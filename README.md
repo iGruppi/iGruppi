@@ -16,7 +16,7 @@ I criteri fondamentali su cui si basa sono:
 
 Installazione
 -------------
-Nella directory documentation/database è presente il dump MySQL del database: dump_db.sql
+Nella directory documentation/database è presente il dump MySQL del database: dump_db.sql.
 Il database anche se non necessita di particolari "configurazioni". Le uniche 2 tabelle che andrebbero popolate prima di iniziare sono "categorie" e "province".
 
 Per iniziare ad usare l'applicativo è necessario creare un dominio virtuale che punta alla directory "public".
