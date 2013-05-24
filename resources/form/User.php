@@ -45,7 +45,7 @@ class Form_User extends MyFw_Form {
 
         $this->addField('password2', array(
                         'type'      => 'password',
-                        'label'     => 'Password (ripeti)',
+                        'label'     => 'Ripeti Password',
                         'size'      => 20,
                         'maxlength' => 12,
                         'required'  => true

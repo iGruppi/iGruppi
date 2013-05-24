@@ -40,17 +40,24 @@
                                 <li class="page_item"><a href="/produttori">Produttori</a></li>
                             </ul>
                         </li>
+                        <!--
                         <li class="page_item"><a href="#">Gestione</a>
                             <ul class="children">
                                 <li class="page_item"><a href="#">Gestione 1</a></li>
                                 <li class="page_item"><a href="#">Utenti</a></li>
                             </ul>
                         </li>
+                        -->
                     </ul>
                 </div>
-                <a class="on_right" style="margin: 42px 0;" href="/auth/logout">Esci</a>
+                <div class="on_right" style="margin: 42px 0;">
+                    <a href="/auth/logout">Esci</a>
+                </div>
 <?php   else: ?>
-                <a class="on_right" style="margin: 42px 0;" href="/auth/login">Login</a>
+                <div class="on_right" style="margin: 42px 0;">
+                    <a href="/auth/login">Login</a><br />
+                    <a href="/auth/register">Registrati</a>
+                </div>
 <?php   endif; ?>
             </div>
         </div>

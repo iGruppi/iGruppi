@@ -66,7 +66,7 @@ class Controller_Auth extends MyFw_Controller {
         $form->setAction("/auth/register");
 
         // reset errorLogin
-        $this->view->errorRegister = false;
+        $this->view->added = false;
 
         if($this->getRequest()->isPost()) {
 
@@ -75,19 +75,29 @@ class Controller_Auth extends MyFw_Controller {
             if( $form->isValid($fv) ) {
 
                 // ADD User
-                if( $form->getValue("password") != $form->getValue("password2") ) {
+                $fValues = $form->getValues();
+                if( $fValues["password"] != $fValues["password2"] ) {
                     $form->setError("password2", "Riscrivi correttamente la password");
                 } else {
-                    // remove password2 field
-                    $form->removeField("password2");
-
-                    // get idgroup
-                    $idgroup = $form->getValue("idgroup");
-                    echo "idgroup: $idgroup";
-                    $form->removeField("idgroup");
-
-                    $iduser = $this->getDB()->makeInsert("users", $fValues);
-                    $this->view->added = true;
+                    try {
+                        // remove password2 field
+                        unset($fValues["password2"]);
+                        // get idgroup
+                        $idgroup = $fValues["idgroup"];
+                        unset($fValues["idgroup"]);
+                        // ADD USER
+                        $iduser = $this->getDB()->makeInsert("users", $fValues);
+                        // ADD USER TO GROUP
+                        $ugFields = array(
+                            'iduser' => $iduser,
+                            'idgroup'=> $idgroup
+                        );
+                        $this->getDB()->makeInsert("users_group", $ugFields);
+                        // OK!
+                        $this->view->added = true;
+                    } catch (Exception $exc) {
+                        echo $exc->getTraceAsString();
+                    }
                 }
             }
         }
