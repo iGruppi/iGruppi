@@ -16,10 +16,9 @@ I criteri fondamentali su cui si basa sono:
 
 Installazione
 -------------
-Nella directory _documentation/database_ è presente il dump MySQL del database: igruppi_dump.sql.
-Il database anche se non necessita di particolari "configurazioni". Le uniche 2 tabelle che andrebbero popolate prima di iniziare sono "categorie" e "province".
-
-Per iniziare ad usare l'applicativo è necessario creare un dominio virtuale che punta alla directory "public".
+Nella directory _documentation/database_ è presente il dump MySQL del database: *igruppi_dump.sql*.
+Le uniche 2 tabelle del database che andrebbero popolate sono _categorie_ (categorie prodotti) e _province_.
+Per iniziare ad usare l'applicativo è necessario creare un dominio virtuale che punta alla directory *public*.
 
 
 Ringraziamenti
