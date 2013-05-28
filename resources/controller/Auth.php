@@ -87,14 +87,31 @@ class Controller_Auth extends MyFw_Controller {
                         unset($fValues["idgroup"]);
                         // ADD USER
                         $iduser = $this->getDB()->makeInsert("users", $fValues);
-                        // ADD USER TO GROUP
-                        $ugFields = array(
-                            'iduser' => $iduser,
-                            'idgroup'=> $idgroup
-                        );
-                        $this->getDB()->makeInsert("users_group", $ugFields);
-                        // OK!
-                        $this->view->added = true;
+
+                        $gObj = new Model_Groups();
+                        $group = $gObj->getGroupById($idgroup);
+                        if($group !== false) {
+                            // ADD USER TO GROUP
+                            $ugFields = array(
+                                'iduser' => $iduser,
+                                'idgroup'=> $idgroup
+                            );
+                            $this->getDB()->makeInsert("users_group", $ugFields);
+
+                            // INVIO EMAIL al FONDATORE per NUOVO UTENTE
+                            $mail = new MyFw_Mail();
+                            $mail->setSubject("Nuovo iscritto al Gruppo ".$group->nome);
+                            $mail->addTo($group->email);
+                            $mail->setViewParam("new_user", $fValues["nome"] . " " . $fValues["cognome"] );
+                            $mail->setViewParam("gruppo", $group->nome);
+                            $mail->setViewParam("email_user", $fValues["email"]);
+                            $this->view->sended = $mail->sendHtmlTemplate("notify.new_user_subscribe.tpl.php");
+
+                            // OK!
+                            $this->view->added = true;
+                        } else {
+                            $form->setError("idgroup", "Devi selezionare un gruppo esistente!");
+                        }
                     } catch (Exception $exc) {
                         echo $exc->getTraceAsString();
                     }

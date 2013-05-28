@@ -19,5 +19,13 @@ class Model_Groups extends MyFw_DB_Base {
         }
         return null;
     }
+
+    function getGroupById($idgroup) {
+
+        $sth_app = $this->db->prepare("SELECT g.*, u.email FROM groups AS g LEFT JOIN users AS u ON g.idfondatore=u.iduser WHERE g.idgroup= :idgroup");
+        $sth_app->execute(array('idgroup' => $idgroup));
+        return $sth_app->fetch(PDO::FETCH_OBJ);
+    }
+
     
 }
