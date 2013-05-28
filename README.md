@@ -2,6 +2,7 @@ iGruppi
 =======
 
 Applicazione web per la gestione dei Gruppi di acquisto (Open Source software)
+
 Website: http://igruppi.com
 
 
