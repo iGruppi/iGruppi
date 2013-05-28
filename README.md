@@ -2,6 +2,7 @@ iGruppi
 =======
 
 Applicazione web per la gestione dei Gruppi di acquisto (Open Source software)
+Website: http://igruppi.com
 
 
 Introduzione
@@ -23,6 +24,6 @@ Per iniziare ad usare l'applicativo è necessario creare un dominio virtuale che
 
 Ringraziamenti
 --------------
-Grazie a mia moglie Elisa che mi ha fatto conoscere il mondo dei Gruppi di acquisto.
+Ringrazio mia moglie Elisa per avermi fatto conoscere il mondo dei Gruppi di acquisto.
 
  
