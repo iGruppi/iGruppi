@@ -17,6 +17,6 @@
         <?php echo $this->form->renderField('idgroup'); ?>
     </fieldset>
 
-        <input type="submit" id="submit" value="LOGIN" />
+        <input type="submit" id="submit" value="ISCRIVIMI ORA!" />
 </form>
 <?php endif; ?>

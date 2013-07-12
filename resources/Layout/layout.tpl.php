@@ -2,7 +2,7 @@
 <html>
 <head>
     <title>iGruppi - Gruppi di acquisto</title>
-    <meta charset="UTF-8">
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
     <!-- jQuery CDN -->
     <link rel="stylesheet" href="http://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css" type="text/css" />
     <script type="text/javascript" language="JavaScript" src="http://code.jquery.com/jquery-1.8.3.js"></script>
@@ -28,11 +28,11 @@
                 <div id="menu_bar">
                     <ul>
                         <li class="page_item"><a href="/dashboard">Dashboard</a></li>
-                        <li class="page_item"><a href="#" class="green">Ordini</a>
-                            <ul class="children">
+                        <li class="page_item"><a href="/ordini" class="green">Ordini</a>
+<!--                            <ul class="children">
                                 <li class="page_item"><a href="/ordini">In corso</a></li>
                                 <li class="page_item"><a href="/ordini/archivio">Archivio</a></li>
-                            </ul>
+                            </ul> -->
                         </li>
                         <li class="page_item"><a href="#">Gruppo</a>
                             <ul class="children">

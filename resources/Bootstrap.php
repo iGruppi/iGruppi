@@ -17,7 +17,7 @@ class Bootstrap {
     }
 
     private function startConfigIni () {
-        $appConfig = new Zend_Config_Ini(APPLICATION_PATH . '/resources/config/application.ini', APPLICATION_ENV);
+        $appConfig = new Zend_Config_Ini(APPLICATION_PATH . '/resources/Config/application.ini', APPLICATION_ENV);
         Zend_Registry::set('appConfig', $appConfig);
     }
     
