@@ -129,6 +129,8 @@ class Controller_GestioneOrdini extends MyFw_Controller {
         
         # TODO : Inserire controllo per i furbi che vogliono visualizzare/cancellare ordini non loro
         
+        $this->view->updated = false;
+        
         // SAVE FORM
         if($this->getRequest()->isPost()) {
             
@@ -153,6 +155,10 @@ class Controller_GestioneOrdini extends MyFw_Controller {
                 }
                 
                 $this->view->updated = true;
+                // Add jQuery ready function
+                $layout = Zend_Registry::get("layout");
+                $layout->addOnLoad("$('#updated').fadeOut(3000);");                
+                
             }
         }
 

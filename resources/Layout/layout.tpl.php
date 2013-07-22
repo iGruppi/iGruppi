@@ -20,7 +20,17 @@
 	<script type="text/javascript" language="JavaScript" src="/js/jx.js"></script>
 	<script type="text/javascript" language="JavaScript" src="/js/functions.js"></script>
 	<script type="text/javascript" language="JavaScript" src="/js/jxAdmin.js"></script>
-    
+
+<?php if(is_array($this->arOnLoads) && count($this->arOnLoads) > 0): ?> 
+<script language="javascript">
+	$(document).ready(function(){
+    <?php   foreach ($this->arOnLoads AS $js_onload) {
+                echo $js_onload;
+            } ?>    
+	});
+</script>
+<?php endif; ?>
+
 </head>
 <body>
     <div id="container">

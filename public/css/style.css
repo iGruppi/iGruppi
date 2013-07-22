@@ -203,6 +203,7 @@ p {
     -moz-border-radius:.5em;
     -webkit-border-radius:.5em;
     border-radius:.5em;
+    font-size: 15px;
 }
 .isa_info {
     color: #00529B;

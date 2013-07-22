@@ -38,9 +38,3 @@
             <input type="submit" id="submit" value="SALVA" />
         </fieldset>
     </form>
-
-<script language="javascript">
-	$(document).ready(function(){
-        $('#updated').fadeOut(3000);
-	});
-</script>
