@@ -18,7 +18,6 @@ class Model_Acl
         // Logged Resource
         $this->addResource('Dashboard');
         $this->addResource('Users');
-        $this->addResource('JxDomains');
         $this->addResource('Ordini');
         $this->addResource('Gruppo');
         $this->addResource('Produttori');

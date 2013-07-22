@@ -17,7 +17,7 @@
                 <h3 class="dom_title"><?php echo $prodotto->descrizione;?></h3>
                 <p>
                     Categoria: <strong><?php echo $prodotto->categoria; ?></strong><br />
-                    Costo: <strong><?php echo $this->valuta($prodotto->costo_op);?></strong> &euro; / <strong><?php echo $prodotto->udm; ?></strong><br />
+                    Costo: <strong><?php echo $this->valuta($prodotto->costo_op);?></strong> / <strong><?php echo $prodotto->udm; ?></strong><br />
                 </p>
             </div>
         <?php endforeach; ?>

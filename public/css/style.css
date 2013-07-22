@@ -127,15 +127,10 @@ p {
 .form_error { padding: 10px 10px 10px 60px; color: #f22; margin: 10px; font-weight: bold; font-size: 14px; background: url(../images/icon/icona_stop_48.png) no-repeat 10px 7px; border: 1px solid #ddd; }
 .form_error p { margin-top: 12px; }
 
-.domain h1, .domain h2 { margin: 25px 0 5px 0; }
-
 #contact_form_iframe {  width: 100%; height: 80%; }
 #content_list1 { width: 650px; margin-right: 30px;}
 #content_list1 a {color: #666;}
 #content_list1 a:hover {color: #000;}
-/* #content_list1_info { border: 1px solid #EEE; border-radius: 3px; box-shadow: 0 0 6px 0px #EEE; } */
-#domains_details p, #domains_details ol { margin: 3px 10px 15px 11px; }
-#domains_details ol li { margin-bottom: 10px; }
 
 .sub_menu { float: right; /* width: 200px; */ text-align: right; }
 .sub_menu a { color: #666; }
