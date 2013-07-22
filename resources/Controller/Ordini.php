@@ -49,6 +49,8 @@ class Controller_Ordini extends MyFw_Controller {
         
         # TODO : Inserire controllo per i furbi che vogliono visualizzare/cancellare ordini non loro
         
+        $this->view->updated = false;
+        
         // SAVE FORM
         if($this->getRequest()->isPost()) {
             

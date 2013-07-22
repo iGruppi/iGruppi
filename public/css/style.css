@@ -192,6 +192,38 @@ p {
 .ok:hover { background: url(/images/icon/ok_32-hover.png) no-repeat left top; }
 
 
+/*------------------ ALERT BOXES by Isabel Castillo http://isabelcastillo.com/ --*/
+
+.isa_info, .isa_success, .isa_warning, .isa_error {
+    border: 1px solid;
+    margin: 10px 0px;
+    padding:15px 10px 15px 50px;
+    background-repeat: no-repeat;
+    background-position: 10px center;
+    -moz-border-radius:.5em;
+    -webkit-border-radius:.5em;
+    border-radius:.5em;
+}
+.isa_info {
+    color: #00529B;
+    background-color: #BDE5F8;
+    background-image: url('/images/icon/alert-boxes/info.png');
+}
+.isa_success {
+    color: #4F8A10;
+    background-color: #DFF2BF;
+    background-image:url('/images/icon/alert-boxes/success.png');
+}
+.isa_warning {
+    color: #9F6000;
+    background-color: #FEEFB3;
+    background-image: url('/images/icon/alert-boxes/warning.png');
+}
+.isa_error {
+    color: #D8000C;
+    background-color: #FFBABA;
+    background-image: url('/images/icon/alert-boxes/error.png');
+}
 
 
 /*------------------ STILI ORDINI STATUS ------------------*/

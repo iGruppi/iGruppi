@@ -3,10 +3,15 @@
 <head>
     <title>iGruppi - Gruppi di acquisto</title>
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-    <!-- jQuery CDN -->
+    <!-- jQuery CDN 
     <link rel="stylesheet" href="http://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css" type="text/css" />
     <script type="text/javascript" language="JavaScript" src="http://code.jquery.com/jquery-1.8.3.js"></script>
     <script type="text/javascript" language="JavaScript" src="http://code.jquery.com/ui/1.9.2/jquery-ui.js"></script>
+    -->
+    <!-- jQuery -->
+    <script type="text/javascript" language="JavaScript" src="/js/jquery/jquery-1.8.3.js"></script>
+    <script type="text/javascript" language="JavaScript" src="/js/jquery/jquery-ui.js"></script>
+    <link rel="stylesheet" href="/css/jquery/jquery-ui.css" type="text/css" />
     
     <!-- Personalized CSS and JS -->
 	<link rel="stylesheet" href="/css/style.css" type="text/css" media="screen" />

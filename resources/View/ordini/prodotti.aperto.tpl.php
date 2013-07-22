@@ -1,4 +1,9 @@
     <form id="prod_ordini_form" action="/ordini/prodotti/idordine/<?php echo $this->ordine->idordine;?>" method="post">
+    <?php if($this->updated): ?>
+        <div id="updated">
+            <div class="isa_success">La tua lista prodotti è stata aggiornata con successo!</div>
+        </div>
+    <?php endif; ?>
         <div id="list_box">
         <?php 
             $totale = 0;
@@ -34,3 +39,8 @@
         </fieldset>
     </form>
 
+<script language="javascript">
+	$(document).ready(function(){
+        $('#updated').fadeOut(3000);
+	});
+</script>
