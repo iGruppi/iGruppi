@@ -1,5 +1,9 @@
 <h2>Elenco Ordini per <strong><?php echo $this->produttore->ragsoc; ?></strong></h2>
 
+<div id="right_col">
+    <h3><a class="menu" href="/gestione-ordini/new/idproduttore/<?php echo $this->produttore->idproduttore;?>"><span class="box_menu_text">Nuovo ordine</span></a></h3>
+</div>
+
 <div id="content_list1">
 <?php if(count($this->list) > 0): ?>
 

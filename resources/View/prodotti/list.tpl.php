@@ -24,7 +24,8 @@
             <p id="p_details_<?php echo $prodotto->idprodotto;?>">
                 Categoria: <strong><?php echo $prodotto->categoria; ?></strong><br />
                 Unità di misura: <strong><?php echo $prodotto->udm; ?></strong><br />
-                Costo: <strong><?php echo $this->valuta($prodotto->costo); ?></strong>
+                Costo: <strong><?php echo $this->valuta($prodotto->costo); ?></strong><br />
+                Disponibile: <strong class="attivo_<?php echo $prodotto->attivo; ?>"><?php echo $this->yesno($prodotto->attivo); ?></strong>
             </p>
                 
         </div>

@@ -123,6 +123,8 @@ p {
 .alert { font-weight : bold; color: #f22; }
 .alert_OK { font-weight : bold; color: #0c0; }
 .green { font-weight : bold; color: #090; }
+.attivo_S { font-weight : bold; color: #090; }
+.attivo_N { font-weight : bold; color: #f22; }
 
 .form_error { padding: 10px 10px 10px 60px; color: #f22; margin: 10px; font-weight: bold; font-size: 14px; background: url(../images/icon/icona_stop_48.png) no-repeat 10px 7px; border: 1px solid #ddd; }
 .form_error p { margin-top: 12px; }
