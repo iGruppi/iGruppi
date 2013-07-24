@@ -49,7 +49,7 @@
                                 <li class="page_item"><a href="/ordini/archivio">Archivio</a></li>
                             </ul> -->
                         </li>
-                        <li class="page_item"><a href="#">Gruppo</a>
+                        <li class="page_item"><a href="/gruppo">Gruppo</a>
                             <ul class="children">
                                 <li class="page_item"><a href="/gruppo/iscritti">Utenti Iscritti</a></li>
                                 <li class="page_item"><a href="/produttori">Produttori</a></li>
@@ -82,7 +82,7 @@
         </div>
         <div id="footer">
             <div id="footer_c">
-                iGruppi<br />
+                <a href="http://igruppi.com">iGruppi</a><br />
                 Open Source Software per i Gruppi di acquisto
             </div>
         </div>

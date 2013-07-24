@@ -61,6 +61,10 @@ class Form_User extends MyFw_Form {
                         'options'   => $arVal,
                         'required'  => true
             ));
+        
+        // Hidden field iduser
+        $this->addField('iduser', array( 'type' => 'hidden' ));
+        
 
     }
 }

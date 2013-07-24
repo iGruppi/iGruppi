@@ -5,7 +5,7 @@
     Data chiusura: <strong><?php echo $this->date($this->ordine->data_fine, '%d/%m/%Y');?></strong> alle <?php echo $this->date($this->ordine->data_fine, '%H:%M:%S');?></strong>
 </p>    
 <div id="content_list1" style="margin-top: 50px;">
-    <h1>Riepilogo Prodotti</h1>
+    <h1>Riepilogo Prodotti ordinati</h1>
 <?php if(count($this->riepilogo) > 0): ?>
     <div id="list_box">
     <?php 
@@ -39,7 +39,7 @@
     <h3>Nessun prodotto ordinato!</h3>
 <?php endif; ?>
     
-    <h1>Dettaglio Prodotti</h1>
+    <h1>Dettaglio Prodotti utenti</h1>
 <?php if(count($this->dettaglio) > 0): ?>
     <div id="list_box">
     <?php foreach ($this->dettaglio as $iduser => $user): ?>

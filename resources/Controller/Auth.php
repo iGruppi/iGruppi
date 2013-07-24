@@ -64,6 +64,7 @@ class Controller_Auth extends MyFw_Controller {
 
         $form = new Form_User();
         $form->setAction("/auth/register");
+        $form->removeField("iduser");
 
         // reset errorLogin
         $this->view->added = false;

@@ -16,7 +16,8 @@ class Controller_Gruppo extends MyFw_Controller {
     }
 
     function indexAction() {
-
+        $gObj = new Model_Groups();
+        $this->view->group = $gObj->getGroupById($this->_userSessionVal->idgroup);
     }
 
     
@@ -31,6 +32,13 @@ class Controller_Gruppo extends MyFw_Controller {
         //echo $sql; die;
         $sth = $this->getDB()->prepare($sql);
         $sth->execute(array('idgroup' => $this->_userSessionVal->idgroup));
+        
+        // check IDfondatore
+        $gObj = new Model_Groups();
+        $group = $gObj->getGroupById($this->_userSessionVal->idgroup);
+        $auth = Zend_Auth::getInstance();
+        $this->view->imFondatore = ($group->idfondatore == $auth->getIdentity()->iduser);
+        
         
 //        Zend_Debug::dump($sth->rowCount()); die;
         $this->view->list = $sth->fetchAll(PDO::FETCH_CLASS);

@@ -38,6 +38,7 @@ class Controller_Prodotti extends MyFw_Controller {
     function editAction() {
 
         $idprodotto = $this->getParam("idprodotto");
+        $this->view->updated = false;
         
         // check if CAN edit this Produttore
         $myObj = new Model_Prodotti();

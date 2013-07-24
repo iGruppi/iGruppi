@@ -28,7 +28,7 @@ class Bootstrap {
     
     private function startSession () {
         $userSessionVal = new Zend_Session_Namespace('userSessionVal');
-        $userSessionVal->idgroup = 1;
+        $userSessionVal->idgroup = 1; // TODO: The users should be choose it! 
     }
     
     private function startLocale () {
