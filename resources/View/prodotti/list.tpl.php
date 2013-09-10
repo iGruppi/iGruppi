@@ -22,9 +22,9 @@
             <h3 class="dom_title"><?php echo $prodotto->descrizione;?></h3>
             
             <p id="p_details_<?php echo $prodotto->idprodotto;?>">
+                Codice: <strong><?php echo $prodotto->codice; ?></strong><br />
                 Categoria: <strong><?php echo $prodotto->categoria; ?></strong><br />
-                Unità di misura: <strong><?php echo $prodotto->udm; ?></strong><br />
-                Costo: <strong><?php echo $this->valuta($prodotto->costo); ?></strong><br />
+                Costo: <strong><?php echo $this->valuta($prodotto->costo); ?> / <?php echo $prodotto->udm; ?></strong><br />
                 Disponibile: <strong class="attivo_<?php echo $prodotto->attivo; ?>"><?php echo $this->yesno($prodotto->attivo); ?></strong>
             </p>
                 

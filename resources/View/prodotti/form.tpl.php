@@ -2,6 +2,7 @@
 
     <fieldset class="border_top">
         <legend>Dati prodotto</legend>
+        <?php echo $this->form->renderField('codice'); ?>
         <?php echo $this->form->renderField('descrizione'); ?>
         <?php echo $this->form->renderField('idcat'); ?>
         <?php echo $this->form->renderField('udm'); ?>

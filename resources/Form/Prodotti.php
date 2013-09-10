@@ -13,6 +13,13 @@ class Form_Prodotti extends MyFw_Form {
     
     function createFields() {
         
+        $this->addField('codice', array(
+                        'type'      => 'input',
+                        'label'     => 'Codice',
+                        'size'      => 10,
+                        'maxlength' => 20,
+                        'required'  => true
+            ));
         $this->addField('descrizione', array(
                         'type'      => 'input',
                         'label'     => 'Descrizione',
