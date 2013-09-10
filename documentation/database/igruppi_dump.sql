@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Sep 11, 2013 at 12:05 AM
+-- Generation Time: Sep 11, 2013 at 12:42 AM
 -- Server version: 5.1.54
 -- PHP Version: 5.3.14
 
@@ -25,7 +25,7 @@ SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 -- Table structure for table `categorie`
 --
 
-CREATE TABLE `categorie` (
+CREATE TABLE IF NOT EXISTS `categorie` (
   `idcat` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `descrizione` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `idpadre` int(10) unsigned NOT NULL DEFAULT '0',
@@ -39,13 +39,14 @@ CREATE TABLE `categorie` (
 -- Table structure for table `groups`
 --
 
-CREATE TABLE `groups` (
+CREATE TABLE IF NOT EXISTS `groups` (
   `idgroup` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `nome` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
   `descrizione` text COLLATE utf8_unicode_ci NOT NULL,
   `provincia` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
   `data_creazione` date NOT NULL,
-  PRIMARY KEY (`idgroup`)
+  PRIMARY KEY (`idgroup`),
+  KEY `fk_group_province1_idx` (`provincia`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=2 ;
 
 -- --------------------------------------------------------
@@ -54,7 +55,7 @@ CREATE TABLE `groups` (
 -- Table structure for table `groups_produttori`
 --
 
-CREATE TABLE `groups_produttori` (
+CREATE TABLE IF NOT EXISTS `groups_produttori` (
   `idgp` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `idgroup` int(10) unsigned NOT NULL,
   `idproduttore` int(10) unsigned NOT NULL,
@@ -72,7 +73,7 @@ CREATE TABLE `groups_produttori` (
 -- Table structure for table `ordini`
 --
 
-CREATE TABLE `ordini` (
+CREATE TABLE IF NOT EXISTS `ordini` (
   `idordine` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `idgp` int(10) unsigned NOT NULL,
   `data_inizio` datetime NOT NULL,
@@ -89,7 +90,7 @@ CREATE TABLE `ordini` (
 -- Table structure for table `ordini_prodotti`
 --
 
-CREATE TABLE `ordini_prodotti` (
+CREATE TABLE IF NOT EXISTS `ordini_prodotti` (
   `idprodotto` int(10) unsigned NOT NULL,
   `idordine` int(10) unsigned NOT NULL,
   `costo` decimal(8,2) NOT NULL,
@@ -106,7 +107,7 @@ CREATE TABLE `ordini_prodotti` (
 -- Table structure for table `ordini_user_prodotti`
 --
 
-CREATE TABLE `ordini_user_prodotti` (
+CREATE TABLE IF NOT EXISTS `ordini_user_prodotti` (
   `iduser` int(10) unsigned NOT NULL,
   `idprodotto` int(10) unsigned NOT NULL,
   `idordine` int(10) unsigned NOT NULL,
@@ -123,7 +124,7 @@ CREATE TABLE `ordini_user_prodotti` (
 -- Table structure for table `prodotti`
 --
 
-CREATE TABLE `prodotti` (
+CREATE TABLE IF NOT EXISTS `prodotti` (
   `idprodotto` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `idproduttore` int(10) unsigned NOT NULL,
   `idcat` int(10) unsigned NOT NULL,
@@ -134,7 +135,8 @@ CREATE TABLE `prodotti` (
   `costo` decimal(8,2) NOT NULL,
   `note` varchar(1024) COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`idprodotto`),
-  KEY `FK_fornitore_idx` (`idproduttore`)
+  KEY `FK_fornitore_idx` (`idproduttore`),
+  KEY `fk_prodotti_prodotti_category1_idx` (`idcat`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=8 ;
 
 -- --------------------------------------------------------
@@ -143,7 +145,7 @@ CREATE TABLE `prodotti` (
 -- Table structure for table `prodotti_costi`
 --
 
-CREATE TABLE `prodotti_costi` (
+CREATE TABLE IF NOT EXISTS `prodotti_costi` (
   `idp_c` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `idprodotto` int(10) unsigned NOT NULL,
   `idgroup` int(10) unsigned NOT NULL,
@@ -161,7 +163,7 @@ CREATE TABLE `prodotti_costi` (
 -- Table structure for table `produttori`
 --
 
-CREATE TABLE `produttori` (
+CREATE TABLE IF NOT EXISTS `produttori` (
   `idproduttore` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `ragsoc` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `indirizzo` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
@@ -170,7 +172,8 @@ CREATE TABLE `produttori` (
   `telefono` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
   `email` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
   `note` varchar(2048) COLLATE utf8_unicode_ci NOT NULL,
-  PRIMARY KEY (`idproduttore`)
+  PRIMARY KEY (`idproduttore`),
+  KEY `fk_produttori_province1_idx` (`provincia`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=6 ;
 
 -- --------------------------------------------------------
@@ -179,7 +182,7 @@ CREATE TABLE `produttori` (
 -- Table structure for table `province`
 --
 
-CREATE TABLE `province` (
+CREATE TABLE IF NOT EXISTS `province` (
   `provincia` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
   `idregione` tinyint(4) NOT NULL,
   PRIMARY KEY (`provincia`)
@@ -191,7 +194,7 @@ CREATE TABLE `province` (
 -- Table structure for table `users`
 --
 
-CREATE TABLE `users` (
+CREATE TABLE IF NOT EXISTS `users` (
   `iduser` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `nome` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
   `cognome` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
@@ -201,8 +204,9 @@ CREATE TABLE `users` (
   `comune` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
   `provincia` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
   `role` enum('User','Admin') COLLATE utf8_unicode_ci NOT NULL DEFAULT 'User',
-  PRIMARY KEY (`iduser`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=8 ;
+  PRIMARY KEY (`iduser`),
+  KEY `fk_users_province1_idx` (`provincia`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=15 ;
 
 -- --------------------------------------------------------
 
@@ -210,17 +214,16 @@ CREATE TABLE `users` (
 -- Table structure for table `users_group`
 --
 
-CREATE TABLE `users_group` (
-  `idug` int(10) unsigned NOT NULL AUTO_INCREMENT,
+CREATE TABLE IF NOT EXISTS `users_group` (
   `iduser` int(10) unsigned NOT NULL,
   `idgroup` int(10) unsigned NOT NULL,
   `attivo` enum('S','N') COLLATE utf8_unicode_ci NOT NULL DEFAULT 'N',
   `fondatore` enum('S','N') COLLATE utf8_unicode_ci NOT NULL DEFAULT 'N',
   `contabile` enum('S','N') COLLATE utf8_unicode_ci NOT NULL DEFAULT 'N',
-  PRIMARY KEY (`idug`),
+  PRIMARY KEY (`iduser`,`idgroup`),
   KEY `FK_group_idx2` (`idgroup`),
   KEY `FK_user_idx2` (`iduser`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=8 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -228,7 +231,7 @@ CREATE TABLE `users_group` (
 -- Table structure for table `users_produttori`
 --
 
-CREATE TABLE `users_produttori` (
+CREATE TABLE IF NOT EXISTS `users_produttori` (
   `iduser_p` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `iduser` int(10) unsigned NOT NULL,
   `idproduttore` int(10) unsigned NOT NULL,
