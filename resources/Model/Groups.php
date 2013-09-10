@@ -21,11 +21,33 @@ class Model_Groups extends MyFw_DB_Base {
     }
 
     function getGroupById($idgroup) {
-
-        $sth_app = $this->db->prepare("SELECT g.*, u.email FROM groups AS g LEFT JOIN users AS u ON g.idfondatore=u.iduser WHERE g.idgroup= :idgroup");
-        $sth_app->execute(array('idgroup' => $idgroup));
-        return $sth_app->fetch(PDO::FETCH_OBJ);
+        $sth = $this->db->prepare("SELECT * FROM groups WHERE idgroup= :idgroup");
+        $sth->execute(array('idgroup' => $idgroup));
+        return $sth->fetch(PDO::FETCH_OBJ);
     }
 
+    function getGroupFoundersById($idgroup) {
+        $sql = "SELECT ug.*, u.email "
+              ."FROM users_group AS ug "
+              ."LEFT JOIN users AS u ON ug.iduser=u.iduser "
+              ."WHERE ug.fondatore='S' AND ug.idgroup= :idgroup";
+        $sth = $this->db->prepare($sql);
+        $sth->execute(array('idgroup' => $idgroup));
+        if($sth->rowCount() > 0) {
+            return $sth->fetchAll(PDO::FETCH_ASSOC);
+        }
+        return null;
+    }
     
+    function getArFoundersId($idgroup) {
+        $founders = array();
+        $ugObj = $this->getGroupFoundersById($idgroup);
+        if(count($ugObj) > 0) {
+            foreach($ugObj AS $ugVal) {
+                $founders[] = $ugVal["iduser"];
+            }
+        }
+        return $founders;
+    }
+     
 }

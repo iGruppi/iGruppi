@@ -33,26 +33,26 @@ class Controller_Users extends MyFw_Controller {
         $form->removeField("password");
         $form->removeField("password2");
         $form->removeField("idgroup");
-        $form->addField('attivo', array(
-                    'type'      => 'select',
-                    'label'     => 'Abilitato',
-                    'options'   => array('S' => 'SI', 'N' => 'NO'),
-                    'required'  => true
-        ));
-
 
         if($this->getRequest()->isPost()) {
             $fv = $this->getRequest()->getPost();
             if( $form->isValid($fv) ) {
-                
+
                 $values = $form->getValues();
+                // remove users_group fields
                 $attivo = $values["attivo"];
                 unset($values["attivo"]);
+                $fondatore = $values["fondatore"];
+                unset($values["fondatore"]);
+                $contabile = $values["contabile"];
+                unset($values["contabile"]);
+                
+                // SAVE user data
                 $this->getDB()->makeUpdate("users", "iduser", $values);
                 
-                // SET Attivo
-                $sth = $this->getDB()->prepare("UPDATE users_group SET attivo= :attivo WHERE iduser= :iduser AND idgroup= :idgroup");
-                $fields = array('attivo' => $attivo, 'iduser' => $iduser, 'idgroup' => $this->_userSessionVal->idgroup);
+                // SET users_group flags
+                $sth = $this->getDB()->prepare("UPDATE users_group SET attivo= :attivo, fondatore= :fondatore, contabile= :contabile WHERE iduser= :iduser AND idgroup= :idgroup");
+                $fields = array('attivo' => $attivo, 'fondatore' => $fondatore, 'contabile' => $contabile, 'iduser' => $iduser, 'idgroup' => $this->_userSessionVal->idgroup);
                 $sth->execute($fields);
 
                 $this->view->updated = true;

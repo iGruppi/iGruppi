@@ -6,9 +6,14 @@
         <?php echo $this->form->renderField('nome'); ?>
         <?php echo $this->form->renderField('cognome'); ?>
         <?php echo $this->form->renderField('email'); ?>
-        <?php echo $this->form->renderField('attivo'); ?>
+        <?php echo $this->form->renderField('num_members'); ?>
     </fieldset>
-
+    <fieldset class="border_top">
+        <legend>Impostazioni utente</legend>
+        <?php echo $this->form->renderField('fondatore'); ?>
+        <?php echo $this->form->renderField('attivo'); ?>
+        <?php echo $this->form->renderField('contabile'); ?>
+    </fieldset>
         <?php echo $this->form->renderField('iduser'); ?>
 
         <input type="submit" id="submit" value="SALVA" />

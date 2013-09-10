@@ -27,6 +27,14 @@ class Form_User extends MyFw_Form {
                         'required'  => true
             ));
 
+        $this->addField('num_members', array(
+                        'type'      => 'input',
+                        'label'     => 'Num. nucleo familiare',
+                        'size'      => 10,
+                        'maxlength' => 2,
+                        'required'  => true
+            ));
+
         $this->addField('email', array(
                         'type'      => 'input',
                         'label'     => 'Email',
@@ -64,6 +72,27 @@ class Form_User extends MyFw_Form {
         
         // Hidden field iduser
         $this->addField('iduser', array( 'type' => 'hidden' ));
+        
+        
+        // USERS_GROUP fields
+        $this->addField('attivo', array(
+                    'type'      => 'select',
+                    'label'     => 'Abilitato',
+                    'options'   => array('S' => 'SI', 'N' => 'NO'),
+                    'required'  => true
+        ));
+        $this->addField('fondatore', array(
+                    'type'      => 'select',
+                    'label'     => 'Fondatore',
+                    'options'   => array('S' => 'SI', 'N' => 'NO'),
+                    'required'  => true
+        ));
+        $this->addField('contabile', array(
+                    'type'      => 'select',
+                    'label'     => 'Contabile',
+                    'options'   => array('S' => 'SI', 'N' => 'NO'),
+                    'required'  => true
+        ));
         
 
     }

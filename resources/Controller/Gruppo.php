@@ -35,9 +35,9 @@ class Controller_Gruppo extends MyFw_Controller {
         
         // check IDfondatore
         $gObj = new Model_Groups();
-        $group = $gObj->getGroupById($this->_userSessionVal->idgroup);
+        $arFounders = $gObj->getArFoundersId($this->_userSessionVal->idgroup);
         $auth = Zend_Auth::getInstance();
-        $this->view->imFondatore = ($group->idfondatore == $auth->getIdentity()->iduser);
+        $this->view->imFondatore = in_array($auth->getIdentity()->iduser, $arFounders);
         
         
 //        Zend_Debug::dump($sth->rowCount()); die;

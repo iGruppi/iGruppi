@@ -64,7 +64,11 @@ class Controller_Auth extends MyFw_Controller {
 
         $form = new Form_User();
         $form->setAction("/auth/register");
+        // remove useless fields
         $form->removeField("iduser");
+        $form->removeField("attivo");
+        $form->removeField("fondatore");
+        $form->removeField("contabile");
 
         // reset errorLogin
         $this->view->added = false;
@@ -86,27 +90,35 @@ class Controller_Auth extends MyFw_Controller {
                         // get idgroup
                         $idgroup = $fValues["idgroup"];
                         unset($fValues["idgroup"]);
-                        // ADD USER
-                        $iduser = $this->getDB()->makeInsert("users", $fValues);
 
                         $gObj = new Model_Groups();
                         $group = $gObj->getGroupById($idgroup);
                         if($group !== false) {
+
+                            // ADD USER
+                            $iduser = $this->getDB()->makeInsert("users", $fValues);
+                            
                             // ADD USER TO GROUP
                             $ugFields = array(
                                 'iduser' => $iduser,
                                 'idgroup'=> $idgroup
                             );
                             $this->getDB()->makeInsert("users_group", $ugFields);
-
-                            // INVIO EMAIL al FONDATORE per NUOVO UTENTE
-                            $mail = new MyFw_Mail();
-                            $mail->setSubject("Nuovo iscritto al Gruppo ".$group->nome);
-                            $mail->addTo($group->email);
-                            $mail->setViewParam("new_user", $fValues["nome"] . " " . $fValues["cognome"] );
-                            $mail->setViewParam("gruppo", $group->nome);
-                            $mail->setViewParam("email_user", $fValues["email"]);
-                            $this->view->sended = $mail->sendHtmlTemplate("notify.new_user_subscribe.tpl.php");
+                            
+                            // Get Founder of the Group
+                            $ugObj = $gObj->getGroupFoundersById($idgroup);
+                            if(count($ugObj) > 0) {
+                                // INVIO EMAIL al FONDATORE per NUOVO UTENTE
+                                $mail = new MyFw_Mail();
+                                $mail->setSubject("Nuovo iscritto al Gruppo ".$group->nome);
+                                foreach($ugObj AS $ugVal) {
+                                    $mail->addTo($ugVal["email"]);
+                                }
+                                $mail->setViewParam("new_user", $fValues["nome"] . " " . $fValues["cognome"] );
+                                $mail->setViewParam("gruppo", $group->nome);
+                                $mail->setViewParam("email_user", $fValues["email"]);
+                                $this->view->sended = $mail->sendHtmlTemplate("notify.new_user_subscribe.tpl.php");
+                            }
 
                             // OK!
                             $this->view->added = true;
