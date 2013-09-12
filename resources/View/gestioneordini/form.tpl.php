@@ -19,7 +19,15 @@
 </form>
 <script>
     $(function() {
-        $( "#data_inizio" ).datepicker({ dateFormat: "dd/mm/yy" });
-        $( "#data_fine" ).datepicker({ dateFormat: "dd/mm/yy" });
+        $( "#data_inizio" ).datepicker({ dateFormat: "dd/mm/yy", 
+            onClose: function( selectedDate ) {
+                $( "#data_fine" ).datepicker( "option", "minDate", selectedDate );
+            } 
+        });
+        $( "#data_fine" ).datepicker({ dateFormat: "dd/mm/yy", 
+            onClose: function( selectedDate ) {
+                $( "#data_inizio" ).datepicker( "option", "maxDate", selectedDate );
+            } 
+        });
     });
 </script>
