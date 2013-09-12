@@ -9,13 +9,10 @@
         <div class="box_row" id="box_<?php echo $ordine->idordine;?>">
         <?php if(!$ordine->statusObj->is_Pianificato()): ?>
             <div class="sub_menu" style="margin-top: 40px;">
-                <a class="menu" href="/ordini/prodotti/idordine/<?php echo $ordine->idordine;?>">
             <?php if($ordine->statusObj->is_Aperto()): ?>
-                    Ordina ora!
-            <?php else: ?>
-                    Visualizza dettaglio
+                <a class="menu" href="/ordini/ordina/idordine/<?php echo $ordine->idordine;?>">Ordina ora!</a>
             <?php endif; ?>
-                </a>
+                <a class="menu" href="/ordini/viewdettaglio/idordine/<?php echo $ordine->idordine;?>">Visualizza dettaglio</a>
             </div>
         <?php endif; ?>
 
