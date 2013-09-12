@@ -42,14 +42,14 @@
 ?>
                 <div id="menu_bar">
                     <ul>
-                        <li class="page_item"><a href="/dashboard">Dashboard</a></li>
+                        <li class="page_item"><a href="/dashboard">Home</a></li>
                         <li class="page_item"><a href="/ordini" class="green">Ordini</a>
 <!--                            <ul class="children">
                                 <li class="page_item"><a href="/ordini">In corso</a></li>
                                 <li class="page_item"><a href="/ordini/archivio">Archivio</a></li>
                             </ul> -->
                         </li>
-                        <li class="page_item"><a href="/gruppo">Gruppo</a>
+                        <li class="page_item last_item"><a href="/gruppo">Gruppo</a>
                             <ul class="children">
                                 <li class="page_item"><a href="/gruppo/iscritti">Utenti Iscritti</a></li>
                                 <li class="page_item"><a href="/produttori">Produttori</a></li>

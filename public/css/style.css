@@ -370,14 +370,6 @@ a.pager_numon:visited , a.pager_numon:link , a.pager_numon:active, a.pager_numon
 	list-style: none;
 	margin: 0;
 	padding-left: 0;
-    background-color: #eaeaea;
-    background-image: -moz-linear-gradient( #fafafa, #eaeaea);
-    background-image: -webkit-linear-gradient( #fafafa, #eaeaea);
-    background-image: linear-gradient( #fafafa, #eaeaea);
-    background-repeat: repeat-x;
-    border: 1px solid #eaeaea;
-    border-bottom-color: #cacaca;
-    border-radius: 3px;
 }
 #menu_bar li {
 	float: left;
@@ -396,8 +388,8 @@ a.pager_numon:visited , a.pager_numon:link , a.pager_numon:active, a.pager_numon
     border-right-color: rgba(0,0,0,0.04);
     border-left: 1px solid #fcfcfc;
     border-left-color: rgba(255,255,255,0.7);
-    border-bottom: 2px solid #DADADA;
 }
+#menu_bar li.last_item a { border-right: 0;}
 #menu_bar a.green { color: #0b0; text-shadow: 1px 1px 4px #fff; }
 #menu_bar ul ul {
 	-moz-box-shadow: 0 3px 3px rgba(0,0,0,0.2);

@@ -12,11 +12,7 @@
 
     <div id="content_list1" style="margin-top: 50px;">
 <?php if(count($this->list) > 0): ?>
-    <?php if($this->statusObj->is_Aperto()): ?>
-        <?php include $this->template('ordini/prodotti.aperto.tpl.php'); ?>
-    <?php elseif( $this->statusObj->is_Chiuso() || $this->statusObj->is_Archiviato() ): ?>
-        <?php include $this->template('ordini/prodotti.chiuso.tpl.php'); ?>
-    <?php endif; ?>
+    <?php include $this->template('ordini/prodotti.dettaglio.tpl.php'); ?>
 <?php else: ?>
     <h3>Nessun prodotto ordinato/disponibile!</h3>
 <?php endif; ?>
