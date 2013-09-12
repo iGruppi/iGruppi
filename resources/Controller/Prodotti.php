@@ -52,6 +52,10 @@ class Controller_Prodotti extends MyFw_Controller {
         // remove useless fields
         $form->removeField("offerta");
         $form->removeField("sconto");
+        
+        // set Categories
+        $objCat = new Model_Categorie();
+        $form->setOptions("idsubcat", $objCat->convertToSingleArray($objCat->getSubCategories($this->_userSessionVal->idgroup, $prodotto["idproduttore"]), "idsubcat", "descrizione"));
 
         if($this->getRequest()->isPost()) {
             $fv = $this->getRequest()->getPost();
@@ -76,14 +80,21 @@ class Controller_Prodotti extends MyFw_Controller {
     
     function addAction() {
         
+        $idproduttore = $this->getParam("idproduttore");
+        
         $form = new Form_Prodotti();
         $form->setAction("/prodotti/add");
-        $form->setValue("idproduttore", $this->getParam("idproduttore"));
+        $form->setValue("idproduttore", $idproduttore);
         // remove useless fields
         $form->removeField("offerta");
         $form->removeField("sconto");
         $form->removeField("idprodotto");
 
+        // set Categories
+        $objCat = new Model_Categorie();
+        $form->setOptions("idsubcat", $objCat->convertToSingleArray($objCat->getSubCategories($this->_userSessionVal->idgroup, $idproduttore), "idsubcat", "descrizione"));
+
+        
         if($this->getRequest()->isPost()) {
             
             // get Post and check if is valid

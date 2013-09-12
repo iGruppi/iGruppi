@@ -42,7 +42,8 @@ class Controller_GestioneOrdini extends MyFw_Controller {
         
         $form = new Form_Ordini();
         $form->setAction("/gestione-ordini/new/idproduttore/$idproduttore");
-        $form->setValue("idgp", $produttore->idgp);
+        $form->setValue("idgroup", $this->_userSessionVal->idgroup);
+        $form->setValue("idproduttore", $idproduttore);
         // remove useless fields
         $form->removeField("archiviato");
         $form->removeField("idordine");
@@ -60,6 +61,15 @@ class Controller_GestioneOrdini extends MyFw_Controller {
                 $dt_fine = new Zend_Date($fValues["data_fine"], "dd/mm/yyyy");
                 $fValues["data_fine"] = $dt_fine->toString("yyyy-mm-dd") . " 23:59:59"; // set default END time
                 $idordine = $this->getDB()->makeInsert("ordini", $fValues);
+                
+                // Add ALL prodotti by Default!
+                $prodObj = new Model_Prodotti();
+                $prodotti = $prodObj->getProdottiByIdProduttore($idproduttore, 'S');
+                $ordObj = new Model_Ordini();
+                foreach($prodotti AS $prodotto) {
+                    $arVal = array('idprodotto' => $prodotto->idprodotto, 'costo' => $prodotto->costo);
+                    $ordObj->addProdottiToOrdine($idordine, $arVal);                    
+                }
                 
                 $this->redirect("gestione-ordini", "index", array("idproduttore" => $idproduttore));
             }
@@ -82,7 +92,8 @@ class Controller_GestioneOrdini extends MyFw_Controller {
         
         $form = new Form_Ordini();
         $form->setAction("/gestione-ordini/edit/idordine/$idordine");
-        $form->setValue("idgp", $produttore->idgp);
+        $form->setValue("idgroup", $this->_userSessionVal->idgroup);
+        $form->setValue("idproduttore", $idproduttore);
         $form->setValue("idordine", $idordine);
 
         if($this->getRequest()->isPost()) {
@@ -121,7 +132,7 @@ class Controller_GestioneOrdini extends MyFw_Controller {
         $ordObj = new Model_Ordini();
         $ordine = $ordObj->getByIdOrdine($idordine);
         $this->view->ordine = $ordine;
-        $this->view->statusObj = new Model_Ordini_Status($ordine->data_inizio, $ordine->data_fine, $ordine->archiviato);;
+        $this->view->statusObj = new Model_Ordini_Status($ordine->data_inizio, $ordine->data_fine, $ordine->archiviato);
                
         $produttoreObj = new Model_Produttori();
         $produttore = $produttoreObj->getProduttoreById($ordine->idproduttore, $this->_userSessionVal->idgroup);
@@ -140,19 +151,16 @@ class Controller_GestioneOrdini extends MyFw_Controller {
             $prod_sel = isset($fv["prod_sel"]) ? $fv["prod_sel"] : array();
             $prodotto = isset($fv["prodotto"]) ? $fv["prodotto"] : array();
             if(count($prod_sel) > 0) {
-                // delete all records in ordini_prodotti
-                $this->getDB()->query("DELETE FROM ordini_prodotti WHERE idordine='$idordine'");
-                // insert product selected
+                // insert products selected
                 foreach ($prod_sel as $idprodotto => $selected) {
                     if( $selected == "S") {
-                        // prepare SQL INSERT
-                        $sql = "INSERT INTO ordini_prodotti SET idprodotto= :idprodotto, idordine= :idordine, costo= :costo";
-                        $sth = $this->getDB()->prepare($sql);
-                        $costo = isset($prodotto[$idprodotto]) ? $prodotto[$idprodotto] : 0;
-                        $fields = array('idprodotto' => $idprodotto, 'idordine' => $idordine, 'costo' => $costo);
-                        $sth->execute($fields);
+                        $arVal[] = array('idprodotto' => $idprodotto, 'costo' => (isset($prodotto[$idprodotto]) ? $prodotto[$idprodotto] : 0));
+                    } else {
+                        // delete all records in ordini_prodotti
+                        $this->getDB()->query("DELETE FROM ordini_prodotti WHERE idordine='$idordine' AND idprodotto='$idprodotto'");
                     }
                 }
+                $ordObj->addProdottiToOrdine($idordine, $arVal);
                 
                 $this->view->updated = true;
                 // Add jQuery ready function

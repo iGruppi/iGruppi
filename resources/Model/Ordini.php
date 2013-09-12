@@ -13,7 +13,7 @@ class Model_Ordini extends MyFw_DB_Base {
     
     function getByIdOrdine($idordine) {
         $sql = "SELECT * FROM ordini AS o"
-              ." LEFT JOIN groups_produttori AS gp ON o.idgp=gp.idgp"
+              ." LEFT JOIN groups_produttori AS gp ON o.idgroup=gp.idgroup AND o.idproduttore=gp.idproduttore"
               ." WHERE o.idordine= :idordine";
         $sth = $this->db->prepare($sql);
         $sth->execute(array('idordine' => $idordine));
@@ -26,11 +26,11 @@ class Model_Ordini extends MyFw_DB_Base {
     function getAllByIdProduttore($idproduttore, $idgroup, $iduser_ref) {
         
         $sql = "SELECT * FROM ordini AS o"
-              ." LEFT JOIN groups_produttori AS gp ON o.idgp=gp.idgp"
+              ." LEFT JOIN groups_produttori AS gp ON o.idgroup=gp.idgroup AND o.idproduttore=gp.idproduttore"
               ." WHERE gp.idproduttore= :idproduttore"
               ." AND gp.iduser_ref= :iduser_ref"
               ." AND gp.idgroup= :idgroup"
-              ." ORDER BY o.archiviato, o.data_inizio";
+              ." ORDER BY o.archiviato, o.data_fine DESC";
         $sth = $this->db->prepare($sql);
         $sth->execute(array('idproduttore' => $idproduttore, 'idgroup' => $idgroup, 'iduser_ref' => $iduser_ref));
         if($sth->rowCount() > 0) {
@@ -41,7 +41,7 @@ class Model_Ordini extends MyFw_DB_Base {
     
     function getProdottiByIdOrdine_Gestione($idordine, $idproduttore) {
         // get elenco completo prodotti
-        $sqlp = "SELECT p.*, c.descrizione AS categoria FROM prodotti AS p LEFT JOIN categorie AS c ON p.idcat=c.idcat WHERE idproduttore= :idproduttore AND attivo='S'";
+        $sqlp = "SELECT p.*, cs.descrizione AS categoria FROM prodotti AS p LEFT JOIN categorie_sub AS cs ON p.idsubcat=cs.idsubcat WHERE p.idproduttore= :idproduttore AND p.attivo='S'";
         $sthp = $this->db->prepare($sqlp);
         $sthp->execute(array('idproduttore' => $idproduttore));        
         $prodotti = $sthp->fetchAll(PDO::FETCH_OBJ);
@@ -73,10 +73,10 @@ class Model_Ordini extends MyFw_DB_Base {
 
     function getProdottiByIdOrdine($idordine, $idproduttore, $iduser) {
         // get elenco prodotti disponibile per quest'ordine
-        $sqlp = "SELECT p.*, op.costo AS costo_op, op.sconto, op.offerta, c.descrizione AS categoria "
+        $sqlp = "SELECT p.*, op.costo AS costo_op, op.sconto, op.offerta, cs.descrizione AS categoria "
               ." FROM ordini_prodotti AS op "
               ." JOIN prodotti AS p ON op.idprodotto=p.idprodotto "
-              ." JOIN categorie AS c ON p.idcat=c.idcat "
+              ." JOIN categorie_sub AS cs ON p.idsubcat=cs.idsubcat "
               ." WHERE op.idordine= :idordine";
         $sthp = $this->db->prepare($sqlp);
         $sthp->execute(array('idordine' => $idordine));        
@@ -109,7 +109,7 @@ class Model_Ordini extends MyFw_DB_Base {
         
         $sql = "SELECT o.*, p.*, u.nome, u.cognome "
              ." FROM groups_produttori AS gp "
-             ." LEFT JOIN ordini AS o ON gp.idgp=o.idgp "
+             ." LEFT JOIN ordini AS o ON gp.idgroup=o.idgroup AND gp.idproduttore=o.idproduttore "
              ." LEFT JOIN produttori AS p ON gp.idproduttore=p.idproduttore "
              ." LEFT JOIN users AS u ON gp.iduser_ref=u.iduser "
              ." WHERE gp.idgroup= :idgroup"
@@ -132,10 +132,42 @@ class Model_Ordini extends MyFw_DB_Base {
               ." WHERE op.idordine= :idordine"
               ." GROUP BY oup.iduser, oup.idprodotto";
         $sthp = $this->db->prepare($sqlp);
-        $sthp->execute(array('idordine' => $idordine));        
+        $sthp->execute(array('idordine' => $idordine));
         $prodotti = $sthp->fetchAll(PDO::FETCH_OBJ);
         //Zend_Debug::dump($prodotti);die;
         return $prodotti;
+    }
+    
+    
+    function addProdottiToOrdine($idordine, $arVal) {
+        $this->db->beginTransaction();
+        
+        // get All products of this order
+        $prodotti = array();
+        $sql = "SELECT idprodotto FROM ordini_prodotti WHERE idordine=".$this->db->quote($idordine);
+        foreach ($this->db->query($sql) as $row) {
+            $prodotti[] = $row["idprodotto"];
+        }
+        // prepare SQL INSERT
+        $sth_insert = $this->db->prepare("INSERT INTO ordini_prodotti SET idprodotto= :idprodotto, idordine= :idordine, costo= :costo");
+        // prepare SQL UPDATE
+        $sth_update = $this->db->prepare("UPDATE ordini_prodotti SET costo= :costo WHERE idprodotto= :idprodotto AND idordine= :idordine");
+        foreach($arVal AS $prodVal) {
+            // prepare fields
+            $fields = array(
+                'idprodotto' => $prodVal["idprodotto"],
+                'costo'      => (isset($prodVal["costo"]) ? $prodVal["costo"] : 0),
+                'idordine' => $idordine
+                );
+            // check if EXISTS
+            if(in_array($prodVal["idprodotto"], $prodotti)) {
+                $sth_update->execute($fields);
+            } else {
+                $sth_insert->execute($fields);
+            }
+        }
+        
+        $this->db->commit();
     }
     
 }

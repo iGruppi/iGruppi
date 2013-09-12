@@ -37,7 +37,9 @@ class Form_Ordini extends MyFw_Form {
 
     # HIDDEN FIELDS
         $this->addField('idordine', array( 'type' => 'hidden' ));
-        $this->addField('idgp', array( 'type' => 'hidden' ));
+        $this->addField('idgroup', array( 'type' => 'hidden' ));
+        $this->addField('idproduttore', array( 'type' => 'hidden' ));
+        
     }
     
     

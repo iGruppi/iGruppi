@@ -29,11 +29,10 @@ class Form_Prodotti extends MyFw_Form {
             ));
         
         // CATEGORIA
-        $objCat = new Model_Categorie();
-        $this->addField('idcat', array(
+        $this->addField('idsubcat', array(
                         'type'      => 'select',
                         'label'     => 'Categoria',
-                        'options'   => $objCat->convertToSingleArray($objCat->getCategorie(), "idcat", "descrizione"),
+                        'options'   => array(),
                         'required'  => true
             ));
         

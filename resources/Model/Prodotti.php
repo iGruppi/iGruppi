@@ -20,9 +20,9 @@ class Model_Prodotti extends MyFw_DB_Base {
     }
 
     function getProdottiByIdProduttore($idproduttore, $attivo=null) {
-        $sql = "SELECT p.*, c.descrizione AS categoria "
+        $sql = "SELECT p.*, cs.descrizione AS categoria "
               ." FROM prodotti AS p"
-              ." LEFT JOIN categorie AS c ON p.idcat=c.idcat"
+              ." LEFT JOIN categorie_sub AS cs ON p.idsubcat=cs.idsubcat"
               ." WHERE p.idproduttore= :idproduttore";
         $sql .= (!is_null($attivo)) ? " AND p.attivo='$attivo'" : "";
         $sql .= " ORDER BY p.descrizione";

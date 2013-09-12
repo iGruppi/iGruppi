@@ -12,7 +12,8 @@
         <?php echo $this->form->renderField('note_consegna'); ?>
     </fieldset>
 
-        <?php echo $this->form->renderField('idgp'); ?>
+        <?php echo $this->form->renderField('idgroup'); ?>
+        <?php echo $this->form->renderField('idproduttore'); ?>
 
         <input type="submit" id="submit" value="SALVA" />
 

@@ -54,12 +54,51 @@ class Controller_Produttori extends MyFw_Controller {
         
         $form = new Form_Produttori();
         $form->setAction("/produttori/edit/idproduttore/$idproduttore");
-
+        
+        // Get elenco Categorie
+        $catObj = new Model_Categorie();
+        $this->view->categorie = $catObj->convertToSingleArray($catObj->getCategorie(), "idcat", "descrizione");
+        $this->view->arSubCat = array();
+        $arSubCat = $catObj->getSubCategories($this->_userSessionVal->idgroup, $idproduttore);
+        if(count($arSubCat) > 0) {
+            foreach ($arSubCat as $key => $value) {
+                $this->view->arSubCat[$value["idcat"]][$value["idsubcat"]] = $value["descrizione"];
+            }
+        }
+        
+        // Get POST and Validate data
         if($this->getRequest()->isPost()) {
             $fv = $this->getRequest()->getPost();
+            // set arSubCat
+            //Zend_Debug::dump($fv["arSubCat"]); die;
+            if(isset($fv["arSubCat"])) {
+                $this->view->arSubCat = $fv["arSubCat"];
+                unset($fv["arSubCat"]);
+            }
+            unset($fv["idcat"]);
+            
             if( $form->isValid($fv) ) {
                 
                 $this->getDB()->makeUpdate("produttori", "idproduttore", $fv);
+                
+                // ADD CATEGORIES
+                $sth = $this->getDB()->prepare("DELETE FROM categorie_sub WHERE idgroup= :idgroup AND idproduttore= :idproduttore");
+                $sth->execute(array('idgroup' => $this->_userSessionVal->idgroup, 'idproduttore' => $idproduttore));
+                die;
+                if(count($this->view->arSubCat)) {
+                    foreach ($this->view->arSubCat as $idcat => $arCat) {
+                        foreach ($arCat as $idsubcat => $subCatDesc) {
+                            $this->getDB()->makeInsert("categorie_sub", array(
+                                'idsubcat'      => $idsubcat,
+                                'idproduttore'  => $idproduttore,
+                                'idgroup'       => $this->_userSessionVal->idgroup,
+                                'idcat'         => $idcat,
+                                'descrizione'   => $subCatDesc
+                            ));
+                        }
+                    }
+                }
+                
 
                 $this->view->updated = true;
             }
@@ -79,11 +118,23 @@ class Controller_Produttori extends MyFw_Controller {
         $form = new Form_Produttori();
         $form->setAction("/produttori/add");
         $form->removeField("idproduttore");
+        
+        // Get elenco Categorie
+        $catObj = new Model_Categorie();
+        $this->view->categorie = $catObj->convertToSingleArray($catObj->getCategorie(), "idcat", "descrizione");
+        $this->view->arSubCat = array();
 
         if($this->getRequest()->isPost()) {
             
             // get Post and check if is valid
             $fv = $this->getRequest()->getPost();
+            // set arSubCat
+            if(isset($fv["arSubCat"])) {
+                $this->view->arSubCat = $fv["arSubCat"];
+                unset($fv["arSubCat"]);
+            }
+            unset($fv["idcat"]);
+            
             if( $form->isValid($fv) ) {
                 
                 // ADD Produttore
@@ -96,6 +147,20 @@ class Controller_Produttori extends MyFw_Controller {
                     'stato'         => 'A',
                     'iduser_ref'    => $this->_iduser
                 ));
+                
+                // ADD CATEGORIES
+                if(count($this->view->arSubCat)) {
+                    foreach ($this->view->arSubCat as $idcat => $arCat) {
+                        foreach ($arCat as $k => $subCatDesc) {
+                            $this->getDB()->makeInsert("categorie_sub", array(
+                                'idproduttore'  => $idproduttore,
+                                'idgroup'       => $this->_userSessionVal->idgroup,
+                                'idcat'         => $idcat,
+                                'descrizione'   => $subCatDesc
+                            ));
+                        }
+                    }
+                }
                 
                 $this->view->added = true;
             }

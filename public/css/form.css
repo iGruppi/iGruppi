@@ -37,6 +37,9 @@ fieldset .error textarea,
 fieldset .error select { margin-bottom: 5px; border: 2px solid #D34940; color: #D34940; }
 fieldset .error p {margin: 0 0 0 158px; padding: 1px 0 0 29px; color: #D34940; background: url(../images/icon/icona_error_16.png) no-repeat 6px 2px;}
 
+fieldset a.menu_icon_btn { padding: 2px 12px; font-size: 14px; font-weight: normal; border: 1px solid #CCC; background-color: #eee; text-decoration: none; text-align: center; }
+fieldset a.menu_icon_btn:hover { background-color: #fff; color: #000; }
+
 li.form_row, li.witherrors { margin-top: 10px; }
 li.witherrors { background-color: #F8FFDD; border: 1px solid #ddFFdd; padding: 20px 0 20px 0; }
 
@@ -68,7 +71,7 @@ input#submit:hover {
 	color: #393;
 	margin: 2px 0 12px 108px;
 	padding: 0;
-	font-size: 9pt;
+	
 }
 .inputcheckbox { border:0px; }
 .disabled, .readonly { background-color: #e9e9e9; color: #666; }
@@ -85,7 +88,7 @@ form.f1n200 { margin: 2px; }
 form.f1n200 fieldset label{ width: 200px; }
 form.f1n200 ul.errors,
 form.f1n200 fieldset .checkbox_box,
-form.f1n200 p.hint,
+form.f1n200 .hint,
 form.f1n200 fieldset .error p { margin-left: 208px; }
 form.f1n200 input#submit, form.f1n200 .contact_submit { margin-left: 225px; }
 
@@ -96,7 +99,7 @@ form.f1n150 { margin: 2px; }
 form.f1n150 fieldset label{ width: 150px; }
 form.f1n150 ul.errors, 
 form.f1n150 fieldset .checkbox_box,
-form.f1n150 p.hint,
+form.f1n150 .hint,
 form.f1n150 fieldset .error p { margin-left: 158px; }
 form.f1n150 input#submit { margin-left: 175px; }
 
@@ -108,6 +111,6 @@ form.f1n120 { margin: 2px; }
 form.f1n120 fieldset label{ width: 120px; }
 form.f1n120 ul.errors,
 form.f1n120 fieldset .checkbox_box,
-form.f1n120 p.hint,
+form.f1n120 .hint,
 form.f1n120 fieldset .error p { margin-left: 128px; }
 form.f1n120 input#submit { margin-left: 145px; }

@@ -56,3 +56,13 @@
         $('#totale').html(totale.formatMoney(2, ',', '') + "&nbsp;&euro;");
         $('#f_totale').val(totale);
     }
+    
+    
+    
+    function jx_AddSubCategoria() {
+        $('#no_subCat').hide();
+        var idcat = $('#idcat').val();
+        var catName = $('#idcat').find(":selected").text();
+        $('#d_subCat').append('<div><input type="input" name="arSubCat['+idcat+'][]" size="40" value="'+catName+'"> <a class="menu_icon_btn" href="javascript:void(0)" onclick="$(this).parent().remove()">Rimuovi</a></div>');
+        
+    }

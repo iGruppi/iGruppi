@@ -23,6 +23,14 @@ class Model_Categorie extends MyFw_DB_Base {
         $sth = $this->db->query("SELECT * FROM categorie ORDER BY descrizione");
         return $sth->fetchAll(PDO::FETCH_ASSOC);
     }
-
+    
+    function getSubCategories($idgroup, $idproduttore) {
+        $sql = "SELECT cs.* FROM categorie_sub AS cs "
+              ."LEFT JOIN groups_produttori AS gp ON cs.idgroup=gp.idgroup AND cs.idproduttore=gp.idproduttore "
+              ."WHERE gp.idgroup= :idgroup AND gp.idproduttore= :idproduttore";
+        $sth = $this->db->prepare($sql);
+        $sth->execute(array('idgroup' => $idgroup, 'idproduttore' => $idproduttore));
+        return $sth->fetchAll(PDO::FETCH_ASSOC);        
+    }
 
 }
