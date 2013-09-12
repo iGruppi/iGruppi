@@ -137,8 +137,8 @@ p {
 .sub_menu { float: right; /* width: 200px; */ text-align: right; }
 .sub_menu a { color: #666; }
 .sub_menu a:hover { color: #000; }
-.sub_menu a.menu { display: block; line-height: 16px; padding: 3px 10px; margin: 0; font-size: 14px; color: #999; text-align: right; text-decoration: none; }
-.sub_menu a.menu:hover { color: #333; background-color: #eee;}
+.sub_menu a.menu { display: block; line-height: 16px; padding: 3px 10px; margin: 0; font-size: 14px; color: #999; text-align: right; text-decoration: none; border: 1px solid #fff;}
+.sub_menu a.menu:hover { color: #333; background-color: #eee; border: 1px solid #ccc; }
 .sub_menu a.selected { color: #0c0; }
 .sub_menu a.menu_dis { color:#ddd; }
 .sub_menu .sub_totale, .sub_menu .totale { font-size: 15px; color: #666; clear: left; border: 1px solid #EEE; width: 127px; text-align: center; }
