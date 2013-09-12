@@ -4,7 +4,11 @@
     <p>
         Chiusura prevista il <strong><?php echo $this->date($this->ordine->data_fine, '%d/%m/%Y');?></strong> alle <?php echo $this->date($this->ordine->data_fine, '%H:%M:%S');?></strong>
     </p>
-<?php endif; ?>    
+<?php endif; ?>
+    <div class="box_note">
+        <h4>Note consegna:</h4>
+        <p><?php echo $this->ordine->note_consegna; ?></p>
+    </div>
 
     <div id="content_list1" style="margin-top: 50px;">
 <?php if(count($this->list) > 0): ?>

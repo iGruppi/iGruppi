@@ -185,7 +185,8 @@ p {
 #right_col a.menu { color: #999; text-decoration: none; border: 1px solid #eee; line-height: 30px; display: block; padding: 4px 10px;}
 #right_col a.menu:hover { border: 1px solid #ccc; background-color: #eee; color: #000; }
 
-
+.box_note { margin-top: 20px; width: 650px; }
+.box_note p { margin-top: 4px; }
 
 .btn_icon { height: 32px; width: 32px; margin: 10px 20px; }
 .delete { background: url(/images/icon/delete_32.png) no-repeat left top; }
