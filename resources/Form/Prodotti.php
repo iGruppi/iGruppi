@@ -36,11 +36,12 @@ class Form_Prodotti extends MyFw_Form {
                         'required'  => true
             ));
         
-        
+        // UDM 
+        $udmObj = new Model_Prodotti_UdM();
         $this->addField('udm', array(
-                        'type'      => 'input',
+                        'type'      => 'select',
                         'label'     => 'Unità di misura',
-                        'size'      => 30,
+                        'options'   => $udmObj->getArUdm(),
                         'required'  => true
             ));
         
