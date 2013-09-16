@@ -61,7 +61,13 @@ div#footer_c {
 	padding: 15px 20px 0 20px;
 }
 div#footer p {	padding: 0 10px 0 0; margin: 0; }
-
+div#footer_c .social { margin-left: 600px; margin-top: 15px; }
+div#footer_c .icon_social { line-height: 28px; padding-left: 30px; }
+div#footer_c .icon_social a { color: #aaa; font-weight: normal; text-decoration: none;}
+div#footer_c .icon_social a:hover { color: #333;}
+div#footer_c .github { background: transparent url(/images/icon/social/Github.png) no-repeat 3px 1px; }
+div#footer_c .twitter { background: transparent url(/images/icon/social/Twitter.png) no-repeat 0px 3px; }
+div#footer_c .wordpress { background: transparent url(/images/icon/social/Wordpress.png) no-repeat 0px 3px; }
 
 /*------------------------- Default Styles ------------------*/
 
