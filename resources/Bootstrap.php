@@ -8,7 +8,7 @@ class Bootstrap {
     
     public function run() {
         $this->startConfigIni();
-        $this->startSession();
+//        $this->startSession();
         $this->startLocale();
         $this->startDB();
         $this->startLayout();
@@ -25,12 +25,12 @@ class Bootstrap {
         $db = new MyFw_DB();
         Zend_Registry::set('db', $db);
     }
-    
+/*    
     private function startSession () {
         $userSessionVal = new Zend_Session_Namespace('userSessionVal');
         $userSessionVal->idgroup = 1; // TODO: The users should be choose it! 
     }
-    
+ */   
     private function startLocale () {
     	date_default_timezone_set('Europe/Rome');
     	setlocale(LC_TIME, 'it_IT');

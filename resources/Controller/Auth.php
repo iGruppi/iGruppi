@@ -24,7 +24,7 @@ class Controller_Auth extends MyFw_Controller {
             $fv = $this->getRequest()->getPost();
             if( $form->isValid($fv) ) {
                 // check Auth
-                $sql = "SELECT u.*, ug.attivo, ug.fondatore, ug.contabile, g.nome AS gruppo "
+                $sql = "SELECT u.*, ug.attivo, ug.fondatore, ug.contabile, g.nome AS gruppo, g.idgroup "
                       ."FROM users AS u LEFT JOIN users_group AS ug ON u.iduser=ug.iduser "
                       ."LEFT JOIN groups AS g ON ug.idgroup=g.idgroup "
                       ."WHERE email= :email AND password= :password";
@@ -38,6 +38,10 @@ class Controller_Auth extends MyFw_Controller {
                     // remove password
                     $row = $checkSth->fetch(PDO::FETCH_OBJ);
                     $storage->write($row);
+                    
+                    // set idgroup in session
+                    $userSessionVal = new Zend_Session_Namespace('userSessionVal');
+                    $userSessionVal->idgroup = $row->idgroup;
                     
                     // redirect to Dashboard
                     $this->redirect('dashboard');
