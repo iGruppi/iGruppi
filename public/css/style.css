@@ -191,6 +191,9 @@ p {
 #right_col a.menu { color: #999; text-decoration: none; border: 1px solid #eee; line-height: 30px; display: block; padding: 4px 10px;}
 #right_col a.menu:hover { border: 1px solid #ccc; background-color: #eee; color: #000; }
 
+#invia_ordine { border: 1px solid #eee; float: right; width: 340px; padding: 20px; }
+#invia_ordine h2 { margin-top: 0;}
+
 .box_note { margin-top: 20px; width: 650px; }
 .box_note p { margin-top: 4px; }
 

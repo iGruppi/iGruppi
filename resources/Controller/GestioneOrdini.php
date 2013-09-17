@@ -233,4 +233,18 @@ class Controller_GestioneOrdini extends MyFw_Controller {
         $this->view->dettaglio = $dettaglio;
     }
     
+    function inviaAction() {
+        $idordine = $this->getParam("idordine");
+        $ordObj = new Model_Ordini();
+        $ordine = $ordObj->getByIdOrdine($idordine);
+        $this->view->ordine = $ordine;
+        $this->view->statusObj = new Model_Ordini_Status($ordine->data_inizio, $ordine->data_fine, $ordine->archiviato);;
+               
+        $produttoreObj = new Model_Produttori();
+        $produttore = $produttoreObj->getProduttoreById($ordine->idproduttore, $this->_userSessionVal->idgroup);
+        $this->view->produttore = $produttore;
+        
+        // TODO: Invia email...
+    }
+    
 }

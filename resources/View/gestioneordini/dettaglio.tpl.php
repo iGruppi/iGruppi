@@ -1,3 +1,12 @@
+<?php if( $this->statusObj->is_Chiuso()): ?>
+<div id="invia_ordine">
+    <h2>Invio ordine</h2>
+    <form id="forminvioordine" action="/gestione-ordini/invia/idordine/<?php echo $this->ordine->idordine; ?>" method="post">
+        <p><input type="checkbox" name="invia_dettaglio" value="S" /> Invia anche <b>Dettaglio Prodotti utenti</b></p>
+        <input type="submit" id="submit" value="INVIA!" style="margin-left: 0;" />
+    </form>
+</div>
+<?php endif; ?>
 <h2>Produttore <strong><?php echo $this->produttore->ragsoc;?></strong></h2>
 <h3>Ordine <strong class="<?php echo $this->statusObj->getStatus(); ?>"><?php echo $this->statusObj->getStatus(); ?></strong></h3>
 <p>
@@ -43,7 +52,7 @@
 <?php if(count($this->dettaglio) > 0): ?>
     <div id="list_box">
     <?php foreach ($this->dettaglio as $iduser => $user): ?>
-        <h2><?php echo $user["cognome"] . " " . $user["nome"]; ?></h2>
+        <h2><strong><?php echo $user["cognome"] . " " . $user["nome"]; ?></strong></h2>
         <?php 
         $totale = 0;        
         foreach ($user["prodotti"] as $idprodotto => $prodotto): ?>

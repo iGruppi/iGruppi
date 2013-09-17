@@ -122,13 +122,13 @@ class Model_Ordini extends MyFw_DB_Base {
     
     function getProdottiOrdinatiByIdOrdine($idordine) {
         // get elenco prodotti disponibile per quest'ordine
-        $sqlp = "SELECT p.*, op.costo AS costo_op, op.sconto, op.offerta, c.descrizione AS categoria, "
+        $sqlp = "SELECT p.*, op.costo AS costo_op, op.sconto, op.offerta, cs.descrizione AS categoria, "
               ." SUM(oup.qta) AS qta_ord, u.iduser, u.nome, u.cognome "
               ." FROM ordini_user_prodotti AS oup"
               ." JOIN users AS u ON oup.iduser=u.iduser"
               ." JOIN ordini_prodotti AS op ON oup.idprodotto=op.idprodotto AND oup.idordine=op.idordine"
               ." JOIN prodotti AS p ON op.idprodotto=p.idprodotto "
-              ." JOIN categorie AS c ON p.idcat=c.idcat "
+              ." JOIN categorie_sub AS cs ON p.idsubcat=cs.idsubcat "
               ." WHERE op.idordine= :idordine"
               ." GROUP BY oup.iduser, oup.idprodotto";
         $sthp = $this->db->prepare($sqlp);
