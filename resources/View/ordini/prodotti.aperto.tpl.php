@@ -1,4 +1,4 @@
-    <form id="prod_ordini_form" action="/ordini/prodotti/idordine/<?php echo $this->ordine->idordine;?>" method="post">
+    <form id="prod_ordini_form" action="/ordini/ordina/idordine/<?php echo $this->ordine->idordine;?>" method="post">
     <?php if($this->updated): ?>
         <div id="updated">
             <div class="isa_success">La lista dei prodotti ordinati è stata aggiornata con successo!</div>

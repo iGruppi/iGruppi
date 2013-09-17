@@ -1,7 +1,9 @@
     <div id="list_box">
     <?php 
         $totale = 0;
-        foreach ($this->list as $key => $prodotto): ?>
+        foreach ($this->list as $key => $prodotto): 
+            if($prodotto->qta > 0):
+            ?>
         <div class="box_row">
             <div class="sub_menu">
                 <span class="menu_icon_empty" >&nbsp;</span>
@@ -19,7 +21,9 @@
                 Costo: <strong><?php echo $this->valuta($prodotto->costo_op);?></strong> / <strong><?php echo $prodotto->udm; ?></strong><br />
             </p>
         </div>
-    <?php endforeach; ?>
+    <?php 
+            endif;
+        endforeach; ?>
         <div class="sub_menu">
             <div class="totale">
                 <p>Totale</p>
