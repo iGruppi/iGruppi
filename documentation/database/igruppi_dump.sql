@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Sep 12, 2013 at 02:16 AM
+-- Generation Time: Sep 17, 2013 at 11:43 AM
 -- Server version: 5.1.54
 -- PHP Version: 5.3.14
 
@@ -38,15 +38,15 @@ CREATE TABLE IF NOT EXISTS `categorie` (
 --
 
 CREATE TABLE IF NOT EXISTS `categorie_sub` (
-  `idsubcat` int(11) NOT NULL,
+  `idsubcat` int(11) NOT NULL AUTO_INCREMENT,
   `idcat` int(10) unsigned NOT NULL,
   `idgroup` int(10) unsigned NOT NULL,
   `idproduttore` int(10) unsigned NOT NULL,
-  `descrizione` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
+  `descrizione` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`idsubcat`),
-  KEY `fk_sub_categorie_categorie1_idx` (`idcat`),
+  KEY `fk_categorie_sub_categorie1_idx` (`idcat`),
   KEY `fk_categorie_sub_groups_produttori1_idx` (`idgroup`,`idproduttore`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -263,7 +263,6 @@ CREATE TABLE IF NOT EXISTS `users_produttori` (
 -- Constraints for table `categorie_sub`
 --
 ALTER TABLE `categorie_sub`
-  ADD CONSTRAINT `fk_sub_categorie_categorie1` FOREIGN KEY (`idcat`) REFERENCES `categorie` (`idcat`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   ADD CONSTRAINT `fk_categorie_sub_groups_produttori1` FOREIGN KEY (`idgroup`, `idproduttore`) REFERENCES `groups_produttori` (`idgroup`, `idproduttore`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
@@ -305,8 +304,8 @@ ALTER TABLE `prodotti`
 -- Constraints for table `prodotti_costi`
 --
 ALTER TABLE `prodotti_costi`
-  ADD CONSTRAINT `FK_group_prodotti_costi` FOREIGN KEY (`idgroup`) REFERENCES `groups` (`idgroup`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `FK_prodotto_prodotti_costi` FOREIGN KEY (`idprodotto`) REFERENCES `prodotti` (`idprodotto`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+  ADD CONSTRAINT `FK_prodotto_prodotti_costi` FOREIGN KEY (`idprodotto`) REFERENCES `prodotti` (`idprodotto`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `FK_group_prodotti_costi` FOREIGN KEY (`idgroup`) REFERENCES `groups` (`idgroup`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Constraints for table `users_group`
@@ -319,5 +318,5 @@ ALTER TABLE `users_group`
 -- Constraints for table `users_produttori`
 --
 ALTER TABLE `users_produttori`
-  ADD CONSTRAINT `FK_produttore` FOREIGN KEY (`idproduttore`) REFERENCES `produttori` (`idproduttore`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `FK_user_produttori` FOREIGN KEY (`iduser`) REFERENCES `users` (`iduser`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+  ADD CONSTRAINT `FK_user_produttori` FOREIGN KEY (`iduser`) REFERENCES `users` (`iduser`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `FK_produttore` FOREIGN KEY (`idproduttore`) REFERENCES `produttori` (`idproduttore`) ON DELETE NO ACTION ON UPDATE NO ACTION;

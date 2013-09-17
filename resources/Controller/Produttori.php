@@ -82,23 +82,21 @@ class Controller_Produttori extends MyFw_Controller {
                 $this->getDB()->makeUpdate("produttori", "idproduttore", $fv);
                 
                 // ADD CATEGORIES
-                $sth = $this->getDB()->prepare("DELETE FROM categorie_sub WHERE idgroup= :idgroup AND idproduttore= :idproduttore");
-                $sth->execute(array('idgroup' => $this->_userSessionVal->idgroup, 'idproduttore' => $idproduttore));
-                die;
                 if(count($this->view->arSubCat)) {
+                    $catObj = new Model_Categorie();
+                    $arVal = array();
+                    // prepare array to UPDATE!
                     foreach ($this->view->arSubCat as $idcat => $arCat) {
                         foreach ($arCat as $idsubcat => $subCatDesc) {
-                            $this->getDB()->makeInsert("categorie_sub", array(
+                            $arVal[] = array(
                                 'idsubcat'      => $idsubcat,
-                                'idproduttore'  => $idproduttore,
-                                'idgroup'       => $this->_userSessionVal->idgroup,
                                 'idcat'         => $idcat,
                                 'descrizione'   => $subCatDesc
-                            ));
+                            );
                         }
                     }
+                    $catObj->addSubCategorieToProduttore($this->_userSessionVal->idgroup, $idproduttore, $arVal);
                 }
-                
 
                 $this->view->updated = true;
             }
@@ -150,17 +148,19 @@ class Controller_Produttori extends MyFw_Controller {
                 
                 // ADD CATEGORIES
                 if(count($this->view->arSubCat)) {
+                    $catObj = new Model_Categorie();
+                    $arVal = array();
                     foreach ($this->view->arSubCat as $idcat => $arCat) {
                         foreach ($arCat as $k => $subCatDesc) {
-                            $this->getDB()->makeInsert("categorie_sub", array(
-                                'idproduttore'  => $idproduttore,
-                                'idgroup'       => $this->_userSessionVal->idgroup,
+                            $arVal[] = array(
                                 'idcat'         => $idcat,
                                 'descrizione'   => $subCatDesc
-                            ));
+                            );
                         }
                     }
+                    $catObj->addSubCategorieToProduttore($this->_userSessionVal->idgroup, $idproduttore, $arVal);
                 }
+                
                 
                 $this->view->added = true;
             }
