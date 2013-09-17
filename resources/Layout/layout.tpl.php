@@ -39,6 +39,7 @@
                 <a href="/"><img id="logo_top" src="/images/igruppi_logo.png" alt="iGruppi logo"></a>
 <?php   $auth= Zend_Auth::getInstance();
         if($auth->hasIdentity()):
+            $userData = $auth->getStorage()->read();
 ?>
                 <div id="menu_bar">
                     <ul>
@@ -65,6 +66,12 @@
                         -->
                     </ul>
                 </div>
+                <div id="userdata">
+                    <p>
+                        <b><?php echo $userData->nome . " " . $userData->cognome; ?></b><br />
+                        <em>Gruppo:</em> <b><?php echo $userData->gruppo; ?></b>
+                    </p>
+                </div>                
                 <div class="on_right" style="margin: 42px 0;">
                     <a href="/auth/logout">Esci</a>
                 </div>

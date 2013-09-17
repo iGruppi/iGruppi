@@ -24,7 +24,11 @@ class Controller_Auth extends MyFw_Controller {
             $fv = $this->getRequest()->getPost();
             if( $form->isValid($fv) ) {
                 // check Auth
-                $checkSth = $this->getDB()->prepare("SELECT * FROM users WHERE email= :email AND password= :password");
+                $sql = "SELECT u.*, ug.attivo, ug.fondatore, ug.contabile, g.nome AS gruppo "
+                      ."FROM users AS u LEFT JOIN users_group AS ug ON u.iduser=ug.iduser "
+                      ."LEFT JOIN groups AS g ON ug.idgroup=g.idgroup "
+                      ."WHERE email= :email AND password= :password";
+                $checkSth = $this->getDB()->prepare($sql);
                 $checkSth->execute(array('email' => $form->getValue("email"), 'password' => $form->getValue('password')));
                 if( $checkSth->rowCount() > 0 ) {
                     // store user values

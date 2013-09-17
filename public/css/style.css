@@ -37,7 +37,7 @@ div#header {
 div#header_top { height: 70px; width: 900px; margin: 0 auto; }
 div#header_top #logo_top { float: left; margin-top: 16px; }
 
-
+#userdata { float: left; border-left: 10px solid #fcfcfc; margin: 23px 0 0 40px; font-size: 14px; }
 
 
 
