@@ -105,18 +105,23 @@ class Model_Ordini extends MyFw_DB_Base {
     }
     
     
-    function getAllByIdgroup($idgroup, $archiviato=false) {
+    function getAllByIdgroup($idgroup, $idproduttore=null) {
+        
+        $arFilters = array('idgroup' => $idgroup);
         
         $sql = "SELECT o.*, p.*, u.nome, u.cognome "
-             ." FROM groups_produttori AS gp "
-             ." LEFT JOIN ordini AS o ON gp.idgroup=o.idgroup AND gp.idproduttore=o.idproduttore "
+             ." FROM ordini AS o "
+             ." LEFT JOIN groups_produttori AS gp ON o.idgroup=gp.idgroup AND o.idproduttore=gp.idproduttore "
              ." LEFT JOIN produttori AS p ON gp.idproduttore=p.idproduttore "
              ." LEFT JOIN users AS u ON gp.iduser_ref=u.iduser "
-             ." WHERE gp.idgroup= :idgroup"
-             ." AND o.archiviato= :archiviato";
+             ." WHERE gp.idgroup= :idgroup";
+        if(!is_null($idproduttore)) {
+            $sql .= " AND gp.idproduttore= :idproduttore";
+            $arFilters["idproduttore"] = $idproduttore;
+        }
+        $sql .= " ORDER BY o.archiviato, o.data_fine DESC";
         $sth = $this->db->prepare($sql);
-        $arc = ($archiviato) ? "S" : "N";
-        $sth->execute(array('idgroup' => $idgroup, 'archiviato' => $arc));
+        $sth->execute($arFilters);
         return $sth->fetchAll(PDO::FETCH_OBJ);
     }
     

@@ -1,5 +1,20 @@
 <h2>Elenco Ordini del <strong><?php echo "Gruppo"; ?></strong></h2>
 
+<div id="right_col" class="links_order">
+    <?php 
+    if(count($this->produttori) > 0):
+        foreach ($this->produttori as $key => $produttore): ?>
+        <?php if( $produttore->idproduttore == $this->idproduttore ): ?>
+        <h3><span class="menu_low_selected"><?php echo $produttore->ragsoc; ?></span></h3>
+        <?php else: ?>
+        <h3><a class="menu_low" href="/ordini/index/idproduttore/<?php echo $produttore->idproduttore; ?>"><span class="box_menu_text"><?php echo $produttore->ragsoc; ?></span></a></h3>
+        <?php endif; ?>
+    <?php 
+        endforeach; 
+    endif; ?>
+
+</div>
+
 <div id="content_list1">
 <?php if(count($this->list) > 0): ?>
 

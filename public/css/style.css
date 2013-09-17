@@ -190,6 +190,11 @@ p {
 #right_col { text-align: right; float: right; }
 #right_col a.menu { color: #999; text-decoration: none; border: 1px solid #eee; line-height: 30px; display: block; padding: 4px 10px;}
 #right_col a.menu:hover { border: 1px solid #ccc; background-color: #eee; color: #000; }
+.links_order { width: 200px; }
+.links_order h3 { margin-top: 0; }
+.links_order a.menu_low { color: #999; text-decoration: none; border: 1px solid #eee; line-height: 22px; display: block; padding: 2px 6px;}
+.links_order a.menu_low:hover { border: 1px solid #ccc; background-color: #eee; color: #000; }
+.links_order .menu_low_selected { color: #000; text-decoration: none; border: 1px solid #ccc; line-height: 22px; display: block; padding: 2px 6px;}
 
 #invia_ordine { border: 1px solid #eee; float: right; width: 340px; padding: 20px; }
 #invia_ordine h2 { margin-top: 0;}

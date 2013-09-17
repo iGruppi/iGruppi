@@ -17,13 +17,17 @@ class Controller_Ordini extends MyFw_Controller {
 
     function indexAction() {
         
-        $statusSelected = $this->getParam("st");
-        if(is_null($statusSelected)) {
-            $statusSelected = Model_Ordini_Status::STATUS_APERTO;
-        }
+        // try to get idproduttore
+        $idproduttore = $this->getParam("idproduttore");
+        $this->view->idproduttore = $idproduttore;
+        
+        // set elenco produttori
+        $prodObj = new Model_Produttori();
+        $produttori = $prodObj->getProduttoriByIdGroup($this->_userSessionVal->idgroup);
+        $this->view->produttori = $produttori;
         
         $ordiniObj = new Model_Ordini();
-        $listOrd = $ordiniObj->getAllByIdgroup($this->_userSessionVal->idgroup);
+        $listOrd = $ordiniObj->getAllByIdgroup($this->_userSessionVal->idgroup, $idproduttore);
         // add Status model to Ordini
         if(count($listOrd) > 0) {
             foreach($listOrd AS &$ordine) {
@@ -31,7 +35,6 @@ class Controller_Ordini extends MyFw_Controller {
             }
         }
         $this->view->list = $listOrd;
-        //Zend_Debug::dump($listOrd);die;
     }
     
     function viewdettaglioAction() {
