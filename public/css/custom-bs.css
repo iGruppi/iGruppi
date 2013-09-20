@@ -25,7 +25,7 @@ a {color: #47a447;}
 
 /* Set the fixed height of the footer here */
 #footer {
-  color: #777;
+  color: #999;
   height: 100px;
   padding-top: 10px;
   border-top: 1px solid #f5f5f5;
@@ -40,8 +40,9 @@ a {color: #47a447;}
   padding-left: 15px;
   padding-right: 15px;
 }
-#footer .info { float: left; }
-#footer .social { margin-left: 600px; margin-top: 15px; }
+#footer p { margin: 0; }
+#footer .info { float: left; margin: 0; }
+#footer .social { margin: 15px 0 0 600px; }
 #footer .icon_social { line-height: 28px; padding-left: 30px; }
 #footer .icon_social a { color: #777; font-weight: normal; text-decoration: none;}
 #footer .icon_social a:hover { color: #333;}

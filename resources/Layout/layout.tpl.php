@@ -96,12 +96,12 @@
     <div id="footer">
       <div class="container">
             <div class="info">
-                <p><a href="http://igruppi.com">iGruppi</a><br />Open Source Software per i Gruppi di acquisto</p>
-                <p class="icon_social github"><a href="https://github.com/Jazzo/iGruppi">Code hosted by Github</a></p>
+                <p><a href="http://igruppi.com">iGruppi</a><br /><small>Open Source Software per i Gruppi di acquisto</small></p>
+                <p class="icon_social github"><a href="https://github.com/Jazzo/iGruppi"><small>Code hosted by Github</small></a></p>
             </div>
             <div class="social">
-                <p class="icon_social twitter"><a href="https://twitter.com/iGruppi">@igruppi</a></p>
-                <p class="icon_social wordpress"><a href="http://igruppi.com">Blog ufficiale</a></p>
+                <p class="icon_social twitter"><a href="https://twitter.com/iGruppi"><small>@igruppi</small></a></p>
+                <p class="icon_social wordpress"><a href="http://igruppi.com"><small>Blog ufficiale</small></a></p>
             </div>
       </div>
     </div>
