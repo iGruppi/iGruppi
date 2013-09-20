@@ -16,8 +16,8 @@
     
     <!-- Personalized CSS and JS 
 	<link rel="stylesheet" href="/css/style.css" type="text/css" media="screen" />
-    <link rel="stylesheet" href="/css/style_print.css" type="text/css" media="print" /> -->
-	<link rel="stylesheet" href="/css/form.css" type="text/css" />
+    <link rel="stylesheet" href="/css/style_print.css" type="text/css" media="print" />
+	<link rel="stylesheet" href="/css/form.css" type="text/css" /> -->
     <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css" media="screen">
     <link rel="stylesheet" href="/css/custom-bs.css" type="text/css" media="screen" />
 	<script type="text/javascript" language="JavaScript" src="/js/jx.js"></script>
@@ -39,56 +39,42 @@
     <div id="wrap">
       <div class="container">
         <div class="header">
-            <a href="/"><img id="logo_top" src="/images/igruppi_logo.png" alt="iGruppi logo"></a>
+            <a class="pull-left" href="/"><img id="logo_top" src="/images/igruppi_logo.png" alt="iGruppi logo"></a>
 <?php   $auth= Zend_Auth::getInstance();
         if($auth->hasIdentity()):
             $userData = $auth->getStorage()->read();
 ?>
-                <div id="menu_bar">
-                    <ul>
-                        <li class="page_item"><a href="/dashboard">Home</a></li>
-                        <li class="page_item"><a href="/ordini" class="green">Ordini</a>
-<!--                            <ul class="children">
-                                <li class="page_item"><a href="/ordini">In corso</a></li>
-                                <li class="page_item"><a href="/ordini/archivio">Archivio</a></li>
-                            </ul> -->
-                        </li>
-                        <li class="page_item last_item"><a href="/gruppo">Gruppo</a>
-                            <ul class="children">
-                                <li class="page_item"><a href="/gruppo/iscritti">Utenti Iscritti</a></li>
-                                <li class="page_item"><a href="/produttori">Produttori</a></li>
-                            </ul>
-                        </li>
-                        <!--
-                        <li class="page_item"><a href="#">Gestione</a>
-                            <ul class="children">
-                                <li class="page_item"><a href="#">Gestione 1</a></li>
-                                <li class="page_item"><a href="#">Utenti</a></li>
-                            </ul>
-                        </li>
-                        -->
-                    </ul>
-                </div>
-                <div id="userdata">
-                    <p>
-                        <b><?php echo $userData->nome . " " . $userData->cognome; ?></b><br />
-                        <em>Gruppo:</em> <b><?php echo $userData->gruppo; ?></b>
-                    </p>
-                </div>                
-                <div class="on_right" style="margin: 42px 0;">
-                    <a href="/auth/logout">Esci</a>
-                </div>
+            <div id="userdata">
+                <b><?php echo $userData->nome . " " . $userData->cognome; ?></b><br />
+                <em>Gruppo:</em> <b><?php echo $userData->gruppo; ?></b>
+            </div>                
+            <ul class="nav nav-pills pull-right">
+              <li><a class="btn btn-default btn-mylg" href="/dashboard"><span class="glyphicon glyphicon-home"></span> Home</a></li>
+              <li><a class="btn btn-success btn-mylg" href="/ordini"><span class="glyphicon glyphicon-shopping-cart"></span> Ordini</a></li>
+              <li>
+                <div class="btn-group">
+                  <button type="button" class="btn btn-default dropdown-toggle btn-mylg" data-toggle="dropdown">
+                    <span class="glyphicon glyphicon-glass"></span> Gruppo <span class="caret"></span>
+                  </button>
+                  <ul class="dropdown-menu" role="menu">
+                    <li><a href="/gruppo/iscritti">Utenti</a></li>
+                    <li><a href="/produttori">Produttori</a></li>
+                  </ul>
+                </div>            
+              </li>
+              <li><a class="btn btn-default btn-mylg" href="/auth/logout"><span class="glyphicon glyphicon-log-out"></span> Esci</a></li>
+            </ul>
 <?php   else: ?>
-                <ul class="nav nav-pills pull-right">
-                  <li><a class="btn btn-success btn-ig" href="/auth/login">Login</a></li>
-                  <li><a class="btn btn-primary btn-ig" href="/auth/register">Registrati</a></li>
-                </ul>                
+            <ul class="nav nav-pills pull-right">
+              <li><a class="btn btn-success btn-mylg" href="/auth/login">Login</a></li>
+              <li><a class="btn btn-primary btn-mylg" href="/auth/register"><span class="glyphicon glyphicon-user"></span> Nuovo utente</a></li>
+            </ul>                
 <?php   endif; ?>
+            <div class="clearfix">&nbsp;</div>            
         </div>
         
         <div id="content">
             <?php echo (isset($this->content) ? $this->content: ""); ?>
-            <div style="clear: both;">&nbsp;</div>
         </div>
       </div>
     </div>
@@ -96,7 +82,7 @@
     <div id="footer">
       <div class="container">
             <div class="info">
-                <p><a href="http://igruppi.com">iGruppi</a><br /><small>Open Source Software per i Gruppi di acquisto</small></p>
+                <p><a href="http://igruppi.com"><b>iGruppi</b></a><br /><small>Open Source Software per i Gruppi di acquisto</small></p>
                 <p class="icon_social github"><a href="https://github.com/Jazzo/iGruppi"><small>Code hosted by Github</small></a></p>
             </div>
             <div class="social">

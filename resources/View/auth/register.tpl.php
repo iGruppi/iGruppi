@@ -1,4 +1,4 @@
-<h1>Registrazione</h1>
+<h1>Registrazione nuovo utente</h1>
 
 <?php if( $this->added === true): ?>
 <h2>La tua iscrizione è avvenuta con successo!</h2>
@@ -6,7 +6,7 @@
 <?php else: ?>
 <form id="loginForm" action="<?php echo $this->form->getAction(); ?>" method="post" class="f1n200">
 
-    <fieldset class="border_top">
+    <fieldset>
         <?php echo $this->form->renderField('nome'); ?>
         <?php echo $this->form->renderField('cognome'); ?>
         <?php echo $this->form->renderField('num_members'); ?>
@@ -21,6 +21,6 @@
         <?php echo $this->form->renderField('idgroup'); ?>
     </fieldset>
 
-        <input type="submit" id="submit" value="ISCRIVIMI ORA!" />
+    <button type="submit" id="submit" class="btn btn-primary btn-mylg">ISCRIVIMI ORA!</button>
 </form>
 <?php endif; ?>
