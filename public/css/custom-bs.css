@@ -1,0 +1,70 @@
+/* Space out content a bit */
+html,
+body {
+  height: 100%;
+  /* The html and body elements cannot have any padding or margin. */
+}
+
+a {color: #47a447;}
+
+.header {
+  padding-top: 20px;
+  padding-bottom: 30px;
+}
+
+/* Wrapper for page content to push down footer */
+#wrap {
+  min-height: 100%;
+  height: auto !important;
+  height: 100%;
+  /* Negative indent footer by its height */
+  margin: 0 auto -100px;
+  /* Pad bottom by footer height */
+  padding: 0 0 100px;
+}
+
+/* Set the fixed height of the footer here */
+#footer {
+  color: #777;
+  height: 100px;
+  padding-top: 10px;
+  border-top: 1px solid #f5f5f5;
+  background-color: #fdfdfd;
+}
+
+#wrap > .container {
+  padding: 20px 15px 0;
+}
+
+#footer > .container {
+  padding-left: 15px;
+  padding-right: 15px;
+}
+#footer .info { float: left; }
+#footer .social { margin-left: 600px; margin-top: 15px; }
+#footer .icon_social { line-height: 28px; padding-left: 30px; }
+#footer .icon_social a { color: #777; font-weight: normal; text-decoration: none;}
+#footer .icon_social a:hover { color: #333;}
+#footer .github { background: transparent url(/images/icon/social/Github.png) no-repeat 3px 1px; }
+#footer .twitter { background: transparent url(/images/icon/social/Twitter.png) no-repeat 0px 3px; }
+#footer .wordpress { background: transparent url(/images/icon/social/Wordpress.png) no-repeat 0px 3px; }
+
+
+/* Buttons and more.... */
+.btn-ig {
+    padding: 10px 16px;
+    font-size: 18px;
+    line-height: 1.33;
+    border-radius: 0;
+}
+.btn-success:hover { background-color: #47a447; border-color: #398439; }
+.btn-primary:hover { background-color: #3276b1; border-color: #285e8e; }
+
+.nav-pills>li>a {
+    border-radius: 2px;
+}
+
+
+
+
+

@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
 <head>
     <title>iGruppi - Gruppi di acquisto</title>
@@ -10,13 +10,16 @@
     -->
     <!-- jQuery -->
     <script type="text/javascript" language="JavaScript" src="/js/jquery/jquery-1.8.3.js"></script>
-    <script type="text/javascript" language="JavaScript" src="/js/jquery/jquery-ui.js"></script>
-    <link rel="stylesheet" href="/css/jquery/jquery-ui.css" type="text/css" />
+    <!--script type="text/javascript" language="JavaScript" src="/js/jquery/jquery-ui.js"></script -->
+    <script type="text/javascript" language="JavaScript" src="/bootstrap/js/bootstrap.min.js"></script>
+    <!--link rel="stylesheet" href="/css/jquery/jquery-ui.css" type="text/css" /-->
     
-    <!-- Personalized CSS and JS -->
+    <!-- Personalized CSS and JS 
 	<link rel="stylesheet" href="/css/style.css" type="text/css" media="screen" />
-    <link rel="stylesheet" href="/css/style_print.css" type="text/css" media="print" />
+    <link rel="stylesheet" href="/css/style_print.css" type="text/css" media="print" /> -->
 	<link rel="stylesheet" href="/css/form.css" type="text/css" />
+    <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css" media="screen">
+    <link rel="stylesheet" href="/css/custom-bs.css" type="text/css" media="screen" />
 	<script type="text/javascript" language="JavaScript" src="/js/jx.js"></script>
 	<script type="text/javascript" language="JavaScript" src="/js/functions.js"></script>
 	<script type="text/javascript" language="JavaScript" src="/js/jxAdmin.js"></script>
@@ -33,10 +36,10 @@
 
 </head>
 <body>
-    <div id="container">
-        <div id="header">
-			<div id="header_top">
-                <a href="/"><img id="logo_top" src="/images/igruppi_logo.png" alt="iGruppi logo"></a>
+    <div id="wrap">
+      <div class="container">
+        <div class="header">
+            <a href="/"><img id="logo_top" src="/images/igruppi_logo.png" alt="iGruppi logo"></a>
 <?php   $auth= Zend_Auth::getInstance();
         if($auth->hasIdentity()):
             $userData = $auth->getStorage()->read();
@@ -76,31 +79,32 @@
                     <a href="/auth/logout">Esci</a>
                 </div>
 <?php   else: ?>
-                <div class="on_right" style="margin: 42px 0;">
-                    <a href="/auth/login">Login</a><br />
-                    <a href="/auth/register">Registrati</a>
-                </div>
+                <ul class="nav nav-pills pull-right">
+                  <li><a class="btn btn-success btn-ig" href="/auth/login">Login</a></li>
+                  <li><a class="btn btn-primary btn-ig" href="/auth/register">Registrati</a></li>
+                </ul>                
 <?php   endif; ?>
-            </div>
         </div>
+        
         <div id="content">
             <?php echo (isset($this->content) ? $this->content: ""); ?>
             <div style="clear: both;">&nbsp;</div>
         </div>
-        <div id="footer">
-            <div id="footer_c">
-                <div class="info" style="float: left;">
-                    <a href="http://igruppi.com">iGruppi</a>
-                    <p>Open Source Software per i Gruppi di acquisto</p><br />
-                    <p class="icon_social github"><a href="https://github.com/Jazzo/iGruppi">Code hosted by Github</a></p>
-                </div>
-                <div class="social">
-                    
-                    <p class="icon_social twitter"><a href="https://twitter.com/iGruppi">@igruppi</a></p>
-                    <p class="icon_social wordpress"><a href="http://igruppi.com">Blog ufficiale</a></p>
-                </div>
-            </div>
-        </div>
+      </div>
     </div>
+    
+    <div id="footer">
+      <div class="container">
+            <div class="info">
+                <p><a href="http://igruppi.com">iGruppi</a><br />Open Source Software per i Gruppi di acquisto</p>
+                <p class="icon_social github"><a href="https://github.com/Jazzo/iGruppi">Code hosted by Github</a></p>
+            </div>
+            <div class="social">
+                <p class="icon_social twitter"><a href="https://twitter.com/iGruppi">@igruppi</a></p>
+                <p class="icon_social wordpress"><a href="http://igruppi.com">Blog ufficiale</a></p>
+            </div>
+      </div>
+    </div>
+
 </body>
 </html>

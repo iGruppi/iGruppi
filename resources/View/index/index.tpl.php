@@ -1,5 +1,4 @@
-<h1>iGruppi</h1>
-
-<h2>Open Source Software per i Gruppi di acquisto</h2>
-
-<h3>Versione 1.1</h3>
+<div class="jumbotron">
+    <p class="lead">Open Source Software per i Gruppi di acquisto!</p>
+    <p><a class="btn btn-lg btn-success" href="#">Versione 1.1</a></p>
+</div>

@@ -1,7 +1,3 @@
-/*********************************************************************************
- * Copyright © 2012 Tutti i diritti riservati.
- * Analisi e Sviluppo di Davide Gullo.
- ********************************************************************************/
 
 /* Style form, input, fieldset, ecc. */
 @import url(/css/form.css);
@@ -61,6 +57,7 @@ div#footer_c {
 	padding: 15px 20px 0 20px;
 }
 div#footer p {	padding: 0 10px 0 0; margin: 0; }
+
 div#footer_c .social { margin-left: 600px; margin-top: 15px; }
 div#footer_c .icon_social { line-height: 28px; padding-left: 30px; }
 div#footer_c .icon_social a { color: #aaa; font-weight: normal; text-decoration: none;}
