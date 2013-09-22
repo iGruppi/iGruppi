@@ -1,17 +1,4 @@
-<form id="prodform" action="<?php echo $this->form->getAction(); ?>" method="post" class="f1n200">
-
-    <fieldset class="border_top">
-        <legend>Dati produttore</legend>
-        <?php echo $this->form->renderField('ragsoc'); ?>
-        <?php echo $this->form->renderField('indirizzo'); ?>
-        <?php echo $this->form->renderField('comune'); ?>
-        <?php echo $this->form->renderField('provincia'); ?>
-        <?php echo $this->form->renderField('telefono'); ?>
-        <?php echo $this->form->renderField('email'); ?>
-    </fieldset>
-
-    <fieldset class="border_top">
-        <legend>Categorie prodotti</legend>
+      <fieldset>
         <label for="idcat">Aggiungi Categoria:</label>
         <select name="idcat" id="idcat" onchange="$('#btn_add_subCat').show()">
             <option value="0" selected="">Seleziona...</option>
@@ -34,15 +21,5 @@
             <p id="no_subCat">Nessuna categoria selezionata!</p>
         <?php endif; ?>
         </div>
-    </fieldset>
+      </fieldset>
 
-    <fieldset class="border_top">
-        <legend>Note</legend>
-        <?php echo $this->form->renderField('note'); ?>
-    </fieldset>
-
-        <?php echo $this->form->renderField('idproduttore'); ?>
-
-        <input type="submit" id="submit" value="SALVA" />
-
-</form>

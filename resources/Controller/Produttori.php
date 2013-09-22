@@ -45,6 +45,8 @@ class Controller_Produttori extends MyFw_Controller {
 
         $idproduttore = $this->getParam("idproduttore");
         
+        $this->view->updated = false;
+        
         // check if CAN edit this Produttore
         $myObj = new Model_Produttori();
         $produttore = $myObj->getProduttoreById($idproduttore, $this->_userSessionVal->idgroup);
@@ -117,22 +119,8 @@ class Controller_Produttori extends MyFw_Controller {
         $form->setAction("/produttori/add");
         $form->removeField("idproduttore");
         
-        // Get elenco Categorie
-        $catObj = new Model_Categorie();
-        $this->view->categorie = $catObj->convertToSingleArray($catObj->getCategorie(), "idcat", "descrizione");
-        $this->view->arSubCat = array();
-
         if($this->getRequest()->isPost()) {
-            
-            // get Post and check if is valid
             $fv = $this->getRequest()->getPost();
-            // set arSubCat
-            if(isset($fv["arSubCat"])) {
-                $this->view->arSubCat = $fv["arSubCat"];
-                unset($fv["arSubCat"]);
-            }
-            unset($fv["idcat"]);
-            
             if( $form->isValid($fv) ) {
                 
                 // ADD Produttore
@@ -145,24 +133,9 @@ class Controller_Produttori extends MyFw_Controller {
                     'stato'         => 'A',
                     'iduser_ref'    => $this->_iduser
                 ));
-                
-                // ADD CATEGORIES
-                if(count($this->view->arSubCat)) {
-                    $catObj = new Model_Categorie();
-                    $arVal = array();
-                    foreach ($this->view->arSubCat as $idcat => $arCat) {
-                        foreach ($arCat as $k => $subCatDesc) {
-                            $arVal[] = array(
-                                'idcat'         => $idcat,
-                                'descrizione'   => $subCatDesc
-                            );
-                        }
-                    }
-                    $catObj->addSubCategorieToProduttore($this->_userSessionVal->idgroup, $idproduttore, $arVal);
-                }
-                
-                
-                $this->view->added = true;
+     
+                // REDIRECT TO EDIT
+                $this->redirect("produttori", "edit", array('idproduttore' => $idproduttore));
             }
         }
         
