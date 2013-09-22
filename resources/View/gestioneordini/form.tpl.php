@@ -15,7 +15,7 @@
         <?php echo $this->form->renderField('idgroup'); ?>
         <?php echo $this->form->renderField('idproduttore'); ?>
 
-        <input type="submit" id="submit" value="SALVA" />
+        <button type="submit" id="submit" class="btn btn-success btn-mylg">SALVA</button>
 
 </form>
 <script>

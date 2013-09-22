@@ -16,13 +16,17 @@ class Controller_Prodotti extends MyFw_Controller {
     }
 
     function indexAction() {
-
+        $idproduttore = $this->getParam("idproduttore");
+        $this->forward("prodotti", "list", array("idproduttore" => $idproduttore));
     }
 
     
     function listAction() {
         
         $idproduttore = $this->getParam("idproduttore");
+        // Get updated if it is set
+        $this->view->updated = $this->getParam("updated");
+        
         $prodModel = new Model_Produttori();
         $produttore = $prodModel->getProduttoreById($idproduttore, $this->_userSessionVal->idgroup);
         $produttore->refObj = new Model_Produttori_Referente($produttore->iduser_ref);
@@ -37,9 +41,7 @@ class Controller_Prodotti extends MyFw_Controller {
 
     function editAction() {
 
-        $idprodotto = $this->getParam("idprodotto");
-        $this->view->updated = false;
-        
+        $idprodotto = $this->getParam("idprodotto");        
         // check if CAN edit this Produttore
         $myObj = new Model_Prodotti();
         $prodotto = $myObj->getProdottoById($idprodotto);
@@ -63,9 +65,7 @@ class Controller_Prodotti extends MyFw_Controller {
 
                 $this->getDB()->makeUpdate("prodotti", "idprodotto", $form->getValues());
 
-                $this->view->updated = true;
-                
-                $this->redirect("prodotti", "list", array("idproduttore" => $prodotto["idproduttore"]));
+                $this->forward("prodotti", "list", array("idproduttore" => $prodotto["idproduttore"], "updated" => true));
             }
             //Zend_Debug::dump($sth); die;
             
