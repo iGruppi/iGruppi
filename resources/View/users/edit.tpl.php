@@ -16,6 +16,6 @@
     </fieldset>
         <?php echo $this->form->renderField('iduser'); ?>
 
-        <input type="submit" id="submit" value="SALVA" />
+    <button type="submit" id="submit" class="btn btn-success btn-mylg">SALVA</button>
 
 </form>

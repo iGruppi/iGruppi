@@ -2,6 +2,7 @@
 
 <div class="row">
   <div class="col-md-8">
+      
 <?php if(count($this->list) > 0): ?>
     <?php foreach ($this->list as $key => $produttore): ?>
       
@@ -17,7 +18,6 @@
         </div>
       </div>
     <?php endforeach; ?>
-
 <?php else: ?>
     <h3>Nessun ordine disponibile!</h3>
 <?php endif; ?>

@@ -18,5 +18,17 @@ class Model_Users extends MyFw_DB_Base {
         return $sth_app->fetch(PDO::FETCH_ASSOC);
     }
     
+    function getUsersByIdGroup($idgroup) {
+        // get All Iscritti in Group
+        $sql = "SELECT u.*, ug.attivo "
+              ." FROM users_group AS ug"
+              ." LEFT JOIN users AS u ON ug.iduser=u.iduser"
+              ." WHERE ug.idgroup= :idgroup"
+              ." ORDER BY u.cognome";
+        //echo $sql; die;
+        $sth = $this->db->prepare($sql);
+        $sth->execute(array('idgroup' => $idgroup));
+        return $sth->fetchAll(PDO::FETCH_CLASS);
+    }
 
 }

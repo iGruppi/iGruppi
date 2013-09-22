@@ -24,24 +24,18 @@ class Controller_Gruppo extends MyFw_Controller {
     function iscrittiAction() {
         
         // get All Iscritti in Group
-        $sql = "SELECT u.*, ug.attivo "
-              ." FROM users_group AS ug"
-              ." LEFT JOIN users AS u ON ug.iduser=u.iduser"
-              ." WHERE ug.idgroup= :idgroup"
-              ." ORDER BY u.cognome";
-        //echo $sql; die;
-        $sth = $this->getDB()->prepare($sql);
-        $sth->execute(array('idgroup' => $this->_userSessionVal->idgroup));
-        
+        $uObj = new Model_Users();
+        $users = $uObj->getUsersByIdGroup($this->_userSessionVal->idgroup);
+
         // check IDfondatore
         $gObj = new Model_Groups();
         $arFounders = $gObj->getArFoundersId($this->_userSessionVal->idgroup);
         $auth = Zend_Auth::getInstance();
         $this->view->imFondatore = in_array($auth->getIdentity()->iduser, $arFounders);
-        
-        
+        $this->view->group = $gObj->getGroupById($this->_userSessionVal->idgroup);
+
 //        Zend_Debug::dump($sth->rowCount()); die;
-        $this->view->list = $sth->fetchAll(PDO::FETCH_CLASS);
+        $this->view->list = $users;
     }
 
 
