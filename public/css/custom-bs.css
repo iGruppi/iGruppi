@@ -52,22 +52,51 @@ body {
 #footer .wordpress { background: transparent url(/images/icon/social/Wordpress.png) no-repeat 0px 3px; }
 
 
-/* BASE Elements */
-#content { padding: 10px 30px; }
-#content h1, #content h2, #content h3, #content h4, #content h5, #content h6 {color: #666;}
-#content h1 { font-size: 30px; }
-#content h3.no-margin {margin:0;}
-#content h3.green {color: #47a447;}
+/*------------------ BASE Elements ------------------*/
 a {color: #47a447;}
+h1, h2, h3, h4, h5, h6 {color: #666;}
+h1 { font-size: 30px; }
+h3.no-margin {margin:0;}
+h3.green {color: #47a447;}
 
-/* GRIDs and more.... */
+.content { padding: 10px 30px; }
+
+/* STILI ORDINI STATUS */
+.ordine { margin-top: 5px; }
+.Pianificato { color: #666; }
+.Aperto { color: #2b2; }
+.Chiuso { color: #f22; }
+.Archiviato { color: #ccc; }
+
+.btn_icon { float: right; height: 32px; width: 32px; margin: 2px 20px; }
+.delete { background: url(/images/icon/delete_32.png) no-repeat left top; }
+.delete:hover { background: url(/images/icon/delete_32-hover.png) no-repeat left top; }
+.ok { background: url(/images/icon/ok_32.png) no-repeat left top; }
+.ok:hover { background: url(/images/icon/ok_32-hover.png) no-repeat left top; }
+
+/* box_row disabled style */
+.box_row_dis p,
+.box_row_dis strong,
+.box_row_dis label,
+.box_row_dis input,
+.box_row_dis a.gray,
+.box_row_dis a.gray:hover,
+.box_row_dis h3,
+.box_row_dis h3.dom_title a { color: #ddd; }
+.box_row_dis input { border: solid 1px #ddd; }
+
+
+
+
+
+/*------------------ GRIDs and more.... */
 
 .row-myig { margin-top: 40px; border-bottom: 20px solid #fbfbfb; }
 
 
 
 
-/* Buttons and more.... */
+/*------------------ Buttons and more.... */
 .btn-no-bord-rad { border-radius: 0px; }
 .btn-mylg {
     padding: 10px 16px;
@@ -84,9 +113,9 @@ a {color: #47a447;}
 .btn-group-myig { margin-top: 4px; }
 
 
-/*
+/*------------------------------------
     FORM 
-*/
+------------------------------------*/
 
 
 form{ margin:0px; margin-top: 35px; padding:0px; font-size: 16px; }

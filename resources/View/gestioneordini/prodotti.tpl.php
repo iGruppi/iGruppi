@@ -4,7 +4,10 @@
     Data apertura: <strong><?php echo $this->date($this->ordine->data_inizio, '%d/%m/%Y');?></strong> alle <?php echo $this->date($this->ordine->data_inizio, '%H:%M:%S');?></strong><br />
     Data chiusura: <strong><?php echo $this->date($this->ordine->data_fine, '%d/%m/%Y');?></strong> alle <?php echo $this->date($this->ordine->data_fine, '%H:%M:%S');?></strong>
 </p>    
-<div id="content_list1" style="margin-top: 50px;">
+
+<div class="row">
+  <div class="col-md-8">
+      
     <?php if(count($this->list) > 0): ?>
         <?php if($this->statusObj->can_ModificaProdotti()): ?>
             <?php include $this->template('gestioneordini/prodotti.aperto.tpl.php'); ?>
@@ -14,4 +17,6 @@
     <?php else: ?>
         <h3>Nessun prodotto disponibile!</h3>
     <?php endif; ?>
+        
+  </div>
 </div>

@@ -36,7 +36,8 @@
 <?php endif; ?>
   </div>
 <?php if($this->produttore->refObj->is_Referente()): ?>    
-  <div class="col-md-4">
+  <div class="col-md-1">&nbsp;</div>
+  <div class="col-md-3">
       <a class="btn btn-default btn-mylg" href="/prodotti/add/idproduttore/<?php echo $this->produttore->idproduttore;?>"><span class="glyphicon glyphicon-plus"></span> Nuovo prodotto</a>
   </div>
 <?php endif; ?>

@@ -9,7 +9,7 @@
       <div class="row row-myig">
         <div class="col-md-8">
             <h3 class="no-margin<?php if($produttore->refObj->is_Referente()): ?> green<?php endif; ?>"><?php echo $produttore->ragsoc;?></h3>
-            <p id="p_details_<?php echo $produttore->idproduttore;?>">
+            <p>
                 Referente: <strong><?php echo $produttore->nome . " " . $produttore->cognome; ?></strong>
             </p>
         </div>
@@ -23,7 +23,8 @@
 <?php endif; ?>
       
   </div>
-  <div class="col-md-4">
+  <div class="col-md-1">&nbsp;</div>
+  <div class="col-md-3">
       <a class="btn btn-default btn-mylg" href="/produttori/add"><span class="glyphicon glyphicon-plus"></span> Nuovo produttore</a>
   </div>
 </div>
