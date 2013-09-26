@@ -105,7 +105,7 @@ class Model_Ordini extends MyFw_DB_Base {
     }
     
     
-    function getAllByIdgroup($idgroup, $idproduttore=null) {
+    function getAllByIdgroupWithFilter($idgroup, array $filters = null) {
         
         $arFilters = array('idgroup' => $idgroup);
         
@@ -115,9 +115,25 @@ class Model_Ordini extends MyFw_DB_Base {
              ." LEFT JOIN produttori AS p ON gp.idproduttore=p.idproduttore "
              ." LEFT JOIN users AS u ON gp.iduser_ref=u.iduser "
              ." WHERE gp.idgroup= :idgroup";
-        if(!is_null($idproduttore)) {
-            $sql .= " AND gp.idproduttore= :idproduttore";
-            $arFilters["idproduttore"] = $idproduttore;
+        if(is_array($filters) && count($filters) > 0) {
+            foreach($filters AS $fField => $fValue) {
+                switch ($fField) {
+                    case "idproduttore":
+                        $sql .= " AND gp.idproduttore= :idproduttore";
+                        $arFilters["idproduttore"] = $fValue;
+                        break;
+
+                    case "stato":
+//                        $sql .= " AND gp.idproduttore= :idproduttore";
+//                        $arFilters["idproduttore"] = $idproduttore;
+                        break;
+                    
+                    case "periodo":
+//                        $sql .= " AND gp.idproduttore= :idproduttore";
+//                        $arFilters["idproduttore"] = $idproduttore;
+                        break;
+                }
+            }
         }
         $sql .= " ORDER BY o.archiviato, o.data_fine DESC";
         $sth = $this->db->prepare($sql);

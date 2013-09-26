@@ -17,10 +17,7 @@
         </div>
         <div class="col-md-4">
             <div class="btn-group btn-group-myig">
-                <button type="button" class="btn btn-success">Gestisci</button>
-                <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown">
-                  <span class="caret"></span>
-                </button>
+                <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown">Gestisci Ordine <span class="caret"></span></button>
                 <ul class="dropdown-menu" role="menu">
                   <li><a href="/gestione-ordini/edit/idordine/<?php echo $ordine->idordine;?>">Modifica ordine</a></li>
                   <li><a href="/gestione-ordini/prodotti/idordine/<?php echo $ordine->idordine;?>">Prodotti</a></li>

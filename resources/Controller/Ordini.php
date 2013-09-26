@@ -17,9 +17,29 @@ class Controller_Ordini extends MyFw_Controller {
 
     function indexAction() {
         
-        // try to get idproduttore
+        // init filters array
+        $filters = array();
+        
+        // check for idproduttore FILTER
         $idproduttore = $this->getParam("idproduttore");
+        if(!is_null($idproduttore)) {
+            $filters["idproduttore"] = $idproduttore;
+        }
         $this->view->idproduttore = $idproduttore;
+        
+        // check for stato FILTER
+        $stato = $this->getParam("stato");
+        if(!is_null($stato)) {
+            $filters["stato"] = $stato;
+        }
+        $this->view->stato = $stato;
+        
+        // check for periodo FILTER
+        $periodo = $this->getParam("periodo");
+        if(!is_null($periodo)) {
+            $filters["periodo"] = $periodo;
+        }
+        $this->view->periodo = $periodo;
         
         // set elenco produttori
         $prodObj = new Model_Produttori();
@@ -27,7 +47,7 @@ class Controller_Ordini extends MyFw_Controller {
         $this->view->produttori = $produttori;
         
         $ordiniObj = new Model_Ordini();
-        $listOrd = $ordiniObj->getAllByIdgroup($this->_userSessionVal->idgroup, $idproduttore);
+        $listOrd = $ordiniObj->getAllByIdgroupWithFilter($this->_userSessionVal->idgroup, $filters);
         // add Status model to Ordini
         if(count($listOrd) > 0) {
             foreach($listOrd AS &$ordine) {
