@@ -63,7 +63,6 @@
         $('#no_subCat').hide();
         var idcat = $('#idcat').val();
         var catName = $('#idcat').find(":selected").text();
-        alert(idproduttore);        
         $.getJSON(
 			'/produttori/addcat/',
             {idcat: idcat, catName: catName, idproduttore: idproduttore},
