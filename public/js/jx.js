@@ -59,10 +59,28 @@
     
     
     
-    function jx_AddSubCategoria() {
+    function jx_AddSubCategoria(idproduttore) {
         $('#no_subCat').hide();
         var idcat = $('#idcat').val();
         var catName = $('#idcat').find(":selected").text();
-        $('#d_subCat').append('<div><input type="input" name="arSubCat['+idcat+'][]" size="40" value="'+catName+'"> <a class="menu_icon_btn" href="javascript:void(0)" onclick="$(this).parent().remove()">Rimuovi</a></div>');
-        
+        alert(idproduttore);        
+        $.getJSON(
+			'/produttori/addcat/',
+            {idcat: idcat, catName: catName, idproduttore: idproduttore},
+			function(data) {
+                if(data.res) {
+                    $('#d_subCat').append('<label>'+catName+':</label><input type="input" name="arSubCat['+data.idsubcat+']" size="40" value="'+catName+'"> <a class="menu_icon_btn" href="javascript:void(0)" onclick="$(this).parent().remove()">Rimuovi</a><br />');
+                }
+			});
+    }
+    
+    function jx_DelSubCategoria(idsubcat) {
+        $.getJSON(
+			'/produttori/delcat/',
+            {idsubcat: idsubcat},
+			function(data) {
+                if(data) {
+                    $('#subcat_'+idsubcat).remove();
+                }
+			});
     }

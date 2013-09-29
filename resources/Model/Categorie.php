@@ -25,7 +25,9 @@ class Model_Categorie extends MyFw_DB_Base {
     }
     
     function getSubCategories($idgroup, $idproduttore) {
-        $sql = "SELECT cs.* FROM categorie_sub AS cs "
+        $sql = "SELECT cs.*, c.descrizione AS cat_descrizione "
+              ."FROM categorie_sub AS cs "
+              ."LEFT JOIN categorie AS c ON cs.idcat=c.idcat "
               ."LEFT JOIN groups_produttori AS gp ON cs.idgroup=gp.idgroup AND cs.idproduttore=gp.idproduttore "
               ."WHERE gp.idgroup= :idgroup AND gp.idproduttore= :idproduttore";
         $sth = $this->db->prepare($sql);
@@ -33,33 +35,21 @@ class Model_Categorie extends MyFw_DB_Base {
         return $sth->fetchAll(PDO::FETCH_ASSOC);        
     }
     
-    function addSubCategorieToProduttore($idgroup, $idproduttore, $arVal) {
+    function addSubCategoria($arVal) {
+        $sth = $this->db->prepare("INSERT INTO categorie_sub SET idgroup= :idgroup, idproduttore= :idproduttore, idcat= :idcat, descrizione= :descrizione");
+        if( $sth->execute($arVal)) {
+            return $this->db->lastInsertId();
+        } else {
+            return null;
+        }
+    }
+    
+    function editSubCategorie($arVal) {
         $this->db->beginTransaction();
-        
-        // get All SubCat for this Produttore
-        $subCat = array();
-        $sql = "SELECT idsubcat FROM categorie_sub WHERE idgroup= ".$this->db->quote($idgroup)." AND idproduttore= ".$this->db->quote($idproduttore);
-        foreach ($this->db->query($sql) as $row) {
-            $subCat[] = $row["idsubcat"];
-        }
-        // prepare SQL UPDATE
         $sth_update = $this->db->prepare("UPDATE categorie_sub SET descrizione= :descrizione WHERE idsubcat= :idsubcat");
-        // prepare SQL INSERT
-        $sth_insert = $this->db->prepare("INSERT INTO categorie_sub SET idgroup= :idgroup, idproduttore= :idproduttore, idcat= :idcat, descrizione= :descrizione");
-
-        foreach($arVal AS $catVal) {
-            // check if EXISTS
-            if(isset($catVal["idsubcat"]) && in_array($catVal["idsubcat"], $subCat)) {
-                unset($catVal["idcat"]);
-                $sth_update->execute($catVal);
-            } else {
-                // prepare Array values
-                $catVal["idgroup"] = $idgroup;
-                $catVal["idproduttore"] = $idproduttore;
-                $sth_insert->execute($catVal);
-            }
+        foreach($arVal AS $arSubCat) {
+            $sth_update->execute($arSubCat);
         }
-        
         $this->db->commit();
     }
 

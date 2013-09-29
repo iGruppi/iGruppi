@@ -1,9 +1,4 @@
-<?php if($this->updated): ?>
-    <div id="updated">
-        <div class="isa_success">La lista dei prodotti per quest'ordine è stata aggiornata con successo!</div>
-    </div>
-<?php endif; ?>
-    
+
 <h3>Prodotti:</h3>
 <p>Segue l'elenco di <b>tutti</b> i <a href="/prodotti/list/idproduttore/<?php echo $this->produttore->idproduttore;?>">prodotti di <?php echo $this->produttore->ragsoc;?></a>.<br />
     Puoi escludere i prodotti non disponibili cliccando sulla X a destra e modificare il prezzo nel caso di variazioni per quest'ordine.</p>

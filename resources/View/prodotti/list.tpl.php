@@ -1,5 +1,8 @@
 <h2>Elenco Prodotti di <strong><?php echo $this->produttore->ragsoc;?></strong></h2>
 
+<div class="row">
+  <div class="col-md-8">
+      
 <?php if($this->updated): ?>
     <div class="alert alert-success alert-dismissable">
       <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
@@ -7,8 +10,6 @@
     </div>
 <?php endif; ?>
 
-<div class="row">
-  <div class="col-md-8">
       
 <?php if(count($this->list) > 0): ?>
     <?php foreach ($this->list as $key => $prodotto): ?>

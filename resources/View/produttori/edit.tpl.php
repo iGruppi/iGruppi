@@ -1,14 +1,14 @@
-    <h2>Modifica Produttore</h2>
+    <h2>Modifica Produttore <strong><?php echo $this->produttore->ragsoc; ?></strong></h2>
     
 <?php if($this->updated): ?>
     <div class="alert alert-success alert-dismissable">
       <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-      Fornitore aggiornato con <strong>successo</strong>!
+      Produttore aggiornato con <strong>successo</strong>!
     </div>
 <?php endif; ?>
     
     
-    <form id="prodform" action="<?php echo $this->form->getAction(); ?>" method="post" class="f1n200">
+    <form id="prodform" action="<?php echo $this->form->getAction(); ?>" method="post" class="f1n150">
 
         <ul class="nav nav-tabs" id="myTab">
           <li class="active"><a href="#dati" data-toggle="tab">Anagrafica</a></li>

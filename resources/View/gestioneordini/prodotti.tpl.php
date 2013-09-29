@@ -8,6 +8,13 @@
 <div class="row">
   <div class="col-md-8">
       
+<?php if($this->updated): ?>
+    <div class="alert alert-success alert-dismissable">
+      <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+      La lista dei prodotti per quest'ordine è stata aggiornata con <strong>successo</strong>!
+    </div>
+<?php endif; ?>      
+      
     <?php if(count($this->list) > 0): ?>
         <?php if($this->statusObj->can_ModificaProdotti()): ?>
             <?php include $this->template('gestioneordini/prodotti.aperto.tpl.php'); ?>

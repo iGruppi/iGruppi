@@ -52,7 +52,8 @@ class Controller_Produttori extends MyFw_Controller {
         $produttore = $myObj->getProduttoreById($idproduttore, $this->_userSessionVal->idgroup);
         if($produttore === false) {
             $this->redirect("produttori");
-        }        
+        }
+        $this->view->produttore = $produttore;
         
         $form = new Form_Produttori();
         $form->setAction("/produttori/edit/idproduttore/$idproduttore");
@@ -60,21 +61,14 @@ class Controller_Produttori extends MyFw_Controller {
         // Get elenco Categorie
         $catObj = new Model_Categorie();
         $this->view->categorie = $catObj->convertToSingleArray($catObj->getCategorie(), "idcat", "descrizione");
-        $this->view->arSubCat = array();
-        $arSubCat = $catObj->getSubCategories($this->_userSessionVal->idgroup, $idproduttore);
-        if(count($arSubCat) > 0) {
-            foreach ($arSubCat as $key => $value) {
-                $this->view->arSubCat[$value["idcat"]][$value["idsubcat"]] = $value["descrizione"];
-            }
-        }
         
         // Get POST and Validate data
         if($this->getRequest()->isPost()) {
             $fv = $this->getRequest()->getPost();
             // set arSubCat
-            //Zend_Debug::dump($fv["arSubCat"]); die;
+            // Zend_Debug::dump($fv["arSubCat"]); die;
             if(isset($fv["arSubCat"])) {
-                $this->view->arSubCat = $fv["arSubCat"];
+                $arSubCat = $fv["arSubCat"];
                 unset($fv["arSubCat"]);
             }
             unset($fv["idcat"]);
@@ -83,21 +77,17 @@ class Controller_Produttori extends MyFw_Controller {
                 
                 $this->getDB()->makeUpdate("produttori", "idproduttore", $fv);
                 
-                // ADD CATEGORIES
-                if(count($this->view->arSubCat)) {
-                    $catObj = new Model_Categorie();
+                /* ADD CATEGORIES */
+                if(count($arSubCat) > 0) {
                     $arVal = array();
                     // prepare array to UPDATE!
-                    foreach ($this->view->arSubCat as $idcat => $arCat) {
-                        foreach ($arCat as $idsubcat => $subCatDesc) {
-                            $arVal[] = array(
-                                'idsubcat'      => $idsubcat,
-                                'idcat'         => $idcat,
-                                'descrizione'   => $subCatDesc
-                            );
-                        }
+                    foreach ($arSubCat as $idsubcat => $subCat) {
+                        $arVal[] = array(
+                            'idsubcat'      => $idsubcat,
+                            'descrizione'   => $subCat
+                        );
                     }
-                    $catObj->addSubCategorieToProduttore($this->_userSessionVal->idgroup, $idproduttore, $arVal);
+                    $catObj->editSubCategorie($arVal);
                 }
 
                 $this->view->updated = true;
@@ -107,7 +97,9 @@ class Controller_Produttori extends MyFw_Controller {
         } else {
             $form->setValues($produttore);
         }
-        // Zend_Debug::dump($form); die;
+        
+        // get Elenco subCat
+        $this->view->arSubCat =  $catObj->getSubCategories($this->_userSessionVal->idgroup, $idproduttore);
         // set Form in the View
         $this->view->form = $form;
     }
@@ -144,7 +136,47 @@ class Controller_Produttori extends MyFw_Controller {
     }
     
 
-
-
+/******************
+ * JX Functions
+ *****************/
+    function addcatAction() {
+        
+        $layout = Zend_Registry::get("layout");
+        $layout->disableDisplay();
+        
+        $idproduttore = $this->getParam("idproduttore");
+        $idcat = $this->getParam("idcat");
+        $catName = $this->getParam("catName");;
+        
+        // prepare array
+        $arVal = array(
+                'idgroup'       => $this->_userSessionVal->idgroup,
+                'idproduttore'  => $idproduttore,
+                'idcat'         => $idcat,
+                'descrizione'   => $catName
+            );
+        
+        $catObj = new Model_Categorie();
+        $idsubcat = $catObj->addSubCategoria($arVal);
+        
+        if(!is_null($idsubcat)) {
+            $result = array('res' => true, 'idsubcat' => $idsubcat);
+        } else {
+            $result = array('res' => false);
+        }
+        
+        echo json_encode($result);
+    }
+    
+    function delcatAction() {
+        $layout = Zend_Registry::get("layout");
+        $layout->disableDisplay();
+        
+        $idsubcat = $this->getParam("idsubcat");
+        $sth = $this->getDB()->prepare("DELETE FROM categorie_sub WHERE idsubcat= :idsubcat");
+        $result = $sth->execute(array('idsubcat' => $idsubcat));
+        echo json_encode($result);
+    }
+    
 }
 ?>

@@ -54,6 +54,7 @@ body {
 
 /*------------------ BASE Elements ------------------*/
 a {color: #47a447;}
+a:hover, a:focus { color: #666; }
 strong { color: #000; }
 h1, h2, h3, h4, h5, h6 {color: #666;}
 h1 { font-size: 30px; }
@@ -87,7 +88,7 @@ h3.green {color: #47a447;}
 .box_row_dis input { border: solid 1px #ddd; }
 
 
-.sub_menu { float: right; /* width: 200px; */ text-align: right; }
+.sub_menu { float: right; text-align: right; }
 .sub_menu a { color: #666; }
 .sub_menu a:hover { color: #000; }
 .sub_menu a.menu { display: block; line-height: 16px; padding: 3px 10px; margin: 0; font-size: 14px; color: #999; text-align: right; text-decoration: none; border: 1px solid #fff;}
@@ -97,10 +98,15 @@ h3.green {color: #47a447;}
 .sub_menu .sub_totale, .sub_menu .totale { font-size: 15px; color: #666; clear: left; border: 1px solid #EEE; width: 127px; text-align: center; }
 .sub_menu .sub_totale h3 { margin-top: 0; }
 .sub_menu .totale p { margin: 0; padding: 3px; background-color: #eee; color: #666; font-size: 15px; }
+.sub_menu .totale h2 { margin-top: 10px; }
 .totale_line { padding: 38px 0px 12px 8px; margin-bottom: 50px; border-bottom: 3px dashed #CCC; }
 .totale_line h2 { float: left; padding: 0; margin: 0; }
 .totale_line .tot_right { margin: 0; padding: 0; color: #000; float: right; }
-
+.sub_menu a.menu_icon { font-family: sans-serif; font-size: 27px; font-weight: bold; border: 1px solid #CCC; background-color: #eee; float: left; text-decoration: none; width: 35px; text-align: center; }
+.sub_menu a.menu_icon:hover { background-color: #fff; color: #000; }
+.sub_menu .prod_qta { font-size: 24px; font-weight: bold; border: 1px solid #eee; float: left; width: 50px; text-align: center; margin: 0px 3px 3px 3px; color: #000; padding: 2px;}
+.sub_menu .menu_icon_empty { width: 34px; float: left; }
+.box_note { background-color: #fcfcfc; border: 1px solid #ccc; padding: 15px; margin-top: 20px; }
 
 
 /*------------------ GRIDs and more.... */
@@ -166,7 +172,7 @@ fieldset .error textarea,
 fieldset .error select { margin-bottom: 5px; border: 2px solid #D34940; color: #D34940; }
 fieldset .error p {margin: 0 0 0 158px; padding: 1px 0 0 29px; color: #D34940; background: url(../images/icon/icona_error_16.png) no-repeat 6px 2px;}
 
-fieldset a.menu_icon_btn { padding: 2px 12px; font-size: 14px; font-weight: normal; border: 1px solid #CCC; background-color: #eee; text-decoration: none; text-align: center; }
+fieldset a.menu_icon_btn { padding: 4px 14px; font-weight: normal; border: 1px solid #CCC; background-color: #eee; text-decoration: none; text-align: center; }
 fieldset a.menu_icon_btn:hover { background-color: #fff; color: #000; }
 
 li.form_row, li.witherrors { margin-top: 10px; }

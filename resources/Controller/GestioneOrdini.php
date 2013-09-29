@@ -14,11 +14,17 @@ class Controller_GestioneOrdini extends MyFw_Controller {
         $auth = Zend_Auth::getInstance();
         $this->_iduser = $auth->getIdentity()->iduser;
         $this->_userSessionVal = new Zend_Session_Namespace('userSessionVal');
+        
+        // TODO: Inserire controllo per i furbi (non Referenti)
+        // Per tutto il Controller l'accesso deve essere consentito solo al Referente del produttore
     }
     
     function indexAction() {
-
+        
         $idproduttore = $this->getParam("idproduttore");
+        // Get updated if it is set
+        $this->view->updated = $this->getParam("updated");        
+        
         $produttoreObj = new Model_Produttori();
         $produttore = $produttoreObj->getProduttoreById($idproduttore, $this->_userSessionVal->idgroup);
         $this->view->produttore = $produttore;
@@ -71,7 +77,7 @@ class Controller_GestioneOrdini extends MyFw_Controller {
                     $ordObj->addProdottiToOrdine($idordine, $arVal);                    
                 }
                 
-                $this->redirect("gestione-ordini", "index", array("idproduttore" => $idproduttore));
+                $this->forward("gestioneordini", "index", array("idproduttore" => $idproduttore, "updated" => true));
             }
         }
         
@@ -110,7 +116,7 @@ class Controller_GestioneOrdini extends MyFw_Controller {
                 $fValues["data_fine"] = $dt_fine->toString("yyyy-mm-dd") . " 23:59:59"; // set default END time
                 $this->getDB()->makeUpdate("ordini", "idordine", $fValues );
                 
-                $this->redirect("gestione-ordini", "index", array("idproduttore" => $idproduttore));
+                $this->forward("gestioneordini", "index", array("idproduttore" => $idproduttore, "updated" => true));
             }
         } else {
             // get only dates without time
@@ -163,10 +169,6 @@ class Controller_GestioneOrdini extends MyFw_Controller {
                 $ordObj->addProdottiToOrdine($idordine, $arVal);
                 
                 $this->view->updated = true;
-                // Add jQuery ready function
-                $layout = Zend_Registry::get("layout");
-                $layout->addOnLoad("$('#updated').fadeOut(3000);");                
-                
             }
         }
 
