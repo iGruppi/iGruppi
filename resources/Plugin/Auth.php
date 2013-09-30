@@ -31,16 +31,19 @@ class Plugin_Auth {
         $action = $cf->getAction();
         
         // init Acl model and check Auth
-        $acl = new Model_Acl($this->_auth);
-        if (!$this->_acl->isAllowed($role, $controller))
-        {
-            $controller = 'auth';
-            $action = 'login';
+        if( $this->_acl->has($controller) ) {
+            if(!$this->_acl->isAllowed($role, $controller)) {
+                $controller = 'Auth';
+                $action = 'login';
+            }
+        } else {
+            $controller = 'Index';
+            $action = 'error';
+            $cf->setParams(array("code" => 404));
         }
 //echo "POST - Controller: $controller - Action: $action <br>";
         $cf->setController($controller);
         $cf->setAction($action);
-        
     }
 
     public function  postDispatch(MyFw_ControllerFront $cf)
