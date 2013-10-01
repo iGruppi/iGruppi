@@ -9,9 +9,9 @@ class Controller_Index extends MyFw_Controller {
     function _init() {}
 
     function indexAction() {
-
+        
     }
-
+    
 
     function errorAction() {
         $errorCode = $this->getParam("code");
@@ -22,6 +22,7 @@ class Controller_Index extends MyFw_Controller {
                 break;
 
             default:
+                $this->view->errorMessage = "";
                 break;
         }
         

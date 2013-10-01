@@ -56,7 +56,7 @@ body {
 a {color: #47a447;}
 a:hover, a:focus { color: #666; }
 strong { color: #000; }
-h1, h2, h3, h4, h5, h6 {color: #666;}
+h1, h2, h3, h4, h5, h6 {color: #666; font-weight: 200; }
 h1 { font-size: 30px; }
 h3.no-margin {margin:0;}
 h3.green {color: #47a447;}
@@ -112,8 +112,7 @@ h3.green {color: #47a447;}
 /*------------------ GRIDs and more.... */
 
 .row-myig { margin-top: 40px; border-bottom: 20px solid #fbfbfb; }
-
-
+.dashboard-right { margin-top: 30px; border-left: 1px solid #eee; }
 
 
 /*------------------ Buttons and more.... */

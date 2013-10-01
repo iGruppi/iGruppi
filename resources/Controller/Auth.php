@@ -8,9 +8,8 @@ class Controller_Auth extends MyFw_Controller {
     
     
     function indexAction() {
-        $this->forward("auth", "register");
+        $this->forward("auth", "login");
     }
-    
     
     function loginAction() {
         
@@ -27,7 +26,7 @@ class Controller_Auth extends MyFw_Controller {
                 $sql = "SELECT u.*, ug.attivo, ug.fondatore, ug.contabile, g.nome AS gruppo, g.idgroup "
                       ."FROM users AS u LEFT JOIN users_group AS ug ON u.iduser=ug.iduser "
                       ."LEFT JOIN groups AS g ON ug.idgroup=g.idgroup "
-                      ."WHERE email= :email AND password= :password";
+                      ."WHERE u.email= :email AND u.password= :password AND ug.attivo='S'";
                 $checkSth = $this->getDB()->prepare($sql);
                 $checkSth->execute(array('email' => $form->getValue("email"), 'password' => $form->getValue('password')));
                 if( $checkSth->rowCount() > 0 ) {
@@ -143,6 +142,50 @@ class Controller_Auth extends MyFw_Controller {
         // set Form in the View
         $this->view->form = $form;
 
+    }
+    
+    function passwordAction() {
+        
+        // reset error
+        $errorPwd = false;
+        $this->view->sent = false;
+        
+        if($this->getRequest()->isPost()) {
+            $fv = $this->getRequest()->getPost();
+            $email = $fv["email"];
+            if( $email != "" ) {
+                $checkSth = $this->getDB()->prepare("SELECT iduser, nome, cognome FROM users WHERE email= :email");
+                $checkSth->execute(array('email' => $email));
+                if( $checkSth->rowCount() > 0 ) {
+                    $user = $checkSth->fetch(PDO::FETCH_OBJ);
+
+                    // generate new Password
+                    $newPwd = substr(md5(time()), 0, 12);
+                    
+                    // INVIO NUOVA PASSWORD all'UTENTE
+                    $mail = new MyFw_Mail();
+                    $mail->setSubject("Cambio password!");
+                    $mail->addTo($email);
+                    $mail->setViewParam("newPwd", $newPwd );
+                    $mail->setViewParam("nominativo", $user->nome . " " . $user->cognome );
+                    $this->view->sent = $mail->sendHtmlTemplate("request.new_password.tpl.php");
+                    if($this->view->sent) {
+                        // aggiorno nuova password per utente
+                        $arVal = array('iduser' => $user->iduser, 'password' => $newPwd);
+                        $this->getDB()->makeUpdate("users", "iduser", $arVal);
+                    } else {
+                        $errorPwd = "Errore durante l'invio dell'email. Riprovare più tardi, grazie!";
+                    }
+                } else {
+                    $errorPwd = "Indirizzo Email inesistente!";
+                }
+            } else {
+                $errorPwd = "Inserisci un indirizzo email valido!";
+            }
+            
+        }
+        $this->view->errorPwd = $errorPwd;
+        
     }
     
 }
