@@ -71,10 +71,12 @@ class Controller_GestioneOrdini extends MyFw_Controller {
                 // Add ALL prodotti by Default!
                 $prodObj = new Model_Prodotti();
                 $prodotti = $prodObj->getProdottiByIdProduttore($idproduttore, 'S');
-                $ordObj = new Model_Ordini();
-                foreach($prodotti AS $prodotto) {
-                    $arVal = array('idprodotto' => $prodotto->idprodotto, 'costo' => $prodotto->costo);
-                    $ordObj->addProdottiToOrdine($idordine, $arVal);                    
+                if(count($prodotti) > 0) {
+                    $ordObj = new Model_Ordini();
+                    foreach($prodotti AS $prodotto) {
+                        $arVal[] = array('idprodotto' => $prodotto->idprodotto, 'costo' => $prodotto->costo);
+                    }
+                    $ordObj->addProdottiToOrdine($idordine, $arVal);
                 }
                 
                 $this->forward("gestioneordini", "index", array("idproduttore" => $idproduttore, "updated" => true));
