@@ -36,7 +36,7 @@
             <div class="totale">
                 <p>Totale</p>
                 <input disabled id="f_totale" type="hidden" name="f_totale" value="<?php echo $totale; ?>" />
-                <h2><?php echo $this->valuta($totale) ?></h2>
+                <h2 id="totale"><?php echo $this->valuta($totale) ?></h2>
             </div>
       </div>
 
