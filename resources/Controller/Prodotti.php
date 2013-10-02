@@ -83,7 +83,7 @@ class Controller_Prodotti extends MyFw_Controller {
         $idproduttore = $this->getParam("idproduttore");
         
         $form = new Form_Prodotti();
-        $form->setAction("/prodotti/add");
+        $form->setAction("/prodotti/add/idproduttore/$idproduttore");
         $form->setValue("idproduttore", $idproduttore);
         // remove useless fields
         $form->removeField("offerta");
@@ -93,7 +93,6 @@ class Controller_Prodotti extends MyFw_Controller {
         // set Categories
         $objCat = new Model_Categorie();
         $form->setOptions("idsubcat", $objCat->convertToSingleArray($objCat->getSubCategories($this->_userSessionVal->idgroup, $idproduttore), "idsubcat", "descrizione"));
-
         
         if($this->getRequest()->isPost()) {
             

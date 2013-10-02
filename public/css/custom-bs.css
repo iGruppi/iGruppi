@@ -174,7 +174,7 @@ fieldset .error { padding: 10px 0; margin-bottom: 20px; }
 fieldset .error input, 
 fieldset .error textarea, 
 fieldset .error select { margin-bottom: 5px; border: 2px solid #D34940; color: #D34940; }
-fieldset .error p {margin: 0 0 0 158px; padding: 1px 0 0 29px; color: #D34940; background: url(../images/icon/icona_error_16.png) no-repeat 6px 2px;}
+fieldset .error p {margin: 0 0 0 158px; padding: 1px 0 0 29px; color: #D34940; background: url(../images/icon/icona_error_16.png) no-repeat 6px 4px;}
 
 fieldset a.menu_icon_btn { padding: 4px 14px; font-weight: normal; border: 1px solid #CCC; background-color: #eee; text-decoration: none; text-align: center; }
 fieldset a.menu_icon_btn:hover { background-color: #fff; color: #000; }
