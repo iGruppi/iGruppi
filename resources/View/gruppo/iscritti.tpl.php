@@ -10,7 +10,9 @@
             <h3 class="no-margin"><?php echo $user->nome . " " . $user->cognome; ?></h3>
             <p>
                 Email: <a href="mailto:<?php echo $user->email;?>"><?php echo $user->email;?></a><br />
-                Abilitato: <strong class="attivo_<?php echo $user->attivo; ?>"><?php echo $this->yesno($user->attivo); ?></strong>
+            <?php if( !$this->yesnoToBool($user->attivo)): ?>
+                <strong class="alert_red">Disabilitato</strong>
+            <?php endif; ?>
             </p>
         </div>
         <div class="col-md-4">

@@ -39,6 +39,11 @@ class Model_Ordini extends MyFw_DB_Base {
         return null;
     }
     
+/*
+ *  GET elenco completo dei prodotti del produttore con attivo=S
+ *      In questo modo in fase di pianificazione posso comunque abilitare un prodotto del produttore e ritrovarmelo automaticamente qui
+ *      NON utilizzo la query diretta su ordini_prodotti perchè perderei i prodotti una volta disabilitati nell'ordine
+ */    
     function getProdottiByIdOrdine_Gestione($idordine, $idproduttore) {
         // get elenco completo prodotti
         $sqlp = "SELECT p.*, cs.descrizione AS categoria FROM prodotti AS p LEFT JOIN categorie_sub AS cs ON p.idsubcat=cs.idsubcat WHERE p.idproduttore= :idproduttore AND p.attivo='S'";

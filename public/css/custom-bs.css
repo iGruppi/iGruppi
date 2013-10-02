@@ -61,6 +61,9 @@ h1 { font-size: 30px; }
 h3.no-margin {margin:0;}
 h3.green {color: #47a447;}
 
+.alert_red { color: #f22; }
+.alert_green { color: #2b2; }
+
 .content { padding: 10px 30px; }
 
 /* STILI ORDINI STATUS */

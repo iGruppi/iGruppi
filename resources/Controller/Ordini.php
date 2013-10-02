@@ -106,9 +106,6 @@ class Controller_Ordini extends MyFw_Controller {
                 }
                 
                 $this->view->updated = true;
-                // Add jQuery ready function
-                $layout = Zend_Registry::get("layout");
-                $layout->addOnLoad("$('#updated').fadeOut(3000);");
             }
         }
 

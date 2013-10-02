@@ -79,7 +79,7 @@ class Controller_GestioneOrdini extends MyFw_Controller {
                     $ordObj->addProdottiToOrdine($idordine, $arVal);
                 }
                 
-                $this->forward("gestioneordini", "index", array("idproduttore" => $idproduttore, "updated" => true));
+                $this->redirect("gestione-ordini", "index", array("idproduttore" => $idproduttore, "updated" => true));
             }
         }
         
@@ -139,6 +139,9 @@ class Controller_GestioneOrdini extends MyFw_Controller {
         $idordine = $this->getParam("idordine");
         $ordObj = new Model_Ordini();
         $ordine = $ordObj->getByIdOrdine($idordine);
+        if(is_null($ordine)) {
+            $this->redirect("index", "error", array('code' => 404));
+        }
         $this->view->ordine = $ordine;
         $this->view->statusObj = new Model_Ordini_Status($ordine->data_inizio, $ordine->data_fine, $ordine->archiviato);
                
@@ -158,6 +161,7 @@ class Controller_GestioneOrdini extends MyFw_Controller {
             
             $prod_sel = isset($fv["prod_sel"]) ? $fv["prod_sel"] : array();
             $prodotto = isset($fv["prodotto"]) ? $fv["prodotto"] : array();
+            $arVal = array();
             if(count($prod_sel) > 0) {
                 // insert products selected
                 foreach ($prod_sel as $idprodotto => $selected) {
@@ -168,7 +172,9 @@ class Controller_GestioneOrdini extends MyFw_Controller {
                         $this->getDB()->query("DELETE FROM ordini_prodotti WHERE idordine='$idordine' AND idprodotto='$idprodotto'");
                     }
                 }
-                $ordObj->addProdottiToOrdine($idordine, $arVal);
+                if(count($arVal) > 0) {
+                    $ordObj->addProdottiToOrdine($idordine, $arVal);
+                }
                 
                 $this->view->updated = true;
             }

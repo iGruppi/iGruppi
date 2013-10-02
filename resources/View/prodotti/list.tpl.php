@@ -21,7 +21,9 @@
                 Codice: <strong><?php echo $prodotto->codice; ?></strong><br />
                 Categoria: <strong><?php echo $prodotto->categoria; ?></strong><br />
                 Costo: <strong><?php echo $this->valuta($prodotto->costo); ?> / <?php echo $prodotto->udm; ?></strong><br />
-                Disponibile: <strong class="attivo_<?php echo $prodotto->attivo; ?>"><?php echo $this->yesno($prodotto->attivo); ?></strong>
+            <?php if( !$this->yesnoToBool($prodotto->attivo)): ?>
+                <strong class="alert_red">Disabilitato</strong> (Non verrà utilizzato negli ordini!)
+            <?php endif; ?>
             </p>
         </div>
         <div class="col-md-2">
