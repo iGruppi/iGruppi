@@ -20,26 +20,21 @@ class Controller_Ordini extends MyFw_Controller {
         // init filters array
         $filters = array();
         
-        // check for idproduttore FILTER
-        $idproduttore = $this->getParam("idproduttore");
-        if(!is_null($idproduttore)) {
-            $filters["idproduttore"] = $idproduttore;
-        }
-        $this->view->idproduttore = $idproduttore;
+        // init Filters class for View
+        $fObj = new Model_Ordini_Filters($filters);
+        $fObj->setUrlBase("/ordini/index");
         
-        // check for stato FILTER
-        $stato = $this->getParam("stato");
-        if(!is_null($stato)) {
-            $filters["stato"] = $stato;
-        }
-        $this->view->stato = $stato;
+        // SET idproduttore FILTER
+        $fObj->setFilterByField("idproduttore", $this->getParam("idproduttore"));
+        // SET stato FILTER
+        $fObj->setFilterByField("stato", $this->getParam("stato"));
+        // SET periodo FILTER
+        //$fObj->setFilterByField("periodo", $this->getParam("periodo"));
         
-        // check for periodo FILTER
-        $periodo = $this->getParam("periodo");
-        if(!is_null($periodo)) {
-            $filters["periodo"] = $periodo;
-        }
-        $this->view->periodo = $periodo;
+        $this->view->fObj = $fObj;
+        //Zend_Debug::dump($fObj->getFilters());
+        // set elenco Stati
+        $this->view->statusArray = Model_Ordini_Status::getArrayStatus();
         
         // set elenco produttori
         $prodObj = new Model_Produttori();
@@ -47,7 +42,7 @@ class Controller_Ordini extends MyFw_Controller {
         $this->view->produttori = $produttori;
         
         $ordiniObj = new Model_Ordini();
-        $listOrd = $ordiniObj->getAllByIdgroupWithFilter($this->_userSessionVal->idgroup, $filters);
+        $listOrd = $ordiniObj->getAllByIdgroupWithFilter($this->_userSessionVal->idgroup, $fObj->getFilters());
         // add Status model to Ordini
         if(count($listOrd) > 0) {
             foreach($listOrd AS &$ordine) {
@@ -122,8 +117,5 @@ class Controller_Ordini extends MyFw_Controller {
         //Zend_Debug::dump($this->view->list);
     }
 
-    function archivioAction() {
-        
-    }
 }
 ?>

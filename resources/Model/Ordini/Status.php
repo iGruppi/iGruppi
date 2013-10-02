@@ -20,7 +20,6 @@ class Model_Ordini_Status {
         $this->_inizio = $inizio;
         $this->_fine = $fine;
         $this->_archiviato = $a;
-        
     }
     
     function getStatus() {
@@ -73,6 +72,50 @@ class Model_Ordini_Status {
 
     function can_ModificaProdotti() {
         return ( $this->is_Pianificato() ) ? true : false;
+    }
+    
+
+/* ***************************
+ *  MISCELLANEOUS
+ *************************** */
+    
+    // get simple array with all status
+    static function getArrayStatus() {
+        return array(
+            self::STATUS_PIANIFICATO,
+            self::STATUS_APERTO,
+            self::STATUS_CHIUSO,
+            self::STATUS_ARCHIVIATO
+        );
+    }
+        
+
+    
+    
+    // TODO: DA SISTEMARE!
+    // Lo so, è orrendo. Piazzato qui è un morto!
+    // Ma la logica per identificare lo Stato lasciamola per tutti qui dentro!
+    static function getSqlFilterByStato($stato) {
+        switch ($stato)
+        {
+            case self::STATUS_PIANIFICATO:
+                $sql = " AND NOW() < o.data_inizio AND o.archiviato='N'";
+                break;
+
+            case self::STATUS_APERTO:
+                $sql = " AND NOW() >= o.data_inizio AND NOW() <= o.data_fine AND o.archiviato='N'";
+                break;
+            
+            case self::STATUS_CHIUSO:
+                $sql = " AND NOW() > o.data_fine AND o.archiviato='N'";
+                break;
+
+            case self::STATUS_ARCHIVIATO:
+                $sql = " AND o.archiviato='S' ";
+                break;
+
+        }
+        return $sql; 
     }
     
 }

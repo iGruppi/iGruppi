@@ -49,7 +49,6 @@
   </div>
   <div class="col-md-1">&nbsp;</div>
   <div class="col-md-3">
-      <h3>Filtra per:</h3>
       <?php include $this->template('ordini/left-menu.tpl.php'); ?>      
   </div>    
 </div>

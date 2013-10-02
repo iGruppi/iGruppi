@@ -124,19 +124,21 @@ class Model_Ordini extends MyFw_DB_Base {
                         break;
 
                     case "stato":
-//                        $sql .= " AND gp.idproduttore= :idproduttore";
-//                        $arFilters["idproduttore"] = $idproduttore;
+                        $sql .= Model_Ordini_Status::getSqlFilterByStato($fValue);
                         break;
-                    
+/*                    
                     case "periodo":
-//                        $sql .= " AND gp.idproduttore= :idproduttore";
-//                        $arFilters["idproduttore"] = $idproduttore;
+                        $sql .= " AND DATE_FORMAT(o.data_inizio, '%Y%m') = :periodo";
+                            $arFilters["periodo"] = $fValue;
                         break;
+ * 
+ */
                 }
             }
         }
         $sql .= " ORDER BY o.archiviato, o.data_fine DESC";
         $sth = $this->db->prepare($sql);
+//        Zend_Debug::dump($sth);die;
         $sth->execute($arFilters);
         return $sth->fetchAll(PDO::FETCH_OBJ);
     }

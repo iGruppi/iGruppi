@@ -131,6 +131,11 @@ h3.green {color: #47a447;}
 
 .panel-group .panel { border-radius: 2px; }
 
+.panel-body a { display: block; margin: 0; padding: 4px 8px; text-decoration: none; color: #47a447; font-weight: 200; font-size: 18px; }
+.panel-body a:hover { background-color: #eee; color: #666; }
+.panel-body a.selected { color: #666; border: 1px solid #eee; }
+.panel-body a.selected:hover { color: #f00; border: 1px solid #f00 }
+
 /*------------------------------------
     FORM 
 ------------------------------------*/
