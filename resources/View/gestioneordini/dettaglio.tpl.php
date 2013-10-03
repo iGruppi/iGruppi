@@ -3,7 +3,7 @@
     <h2>Invio ordine</h2>
     <form id="forminvioordine" action="/gestione-ordini/invia/idordine/<?php echo $this->ordine->idordine; ?>" method="post">
         <p><input type="checkbox" name="invia_dettaglio" value="S" /> Invia anche <b>Dettaglio Prodotti utenti</b></p>
-        <input type="submit" id="submit" value="INVIA!" style="margin-left: 0;" />
+        <button type="submit" id="submit" class="btn btn-success btn-mylg">INVIA!</button>
     </form>
 </div>
 <?php endif; ?>

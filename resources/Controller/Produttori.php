@@ -41,6 +41,42 @@ class Controller_Produttori extends MyFw_Controller {
     }
 
     
+    function addAction() {
+        
+        $form = new Form_Produttori();
+        $form->setAction("/produttori/add");
+        $form->removeField("idproduttore");
+        
+        if($this->getRequest()->isPost()) {
+            $fv = $this->getRequest()->getPost();
+            if( $form->isValid($fv) ) {
+                
+                // ADD Produttore
+                $idproduttore = $this->getDB()->makeInsert("produttori", $fv);
+
+                // Add Relationship with Group
+                $this->getDB()->makeInsert("groups_produttori", array(
+                    'idproduttore'  => $idproduttore,
+                    'idgroup'       => $this->_userSessionVal->idgroup,
+                    'stato'         => 'A',
+                    'iduser_ref'    => $this->_iduser
+                ));
+     
+                // REDIRECT TO EDIT
+                $this->redirect("produttori", "edit", array('idproduttore' => $idproduttore));
+            }
+        }
+        
+        // set Form in the View
+        $this->view->form = $form;
+    }
+    
+    function viewAction() {
+        $idproduttore = $this->getParam("idproduttore");
+        $myObj = new Model_Produttori();
+        $this->view->produttore = $myObj->getProduttoreById($idproduttore, $this->_userSessionVal->idgroup);
+    }
+    
     function editAction() {
 
         $idproduttore = $this->getParam("idproduttore");
@@ -50,11 +86,16 @@ class Controller_Produttori extends MyFw_Controller {
         // check if CAN edit this Produttore
         $myObj = new Model_Produttori();
         $produttore = $myObj->getProduttoreById($idproduttore, $this->_userSessionVal->idgroup);
+        // Un po' di controlli per i furbi...
         if($produttore === false) {
             $this->redirect("produttori");
         }
+        if($produttore->iduser_ref != $this->_iduser) {
+            $this->forward("produttori", "view", array('idproduttore' => $idproduttore));
+        }
         $this->view->produttore = $produttore;
         
+        // Get Form Produttori
         $form = new Form_Produttori();
         $form->setAction("/produttori/edit/idproduttore/$idproduttore");
         
@@ -66,7 +107,7 @@ class Controller_Produttori extends MyFw_Controller {
         if($this->getRequest()->isPost()) {
             $fv = $this->getRequest()->getPost();
             // set arSubCat
-            // Zend_Debug::dump($fv["arSubCat"]); die;
+            $arSubCat = array();
             if(isset($fv["arSubCat"])) {
                 $arSubCat = $fv["arSubCat"];
                 unset($fv["arSubCat"]);
@@ -104,36 +145,7 @@ class Controller_Produttori extends MyFw_Controller {
         $this->view->form = $form;
     }
 
-    
-    function addAction() {
-        
-        $form = new Form_Produttori();
-        $form->setAction("/produttori/add");
-        $form->removeField("idproduttore");
-        
-        if($this->getRequest()->isPost()) {
-            $fv = $this->getRequest()->getPost();
-            if( $form->isValid($fv) ) {
-                
-                // ADD Produttore
-                $idproduttore = $this->getDB()->makeInsert("produttori", $fv);
 
-                // Add Relationship with Group
-                $this->getDB()->makeInsert("groups_produttori", array(
-                    'idproduttore'  => $idproduttore,
-                    'idgroup'       => $this->_userSessionVal->idgroup,
-                    'stato'         => 'A',
-                    'iduser_ref'    => $this->_iduser
-                ));
-     
-                // REDIRECT TO EDIT
-                $this->redirect("produttori", "edit", array('idproduttore' => $idproduttore));
-            }
-        }
-        
-        // set Form in the View
-        $this->view->form = $form;
-    }
     
 
 /******************

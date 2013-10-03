@@ -58,7 +58,7 @@ a:hover, a:focus { color: #666; }
 strong { color: #000; }
 h1, h2, h3, h4, h5, h6 {color: #666; font-weight: 200; }
 h1 { font-size: 30px; }
-h3.no-margin {margin:0;}
+.no-margin {margin:0;}
 h3.green {color: #47a447;}
 
 .alert_red { color: #f22; }
@@ -128,13 +128,15 @@ h3.green {color: #47a447;}
 }
 .btn-success:hover { background-color: #47a447; border-color: #398439; }
 .btn-primary:hover { background-color: #3276b1; border-color: #285e8e; }
+.btn-inform { font-size: 14px; padding: 3px 10px; line-height: 1.428571429; vertical-align: top;}
+
 
 .nav-pills>li>a { border-radius: 2px; }
 .btn-group-myig { margin-top: 4px; }
 
 .panel-group .panel { border-radius: 2px; }
 
-.panel-body a { display: block; margin: 0; padding: 4px 8px; text-decoration: none; color: #47a447; font-weight: 200; font-size: 18px; }
+.panel-body a { display: block; margin: 0; padding: 2px 8px; text-decoration: none; color: #47a447; font-weight: 200; font-size: 16px; }
 .panel-body a:hover { background-color: #eee; color: #666; }
 .panel-body a.selected { color: #666; border: 1px solid #eee; }
 .panel-body a.selected:hover { color: #f00; border: 1px solid #f00 }
@@ -151,7 +153,19 @@ label input{ font-weight: normal; }
 input, textarea, select { margin: 0px 2px 20px 2px; color: #000; }
 input  { background-color: #fff; border: solid 1px #aaa; padding: 2px; font-size: 16px;}
 textarea { border:1px solid #aaa; padding:3px; font-size:11pt; margin-bottom: 5px;}
-select { border:1px solid #aaa; font-size:11pt; padding:1px; padding-left:0;}
+select {
+    height: 28px;
+    padding: 6px 12px;
+    color: #555;
+    background-color: #fff;
+    background-image: none;
+    border: 1px solid #ccc;
+    border-radius: 2px;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,0.075);
+    box-shadow: inset 0 1px 1px rgba(0,0,0,0.075);
+    -webkit-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+    transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+}
 option { padding-left: 2px; padding-right: 10px; }
 fieldset { padding: 15px; padding-top: 40px; margin: 0; margin-top: 10px; text-align: left; border: none; }
 fieldset.border_top { border-top: 1px solid #eee; }
@@ -179,9 +193,6 @@ fieldset .error textarea,
 fieldset .error select { margin-bottom: 5px; border: 2px solid #D34940; color: #D34940; }
 fieldset .error p {margin: 0 0 0 158px; padding: 1px 0 0 29px; color: #D34940; background: url(../images/icon/icona_error_16.png) no-repeat 6px 4px;}
 
-fieldset a.menu_icon_btn { padding: 4px 14px; font-weight: normal; border: 1px solid #CCC; background-color: #eee; text-decoration: none; text-align: center; }
-fieldset a.menu_icon_btn:hover { background-color: #fff; color: #000; }
-
 li.form_row, li.witherrors { margin-top: 10px; }
 li.witherrors { background-color: #F8FFDD; border: 1px solid #ddFFdd; padding: 20px 0 20px 0; }
 
@@ -190,31 +201,10 @@ li.form_row a.info:hover {color: #060; }
 
 legend{ background-color: #eee; font-size: 16px; width: auto; margin: 10px 0 0 30px; padding: 3px 5px 3px 5px; color: #666; font-weight: bold; border: 1px solid #ddd; }
 
-input#submit, .contact_submit {
-    cursor: pointer;
-    margin-left: 175px;
-    background-color: #c0c1cc;
-    padding: 5px 20px;
-    color: #000;
-    font-size: 15pt;
-    font-family: 'Trebuchet MS', sans-serif, tahoma, verdana, arial;
-    text-align: center;
-    font-weight: bold;
-}
-
-input#submit:hover {
-    background-color:#fff;
-}
-
-
 /* Other class in form */
 .intro{ margin: 0 10px 20px 0; border: 1px solid #060;}
-.hint{
-    color: #393;
-    margin: 2px 0 12px 108px;
-    padding: 0;
-
-}
+.hint, .hint_green { margin: 2px 0 12px 108px; padding: 0; }
+.hint_green { color: #393;}
 .inputcheckbox { border:0px; }
 .disabled, .readonly { background-color: #e9e9e9; color: #666; }
 ul.errors { margin: 0 0 10px 103px; list-style: none; }

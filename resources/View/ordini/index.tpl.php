@@ -35,7 +35,7 @@
         <div class="col-md-4">
         <?php if(!$ordine->statusObj->is_Pianificato()): ?>
             <?php if($ordine->statusObj->is_Aperto()): ?>
-                <a href="/ordini/ordina/idordine/<?php echo $ordine->idordine;?>" class="btn btn-success">Ordina ora!</a>
+                <a href="/ordini/ordina/idordine/<?php echo $ordine->idordine;?>" class="btn btn-success" style="margin-bottom: 5px;">Ordina ora!</a>
             <?php endif; ?>
                 <a href="/ordini/viewdettaglio/idordine/<?php echo $ordine->idordine;?>" class="btn btn-default">Visualizza dettaglio</a>
         <?php endif; ?>

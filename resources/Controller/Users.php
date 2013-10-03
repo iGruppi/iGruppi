@@ -14,7 +14,7 @@ class Controller_Users extends MyFw_Controller {
 
     
     function indexAction() {
-        
+        $this->redirect("gruppo", "iscritti");
     }
     
     function editAction() {
@@ -26,6 +26,9 @@ class Controller_Users extends MyFw_Controller {
         if($user === false) {
             $this->redirect("gruppo", "iscritti");
         }
+        $this->view->user = $user;
+        
+        $this->view->updated = false;
         
         $form = new Form_User();
         $form->setAction("/users/edit/iduser/$iduser");
@@ -33,6 +36,11 @@ class Controller_Users extends MyFw_Controller {
         $form->removeField("password");
         $form->removeField("password2");
         $form->removeField("idgroup");
+        
+        // Get Elenco produttori (con REFERENTE)
+        $prObj = new Model_Produttori();
+        $this->view->produttori = $prObj->getProduttoriByIdGroup($this->_userSessionVal->idgroup);
+        //Zend_Debug::dump($this->view->user);
 
         if($this->getRequest()->isPost()) {
             $fv = $this->getRequest()->getPost();
@@ -54,10 +62,8 @@ class Controller_Users extends MyFw_Controller {
                 $sth = $this->getDB()->prepare("UPDATE users_group SET attivo= :attivo, fondatore= :fondatore, contabile= :contabile WHERE iduser= :iduser AND idgroup= :idgroup");
                 $fields = array('attivo' => $attivo, 'fondatore' => $fondatore, 'contabile' => $contabile, 'iduser' => $iduser, 'idgroup' => $this->_userSessionVal->idgroup);
                 $sth->execute($fields);
-
-                $this->view->updated = true;
                 
-                $this->redirect("gruppo", "iscritti");
+                $this->view->updated = true;
             }
             
             
@@ -69,17 +75,29 @@ class Controller_Users extends MyFw_Controller {
         $this->view->form = $form;
         
     }
-/*    
-    function addAction() {
+
+    function addrefAction() {
         
-        $name = $this->getParam("name");
-        $surname = $this->getParam("surname");
-        $data = date("Y-m-d H:i:s");
-        $db = Zend_Registry::get("db");
-        $db->query("INSERT INTO users SET name='$name', surname='$surname', dt='$data'");
+        $layout = Zend_Registry::get("layout");
+        $layout->disableDisplay();
         
-        $this->forward('users', 'manage');
+        $idproduttore = $this->getParam("idproduttore");
+        $iduser = $this->getParam("iduser");
+        
+        $sth = $this->getDB()->prepare("SELECT * FROM groups_produttori WHERE idproduttore= :idproduttore AND idgroup= :idgroup");
+        $arVal = array('idproduttore' => $idproduttore, 'idgroup' => $this->_userSessionVal->idgroup);
+        $sth->execute($arVal);
+        if($sth->rowCount() > 0) {
+            // UPDATE
+            $sth_update = $this->getDB()->prepare("UPDATE groups_produttori SET iduser_ref= :iduser_ref WHERE idproduttore= :idproduttore AND idgroup= :idgroup");
+            $arVal["iduser_ref"] = $iduser;
+            $result = $sth_update->execute($arVal);
+        } else {
+            // Non dovrebbe mai capitare: un produttore ha SEMPRE un referente!
+            $result = false;
+        }
+
+        echo json_encode($result);
     }
-    */
     
 }

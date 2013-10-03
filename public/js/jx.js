@@ -68,7 +68,7 @@
             {idcat: idcat, catName: catName, idproduttore: idproduttore},
 			function(data) {
                 if(data.res) {
-                    $('#d_subCat').append('<label>'+catName+':</label><input type="input" name="arSubCat['+data.idsubcat+']" size="40" value="'+catName+'"> <a class="menu_icon_btn" href="javascript:void(0)" onclick="$(this).parent().remove()">Rimuovi</a><br />');
+                    $('#d_subCat').append('<label>'+catName+':</label><input type="input" name="arSubCat['+data.idsubcat+']" size="40" value="'+catName+'"> <a class="btn btn-danger btn-sm btn-inform" href="javascript:void(0)" onclick="$(this).parent().remove()"><span class="glyphicon glyphicon-remove-circle"></span> Rimuovi</a><br />');
                 }
 			});
     }
@@ -80,6 +80,19 @@
 			function(data) {
                 if(data) {
                     $('#subcat_'+idsubcat).remove();
+                }
+			});
+    }
+    
+    function jx_AddReferenteUser(iduser) {
+        $('#no_user_ref').hide();
+        var idproduttore = $('#iduser_ref').find(":selected").val();
+        $.getJSON(
+			'/users/addref/',
+            {iduser: iduser, idproduttore: idproduttore},
+			function(data) {
+                if(data) {
+                    $('#list_user_ref').append('<h4>'+$('#iduser_ref').find(":selected").text()+'</h4>');
                 }
 			});
     }

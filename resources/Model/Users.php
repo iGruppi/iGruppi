@@ -15,7 +15,7 @@ class Model_Users extends MyFw_DB_Base {
 
         $sth_app = $this->db->prepare("SELECT * FROM users AS u LEFT JOIN users_group AS ug ON u.iduser=ug.iduser WHERE ug.iduser= :iduser AND ug.idgroup= :idgroup");
         $sth_app->execute(array('iduser' => $iduser, 'idgroup' => $idgroup));
-        return $sth_app->fetch(PDO::FETCH_ASSOC);
+        return $sth_app->fetch(PDO::FETCH_OBJ);
     }
     
     function getUsersByIdGroup($idgroup) {

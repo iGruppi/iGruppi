@@ -22,7 +22,7 @@
                 Categoria: <strong><?php echo $prodotto->categoria; ?></strong><br />
                 Costo: <strong><?php echo $this->valuta($prodotto->costo); ?> / <?php echo $prodotto->udm; ?></strong><br />
             <?php if( !$this->yesnoToBool($prodotto->attivo)): ?>
-                <strong class="alert_red">Disabilitato</strong> (Non verrà utilizzato negli ordini!)
+                <strong class="alert_red">Disabilitato</strong> (Non disponibile negli ordini)
             <?php endif; ?>
             </p>
         </div>
