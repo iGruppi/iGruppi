@@ -116,7 +116,8 @@ class Controller_Produttori extends MyFw_Controller {
                     foreach ($arSubCat as $idsubcat => $subCat) {
                         $arVal[] = array(
                             'idsubcat'      => $idsubcat,
-                            'descrizione'   => $subCat
+                            'descrizione'   => $subCat["descrizione"],
+                            'idcat'         => $subCat["idcat"]
                         );
                     }
                     $catObj->editSubCategorie($arVal);

@@ -42,9 +42,7 @@ class Bootstrap {
     }
 
     private function startView() {
-        // init view
-        $appConfig = Zend_Registry::get('appConfig');
-        $view = new MyFw_View(array('template_path' => $appConfig->template->path_view));
+        $view = new MyFw_View();
         Zend_Registry::set('view', $view);
     }
 

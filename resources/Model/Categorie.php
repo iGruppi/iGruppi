@@ -46,7 +46,7 @@ class Model_Categorie extends MyFw_DB_Base {
     
     function editSubCategorie($arVal) {
         $this->db->beginTransaction();
-        $sth_update = $this->db->prepare("UPDATE categorie_sub SET descrizione= :descrizione WHERE idsubcat= :idsubcat");
+        $sth_update = $this->db->prepare("UPDATE categorie_sub SET idcat= :idcat, descrizione= :descrizione WHERE idsubcat= :idsubcat");
         foreach($arVal AS $arSubCat) {
             $sth_update->execute($arSubCat);
         }
