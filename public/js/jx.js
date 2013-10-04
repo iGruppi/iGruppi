@@ -68,7 +68,7 @@
             {idcat: idcat, catName: catName, idproduttore: idproduttore},
 			function(data) {
                 if(data.res) {
-                    $('#d_subCat').append('<label>'+catName+':</label><input type="input" name="arSubCat['+data.idsubcat+']" size="40" value="'+catName+'"> <a class="btn btn-danger btn-sm btn-inform" href="javascript:void(0)" onclick="$(this).parent().remove()"><span class="glyphicon glyphicon-remove-circle"></span> Rimuovi</a><br />');
+                    $('#d_subCat').prepend(data.myTpl);
                 }
 			});
     }

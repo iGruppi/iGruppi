@@ -150,7 +150,7 @@ class Controller_Produttori extends MyFw_Controller {
         
         $idproduttore = $this->getParam("idproduttore");
         $idcat = $this->getParam("idcat");
-        $catName = $this->getParam("catName");;
+        $catName = $this->getParam("catName");
         
         // prepare array
         $arVal = array(
@@ -159,16 +159,23 @@ class Controller_Produttori extends MyFw_Controller {
                 'idcat'         => $idcat,
                 'descrizione'   => $catName
             );
-        
         $catObj = new Model_Categorie();
         $idsubcat = $catObj->addSubCategoria($arVal);
         
         if(!is_null($idsubcat)) {
-            $result = array('res' => true, 'idsubcat' => $idsubcat);
+            $arVal["idsubcat"] = $idsubcat;
+            // set data in view of the new Subcat created
+            $this->view->subCat = $arVal;
+            // Get elenco Categorie
+            $catObj = new Model_Categorie();
+            $this->view->categorie = $catObj->convertToSingleArray($catObj->getCategorie(), "idcat", "descrizione");
+            // fetch View
+            $myTpl = $this->view->fetch("produttori/form.cat-single.tpl.php");
+            $result = array('res' => true, 'myTpl' => $myTpl);
         } else {
             $result = array('res' => false);
         }
-        
+        //Zend_Debug::dump($result);die;
         echo json_encode($result);
     }
     

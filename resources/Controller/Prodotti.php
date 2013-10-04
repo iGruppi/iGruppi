@@ -28,6 +28,9 @@ class Controller_Prodotti extends MyFw_Controller {
         
         $prodModel = new Model_Produttori();
         $produttore = $prodModel->getProduttoreById($idproduttore, $this->_userSessionVal->idgroup);
+        if($produttore === false) {
+            $this->forward("produttori");
+        }
         // ADD Referente object to Produttore (so I can check the ref directly into the view)
         $produttore->refObj = new Model_Produttori_Referente($produttore->iduser_ref);
         $this->view->produttore = $produttore;
