@@ -26,11 +26,14 @@ class Model_Produttori extends MyFw_DB_Base {
         $sth_app->execute(array('idgroup' => $idgroup, 'idproduttore' => $idp));
         return $sth_app->fetch(PDO::FETCH_OBJ);
     }
-    
+
     function getProduttoriByIdGroup($idgroup) {
-        $sql = "SELECT * FROM produttori AS p"
+        $sql = "SELECT p.*, gp.stato, gp.iduser_ref, u.nome, u.cognome "
+              ." FROM produttori AS p"
               ." LEFT JOIN groups_produttori AS gp ON p.idproduttore=gp.idproduttore"
-              ." WHERE gp.idgroup= :idgroup";
+              ." LEFT JOIN users AS u ON gp.iduser_ref=u.iduser"
+              ." WHERE gp.idgroup= :idgroup"
+              ." ORDER BY p.ragsoc";
         $sth_app = $this->db->prepare($sql);
         $sth_app->execute(array('idgroup' => $idgroup));
         return $sth_app->fetchAll(PDO::FETCH_OBJ);        

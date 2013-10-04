@@ -16,8 +16,7 @@ class Controller_Prodotti extends MyFw_Controller {
     }
 
     function indexAction() {
-        $idproduttore = $this->getParam("idproduttore");
-        $this->forward("prodotti", "list", array("idproduttore" => $idproduttore));
+        $this->forward("produttori");
     }
 
     
@@ -29,6 +28,7 @@ class Controller_Prodotti extends MyFw_Controller {
         
         $prodModel = new Model_Produttori();
         $produttore = $prodModel->getProduttoreById($idproduttore, $this->_userSessionVal->idgroup);
+        // ADD Referente object to Produttore (so I can check the ref directly into the view)
         $produttore->refObj = new Model_Produttori_Referente($produttore->iduser_ref);
         $this->view->produttore = $produttore;
         
@@ -64,11 +64,9 @@ class Controller_Prodotti extends MyFw_Controller {
             if( $form->isValid($fv) ) {
 
                 $this->getDB()->makeUpdate("prodotti", "idprodotto", $form->getValues());
-
-                $this->forward("prodotti", "list", array("idproduttore" => $prodotto["idproduttore"], "updated" => true));
+                // REDIRECT
+                $this->redirect("prodotti", "list", array("idproduttore" => $prodotto["idproduttore"], "updated" => true));
             }
-            //Zend_Debug::dump($sth); die;
-            
         } else {
             $form->setValues($prodotto);
         }
@@ -101,10 +99,10 @@ class Controller_Prodotti extends MyFw_Controller {
             if( $form->isValid($fv) ) {
                 
                 // ADD Produttore
-                $idprodotto = $this->getDB()->makeInsert("prodotti", $form->getValues());
+                $this->getDB()->makeInsert("prodotti", $form->getValues());
 
                 $this->view->added = true;
-                
+                // REDIRECT
                 $this->redirect("prodotti", "list", array("idproduttore" => $fv["idproduttore"]));
             }
         }

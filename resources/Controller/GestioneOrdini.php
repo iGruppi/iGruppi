@@ -117,8 +117,8 @@ class Controller_GestioneOrdini extends MyFw_Controller {
                 $dt_fine = new Zend_Date($fValues["data_fine"], "dd/mm/yyyy");
                 $fValues["data_fine"] = $dt_fine->toString("yyyy-mm-dd") . " 23:59:59"; // set default END time
                 $this->getDB()->makeUpdate("ordini", "idordine", $fValues );
-                
-                $this->forward("gestioneordini", "index", array("idproduttore" => $idproduttore, "updated" => true));
+                // REDIRECT
+                $this->redirect("gestione-ordini", "index", array("idproduttore" => $idproduttore, "updated" => true));
             }
         } else {
             // get only dates without time

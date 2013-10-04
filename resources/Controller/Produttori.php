@@ -17,20 +17,10 @@ class Controller_Produttori extends MyFw_Controller {
 
     function indexAction() {
         
-        // get All Produttori by Group
-        $idgroup = $this->_userSessionVal->idgroup;
-        $sql = "SELECT p.*, gp.stato, gp.iduser_ref, u.nome, u.cognome "
-              ." FROM produttori AS p"
-              ." LEFT JOIN groups_produttori AS gp ON p.idproduttore=gp.idproduttore"
-              ." LEFT JOIN users AS u ON gp.iduser_ref=u.iduser"
-              ." WHERE gp.idgroup= :idgroup"
-              ." ORDER BY p.ragsoc";
-        //echo $sql; die;
-        $sth = $this->getDB()->prepare($sql);
-        $sth->execute(array('idgroup' => $this->_userSessionVal->idgroup));
-        $listProduttori = $sth->fetchAll(PDO::FETCH_CLASS);
+        $pObj = new Model_Produttori();
+        $listProduttori = $pObj->getProduttoriByIdGroup($this->_userSessionVal->idgroup);
         
-        // add Status model to Ordini
+        // add Referente object to every Produttore
         if(count($listProduttori) > 0) {
             foreach($listProduttori AS &$produttore) {
                 $produttore->refObj = new Model_Produttori_Referente($produttore->iduser_ref);
@@ -90,7 +80,8 @@ class Controller_Produttori extends MyFw_Controller {
         if($produttore === false) {
             $this->redirect("produttori");
         }
-        if($produttore->iduser_ref != $this->_iduser) {
+        $pRefObj = new Model_Produttori_Referente($produttore->iduser_ref);
+        if(!$pRefObj->is_Referente()) {
             $this->forward("produttori", "view", array('idproduttore' => $idproduttore));
         }
         $this->view->produttore = $produttore;
