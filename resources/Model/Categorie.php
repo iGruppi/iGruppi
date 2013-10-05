@@ -35,6 +35,24 @@ class Model_Categorie extends MyFw_DB_Base {
         return $sth->fetchAll(PDO::FETCH_ASSOC);        
     }
     
+    function getSubCategoriesByIdgroup($idgroup) {
+        $sql = "SELECT cs.*, c.descrizione AS cat_descrizione "
+              ."FROM categorie_sub AS cs "
+              ."LEFT JOIN categorie AS c ON cs.idcat=c.idcat "
+              ."WHERE cs.idgroup= :idgroup";
+        $sth = $this->db->prepare($sql);
+        $sth->execute(array('idgroup' => $idgroup));
+        $subCat = $sth->fetchAll(PDO::FETCH_OBJ);
+        $res = array();
+        if(count($subCat) > 0) {
+            foreach($subCat AS $sub) {
+                $res[$sub->idproduttore][$sub->idcat] = $sub->cat_descrizione;
+            }
+        }
+        return $res;
+    }
+
+    
     function addSubCategoria($arVal) {
         $sth = $this->db->prepare("INSERT INTO categorie_sub SET idgroup= :idgroup, idproduttore= :idproduttore, idcat= :idcat, descrizione= :descrizione");
         if( $sth->execute($arVal)) {

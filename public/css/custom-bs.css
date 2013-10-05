@@ -65,9 +65,10 @@ h3.green {color: #47a447;}
 .alert_green { color: #2b2; }
 
 .content { padding: 10px 30px; }
+.col-right { padding-left: 40px; }
 
 /* STILI ORDINI STATUS */
-.ordine { margin-top: 5px; }
+.ordine { margin-top: 5px; margin-bottom: 2px; }
 .Pianificato { color: #666; }
 .Aperto { color: #2b2; }
 .Chiuso { color: #f22; }
@@ -115,10 +116,8 @@ h3.green {color: #47a447;}
 .totale h2 { margin-top: 10px; }
 
 /*
- * Side navigation
- *
- * Scrollspy and affixed enhanced navigation to highlight sections and secondary
- * sections of docs content.
+ * Side navigation ORDINI
+ * Scrollspy and affixed enhanced navigation to highlight sections and secondary sections
  */
 
 /* By default it's not affixed in mobile views, so undo that */
@@ -173,7 +172,7 @@ h3.green {color: #47a447;}
   .bs-sidebar .nav > .active > ul {
     display: block;
   }
-  .bs-sidebar { margin-left: 30px; }
+  .bs-sidebar { margin-left: 0; }
   /* Widen the fixed sidebar */
   .bs-sidebar.affix,
   .bs-sidebar.affix-bottom {
@@ -203,7 +202,7 @@ h3.green {color: #47a447;}
 
 /*------------------ GRIDs and more.... */
 
-.row-myig { margin-top: 40px; border-bottom: 20px solid #fbfbfb; }
+.row-myig { margin-top: 40px; padding-bottom: 8px; border-bottom: 20px solid #fbfbfb; }
 .dashboard-right { margin-top: 30px; border-left: 1px solid #eee; }
 
 

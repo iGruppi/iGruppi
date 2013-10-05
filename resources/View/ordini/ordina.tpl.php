@@ -9,11 +9,11 @@
       La lista dei prodotti ordinati è stata aggiornata con <strong>successo</strong>!
     </div>
 <?php endif; ?>
-      
-    <h3>Ordine <strong class="<?php echo $this->statusObj->getStatus(); ?>"><?php echo $this->statusObj->getStatus(); ?></strong> il <?php echo $this->date($this->ordine->data_fine, '%d/%m/%Y');?> alle <?php echo $this->date($this->ordine->data_fine, '%H:%M');?></h3>
+    
+    <h3>Ordine <strong class="<?php echo $this->statusObj->getStatus(); ?>"><?php echo $this->statusObj->getStatus(); ?></strong> il <?php echo $this->date($this->ordine->data_inizio, '%d/%m/%Y');?> alle <?php echo $this->date($this->ordine->data_inizio, '%H:%M');?></h3>
 <?php if($this->statusObj->is_Aperto()): ?>
     <p>
-        Chiusura prevista il <strong><?php echo $this->date($this->ordine->data_fine, '%d/%m/%Y');?></strong> alle <?php echo $this->date($this->ordine->data_fine, '%H:%M:%S');?></strong>
+        Chiusura prevista il <strong><?php echo $this->date($this->ordine->data_fine, '%d/%m/%Y');?></strong> alle <?php echo $this->date($this->ordine->data_fine, '%H:%M');?></strong>
     </p>
 <?php endif; ?>
     <div class="box_note">
@@ -64,7 +64,7 @@
 <?php endif; ?>
     
   </div>
-  <div class="col-md-4">
+  <div class="col-md-4 col-right">
     <div class="bs-sidebar" data-spy="affix" role="complementary">
         <div class="totale">
             <input disabled id="f_totale" type="hidden" name="f_totale" value="<?php echo $totale; ?>" />

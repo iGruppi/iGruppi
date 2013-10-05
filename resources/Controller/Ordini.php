@@ -40,6 +40,10 @@ class Controller_Ordini extends MyFw_Controller {
         $prodObj = new Model_Produttori();
         $produttori = $prodObj->getProduttoriByIdGroup($this->_userSessionVal->idgroup);
         $this->view->produttori = $produttori;
+        // Create array Categorie prodotti for Produttori
+        $catObj = new Model_Categorie();
+        $arCat = $catObj->getSubCategoriesByIdgroup($this->_userSessionVal->idgroup);
+        $this->view->arCat = $arCat;
         
         $ordiniObj = new Model_Ordini();
         $listOrd = $ordiniObj->getAllByIdgroupWithFilter($this->_userSessionVal->idgroup, $fObj->getFilters());
