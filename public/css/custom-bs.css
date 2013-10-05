@@ -60,6 +60,7 @@ h1, h2, h3, h4, h5, h6 {color: #666; font-weight: 200; }
 h1 { font-size: 30px; }
 .no-margin {margin:0;}
 h3.green {color: #47a447;}
+.text-dark { color: #333;}
 
 .alert_red { color: #f22; }
 .alert_green { color: #2b2; }

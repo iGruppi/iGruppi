@@ -18,16 +18,20 @@ class Controller_Produttori extends MyFw_Controller {
     function indexAction() {
         
         $pObj = new Model_Produttori();
-        $listProduttori = $pObj->getProduttoriByIdGroup($this->_userSessionVal->idgroup);
-        
+        $listProduttori = $pObj->getProduttoriByIdGroup($this->_userSessionVal->idgroup);        
         // add Referente object to every Produttore
         if(count($listProduttori) > 0) {
             foreach($listProduttori AS &$produttore) {
                 $produttore->refObj = new Model_Produttori_Referente($produttore->iduser_ref);
             }
         }
-
         $this->view->list = $listProduttori;
+        
+        // Create array Categorie prodotti for Produttori
+        $catObj = new Model_Categorie();
+        $arCat = $catObj->getSubCategoriesByIdgroup($this->_userSessionVal->idgroup);
+        $this->view->arCat = $arCat;
+        
     }
 
     

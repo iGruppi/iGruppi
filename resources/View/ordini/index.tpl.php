@@ -8,7 +8,7 @@
 
       <div class="row row-myig">
         <div class="col-md-12">
-            <h3 class="no-margin"><strong><?php echo $ordine->ragsoc;?></strong></h3>
+            <h3 class="no-margin text-dark"><?php echo $ordine->ragsoc;?></h3>
         </div>
         <div class="col-md-8">
         <?php if( isset($this->arCat[$ordine->idproduttore]) ): ?>

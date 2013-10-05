@@ -7,11 +7,14 @@
     <?php foreach ($this->list as $key => $produttore): ?>
       
       <div class="row row-myig">
+        <div class="col-md-12">
+            <h3 class="no-margin <?php echo ($produttore->refObj->is_Referente()) ? "green" : "text-dark"; ?>"><?php echo $produttore->ragsoc;?></h3>
+        </div>
         <div class="col-md-8">
-            <h3 class="no-margin<?php if($produttore->refObj->is_Referente()): ?> green<?php endif; ?>"><?php echo $produttore->ragsoc;?></h3>
-            <p>
-                Referente: <strong><?php echo $produttore->nome . " " . $produttore->cognome; ?></strong>
-            </p>
+            <p>Referente: <strong><?php echo $produttore->nome . " " . $produttore->cognome; ?></strong></p>
+        <?php if( isset($this->arCat[$produttore->idproduttore]) ): ?>
+            <h4><span class="text-muted">Prodotti:</span> <?php echo implode(", ", $this->arCat[$produttore->idproduttore]); ?></h4>
+        <?php endif; ?>
         </div>
         <div class="col-md-4">
             <?php include $this->template('produttori/sub-menu.tpl.php'); ?>
