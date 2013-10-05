@@ -37,9 +37,19 @@ class Controller_Prodotti extends MyFw_Controller {
         
         // get All Prodotti by Produttore
         $objModel = new Model_Prodotti();
-        $list = $objModel->getProdottiByIdProduttore($idproduttore);
-//        Zend_Debug::dump($sth->rowCount()); die;
-        $this->view->list = $list;
+        $listProd = $objModel->getProdottiByIdProduttore($idproduttore);
+        // rebuild array
+        $subCat = array();
+        $prodotti = array();
+        if(count($listProd) > 0) {
+            foreach ($listProd as $key => $value) {
+                $prodotti[$value->idcat][$value->idsubcat][$value->idprodotto] = $value;
+                $subCat[$value->idcat]["categoria"] = $value->categoria;
+                $subCat[$value->idcat]["subcat"][$value->idsubcat] = $value->categoria_sub;
+            }
+        }
+        $this->view->listProdotti = $prodotti;
+        $this->view->listSubCat = $subCat;
     }
 
     function editAction() {

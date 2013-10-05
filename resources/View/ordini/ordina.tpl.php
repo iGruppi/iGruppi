@@ -37,6 +37,9 @@
             <p>
                 Categoria: <strong><?php echo $prodotto->categoria_sub; ?></strong><br />
                 Costo: <strong><?php echo $this->valuta($prodotto->costo_op);?></strong> / <strong><?php echo $prodotto->udm; ?></strong><br />
+        <?php if($prodotto->note != ""): ?>
+                <a href="javascript:void(0)" class="note" data-toggle="popover" title="" data-content="<?php echo $prodotto->note; ?>">Visualizza note</a>
+        <?php endif; ?>
             </p>
         </div>
         <div class="col-md-3">
@@ -69,7 +72,7 @@
         <div class="totale">
             <input disabled id="f_totale" type="hidden" name="f_totale" value="<?php echo $totale; ?>" />
             <h4>Totale: <b id="totale"><?php echo $this->valuta($totale) ?></b></h4>
-            <button type="submit" id="submit" class="btn btn-success btn-mylg">SALVA ORDINE</button>
+            <button type="submit" id="submit" class="btn btn-success btn-mylg"><span class="glyphicon glyphicon-<?php echo($this->updated) ? "saved" : "save"; ?>"></span> SALVA ORDINE</button>
         </div>
         <?php echo $this->partial('prodotti/subcat-navigation.tpl.php', array('listSubCat' => $this->listSubCat)); ?>
     </div>
@@ -77,55 +80,5 @@
 </div>
 </form>
 <script>
-!function ($) {
-
-  $(function(){
-
-    var $window = $(window)
-    var $body   = $(document.body)
-
-    var navHeight = $('.header').outerHeight(true) + 10
-
-    $body.scrollspy({
-      target: '.bs-sidebar',
-      offset: navHeight
-    })
-
-    $window.on('load', function () {
-      $body.scrollspy('refresh')
-    })
-
-    // back to top
-    setTimeout(function () {
-      var $sideBar = $('.bs-sidebar')
-
-      $sideBar.affix({
-        offset: {
-          top: function () {
-            var offsetTop      = $sideBar.offset().top
-            var sideBarMargin  = parseInt($sideBar.children(0).css('margin-top'), 10)
-            var navOuterHeight = $('.header').height()
-
-            return (this.top = offsetTop - navOuterHeight - sideBarMargin)
-          }
-        , bottom: function () {
-            return (this.bottom = $('.bs-footer').outerHeight(true))
-          }
-        }
-      })
-    }, 100)
-
-    setTimeout(function () {
-      $('.bs-top').affix()
-    }, 100)
-    
-    $('.moreThan30').tooltip('hide');
-
-})
-
-}(window.jQuery)
-
+    $('.note').popover();
 </script>
-
-
-

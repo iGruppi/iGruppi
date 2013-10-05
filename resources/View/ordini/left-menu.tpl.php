@@ -1,9 +1,8 @@
-<h4>Filtra per:</h4>
 <div class="panel-group" id="accordion">
   <div class="panel panel-default">
     <div class="panel-heading">
       <h4 class="panel-title">
-        <a class="accordion-toggle" data-toggle="collapse" href="#collapseOne">Stato</a>
+        <a class="accordion-toggle" data-toggle="collapse" href="#collapseOne"><span class="glyphicon glyphicon-filter"></span> Stato</a>
       </h4>
     </div>
     <div id="collapseOne" class="panel-collapse collapse<?php if($this->fObj->hasFilterByField("stato")) { echo " in"; } ?>">
@@ -25,7 +24,7 @@
   <div class="panel panel-default">
     <div class="panel-heading">
       <h4 class="panel-title">
-        <a class="accordion-toggle" data-toggle="collapse" href="#collapseTwo">Produttore</a>
+        <a class="accordion-toggle" data-toggle="collapse" href="#collapseTwo"><span class="glyphicon glyphicon-filter"></span> Produttore</a>
       </h4>
     </div>
     <div id="collapseTwo" class="panel-collapse collapse<?php if($this->fObj->hasFilterByField("idproduttore")) { echo " in"; } ?>">

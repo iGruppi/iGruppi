@@ -20,12 +20,13 @@ class Model_Prodotti extends MyFw_DB_Base {
     }
 
     function getProdottiByIdProduttore($idproduttore, $attivo=null) {
-        $sql = "SELECT p.*, cs.descrizione AS categoria "
+        $sql = "SELECT p.*, cs.descrizione AS categoria_sub, c.idcat, c.descrizione AS categoria "
               ." FROM prodotti AS p"
-              ." LEFT JOIN categorie_sub AS cs ON p.idsubcat=cs.idsubcat"
+              ." JOIN categorie_sub AS cs ON p.idsubcat=cs.idsubcat"
+              ." JOIN categorie AS c ON cs.idcat=c.idcat "
               ." WHERE p.idproduttore= :idproduttore";
         $sql .= (!is_null($attivo)) ? " AND p.attivo='$attivo'" : "";
-        $sql .= " ORDER BY p.descrizione";
+        $sql .=" ORDER BY c.descrizione, p.codice";
         //echo $sql; die;
         $sth = $this->db->prepare($sql);
         $sth->execute(array('idproduttore' => $idproduttore));        

@@ -5,6 +5,6 @@
         <?php endforeach; ?>
         </select>
         <input type="input" name="arSubCat[<?php echo $this->subCat["idsubcat"]; ?>][descrizione]" size="40" value="<?php echo $this->subCat["descrizione"]; ?>">
-        <a class="btn btn-danger btn-sm btn-inform" href="javascript:void(0)" onclick="jx_DelSubCategoria(<?php echo $this->subCat["idsubcat"]; ?>)"><span class="glyphicon glyphicon-remove"></span> Rimuovi</a>
+        <a class="btn btn-danger btn-sm btn-inform" href="javascript:void(0)" onclick="jx_DelSubCategoria(<?php echo $this->subCat["idsubcat"]; ?>)"><span class="glyphicon glyphicon-trash"></span> Rimuovi</a>
         <br />
     </div>

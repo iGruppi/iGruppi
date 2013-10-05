@@ -1,4 +1,4 @@
-<h2>Elenco Prodotti di <strong><?php echo $this->produttore->ragsoc;?></strong></h2>
+<h2>Gestione Prodotti di <strong><?php echo $this->produttore->ragsoc;?></strong></h2>
 
 <div class="row">
   <div class="col-md-8">
@@ -11,8 +11,14 @@
 <?php endif; ?>
 
       
-<?php if(count($this->list) > 0): ?>
-    <?php foreach ($this->list as $key => $prodotto): ?>
+<?php if(count($this->listProdotti) > 0): ?>
+    <?php 
+    foreach ($this->listProdotti as $idcat => $cat): ?>
+    <span id="cat_<?php echo $idcat; ?>" style="visibility: hidden;"><?php echo $this->listSubCat[$idcat]["categoria"]; ?></span>
+<?php foreach ($cat as $idsubcat => $prodotti): ?>
+        <h2 id="subcat_<?php echo $idsubcat; ?>" class="subcat-title"><?php echo $this->listSubCat[$idcat]["categoria"]; ?> - <?php echo $this->listSubCat[$idcat]["subcat"][$idsubcat]; ?></h2>
+        
+<?php   foreach ($prodotti as $idprodotto => $prodotto): ?>
       
       <div class="row row-myig">
         <div class="col-md-10">
@@ -33,15 +39,21 @@
         </div>
       </div>
       
+      <?php endforeach; ?>
     <?php endforeach; ?>
+  <?php endforeach; ?>
 <?php else: ?>
     <h3>Nessun prodotto!</h3>
 <?php endif; ?>
   </div>
 <?php if($this->produttore->refObj->is_Referente()): ?>    
-  <div class="col-md-1">&nbsp;</div>
-  <div class="col-md-3">
+  <div class="col-md-4 col-right">
+    <div class="bs-sidebar" data-spy="affix" role="complementary">
       <a class="btn btn-default btn-mylg" href="/prodotti/add/idproduttore/<?php echo $this->produttore->idproduttore;?>"><span class="glyphicon glyphicon-plus"></span> Nuovo prodotto</a>
+      <br />
+      <br />
+      <?php echo $this->partial('prodotti/subcat-navigation.tpl.php', array('listSubCat' => $this->listSubCat)); ?>
+    </div>
   </div>
 <?php endif; ?>
 
