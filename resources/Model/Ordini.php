@@ -78,10 +78,11 @@ class Model_Ordini extends MyFw_DB_Base {
 
     function getProdottiByIdOrdine($idordine, $idproduttore, $iduser) {
         // get elenco prodotti disponibile per quest'ordine
-        $sqlp = "SELECT p.*, op.costo AS costo_op, op.sconto, op.offerta, cs.descrizione AS categoria "
+        $sqlp = "SELECT p.*, op.costo AS costo_op, op.sconto, op.offerta, cs.descrizione AS categoria_sub, c.idcat, c.descrizione AS categoria "
               ." FROM ordini_prodotti AS op "
               ." JOIN prodotti AS p ON op.idprodotto=p.idprodotto "
               ." JOIN categorie_sub AS cs ON p.idsubcat=cs.idsubcat "
+              ." JOIN categorie AS c ON cs.idcat=c.idcat "
               ." WHERE op.idordine= :idordine";
         $sthp = $this->db->prepare($sqlp);
         $sthp->execute(array('idordine' => $idordine));        

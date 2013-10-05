@@ -98,10 +98,8 @@ h3.green {color: #47a447;}
 .sub_menu a.menu:hover { color: #333; background-color: #eee; border: 1px solid #ccc; }
 .sub_menu a.selected { color: #0c0; }
 .sub_menu a.menu_dis { color:#ddd; }
-.sub_menu .sub_totale, .sub_menu .totale { font-size: 15px; color: #666; clear: left; border: 1px solid #EEE; width: 127px; text-align: center; }
+.sub_menu .sub_totale { font-size: 15px; color: #666; clear: left; border: 1px solid #EEE; width: 127px; text-align: center; }
 .sub_menu .sub_totale h3 { margin-top: 0; }
-.sub_menu .totale p { margin: 0; padding: 3px; background-color: #eee; color: #666; font-size: 15px; }
-.sub_menu .totale h2 { margin-top: 10px; }
 .totale_line { padding: 38px 0px 12px 8px; margin-bottom: 50px; border-bottom: 3px dashed #CCC; }
 .totale_line h2 { float: left; padding: 0; margin: 0; }
 .totale_line .tot_right { margin: 0; padding: 0; color: #000; float: right; }
@@ -110,6 +108,97 @@ h3.green {color: #47a447;}
 .sub_menu .prod_qta { font-size: 24px; font-weight: bold; border: 1px solid #eee; float: left; width: 50px; text-align: center; margin: 0px 3px 3px 3px; color: #000; padding: 2px;}
 .sub_menu .menu_icon_empty { width: 34px; float: left; }
 .box_note { background-color: #fcfcfc; border: 1px solid #ccc; padding: 15px; margin-top: 20px; }
+
+/* ORDINI */
+.subcat-title { background-color: #d6e9c6; color: #060; padding: 10px; margin: 75px 0px 10px -10px; margin-top: 75px; }
+.totale { margin-bottom: 20px; padding: 10px 20px; background-color: #fcfcfc; border-radius: 2px;}
+.totale h2 { margin-top: 10px; }
+
+/*
+ * Side navigation
+ *
+ * Scrollspy and affixed enhanced navigation to highlight sections and secondary
+ * sections of docs content.
+ */
+
+/* By default it's not affixed in mobile views, so undo that */
+.bs-sidebar.affix {
+  position: static;
+}
+
+/* First level of nav */
+.bs-sidenav {
+  margin-top: 30px;
+  margin-bottom: 30px;
+  padding-top:    10px;
+  padding-bottom: 10px;
+  text-shadow: 0 1px 0 #fff;
+  background-color: #fcfcfc;
+  border-radius: 5px;
+}
+
+/* All levels of nav */
+.bs-sidebar .nav > li > a {
+  display: block;
+  color: #716b7a;
+  padding: 5px 20px;
+}
+.bs-sidebar .nav > li > a:hover,
+.bs-sidebar .nav > li > a:focus {
+  text-decoration: none;
+  background-color: #e5e3e9;
+  border-right: 1px solid #dbd8e0;
+}
+.bs-sidebar .nav > .active > a,
+.bs-sidebar .nav > .active:hover > a,
+.bs-sidebar .nav > .active:focus > a {
+  font-weight: bold;
+  color: #060;
+  background-color: transparent;
+  border-right: 1px solid #060;
+}
+
+/* Nav: second level (shown on .active) */
+.bs-sidebar .nav .nav {
+  display: none; /* Hide by default, but at >768px, show it */
+  margin-bottom: 8px;
+}
+.bs-sidebar .nav .nav > li > a {
+  padding: 3px 10px 3px 30px;
+  font-size: 90%;
+}
+
+/* Show and affix the side nav when space allows it */
+@media screen and (min-width: 992px) {
+  .bs-sidebar .nav > .active > ul {
+    display: block;
+  }
+  .bs-sidebar { margin-left: 30px; }
+  /* Widen the fixed sidebar */
+  .bs-sidebar.affix,
+  .bs-sidebar.affix-bottom {
+    width: 270px;
+  }
+  .bs-sidebar.affix {
+    position: fixed; /* Undo the static from mobile first approach */
+    top: 110px;
+  }
+  .bs-sidebar.affix-bottom {
+    position: absolute; /* Undo the static from mobile first approach */
+  }
+  .bs-sidebar.affix-bottom .bs-sidenav,
+  .bs-sidebar.affix .bs-sidenav {
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+}
+@media screen and (min-width: 1200px) {
+  /* Widen the fixed sidebar again */
+  .bs-sidebar.affix-bottom,
+  .bs-sidebar.affix {
+    width: 263px;
+  }
+}
 
 
 /*------------------ GRIDs and more.... */
@@ -147,6 +236,7 @@ h3.green {color: #47a447;}
 
 
 form{ margin:0px; margin-top: 35px; padding:0px; font-size: 16px; }
+form.ordini { margin: 0; font-size: 14px; }
 form p { margin-bottom: 15px; }
 label{ cursor: pointer;	color: #000; font-weight: bold;}
 label input{ font-weight: normal; }
@@ -243,3 +333,8 @@ form.f1n120 fieldset .checkbox_box,
 form.f1n120 .hint,
 form.f1n120 fieldset .error p { margin-left: 128px; }
 form.f1n120 input#submit, form.f1n120 button#submit { margin-left: 137px; }
+
+
+
+
+

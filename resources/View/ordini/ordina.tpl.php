@@ -1,4 +1,6 @@
 <h2>Produttore <strong><?php echo $this->produttore->ragsoc;?></strong></h2>
+<form id="prod_ordini_form" class="ordini" action="/ordini/ordina/idordine/<?php echo $this->ordine->idordine;?>" method="post">
+
 <div class="row">
   <div class="col-md-8">
 <?php if($this->updated): ?>
@@ -8,7 +10,7 @@
     </div>
 <?php endif; ?>
       
-    <h3>Ordine <strong class="<?php echo $this->statusObj->getStatus(); ?>"><?php echo $this->statusObj->getStatus(); ?></strong></h3>
+    <h3>Ordine <strong class="<?php echo $this->statusObj->getStatus(); ?>"><?php echo $this->statusObj->getStatus(); ?></strong> il <?php echo $this->date($this->ordine->data_fine, '%d/%m/%Y');?> alle <?php echo $this->date($this->ordine->data_fine, '%H:%M');?></h3>
 <?php if($this->statusObj->is_Aperto()): ?>
     <p>
         Chiusura prevista il <strong><?php echo $this->date($this->ordine->data_fine, '%d/%m/%Y');?></strong> alle <?php echo $this->date($this->ordine->data_fine, '%H:%M:%S');?></strong>
@@ -19,15 +21,111 @@
         <p><?php echo $this->ordine->note_consegna; ?></p>
     </div>
 
-<?php if(count($this->list) > 0): ?>
-    <?php if($this->statusObj->is_Aperto()): ?>
-        <?php include $this->template('ordini/prodotti.aperto.tpl.php'); ?>
-    <?php elseif( $this->statusObj->is_Chiuso() || $this->statusObj->is_Archiviato() ): ?>
-        <?php include $this->template('ordini/prodotti.chiuso.tpl.php'); ?>
-    <?php endif; ?>
+<?php 
+    if(count($this->listProdotti) > 0):
+    $totale = 0;
+    foreach ($this->listProdotti as $idcat => $cat): ?>
+    <span id="cat_<?php echo $idcat; ?>" style="visibility: hidden;"><?php echo $this->listSubCat[$idcat]["categoria"]; ?></span>
+<?php foreach ($cat as $idsubcat => $prodotti): ?>
+        <h2 id="subcat_<?php echo $idsubcat; ?>" class="subcat-title"><?php echo $this->listSubCat[$idcat]["categoria"]; ?> - <?php echo $this->listSubCat[$idcat]["subcat"][$idsubcat]; ?></h2>
+        
+<?php   foreach ($prodotti as $idprodotto => $prodotto): ?>
+        
+      <div class="row row-myig">
+        <div class="col-md-9">
+            <h3 class="no-margin"><?php echo $prodotto->descrizione;?></h3>
+            <p>
+                Categoria: <strong><?php echo $prodotto->categoria_sub; ?></strong><br />
+                Costo: <strong><?php echo $this->valuta($prodotto->costo_op);?></strong> / <strong><?php echo $prodotto->udm; ?></strong><br />
+            </p>
+        </div>
+        <div class="col-md-3">
+            <div class="sub_menu">
+                <a class="menu_icon" href="javascript:void(0)" onclick="jx_SelQtaProdotto(<?php echo $prodotto->idprodotto;?>, '<?php echo $prodotto->costo_op;?>', '+')">+</a>
+                <input readonly class="prod_qta" type="text" id="prod_qta_<?php echo $prodotto->idprodotto;?>" name="prod_qta[<?php echo $prodotto->idprodotto;?>]" value="<?php echo $prodotto->qta;?>" />
+                <a class="menu_icon" href="javascript:void(0)" onclick="jx_SelQtaProdotto(<?php echo $prodotto->idprodotto;?>, '<?php echo $prodotto->costo_op;?>', '-')">-</a>
+        <?php 
+                $subtotale = ($prodotto->qta * $prodotto->costo_op);
+                $totale += $subtotale;
+        ?>
+                <div class="sub_totale" id="subtotale_<?php echo $prodotto->idprodotto;?>"><?php echo $this->valuta($subtotale) ?></div>
+            </div>
+        </div>
+      </div>
+        
+    <?php endforeach; ?>
+  <?php endforeach; ?>
+<?php endforeach; ?>
+      <div class="row bs-footer">
+          <div class="col-md-12">&nbsp;</div>
+      </div>
 <?php else: ?>
     <h3>Nessun prodotto ordinato/disponibile!</h3>
 <?php endif; ?>
     
   </div>
+  <div class="col-md-4">
+    <div class="bs-sidebar" data-spy="affix" role="complementary">
+        <div class="totale">
+            <input disabled id="f_totale" type="hidden" name="f_totale" value="<?php echo $totale; ?>" />
+            <h4>Totale: <b id="totale"><?php echo $this->valuta($totale) ?></b></h4>
+            <button type="submit" id="submit" class="btn btn-success btn-mylg">SALVA ORDINE</button>
+        </div>
+        <?php echo $this->partial('prodotti/subcat-navigation.tpl.php', array('listSubCat' => $this->listSubCat)); ?>
+    </div>
+  </div>
 </div>
+</form>
+<script>
+!function ($) {
+
+  $(function(){
+
+    var $window = $(window)
+    var $body   = $(document.body)
+
+    var navHeight = $('.header').outerHeight(true) + 10
+
+    $body.scrollspy({
+      target: '.bs-sidebar',
+      offset: navHeight
+    })
+
+    $window.on('load', function () {
+      $body.scrollspy('refresh')
+    })
+
+    // back to top
+    setTimeout(function () {
+      var $sideBar = $('.bs-sidebar')
+
+      $sideBar.affix({
+        offset: {
+          top: function () {
+            var offsetTop      = $sideBar.offset().top
+            var sideBarMargin  = parseInt($sideBar.children(0).css('margin-top'), 10)
+            var navOuterHeight = $('.header').height()
+
+            return (this.top = offsetTop - navOuterHeight - sideBarMargin)
+          }
+        , bottom: function () {
+            return (this.bottom = $('.bs-footer').outerHeight(true))
+          }
+        }
+      })
+    }, 100)
+
+    setTimeout(function () {
+      $('.bs-top').affix()
+    }, 100)
+    
+    $('.moreThan30').tooltip('hide');
+
+})
+
+}(window.jQuery)
+
+</script>
+
+
+

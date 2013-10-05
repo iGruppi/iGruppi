@@ -110,8 +110,21 @@ class Controller_Ordini extends MyFw_Controller {
         }
 
         // elenco prodotti (aggiornato dopo eventuale POST)
-        $this->view->list = $ordObj->getProdottiByIdOrdine($idordine, $ordine->idproduttore, $this->_iduser);
-        //Zend_Debug::dump($this->view->list);
+        $listProd = $ordObj->getProdottiByIdOrdine($idordine, $ordine->idproduttore, $this->_iduser);
+        // rebuild array
+        $subCat = array();
+        $prodotti = array();
+        if(count($listProd) > 0) {
+            foreach ($listProd as $key => $value) {
+                $prodotti[$value->idcat][$value->idsubcat][$value->idprodotto] = $value;
+                $subCat[$value->idcat]["categoria"] = $value->categoria;
+                $subCat[$value->idcat]["subcat"][$value->idsubcat] = $value->categoria_sub;
+            }
+        }
+        
+        $this->view->listProdotti = $prodotti;
+        $this->view->listSubCat = $subCat;
+        //Zend_Debug::dump($subCat);
     }
 
 }
