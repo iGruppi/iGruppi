@@ -100,4 +100,39 @@ class Controller_Users extends MyFw_Controller {
         echo json_encode($result);
     }
     
+    function enableAction() {
+        $layout = Zend_Registry::get("layout");
+        $layout->disableDisplay();
+        
+        $iduser = $this->getParam("iduser");
+        $uObj = new Model_Users();
+        $user = $uObj->getUserByIdInGroup($iduser, $this->_userSessionVal->idgroup);
+        $result = false;
+        if(!is_null($user)) {
+            // send email to User
+            $gObj = new Model_Groups();
+            $mail = new MyFw_Mail();
+            $group = $gObj->getGroupById($this->_userSessionVal->idgroup);
+            $mail->setSubject("Iscrizione al Gruppo ".$group->nome);
+            $mail->addTo($user->email);
+            $ugObj = $gObj->getGroupFoundersById($this->_userSessionVal->idgroup);
+            foreach($ugObj AS $ugVal) {
+                $mail->addBcc($ugVal["email"]);
+            }
+            $mail->setViewParam("new_user", $user->nome . " " . $user->cognome );
+            $mail->setViewParam("gruppo", $group->nome);
+            $mail->setViewParam("email_user", $user->email);
+            $mail->setViewParam("password_user", $user->password);
+            $config = Zend_Registry::get("appConfig");
+            $mail->setViewParam("url_environment", $config->url_environment);
+            $sended = $mail->sendHtmlTemplate("notify.new_user_enabled.tpl.php");
+            if($sended) {
+                // enable user
+                $sth_update = $this->getDB()->prepare("UPDATE users_group SET attivo='S' WHERE iduser= :iduser AND idgroup= :idgroup");
+                $result = $sth_update->execute(array('iduser' => $iduser, 'idgroup' => $this->_userSessionVal->idgroup));
+            }
+        }
+        echo json_encode($result);
+    }
+    
 }

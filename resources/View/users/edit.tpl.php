@@ -3,7 +3,7 @@
 <?php if($this->updated): ?>
     <div class="alert alert-success alert-dismissable">
       <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-      Produttore aggiornato con <strong>successo</strong>!
+      Utente aggiornato con <strong>successo</strong>!
     </div>
 <?php endif; ?>
 

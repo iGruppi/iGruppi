@@ -96,3 +96,16 @@
                 }
 			});
     }
+
+    function jx_EnableUser(iduser) {
+        $('#disabled_button_'+iduser).button('loading');
+        $.getJSON(
+			'/users/enable/',
+            {iduser: iduser},
+			function(data) {
+                if(data) {
+                    $('#disabled_'+iduser).remove();
+                    $('#disabled_button_'+iduser).remove();
+                }
+			});
+    }

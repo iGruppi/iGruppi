@@ -218,7 +218,7 @@ h3.green {color: #47a447;}
 .btn-success:hover { background-color: #47a447; border-color: #398439; }
 .btn-primary:hover { background-color: #3276b1; border-color: #285e8e; }
 .btn-inform { font-size: 14px; padding: 3px 10px; line-height: 1.428571429; vertical-align: top;}
-
+.btn-primary.disabled { color: #fff; }
 
 .nav-pills>li>a { border-radius: 2px; }
 .btn-group-myig { margin-top: 4px; }

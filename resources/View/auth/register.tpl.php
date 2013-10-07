@@ -1,9 +1,5 @@
 <h1>Registrazione nuovo utente</h1>
 
-<?php if( $this->added === true): ?>
-<h2>La tua iscrizione è avvenuta con successo!</h2>
-<h3>Presto il tuo account verrà abilitato e avrai accesso a tutte le funzionalità.<br />Grazie!</h3>
-<?php else: ?>
 <form id="loginForm" action="<?php echo $this->form->getAction(); ?>" method="post" class="f1n200">
 
     <fieldset>
@@ -23,4 +19,3 @@
 
     <button type="submit" id="submit" class="btn btn-primary btn-mylg">ISCRIVIMI ORA!</button>
 </form>
-<?php endif; ?>

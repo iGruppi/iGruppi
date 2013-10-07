@@ -127,8 +127,8 @@ class Controller_Auth extends MyFw_Controller {
                                 $this->view->sended = $mail->sendHtmlTemplate("notify.new_user_subscribe.tpl.php");
                             }
 
-                            // OK!
-                            $this->view->added = true;
+                            // REGISTRATION OK!
+                            $this->redirect("auth", "registerok");
                         } else {
                             $form->setError("idgroup", "Devi selezionare un gruppo esistente!");
                         }
@@ -138,10 +138,12 @@ class Controller_Auth extends MyFw_Controller {
                 }
             }
         }
-
         // set Form in the View
         $this->view->form = $form;
-
+    }
+    
+    function registerokAction() {
+        
     }
     
     function passwordAction() {
