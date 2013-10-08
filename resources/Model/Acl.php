@@ -14,7 +14,7 @@ class Model_Acl
         $this->addResource('Index');
         $this->addResource('Error');
         $this->addResource('Auth');			// operazioni di login/logout
-        $this->addResource('Info');
+        $this->addResource('Cronjobs');
         // Logged Resource
         $this->addResource('Dashboard');
         $this->addResource('Users');
@@ -31,7 +31,7 @@ class Model_Acl
         $this->allow('Guest', 'Index');
         $this->allow('Guest', 'Error');
         $this->allow('Guest', 'Auth');
-        $this->allow('Guest', 'Info');
+        $this->allow('Guest', 'Cronjobs');
 
         // Free vede tutto quello che vede Guest più questi sotto
         $this->allow('User', 'Dashboard');

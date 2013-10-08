@@ -124,7 +124,7 @@ class Controller_Auth extends MyFw_Controller {
                                 $mail->setViewParam("new_user", $fValues["nome"] . " " . $fValues["cognome"] );
                                 $mail->setViewParam("gruppo", $group->nome);
                                 $mail->setViewParam("email_user", $fValues["email"]);
-                                $this->view->sended = $mail->sendHtmlTemplate("notify.new_user_subscribe.tpl.php");
+                                $this->view->sended = $mail->sendHtmlTemplate("registration.new_user_subscribe.tpl.php");
                             }
 
                             // REGISTRATION OK!

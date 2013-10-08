@@ -200,4 +200,17 @@ class Model_Ordini extends MyFw_DB_Base {
         $this->db->commit();
     }
     
+    function getAllByDate($date, $type) {
+        $sql = "SELECT * FROM ordini AS o"
+              ." LEFT JOIN groups AS g ON o.idgroup=g.idgroup"
+              ." LEFT JOIN produttori AS p ON o.idproduttore=p.idproduttore"
+              ." WHERE DATE_FORMAT(o.$type, '%Y-%m-%d')= :date";
+        $sth = $this->db->prepare($sql);
+        $sth->execute(array('date' => $date));
+        if($sth->rowCount() > 0) {
+            return $sth->fetchAll(PDO::FETCH_OBJ);
+        }
+        return null;
+    }
+    
 }

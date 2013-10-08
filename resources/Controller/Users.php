@@ -125,7 +125,7 @@ class Controller_Users extends MyFw_Controller {
             $mail->setViewParam("password_user", $user->password);
             $config = Zend_Registry::get("appConfig");
             $mail->setViewParam("url_environment", $config->url_environment);
-            $sended = $mail->sendHtmlTemplate("notify.new_user_enabled.tpl.php");
+            $sended = $mail->sendHtmlTemplate("registration.new_user_enabled.tpl.php");
             if($sended) {
                 // enable user
                 $sth_update = $this->getDB()->prepare("UPDATE users_group SET attivo='S' WHERE iduser= :iduser AND idgroup= :idgroup");
