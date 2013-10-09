@@ -10,10 +10,16 @@ class Controller_Cronjobs extends MyFw_Controller {
         $layout = Zend_Registry::get("layout");
         $layout->disableDisplay();
     }
+    
+    function everyday20Action() {
+        $this->startorderAction();
+    }
  
     function startorderAction() {
         // date to check
-        $date = "2013-10-10";
+        $today = new Zend_Date();
+        $tomorrow = $today->addDay(1);
+        $date = $tomorrow->toString("YYYY-MM-dd");
         
         // GET GROUP/PRODUTTORE for any OPENED ORDER
         $orderObj = new Model_Ordini();
