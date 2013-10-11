@@ -142,15 +142,17 @@ class Controller_GestioneOrdini extends MyFw_Controller {
         if(is_null($ordine)) {
             $this->redirect("index", "error", array('code' => 404));
         }
-        $this->view->ordine = $ordine;
-        $this->view->statusObj = new Model_Ordini_Status($ordine->data_inizio, $ordine->data_fine, $ordine->archiviato);
-               
+        // controllo per i furbi che vogliono visualizzare/cancellare ordini non loro
         $produttoreObj = new Model_Produttori();
         $produttore = $produttoreObj->getProduttoreById($ordine->idproduttore, $this->_userSessionVal->idgroup);
+        $user_ref = new Model_Produttori_Referente($ordine->iduser_ref);
+        if(!$user_ref->is_Referente()) {
+            $this->redirect("index", "error", array('code' => 404));
+        }
+        
+        $this->view->ordine = $ordine;
         $this->view->produttore = $produttore;
-        
-        # TODO : Inserire controllo per i furbi che vogliono visualizzare/cancellare ordini non loro
-        
+        $this->view->statusObj = new Model_Ordini_Status($ordine->data_inizio, $ordine->data_fine, $ordine->archiviato);
         $this->view->updated = false;
         
         // SAVE FORM
