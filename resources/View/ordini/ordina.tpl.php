@@ -68,6 +68,7 @@
     
   </div>
   <div class="col-md-4 col-right">
+<?php if(count($this->listProdotti) > 0): ?>      
     <div class="bs-sidebar" data-spy="affix" role="complementary">
         <div class="totale">
             <input disabled id="f_totale" type="hidden" name="f_totale" value="<?php echo $totale; ?>" />
@@ -76,6 +77,7 @@
         </div>
         <?php echo $this->partial('prodotti/subcat-navigation.tpl.php', array('listSubCat' => $this->listSubCat)); ?>
     </div>
+<?php endif; ?>
   </div>
 </div>
 </form>

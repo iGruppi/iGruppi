@@ -14,7 +14,7 @@ class Controller_Cronjobs extends MyFw_Controller {
     function everyday20Action() {
         $this->startorderAction();
     }
- 
+
     function startorderAction() {
         // date to check
         $today = new Zend_Date();
@@ -32,7 +32,7 @@ class Controller_Cronjobs extends MyFw_Controller {
 
                 // PREPARE EMAIL TO GROUP LIST
                 $mail = new MyFw_Mail();
-                $mail->setSubject("Nuovo ordine aperto, Gruppo ".$ordine->nome);
+                $mail->setSubject("Nuovo ordine aperto per ".$ordine->ragsoc);
                 $mail->setViewParam("ordine", $ordine);
                 
                 // SET array Categorie prodotti for Produttore
