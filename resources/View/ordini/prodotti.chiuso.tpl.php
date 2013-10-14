@@ -1,6 +1,16 @@
+<div class="row">
+  <div class="col-md-8">
+      
+    <h3>Ordine <strong class="<?php echo $this->statusObj->getStatus(); ?>"><?php echo $this->statusObj->getStatus(); ?></strong></h3>
+    <div class="box_note">
+        <h4>Note consegna:</h4>
+        <p><?php echo $this->ordine->note_consegna; ?></p>
+    </div>
+
+<?php if(count($this->listProdotti) > 0): ?>
     <?php 
         $totale = 0;
-        foreach ($this->list as $key => $prodotto): ?>
+        foreach ($this->listProdotti as $key => $prodotto): ?>
       <div class="row row-myig">
         <div class="col-md-9">
             <h3 class="no-margin"><?php echo $prodotto->descrizione;?></h3>
@@ -34,3 +44,9 @@
             <h2><?php echo $this->valuta($totale) ?></h2>
         </div>
       </div>
+<?php else: ?>
+    <h3>Nessun prodotto ordinato!</h3>
+<?php endif; ?>
+    
+  </div>
+</div>

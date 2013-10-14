@@ -50,7 +50,7 @@ class Controller_Ordini extends MyFw_Controller {
         // add Status model to Ordini
         if(count($listOrd) > 0) {
             foreach($listOrd AS &$ordine) {
-                $ordine->statusObj = new Model_Ordini_Status($ordine->data_inizio, $ordine->data_fine, $ordine->archiviato);
+                $ordine->statusObj = new Model_Ordini_Status($ordine);
             }
         }
         $this->view->list = $listOrd;
@@ -61,7 +61,7 @@ class Controller_Ordini extends MyFw_Controller {
         $ordObj = new Model_Ordini();
         $ordine = $ordObj->getByIdOrdine($idordine);
         $this->view->ordine = $ordine;
-        $this->view->statusObj = new Model_Ordini_Status($ordine->data_inizio, $ordine->data_fine, $ordine->archiviato);;
+        $this->view->statusObj = new Model_Ordini_Status($ordine);
 
         $produttoreObj = new Model_Produttori();
         $produttore = $produttoreObj->getProduttoreById($ordine->idproduttore, $this->_userSessionVal->idgroup);
@@ -77,7 +77,7 @@ class Controller_Ordini extends MyFw_Controller {
         $ordObj = new Model_Ordini();
         $ordine = $ordObj->getByIdOrdine($idordine);
         $this->view->ordine = $ordine;
-        $this->view->statusObj = new Model_Ordini_Status($ordine->data_inizio, $ordine->data_fine, $ordine->archiviato);;
+        $this->view->statusObj = new Model_Ordini_Status($ordine);
 
         $produttoreObj = new Model_Produttori();
         $produttore = $produttoreObj->getProduttoreById($ordine->idproduttore, $this->_userSessionVal->idgroup);

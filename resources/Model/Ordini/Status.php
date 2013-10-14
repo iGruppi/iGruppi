@@ -16,10 +16,10 @@ class Model_Ordini_Status {
     private $_fine;
     private $_archiviato;
     
-    function __construct($inizio, $fine, $a) {
-        $this->_inizio = $inizio;
-        $this->_fine = $fine;
-        $this->_archiviato = $a;
+    function __construct($o) {
+        $this->_inizio = $o->data_inizio;
+        $this->_fine = $o->data_fine;
+        $this->_archiviato = $o->archiviato;
     }
     
     function getStatus() {
@@ -71,7 +71,7 @@ class Model_Ordini_Status {
  */   
 
     function can_ModificaProdotti() {
-        return ( $this->is_Pianificato() ) ? true : false;
+        return ( !$this->is_Archiviato() ) ? true : false;
     }
     
 
