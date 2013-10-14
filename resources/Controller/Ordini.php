@@ -76,8 +76,15 @@ class Controller_Ordini extends MyFw_Controller {
         $idordine = $this->getParam("idordine");
         $ordObj = new Model_Ordini();
         $ordine = $ordObj->getByIdOrdine($idordine);
+        if(is_null($ordine)) {
+            $this->redirect("ordini");
+        }
         $this->view->ordine = $ordine;
-        $this->view->statusObj = new Model_Ordini_Status($ordine);
+        $statusObj = new Model_Ordini_Status($ordine);
+        if(!$statusObj->is_Aperto()) {
+            $this->redirect("ordini", "viewdettaglio", array("idordine" => $idordine));
+        }
+        $this->view->statusObj = $statusObj;
 
         $produttoreObj = new Model_Produttori();
         $produttore = $produttoreObj->getProduttoreById($ordine->idproduttore, $this->_userSessionVal->idgroup);
