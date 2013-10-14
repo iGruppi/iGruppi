@@ -81,7 +81,9 @@ class Controller_Ordini extends MyFw_Controller {
         }
         $this->view->ordine = $ordine;
         $statusObj = new Model_Ordini_Status($ordine);
-        if(!$statusObj->is_Aperto()) {
+        if($statusObj->is_Pianificato()) {
+            $this->redirect("ordini");
+        } else if(!$statusObj->is_Aperto()) {
             $this->redirect("ordini", "viewdettaglio", array("idordine" => $idordine));
         }
         $this->view->statusObj = $statusObj;
