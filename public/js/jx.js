@@ -78,8 +78,14 @@
 			'/produttori/delcat/',
             {idsubcat: idsubcat},
 			function(data) {
-                if(data) {
+                if(data.res) {
                     $('#subcat_'+idsubcat).remove();
+                } else {
+                    $('#subcat_'+idsubcat+' > .alert').show();
+                    $('#subcat_'+idsubcat+' > .alert > .alert_red').html(data.prodotti.length);
+                    for (var i in data.prodotti) {
+                        $('#subcat_'+idsubcat+' > .alert > ul').append('<li><a href="/prodotti/edit/idprodotto/'+data.prodotti[i].idprodotto+'">'+data.prodotti[i].descrizione+'</a></li>');
+                    }
                 }
 			});
     }

@@ -188,8 +188,19 @@ class Controller_Produttori extends MyFw_Controller {
         $layout->disableDisplay();
         
         $idsubcat = $this->getParam("idsubcat");
-        $sth = $this->getDB()->prepare("DELETE FROM categorie_sub WHERE idsubcat= :idsubcat");
-        $result = $sth->execute(array('idsubcat' => $idsubcat));
+        // get Prodotti by idsubcat
+        $prodObj = new Model_Prodotti();
+        $prodotti = $prodObj->getProdottiByIdSubCat($idsubcat);
+        if(count($prodotti) > 0) {
+            
+            $result = array('res' => false, 'prodotti' => $prodotti);
+        } else {
+            // Nessun prodotto per questa SubCat -> can DELETE!
+            $sth = $this->getDB()->prepare("DELETE FROM categorie_sub WHERE idsubcat= :idsubcat");
+            $res = $sth->execute(array('idsubcat' => $idsubcat));
+            $result = array('res' => $res);
+        }
+        
         echo json_encode($result);
     }
     

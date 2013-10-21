@@ -61,7 +61,7 @@ class Controller_Prodotti extends MyFw_Controller {
         if($prodotto === false) {
             $this->redirect("prodotti", "list");
         }
-        
+
         $form = new Form_Prodotti();
         $form->setAction("/prodotti/edit/idprodotto/$idprodotto");
         // remove useless fields
@@ -70,7 +70,7 @@ class Controller_Prodotti extends MyFw_Controller {
         
         // set Categories
         $objCat = new Model_Categorie();
-        $form->setOptions("idsubcat", $objCat->convertToSingleArray($objCat->getSubCategories($this->_userSessionVal->idgroup, $prodotto["idproduttore"]), "idsubcat", "descrizione"));
+        $form->setOptions("idsubcat", $objCat->convertToSingleArray($objCat->getSubCategories($this->_userSessionVal->idgroup, $prodotto->idproduttore), "idsubcat", "descrizione"));
 
         if($this->getRequest()->isPost()) {
             $fv = $this->getRequest()->getPost();
@@ -78,10 +78,10 @@ class Controller_Prodotti extends MyFw_Controller {
 
                 $this->getDB()->makeUpdate("prodotti", "idprodotto", $form->getValues());
                 // REDIRECT
-                $this->redirect("prodotti", "list", array("idproduttore" => $prodotto["idproduttore"], "updated" => true));
+                $this->redirect("prodotti", "list", array("idproduttore" => $prodotto->idproduttore, "updated" => true));
             }
         } else {
-            $form->setValues($prodotto);
+            $form->setValues((array)$prodotto);
         }
         // Zend_Debug::dump($form); die;
         // set Form in the View

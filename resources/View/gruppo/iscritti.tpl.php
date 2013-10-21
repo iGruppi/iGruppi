@@ -1,4 +1,4 @@
-<h2>Elenco Iscritti al Gruppo <strong><?php echo $this->group->nome; ?></strong></h2>
+<h2><strong><?php echo count($this->list); ?></strong> utenti iscritti al Gruppo <strong><?php echo $this->group->nome; ?></strong></h2>
 
 <div class="row">
   <div class="col-md-8">

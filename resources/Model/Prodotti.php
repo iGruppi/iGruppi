@@ -16,7 +16,7 @@ class Model_Prodotti extends MyFw_DB_Base {
 
         $sth_app = $this->db->prepare("SELECT * FROM prodotti WHERE idprodotto= :idprodotto");
         $sth_app->execute(array('idprodotto' => $idprodotto));
-        return $sth_app->fetch(PDO::FETCH_ASSOC);
+        return $sth_app->fetch(PDO::FETCH_OBJ);
     }
 
     function getProdottiByIdProduttore($idproduttore, $attivo=null) {
@@ -32,6 +32,12 @@ class Model_Prodotti extends MyFw_DB_Base {
         $sth->execute(array('idproduttore' => $idproduttore));        
         return $sth->fetchAll(PDO::FETCH_OBJ);
     }
-
+    
+    function getProdottiByIdSubCat($idsubcat) {
+        
+        $sth_app = $this->db->prepare("SELECT * FROM prodotti WHERE idsubcat= :idsubcat");
+        $sth_app->execute(array('idsubcat' => $idsubcat));
+        return $sth_app->fetchAll(PDO::FETCH_OBJ);
+    }
 
 }
