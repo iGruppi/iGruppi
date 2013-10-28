@@ -22,7 +22,7 @@
       </div>
     <?php endforeach; ?>
 <?php else: ?>
-    <h3>Nessun ordine disponibile!</h3>
+    <h3>Nessun produttore disponibile!</h3>
 <?php endif; ?>
       
   </div>

@@ -1,4 +1,4 @@
-<h2>Gestione Prodotti di <strong><?php echo $this->produttore->ragsoc;?></strong></h2>
+<h2>Listino Prodotti di <strong><?php echo $this->produttore->ragsoc;?></strong></h2>
 
 <div class="row">
   <div class="col-md-8">
