@@ -63,7 +63,7 @@
           <div class="col-md-12">&nbsp;</div>
       </div>
 <?php else: ?>
-    <h3>Nessun prodotto ordinato!</h3>
+    <h3>Nessun prodotto disponibile!</h3>
 <?php endif; ?>
     
   </div>

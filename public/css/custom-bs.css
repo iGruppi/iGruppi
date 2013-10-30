@@ -58,7 +58,10 @@ a:hover, a:focus { color: #666; }
 strong { color: #000; }
 h1, h2, h3, h4, h5, h6 {color: #666; font-weight: 200; }
 h1 { font-size: 30px; }
+h2 { font-size: 24px; }
+h3 { font-size: 20px; }
 .no-margin {margin:0;}
+.big-margin-top { margin-top: 55px; }
 h3.green {color: #47a447;}
 .text-dark { color: #333;}
 
@@ -100,8 +103,7 @@ h3.green {color: #47a447;}
 .sub_menu a.menu:hover { color: #333; background-color: #eee; border: 1px solid #ccc; }
 .sub_menu a.selected { color: #0c0; }
 .sub_menu a.menu_dis { color:#ddd; }
-.sub_menu .sub_totale { font-size: 15px; color: #666; clear: left; border: 1px solid #EEE; width: 127px; text-align: center; }
-.sub_menu .sub_totale h3 { margin-top: 0; }
+.sub_menu .sub_totale { font-size: 18px; font-weight: 200; color: #666; clear: left; border: 1px solid #EEE; width: 127px; text-align: center; }
 .totale_line { padding: 38px 0px 12px 8px; margin-bottom: 50px; border-bottom: 3px dashed #CCC; }
 .totale_line h2 { float: left; padding: 0; margin: 0; }
 .totale_line .tot_right { margin: 0; padding: 0; color: #000; float: right; }
@@ -204,6 +206,8 @@ h3.green {color: #47a447;}
 /*------------------ GRIDs and more.... */
 
 .row-myig { margin-top: 40px; padding-bottom: 8px; border-bottom: 20px solid #fbfbfb; }
+.row-myig-thin { margin-top: 20px; padding-top: 10px; padding-bottom: 4px; border-bottom: 1px solid #fbfbfb; }
+.row-myig-thin:hover { background-color: #fbfbfb; }
 .dashboard-right { margin-top: 30px; border-left: 1px solid #eee; }
 
 
@@ -230,6 +234,53 @@ h3.green {color: #47a447;}
 .panel-body a.selected { color: #666; border: 1px solid #eee; }
 .panel-body a.selected:hover { color: #f00; border: 1px solid #f00 }
 
+
+/*
+ * Callouts
+ *
+ * Not quite alerts, but custom and helpful notes for folks reading the docs.
+ * Requires a base and modifier class.
+ */
+
+/* Common styles for all types */
+.bs-callout {
+  margin: 20px 0;
+  padding: 20px;
+  border-left: 3px solid #eee;
+}
+.bs-callout h4 {
+  margin-top: 0;
+  margin-bottom: 5px;
+}
+.bs-callout p { font-size: 14px; }
+.bs-callout p:last-child {
+  margin-bottom: 0;
+}
+
+/* Variations */
+.bs-callout-danger {
+  background-color: #fdf7f7;
+  border-color: #eed3d7;
+}
+.bs-callout-danger h4 {
+  color: #b94a48;
+}
+.bs-callout-warning {
+  background-color: #faf8f0;
+  border-color: #faebcc;
+}
+.bs-callout-warning h4 {
+  color: #c09853;
+}
+.bs-callout-info {
+  background-color: #F5FAF4;
+  border-color: #BCF1BE;
+}
+.bs-callout-info h4 {
+  color: #4CAD3A;
+}
+
+
 /*------------------------------------
     FORM 
 ------------------------------------*/
@@ -237,6 +288,7 @@ h3.green {color: #47a447;}
 
 form{ margin:0px; margin-top: 35px; padding:0px; font-size: 16px; }
 form.ordini { margin: 0; font-size: 14px; }
+form#forminvioordine { margin-top: 0; }
 form p { margin-bottom: 15px; }
 label{ cursor: pointer;	color: #000; font-weight: bold;}
 label input{ font-weight: normal; }
