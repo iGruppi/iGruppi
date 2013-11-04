@@ -160,7 +160,8 @@ class Model_Ordini extends MyFw_DB_Base {
               ." JOIN prodotti AS p ON op.idprodotto=p.idprodotto "
               ." JOIN categorie_sub AS cs ON p.idsubcat=cs.idsubcat "
               ." WHERE op.idordine= :idordine"
-              ." GROUP BY oup.iduser, oup.idprodotto";
+              ." GROUP BY oup.iduser, oup.idprodotto"
+              ." ORDER BY p.codice";
         $sthp = $this->db->prepare($sqlp);
         $sthp->execute(array('idordine' => $idordine));
         $prodotti = $sthp->fetchAll(PDO::FETCH_OBJ);

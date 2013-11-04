@@ -206,6 +206,7 @@ class Controller_GestioneOrdini extends MyFw_Controller {
             // RIEPILOGO
                 if(!isset($riepilogo[$idprodotto])) {
                     $riepilogo[$idprodotto] = array(
+                        'codice' => $value->codice,
                         'descrizione' => $value->descrizione,
                         'udm' => $value->udm,
                         'costo_op' => $value->costo_op,
@@ -227,13 +228,14 @@ class Controller_GestioneOrdini extends MyFw_Controller {
                 }
                 $dettaglio[$iduser]["prodotti"][] = array(
                         'idprodotto' => $value->idprodotto,
+                        'codice' => $value->codice,
                         'descrizione' => $value->descrizione,
                         'udm' => $value->udm,
                         'costo_op' => $value->costo_op,
                         'qta_ord' => $value->qta_ord,
                 );
-                
             }
+
         }
         //Zend_Debug::dump((object)$riepilogo);die;
         $this->view->riepilogo = (object)$riepilogo;
