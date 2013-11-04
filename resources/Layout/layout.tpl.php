@@ -18,8 +18,8 @@
 	<link rel="stylesheet" href="/css/style.css" type="text/css" media="screen" />
     <link rel="stylesheet" href="/css/style_print.css" type="text/css" media="print" />
 	<link rel="stylesheet" href="/css/form.css" type="text/css" /> -->
-    <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css" media="screen" />
-    <link rel="stylesheet" href="/css/custom-bs.css" type="text/css" media="screen" />
+    <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/css/custom-bs.css" type="text/css" />
 	<script type="text/javascript" language="JavaScript" src="/js/jx.js"></script>
 	<script type="text/javascript" language="JavaScript" src="/js/functions.js"></script>
 	<script type="text/javascript" language="JavaScript" src="/js/jxAdmin.js"></script>
@@ -38,7 +38,7 @@
 <body>
     <div id="wrap">
       <div class="container">
-        <div class="header">
+        <div class="header hidden-print">
             <a class="pull-left" href="/"><img id="logo_top" src="/images/igruppi_logo.png" alt="iGruppi logo"></a>
 <?php   $auth= Zend_Auth::getInstance();
         if($auth->hasIdentity()):
@@ -79,7 +79,7 @@
       </div>
     </div>
     
-    <div id="footer">
+    <div id="footer" class="hidden-print">
       <div class="container">
             <div class="info">
                 <p><a href="http://igruppi.com"><b>iGruppi</b></a><br /><small>Open Source Software per i Gruppi di acquisto</small></p>

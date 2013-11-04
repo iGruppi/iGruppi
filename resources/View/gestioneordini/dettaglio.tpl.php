@@ -8,7 +8,7 @@
         Data chiusura: <strong><?php echo $this->date($this->ordine->data_fine, '%d/%m/%Y');?></strong> alle <?php echo $this->date($this->ordine->data_fine, '%H:%M');?></strong>
     </p>
   </div>
-  <div class="col-md-4">
+  <div class="col-md-4  hidden-print">
 <?php if( $this->statusObj->is_Chiuso() && count((array)$this->riepilogo) > 0): ?>
     <div class="bs-callout bs-callout-info">
       <h4>Invio ordine</h4>
@@ -33,7 +33,7 @@
             <th>Codice</th>
             <th>Costo unitario</th>
             <th>Descrizione</th>
-            <th style="text-align: right;">Totale</th>
+            <th class="text-right">Totale</th>
           </tr>
         </thead>
         <tbody>
@@ -46,7 +46,7 @@
                 <td><strong><?php echo $prodotto["codice"];?></strong></td>
                 <td><?php echo $prodotto["costo_op"];?> &euro; / <?php echo $prodotto["udm"]; ?></td>
                 <td><?php echo $prodotto["descrizione"];?></td>
-                <td style="text-align: right;"><strong><?php 
+                <td class="text-right"><strong><?php 
                   $subtotale = ($prodotto["qta_ord"] * $prodotto["costo_op"]);
                   $totale += $subtotale;
                   $totale_colli += $prodotto["qta_ord"];
@@ -77,7 +77,7 @@
                 <th>Codice</th>
                 <th>Costo unitario</th>
                 <th>Descrizione</th>
-                <th style="text-align: right;">Totale</th>
+                <th class="text-right">Totale</th>
               </tr>
             </thead>
             <tbody>
@@ -89,7 +89,7 @@
                     <td><strong><?php echo $prodotto["codice"];?></strong></td>
                     <td><?php echo $prodotto["costo_op"];?> &euro; / <?php echo $prodotto["udm"]; ?></td>
                     <td><?php echo $prodotto["descrizione"];?></td>
-                    <td style="text-align: right;"><strong><?php 
+                    <td class="text-right"><strong><?php 
                         $subtotale = ($prodotto["qta_ord"] * $prodotto["costo_op"]);
                         $totale += $subtotale;
                         echo $this->valuta($subtotale);
