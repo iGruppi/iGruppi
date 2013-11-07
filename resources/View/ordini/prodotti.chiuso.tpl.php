@@ -2,10 +2,8 @@
   <div class="col-md-8">
       
     <h3>Ordine <strong class="<?php echo $this->statusObj->getStatus(); ?>"><?php echo $this->statusObj->getStatus(); ?></strong></h3>
-    <div class="box_note">
-        <h4>Note consegna:</h4>
-        <p><?php echo $this->ordine->note_consegna; ?></p>
-    </div>
+    
+    <?php echo $this->partial('ordini/box-note.tpl.php', array('ordine' => $this->ordine, 'produttore' => $this->produttore)); ?>
 
 <?php if(count($this->listProdotti) > 0): ?>
     <?php 

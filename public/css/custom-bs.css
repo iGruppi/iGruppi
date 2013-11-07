@@ -60,6 +60,8 @@ h1, h2, h3, h4, h5, h6 {color: #666; font-weight: 200; }
 h1 { font-size: 30px; }
 h2 { font-size: 24px; }
 h3 { font-size: 20px; }
+h4, h5, h6 { margin-top: 5px; margin-bottom: 5px; }
+
 .no-margin {margin:0;}
 .big-margin-top { margin-top: 55px; }
 h3.green {color: #47a447;}
@@ -72,7 +74,7 @@ h3.green {color: #47a447;}
 .col-right { padding-left: 40px; }
 
 /* STILI ORDINI STATUS */
-.ordine { margin-top: 5px; margin-bottom: 2px; }
+.ordine { margin-top: 10px; margin-bottom: 2px; }
 .Pianificato { color: #666; }
 .Aperto { color: #2b2; }
 .Chiuso { color: #f22; }
@@ -112,9 +114,11 @@ h3.green {color: #47a447;}
 .sub_menu .prod_qta { font-size: 24px; font-weight: bold; border: 1px solid #eee; float: left; width: 50px; text-align: center; margin: 0px 3px 3px 3px; color: #000; padding: 2px;}
 .sub_menu .menu_icon_empty { width: 34px; float: left; }
 .box_note { background-color: #fcfcfc; border: 1px solid #ccc; padding: 15px; margin-top: 20px; }
+.box_note h4 { margin-bottom: 0px; color: #444;}
+.box_note h5 { margin-top: 2px;}
 
 /* ORDINI */
-.subcat-title { background-color: #d6e9c6; color: #060; padding: 10px; margin: 75px 0px 10px -10px; margin-top: 75px; }
+.subcat-title { background-color: #d6e9c6; color: #060; padding: 4px 10px; margin: 75px 0px 10px -10px; margin-top: 75px; }
 .totale { margin-bottom: 20px; padding: 10px 20px; background-color: #fcfcfc; border-radius: 2px;}
 .totale h2 { margin-top: 10px; }
 

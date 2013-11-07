@@ -12,8 +12,9 @@
         </div>
         <div class="col-md-8">
         <?php if( isset($this->arCat[$ordine->idproduttore]) ): ?>
-            <h4><span class="text-muted">Prodotti:</span> <?php echo implode(", ", $this->arCat[$ordine->idproduttore]); ?></h4>
+            <h5><span class="text-muted">Prodotti:</span> <?php echo implode(", ", $this->arCat[$ordine->idproduttore]); ?></h5>
         <?php endif; ?>
+            
         <?php if($ordine->statusObj->is_Pianificato()): ?>
             <h4 class="ordine">
                 Ordine <span class="<?php echo $ordine->statusObj->getStatus(); ?>"><?php echo $ordine->statusObj->getStatus(); ?></span>

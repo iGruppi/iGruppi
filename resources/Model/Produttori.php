@@ -18,8 +18,9 @@ class Model_Produttori extends MyFw_DB_Base {
          * In questo modo non possono visualizzare Produttori di altri Gruppi cambiando l'idproduttore
          */
         
-        $sql = "SELECT * FROM produttori AS p"
+        $sql = "SELECT *, u.nome, u.cognome, u.email FROM produttori AS p"
               ." LEFT JOIN groups_produttori AS gp ON p.idproduttore=gp.idproduttore"
+              ." LEFT JOIN users AS u ON gp.iduser_ref=u.iduser"
               ." WHERE gp.idproduttore= :idproduttore"
               ." AND gp.idgroup= :idgroup";
         $sth_app = $this->db->prepare($sql);

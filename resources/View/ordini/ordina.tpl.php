@@ -16,11 +16,9 @@
         Chiusura prevista il <strong><?php echo $this->date($this->ordine->data_fine, '%d/%m/%Y');?></strong> alle <?php echo $this->date($this->ordine->data_fine, '%H:%M');?></strong>
     </p>
 <?php endif; ?>
-    <div class="box_note">
-        <h4>Note consegna:</h4>
-        <p><?php echo $this->ordine->note_consegna; ?></p>
-    </div>
 
+<?php echo $this->partial('ordini/box-note.tpl.php', array('ordine' => $this->ordine, 'produttore' => $this->produttore)); ?>
+    
 <?php 
     if(count($this->listProdotti) > 0):
     $totale = 0;
