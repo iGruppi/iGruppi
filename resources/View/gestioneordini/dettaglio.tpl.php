@@ -9,7 +9,7 @@
     </p>
   </div>
   <div class="col-md-4  hidden-print">
-<?php if( $this->statusObj->is_Chiuso() && count((array)$this->riepilogo) > 0): ?>
+<?php if( $this->statusObj->can_RefInviaOrdine() && count((array)$this->riepilogo) > 0): ?>
     <div class="bs-callout bs-callout-info">
       <h4>Invio ordine</h4>
       <form id="forminvioordine" action="/gestione-ordini/invia/idordine/<?php echo $this->ordine->idordine; ?>" method="post">
