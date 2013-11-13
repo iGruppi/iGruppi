@@ -119,6 +119,8 @@ class Model_Ordini_Status {
             self::STATUS_PIANIFICATO,
             self::STATUS_APERTO,
             self::STATUS_CHIUSO,
+            self::STATUS_INCONSEGNA,
+            self::STATUS_CONSEGNATO,
             self::STATUS_ARCHIVIATO
         );
     }
@@ -141,7 +143,15 @@ class Model_Ordini_Status {
                 break;
             
             case self::STATUS_CHIUSO:
-                $sql = " AND NOW() > o.data_fine AND o.archiviato='N'";
+                $sql = " AND NOW() > o.data_fine AND NOW() <= o.data_inconsegna AND o.archiviato='N'";
+                break;
+
+            case self::STATUS_INCONSEGNA:
+                $sql = " AND NOW() > o.data_inconsegna AND NOW() <= o.data_consegnato AND o.archiviato='N'";
+                break;
+
+            case self::STATUS_CONSEGNATO:
+                $sql = " AND NOW() > o.data_consegnato AND o.archiviato='N'";
                 break;
 
             case self::STATUS_ARCHIVIATO:
