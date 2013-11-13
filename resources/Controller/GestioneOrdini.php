@@ -153,6 +153,7 @@ class Controller_GestioneOrdini extends MyFw_Controller {
         $this->view->produttore = $this->_produttore;
         $this->view->statusObj = new Model_Ordini_Status($this->_ordine);
         $this->view->updated = false;
+        $ordObj = new Model_Ordini();
         
         // SAVE FORM
         if($this->getRequest()->isPost()) {
@@ -182,7 +183,6 @@ class Controller_GestioneOrdini extends MyFw_Controller {
         }
 
         // elenco prodotti (aggiornato dopo eventuale POST)
-        $ordObj = new Model_Ordini();
         $this->view->list = $ordObj->getProdottiByIdOrdine_Gestione($idordine, $this->_ordine->idproduttore);
         //Zend_Debug::dump($this->view->list);
     }
