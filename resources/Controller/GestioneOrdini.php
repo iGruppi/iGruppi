@@ -193,53 +193,39 @@ class Controller_GestioneOrdini extends MyFw_Controller {
         $this->view->statusObj = new Model_Ordini_Status($this->_ordine);
         $this->view->produttore = $this->_produttore;
         
-        $ordObj = new Model_Ordini();
-        $listOrd = $ordObj->getProdottiOrdinatiByIdOrdine($this->_ordine->idordine);
-        
-        // CREO array RIEPILOGO prodotti ordinati e DETTAGLIO
-        $riepilogo = array();
-        $dettaglio = array();
-        if(count($listOrd) > 0) {
-            foreach ($listOrd as $value) {
-                $idprodotto = $value->idprodotto;
-                
-            // RIEPILOGO
-                if(!isset($riepilogo[$idprodotto])) {
-                    $riepilogo[$idprodotto] = array(
-                        'codice' => $value->codice,
-                        'descrizione' => $value->descrizione,
-                        'udm' => $value->udm,
-                        'costo_op' => $value->costo_op,
-                        'sconto' => $value->sconto,
-                        'offerta' => $value->offerta,
-                        'qta_ord' => 0,
-                    );
-                }
-                $riepilogo[$idprodotto]["qta_ord"] += $value->qta_ord;
-                
-            // DETTAGLIO
-                $iduser = $value->iduser;
-                if(!isset($dettaglio[$iduser])) {
-                    $dettaglio[$iduser] = array(
-                        'nome' => $value->nome,
-                        'cognome' => $value->cognome,
-                        'prodotti' => array(),
-                    );
-                }
-                $dettaglio[$iduser]["prodotti"][] = array(
-                        'idprodotto' => $value->idprodotto,
-                        'codice' => $value->codice,
-                        'descrizione' => $value->descrizione,
-                        'udm' => $value->udm,
-                        'costo_op' => $value->costo_op,
-                        'qta_ord' => $value->qta_ord,
-                );
-            }
-
+        // get View by Tipo
+        $tipo = $this->getParam("tipo");
+        if(is_null($tipo)) {
+            $tipo = "totali";
         }
-        //Zend_Debug::dump((object)$riepilogo);die;
-        $this->view->riepilogo = (object)$riepilogo;
-        $this->view->dettaglio = $dettaglio;
+        $this->view->tipo = $tipo;
+        switch ($tipo) {
+            case "totali":
+                $ordCalcObj = new Model_Ordini_Calcoli_Totali($this->_ordine->idordine, $this->_ordine);
+                break;
+
+            case "utenti":
+                $ordCalcObj = new Model_Ordini_Calcoli_Utenti($this->_ordine->idordine, $this->_ordine);
+                break;
+
+            case "prodotti":
+                $ordCalcObj = new Model_Ordini_Calcoli_Prodotti($this->_ordine->idordine, $this->_ordine);
+                break;
+        }
+        
+        $this->view->ordCalcObj = $ordCalcObj;
+        
+        /*
+        $iii = array();
+        foreach($ordCalcObj->getRiepilogoProdotti() AS $idp => $prObj) {
+            if(!isset($iii[$prObj->getAliquotaIva()])) {
+                $iii[$prObj->getAliquotaIva()] = 0;
+            }
+            $iii[$prObj->getAliquotaIva()] += $prObj->getTotaleSenzaIva();
+        }
+        Zend_Debug::dump($iii);die;
+         */
+
     }
     
     function inviaAction() {
@@ -249,5 +235,32 @@ class Controller_GestioneOrdini extends MyFw_Controller {
         
         // TODO: Invia email...
     }
+    
+    function inconsegnaAction() {
+        
+        $layout = Zend_Registry::get("layout");
+        $layout->disableDisplay();
+        
+        $idordine = $this->getParam("idordine");
+        $ordObj = new Model_Ordini();
+        $ordine = $ordObj->getByIdOrdine($idordine);
+        $result = array('res' => false);
+        if(!is_null($ordine)) {
+            // UPDATE Status -> IN CONSEGNA
+            $dti = new Zend_Date();
+            $sth_update = $this->getDB()->prepare("UPDATE ordini SET data_inconsegna= :dti WHERE idordine= :idordine");
+            $result = $sth_update->execute(array('idordine' => $idordine, 'dti' => $dti->toString("yyyy-MM-dd HH:mm:ss")));
+            if($result) {
+                // update data_inconsegna in my object
+                $ordine->data_inconsegna = $dti->toString("yyyy-MM-dd HH:mm:ss");
+                $ordine->statusObj = new Model_Ordini_Status($ordine);
+                $this->view->ordine = $ordine;
+                $myTpl = $this->view->fetch("gestioneordini/index-ordine.tpl.php");
+                $result = array('res' => true, 'myTpl' => $myTpl);
+            }
+        }
+        echo json_encode($result);
+    }
+    
     
 }

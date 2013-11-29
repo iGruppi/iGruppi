@@ -150,26 +150,6 @@ class Model_Ordini extends MyFw_DB_Base {
         return $sth->fetchAll(PDO::FETCH_OBJ);
     }
     
-    function getProdottiOrdinatiByIdOrdine($idordine) {
-        // get elenco prodotti disponibile per quest'ordine
-        $sqlp = "SELECT p.*, op.costo AS costo_op, op.sconto, op.offerta, cs.descrizione AS categoria, "
-              ." SUM(oup.qta) AS qta_ord, u.iduser, u.nome, u.cognome "
-              ." FROM ordini_user_prodotti AS oup"
-              ." JOIN users AS u ON oup.iduser=u.iduser"
-              ." JOIN ordini_prodotti AS op ON oup.idprodotto=op.idprodotto AND oup.idordine=op.idordine"
-              ." JOIN prodotti AS p ON op.idprodotto=p.idprodotto "
-              ." JOIN categorie_sub AS cs ON p.idsubcat=cs.idsubcat "
-              ." WHERE op.idordine= :idordine"
-              ." GROUP BY oup.iduser, oup.idprodotto"
-              ." ORDER BY p.codice";
-        $sthp = $this->db->prepare($sqlp);
-        $sthp->execute(array('idordine' => $idordine));
-        $prodotti = $sthp->fetchAll(PDO::FETCH_OBJ);
-        //Zend_Debug::dump($prodotti);die;
-        return $prodotti;
-    }
-    
-    
     function addProdottiToOrdine($idordine, $arVal) {
         $this->db->beginTransaction();
         
@@ -212,6 +192,63 @@ class Model_Ordini extends MyFw_DB_Base {
             return $sth->fetchAll(PDO::FETCH_OBJ);
         }
         return null;
+    }
+    
+    
+/********************
+ *  CALCOLI
+ * 
+ */    
+    
+    function getTotaleProdottiOrdinati($idordine) {
+        $sqlp = "SELECT p.*, op.costo AS costo_op, op.sconto, op.offerta, op.disponibile, cs.descrizione AS categoria, "
+              ." SUM(oup.qta) AS qta "
+              ." FROM ordini_prodotti AS op"
+              ." JOIN ordini_user_prodotti AS oup ON oup.idprodotto=op.idprodotto AND oup.idordine=op.idordine"
+              ." JOIN prodotti AS p ON op.idprodotto=p.idprodotto "
+              ." JOIN categorie_sub AS cs ON p.idsubcat=cs.idsubcat "
+              ." WHERE op.idordine= :idordine"
+              ." GROUP BY oup.idprodotto"
+              ." ORDER BY p.codice";
+        $sthp = $this->db->prepare($sqlp);
+        $sthp->execute(array('idordine' => $idordine));
+        $prodotti = $sthp->fetchAll(PDO::FETCH_OBJ);
+        // Zend_Debug::dump($prodotti);die;
+        return $prodotti;
+    }
+    
+    function getParzialiProdottiOrdinatiUtenti($idordine) {
+        $sqlp = "SELECT p.*, op.costo AS costo_op, op.sconto, op.offerta, op.disponibile, cs.descrizione AS categoria, "
+              ." u.nome, u.cognome, u.email, oup.qta, oup.iduser "
+              ." FROM ordini_prodotti AS op"
+              ." JOIN ordini_user_prodotti AS oup ON oup.idprodotto=op.idprodotto AND oup.idordine=op.idordine"
+              ." JOIN users AS u ON oup.iduser=u.iduser"
+              ." JOIN prodotti AS p ON op.idprodotto=p.idprodotto "
+              ." JOIN categorie_sub AS cs ON p.idsubcat=cs.idsubcat "
+              ." WHERE op.idordine= :idordine"
+              ." GROUP BY u.iduser, oup.idprodotto"
+              ." ORDER BY p.codice";
+        $sthp = $this->db->prepare($sqlp);
+        $sthp->execute(array('idordine' => $idordine));
+        $prodotti = $sthp->fetchAll(PDO::FETCH_OBJ);
+        return $prodotti;
+    }
+
+    function getParzialiProdottiOrdinatiProdotti($idordine) {
+        $sqlp = "SELECT p.*, op.costo AS costo_op, op.sconto, op.offerta, op.disponibile, cs.descrizione AS categoria, "
+              ." u.nome, u.cognome, u.email, oup.qta, oup.iduser "
+              ." FROM ordini_prodotti AS op"
+              ." JOIN ordini_user_prodotti AS oup ON oup.idprodotto=op.idprodotto AND oup.idordine=op.idordine"
+              ." JOIN users AS u ON oup.iduser=u.iduser"
+              ." JOIN prodotti AS p ON op.idprodotto=p.idprodotto "
+              ." JOIN categorie_sub AS cs ON p.idsubcat=cs.idsubcat "
+              ." WHERE op.idordine= :idordine"
+              ." GROUP BY oup.idprodotto, u.iduser"
+              ." ORDER BY p.codice";
+        $sthp = $this->db->prepare($sqlp);
+        $sthp->execute(array('idordine' => $idordine));
+        $prodotti = $sthp->fetchAll(PDO::FETCH_OBJ);
+        return $prodotti;
     }
     
 }

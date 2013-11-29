@@ -11,7 +11,7 @@ class Model_Ordini_Status {
     const STATUS_APERTO = "Aperto";
     const STATUS_CHIUSO = "Chiuso";
     const STATUS_ARCHIVIATO = "Archiviato";
-    const STATUS_INCONSEGNA = "In consegna";
+    const STATUS_INCONSEGNA = "In_Consegna";
     const STATUS_CONSEGNATO = "Consegnato";
     
     private $_inizio;
@@ -23,8 +23,8 @@ class Model_Ordini_Status {
     function __construct($o) {
         $this->_inizio = $o->data_inizio;
         $this->_fine = $o->data_fine;
-        $this->_inconsegna = $o->data_inconsegna; // CAN BE NULL!
-        $this->_consegnato = $o->data_consegnato; // CAN BE NULL!
+        $this->_inconsegna = isset($o->data_inconsegna) ? $o->data_inconsegna : null; // CAN BE NULL!
+        $this->_consegnato = isset($o->data_consegnato) ? $o->data_consegnato : null; // CAN BE NULL!
         $this->_archiviato = $o->archiviato;
     }
     
@@ -35,7 +35,7 @@ class Model_Ordini_Status {
             $endObj = $this->getDateObj($this->_fine);
             $inObj = $this->getDateObj($this->_inconsegna);
             $consObj = $this->getDateObj($this->_consegnato);
-            
+
             $timestampNow = Zend_Date::now()->toString("U");
             
             if( $timestampNow < $startObj->toString("U") ) {
