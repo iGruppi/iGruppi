@@ -115,3 +115,13 @@
                 }
 			});
     }
+
+    function jx_OrdineInConsegna(idordine, idproduttore) {
+        $('#gest_ordine_'+idordine).button('loading');
+        $.getJSON(
+			'/gestione-ordini/inconsegna/',
+            {idordine: idordine, idproduttore: idproduttore},
+			function(data) {
+                $('#ordine_'+idordine).html(data.myTpl);
+			});
+    }

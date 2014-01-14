@@ -19,8 +19,8 @@
     </div>
   </div>
   <div class="col-md-4  hidden-print">
-    <?php if( $this->statusObj->can_RefInviaOrdine() && $this->ordCalcObj->getNum() > 0): ?>
-      <a class="btn btn-default btn-mylg" href="/gestione-ordini/new/idproduttore/<?php echo $this->produttore->idproduttore;?>"><span class="glyphicon glyphicon-plus"></span> Invia al Produttore</a>
+    <?php if( $this->statusObj->can_RefInviaOrdine() && $this->ordCalcObj->isThereSomeProductsOrdered()): ?>
+      <a class="btn btn-default btn-mylg" href="/gestione-ordini/invia/idordine/<?php echo $this->ordine->idordine;?>"><span class="glyphicon glyphicon-plus"></span> Invia al Produttore</a>
     <?php endif; ?>
       
   </div>   

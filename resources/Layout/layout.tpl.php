@@ -87,7 +87,7 @@
             </div>
             <div class="social">
                 <p class="icon_social twitter"><a href="https://twitter.com/iGruppi"><small>@igruppi</small></a></p>
-                <p class="icon_social wordpress"><a href="http://igruppi.com"><small>Blog ufficiale</small></a></p>
+                <p class="icon_social wordpress"><a href="http://igruppi.com"><small>Blog</small></a></p>
             </div>
       </div>
     </div>

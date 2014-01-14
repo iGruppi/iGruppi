@@ -11,30 +11,30 @@
 <?php endif; ?>
 
       
-<?php if(count($this->listProdotti) > 0): ?>
-    <?php 
+<?php if(count($this->listProdotti) > 0): 
     foreach ($this->listProdotti as $idcat => $cat): ?>
     <span id="cat_<?php echo $idcat; ?>" style="visibility: hidden;"><?php echo $this->listSubCat[$idcat]["categoria"]; ?></span>
 <?php foreach ($cat as $idsubcat => $prodotti): ?>
-        <h2 id="subcat_<?php echo $idsubcat; ?>" class="subcat-title"><?php echo $this->listSubCat[$idcat]["categoria"]; ?> - <?php echo $this->listSubCat[$idcat]["subcat"][$idsubcat]; ?></h2>
         
-<?php   foreach ($prodotti as $idprodotto => $prodotto): ?>
+        <?php include $this->template('prodotti/subcat-title.tpl.php'); ?>
+        
+<?php   foreach ($prodotti as $idprodotto => $pObj): ?>
       
       <div class="row row-myig">
         <div class="col-md-10">
-            <h3 class="no-margin"><?php echo $prodotto->descrizione;?></h3>
+            <h3 class="no-margin"><?php echo $pObj->getDescrizione();?></h3>
             <p>
-                Codice: <strong><?php echo $prodotto->codice; ?></strong><br />
-                Categoria: <strong><?php echo $prodotto->categoria; ?></strong><br />
-                Costo: <strong><?php echo $this->valuta($prodotto->costo); ?> / <?php echo $prodotto->udm; ?></strong><br />
-            <?php if( !$this->yesnoToBool($prodotto->attivo)): ?>
+                Codice: <strong><?php echo $pObj->getCodice(); ?></strong><br />
+                Categoria: <strong><?php echo $pObj->getCategoria(); ?></strong><br />
+                Costo: <strong><?php echo $this->valuta($pObj->getPrezzoListino()); ?> / <?php echo $pObj->getUdm(); ?></strong><br />
+            <?php if(!$pObj->isAttivo()): ?>
                 <strong class="alert_red">Disabilitato</strong> (Non disponibile negli ordini)
             <?php endif; ?>
             </p>
         </div>
         <div class="col-md-2">
         <?php if($this->produttore->refObj->is_Referente()): ?>
-            <a class="btn btn-success" href="/prodotti/edit/idprodotto/<?php echo $prodotto->idprodotto;?>">Modifica</a>
+            <a class="btn btn-success" href="/prodotti/edit/idprodotto/<?php echo $idprodotto;?>">Modifica</a>
         <?php endif; ?>
         </div>
       </div>

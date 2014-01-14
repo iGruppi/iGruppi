@@ -11,46 +11,44 @@
     
 <?php echo $this->partial('ordini/box-note.tpl.php', array('ordine' => $this->ordine, 'produttore' => $this->produttore)); ?>
 
-<?php if(count($this->list) > 0): ?>
-    <?php 
-        $totale = 0;
-        foreach ($this->list as $key => $prodotto): 
-            if($prodotto->qta > 0):
-            ?>
-      <div class="row row-myig">
+<?php if(count($this->cuObj->getProdottiUtente()) > 0): ?>
+    <?php foreach ($this->cuObj->getProdottiUtente() as $key => $pObj): ?>
+      <div class="row row-myig<?php echo ($pObj->isDisponibile()) ? "" : " box_row_dis" ; ?>">
         <div class="col-md-9">
-            <h3 class="no-margin"><?php echo $prodotto->descrizione;?></h3>
+            <h3 class="no-margin"><?php echo $pObj->descrizione;?></h3>
             <p>
-                Categoria: <strong><?php echo $prodotto->categoria; ?></strong><br />
-                Costo: <strong><?php echo $this->valuta($prodotto->costo_op);?></strong> / <strong><?php echo $prodotto->udm; ?></strong><br />
+                Categoria: <strong><?php echo $pObj->categoria; ?></strong><br />
+                Costo: <strong><?php echo $this->valuta($pObj->getPrezzo());?></strong> / <strong><?php echo $pObj->udm; ?></strong><br />
             </p>
         </div>
         <div class="col-md-3">
             <div class="sub_menu">
                 <span class="menu_icon_empty" >&nbsp;</span>
-                <span class="prod_qta"><?php echo $prodotto->qta;?></span>
+                <span class="prod_qta<?php if(!$pObj->isDisponibile()){ echo "_dis"; } ?>"><?php echo $pObj->qta;?></span>
                 <span class="menu_icon_empty" >&nbsp;</span>
-        <?php 
-                $subtotale = ($prodotto->qta * $prodotto->costo_op);
-                $totale += $subtotale;
-        ?>
-                <div class="sub_totale"><?php echo $this->valuta($subtotale) ?></div>
+            <?php if($pObj->isDisponibile()): ?>
+                <div class="sub_totale"><?php echo $this->valuta($pObj->getTotale()) ?></div>
+            <?php else: ?>
+                <h4 class="non-disponibile">NON disponibile!</h4>
+            <?php endif; ?>
             </div>
         </div>
       </div>
-    <?php 
-            endif;
-        endforeach; ?>
+    <?php endforeach; ?>
 
 <?php else: ?>
     <h3>Nessun prodotto ordinato o disponibile!</h3>
 <?php endif; ?>
   </div>
   <div class="col-md-4 col-right">
-<?php if(count((array)$this->list) > 0): ?>      
+<?php if(count($this->cuObj->getProdottiUtente()) > 0): ?>      
     <div class="bs-sidebar" data-spy="affix" role="complementary">
         <div class="totale">
-            <h4>Totale: <b id="totale"><?php echo $this->valuta($totale) ?></b></h4>
+    <?php if($this->cuObj->hasCostoSpedizione()): ?>
+            <h5>Totale ordine: <b id="totale"><?php echo $this->valuta($this->cuObj->getTotale()) ?></b></h5>
+            <h5>Costo di spedizione: <b><?php echo $this->valuta($this->cuObj->getCostoSpedizioneRipartito()); ?></b></h5>
+    <?php endif; ?>            
+            <h4>Totale: <strong><?php echo $this->valuta($this->cuObj->getTotaleConSpedizione()); ?></strong></h4>
         </div>
     </div>
 <?php endif; ?>

@@ -161,29 +161,21 @@ class Controller_GestioneOrdini extends MyFw_Controller {
             // get Post and check if is valid
             $fv = $this->getRequest()->getPost();
             
-            $prod_sel = isset($fv["prod_sel"]) ? $fv["prod_sel"] : array();
-            $prodotto = isset($fv["prodotto"]) ? $fv["prodotto"] : array();
-            $arVal = array();
-            if(count($prod_sel) > 0) {
-                // insert products selected
-                foreach ($prod_sel as $idprodotto => $selected) {
-                    if( $selected == "S") {
-                        $arVal[] = array('idprodotto' => $idprodotto, 'costo' => (isset($prodotto[$idprodotto]) ? $prodotto[$idprodotto] : 0));
-                    } else {
-                        // delete all records in ordini_prodotti
-                        $this->getDB()->query("DELETE FROM ordini_prodotti WHERE idordine='$idordine' AND idprodotto='$idprodotto'");
-                    }
+            $prodotti = isset($fv["prodotti"]) ? $fv["prodotti"] : array();
+            if(count($prodotti) > 0) {
+                // UPDATE products
+                foreach ($prodotti as $idprodotto => &$val) {
+                    $val["idprodotto"] = $idprodotto;
                 }
-                if(count($arVal) > 0) {
-                    $ordObj->addProdottiToOrdine($idordine, $arVal);
-                }
-                
-                $this->view->updated = true;
+                $this->view->updated = $ordObj->updateProdottiForOrdine($idordine, $prodotti);
             }
         }
 
         // elenco prodotti (aggiornato dopo eventuale POST)
-        $this->view->list = $ordObj->getProdottiByIdOrdine_Gestione($idordine, $this->_ordine->idproduttore);
+        $listProd = $ordObj->getProdottiByIdOrdine($idordine, $this->_ordine->idproduttore);
+        $scoObj = new Model_Prodotti_SubCatOrganizer($listProd);
+        $this->view->listProdotti = $scoObj->getListProductsCategorized();
+        $this->view->listSubCat = $scoObj->getListCategories();
         //Zend_Debug::dump($this->view->list);
     }
     
@@ -195,37 +187,34 @@ class Controller_GestioneOrdini extends MyFw_Controller {
         
         // get View by Tipo
         $tipo = $this->getParam("tipo");
-        if(is_null($tipo)) {
+        if(is_null($tipo)) 
+        {
             $tipo = "totali";
         }
+        
+        // GET PRODUCTS LIST with Qta Ordered
+        $ordObj = new Model_Ordini();
+        $listProdOrdered = $ordObj->getProdottiOrdinatiByIdordine($this->_ordine->idordine);
+        //Zend_Debug::dump( $listProdOrdered ); die;
         $this->view->tipo = $tipo;
-        switch ($tipo) {
+        switch ($tipo) 
+        {
             case "totali":
-                $ordCalcObj = new Model_Ordini_Calcoli_Totali($this->_ordine->idordine, $this->_ordine);
+                $ordCalcObj = new Model_Ordini_Calcoli_Totali();
                 break;
 
             case "utenti":
-                $ordCalcObj = new Model_Ordini_Calcoli_Utenti($this->_ordine->idordine, $this->_ordine);
+                $ordCalcObj = new Model_Ordini_Calcoli_Utenti();
                 break;
 
             case "prodotti":
-                $ordCalcObj = new Model_Ordini_Calcoli_Prodotti($this->_ordine->idordine, $this->_ordine);
+                $ordCalcObj = new Model_Ordini_Calcoli_Prodotti();
                 break;
         }
-        
+        // SET ORDINE e PRODOTTI
+        $ordCalcObj->setOrdObj($this->_ordine);
+        $ordCalcObj->setProdotti($listProdOrdered);
         $this->view->ordCalcObj = $ordCalcObj;
-        
-        /*
-        $iii = array();
-        foreach($ordCalcObj->getRiepilogoProdotti() AS $idp => $prObj) {
-            if(!isset($iii[$prObj->getAliquotaIva()])) {
-                $iii[$prObj->getAliquotaIva()] = 0;
-            }
-            $iii[$prObj->getAliquotaIva()] += $prObj->getTotaleSenzaIva();
-        }
-        Zend_Debug::dump($iii);die;
-         */
-
     }
     
     function inviaAction() {

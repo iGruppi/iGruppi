@@ -78,6 +78,8 @@ h3.green {color: #47a447;}
 .Pianificato { color: #666; }
 .Aperto { color: #2b2; }
 .Chiuso { color: #f22; }
+.In_Consegna { color: #ec971f; }
+.Consegnato { color: #CC00FF; }
 .Archiviato { color: #ccc; }
 
 .btn_icon { float: right; height: 32px; width: 32px; margin: 2px 20px; }
@@ -86,14 +88,14 @@ h3.green {color: #47a447;}
 .ok { background: url(/images/icon/ok_32.png) no-repeat left top; }
 .ok:hover { background: url(/images/icon/ok_32-hover.png) no-repeat left top; }
 
+.strike { text-decoration: line-through; }
+
 /* box_row disabled style */
-.box_row_dis p,
-.box_row_dis strong,
-.box_row_dis label,
-.box_row_dis input,
+.box_row_dis,
+.box_row_dis *,
 .box_row_dis a.gray,
 .box_row_dis a.gray:hover,
-.box_row_dis h3,
+.box_row_dis .sub_totale,
 .box_row_dis h3.dom_title a { color: #ddd; }
 .box_row_dis input { border: solid 1px #ddd; }
 
@@ -106,13 +108,16 @@ h3.green {color: #47a447;}
 .sub_menu a.selected { color: #0c0; }
 .sub_menu a.menu_dis { color:#ddd; }
 .sub_menu .sub_totale { font-size: 18px; font-weight: 200; color: #666; clear: left; border: 1px solid #EEE; width: 127px; text-align: center; }
-.totale_line { padding: 38px 0px 12px 8px; margin-bottom: 50px; border-bottom: 3px dashed #CCC; }
+.totale_line { padding: 38px 0px 12px 8px; margin-bottom: 50px; }
 .totale_line h2 { float: left; padding: 0; margin: 0; }
 .totale_line .tot_right { margin: 0; padding: 0; color: #000; float: right; }
 .sub_menu a.menu_icon { font-family: sans-serif; font-size: 27px; font-weight: bold; border: 1px solid #CCC; background-color: #eee; float: left; text-decoration: none; width: 35px; text-align: center; }
 .sub_menu a.menu_icon:hover { background-color: #fff; color: #000; }
-.sub_menu .prod_qta { font-size: 24px; font-weight: bold; border: 1px solid #eee; float: left; width: 50px; text-align: center; margin: 0px 3px 3px 3px; color: #000; padding: 2px;}
+.sub_menu .prod_qta, .sub_menu .prod_qta_dis { font-size: 24px; font-weight: bold; border: 1px solid #eee; float: left; width: 50px; text-align: center; margin: 0px 3px 3px 3px; color: #000; padding: 2px;}
+.sub_menu .prod_qta_dis { color: #ddd; }
 .sub_menu .menu_icon_empty { width: 34px; float: left; }
+.sub_menu .non-disponibile { color: #f00; clear: left; }
+
 .box_note { background-color: #fcfcfc; border: 1px solid #ccc; padding: 15px; margin-top: 20px; }
 .box_note h4 { margin-bottom: 0px; color: #444;}
 .box_note h5 { margin-top: 2px;}
@@ -121,6 +126,7 @@ h3.green {color: #47a447;}
 .subcat-title { background-color: #d6e9c6; color: #060; padding: 4px 10px; margin: 75px 0px 10px -10px; margin-top: 75px; }
 .totale { margin-bottom: 20px; padding: 10px 20px; background-color: #fcfcfc; border-radius: 2px;}
 .totale h2 { margin-top: 10px; }
+.totale h4 { margin-bottom: 15px; }
 
 /*
  * Side navigation ORDINI

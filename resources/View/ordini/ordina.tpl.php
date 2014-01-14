@@ -21,35 +21,35 @@
     
 <?php 
     if(count($this->listProdotti) > 0):
-    $totale = 0;
     foreach ($this->listProdotti as $idcat => $cat): ?>
     <span id="cat_<?php echo $idcat; ?>" style="visibility: hidden;"><?php echo $this->listSubCat[$idcat]["categoria"]; ?></span>
 <?php foreach ($cat as $idsubcat => $prodotti): ?>
-        <h2 id="subcat_<?php echo $idsubcat; ?>" class="subcat-title"><?php echo $this->listSubCat[$idcat]["categoria"]; ?> - <?php echo $this->listSubCat[$idcat]["subcat"][$idsubcat]; ?></h2>
+        <?php include $this->template('prodotti/subcat-title.tpl.php'); ?>
+<?php   foreach ($prodotti as $idprodotto => $pObj): 
+            $prodotto = $this->cuObj->getProdotto($idprodotto);
+    ?>
         
-<?php   foreach ($prodotti as $idprodotto => $prodotto): ?>
-        
-      <div class="row row-myig">
+      <div class="row row-myig<?php if(!$prodotto->isDisponibile()) { echo " box_row_dis"; } ; ?>">
         <div class="col-md-9">
-            <h3 class="no-margin"><?php echo $prodotto->descrizione;?></h3>
+            <h3 class="no-margin"><?php echo $pObj->descrizione;?></h3>
             <p>
-                Categoria: <strong><?php echo $prodotto->categoria_sub; ?></strong><br />
-                Costo: <strong><?php echo $this->valuta($prodotto->costo_op);?></strong> / <strong><?php echo $prodotto->udm; ?></strong><br />
-        <?php if($prodotto->note != ""): ?>
-                <a href="javascript:void(0)" class="note" data-toggle="popover" title="" data-content="<?php echo $prodotto->note; ?>">Visualizza note</a>
+                Categoria: <strong><?php echo $pObj->categoria_sub; ?></strong><br />
+                Prezzo: <strong><?php echo $this->valuta($prodotto->getPrezzo());?></strong> / <strong><?php echo $pObj->udm; ?></strong><br />
+        <?php if($pObj->note != ""): ?>
+                <a href="javascript:void(0)" class="note" data-toggle="popover" title="" data-content="<?php echo $pObj->note; ?>">Visualizza note</a>
         <?php endif; ?>
             </p>
         </div>
         <div class="col-md-3">
             <div class="sub_menu">
-                <a class="menu_icon" href="javascript:void(0)" onclick="jx_SelQtaProdotto(<?php echo $prodotto->idprodotto;?>, '<?php echo $prodotto->costo_op;?>', '+')">+</a>
-                <input readonly class="prod_qta" type="text" id="prod_qta_<?php echo $prodotto->idprodotto;?>" name="prod_qta[<?php echo $prodotto->idprodotto;?>]" value="<?php echo $prodotto->qta;?>" />
-                <a class="menu_icon" href="javascript:void(0)" onclick="jx_SelQtaProdotto(<?php echo $prodotto->idprodotto;?>, '<?php echo $prodotto->costo_op;?>', '-')">-</a>
-        <?php 
-                $subtotale = ($prodotto->qta * $prodotto->costo_op);
-                $totale += $subtotale;
-        ?>
-                <div class="sub_totale" id="subtotale_<?php echo $prodotto->idprodotto;?>"><?php echo $this->valuta($subtotale) ?></div>
+            <?php if($prodotto->isDisponibile()): ?>
+                <a class="menu_icon" href="javascript:void(0)" onclick="jx_SelQtaProdotto(<?php echo $idprodotto;?>, '<?php echo $prodotto->getPrezzo();?>', '+')">+</a>
+                <input readonly class="prod_qta" type="text" id="prod_qta_<?php echo $idprodotto;?>" name="prod_qta[<?php echo $idprodotto;?>]" value="<?php echo $prodotto->getQta();?>" />
+                <a class="menu_icon" href="javascript:void(0)" onclick="jx_SelQtaProdotto(<?php echo $idprodotto;?>, '<?php echo $prodotto->getPrezzo();?>', '-')">-</a>
+                <div class="sub_totale" id="subtotale_<?php echo $idprodotto;?>"><?php echo $this->valuta($prodotto->getTotale()) ?></div>
+            <?php else: ?>
+                <h4 class="non-disponibile">NON disponibile!</h4>
+            <?php endif; ?>
             </div>
         </div>
       </div>
@@ -69,8 +69,8 @@
 <?php if(count($this->listProdotti) > 0): ?>      
     <div class="bs-sidebar" data-spy="affix" role="complementary">
         <div class="totale">
-            <input disabled id="f_totale" type="hidden" name="f_totale" value="<?php echo $totale; ?>" />
-            <h4>Totale: <b id="totale"><?php echo $this->valuta($totale) ?></b></h4>
+            <input disabled id="f_totale" type="hidden" name="f_totale" value="<?php echo $this->cuObj->getTotale(); ?>" />
+            <h4>Totale: <strong id="totale"><?php echo $this->valuta($this->cuObj->getTotale()); ?></strong></h4>
             <button type="submit" id="submit" class="btn btn-success btn-mylg"><span class="glyphicon glyphicon-<?php echo($this->updated) ? "saved" : "save"; ?>"></span> SALVA ORDINE</button>
         </div>
         <?php echo $this->partial('prodotti/subcat-navigation.tpl.php', array('listSubCat' => $this->listSubCat)); ?>

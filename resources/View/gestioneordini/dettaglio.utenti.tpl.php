@@ -1,10 +1,10 @@
 <div class="row">
   <div class="col-md-12">
-<?php if($this->ordCalcObj->getNum() > 0): ?>
     <h3 class="big-margin-top">Dettaglio Parziali per utente</h3>
-    <?php foreach ($this->ordCalcObj->getElenco() AS $iduser => $user): ?>
+<?php if($this->ordCalcObj->getProdottiUtenti() > 0): ?>
+    <?php foreach ($this->ordCalcObj->getProdottiUtenti() AS $iduser => $user): ?>
         <h3 class="big-margin-top"><strong><?php echo $user["cognome"] . " " . $user["nome"]; ?></strong></h3>
-        <table class="table table-striped table-condensed">
+        <table class="table table-condensed">
             <thead>
               <tr>
                 <th>Quantità</th>
@@ -16,24 +16,30 @@
             </thead>
             <tbody>
         <?php foreach ($user["prodotti"] AS $idprodotto => $pObj): ?>
+            <?php if($pObj->isDisponibile()): ?>
                 <tr>
+            <?php else: ?>
+                <tr class="danger strike">
+            <?php endif; ?>
                     <td><strong><?php echo $pObj->getQta();?></strong></td>
-                    <td><strong><?php echo $pObj->getCodice();?></strong></td>
-                    <td><?php echo $pObj->getPrezzo();?> &euro; / <?php echo $pObj->getUdm(); ?></td>
-                    <td><?php echo $pObj->getDescrizione();?></td>
+                    <td><strong><?php echo $pObj->codice;?></strong></td>
+                    <td><?php echo $pObj->getPrezzo();?> &euro; / <?php echo $pObj->udm; ?></td>
+                    <td><?php echo $pObj->descrizione;?></td>
                     <td class="text-right"><strong><?php echo $this->valuta($pObj->getTotale()); ?></strong></td>
                 </tr>        
         <?php endforeach; ?>
-                <tr>
+        <?php if($this->ordCalcObj->hasCostoSpedizione() && $this->ordCalcObj->getTotaleByIduser($iduser)): ?>
+                <tr class="warning">
                     <td colspan="3">&nbsp;</td>
                     <td><b>Spese di spedizione</b></td>
-                    <td class="text-right"><strong><?php echo $this->valuta($this->ordCalcObj->getCostoSpedizioneRipartito($iduser)); ?></strong></td>
+                    <td class="text-right"><strong><?php echo $this->valuta($this->ordCalcObj->getSpedizione()->getCostoSpedizioneRipartitoByIduser($iduser)); ?></strong></td>
                 </tr>
+        <?php endif; ?>
             </tbody>
         </table>        
         
         <div class="sub_menu">
-            <h3 class="totale">Totale utente: <strong><?php echo $this->valuta($this->ordCalcObj->getTotaleByIduser($iduser)) ?></strong></h3>
+            <h3 class="totale">Totale utente: <strong><?php echo $this->valuta($this->ordCalcObj->getTotaleConSpedizioneByIduser($iduser)) ?></strong></h3>
         </div>                    
         <div class="my_clear" style="clear:both;">&nbsp;</div>
     <?php endforeach; ?>
