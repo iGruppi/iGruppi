@@ -7,23 +7,57 @@
  */
 class Model_Ordini_Calcoli_Totali 
     extends Model_Ordini_Ordine {
+
     
+/*
+ *  UPDATE setProdotti
+ *      Set Totale qta for Product
+ */
     
-    function getTotale() {
-        $t = 0;
-        if(count($this->_arProd) > 0) {
-            foreach ($this->_arProd as $idprodotto => $objProd) {
-                $t += $objProd->getTotale();
+    function setProdotti($listProd) 
+    {
+        parent::setProdotti($listProd);
+        // SET qta for ALL USERS
+        if(count($this->_arProdOriginal) > 0) 
+        {
+            foreach ($this->_arProdOriginal AS $value) 
+            {
+                $this->getProdotto($value->idprodotto)->addQta($value->qta);
             }
         }
-        return ($this->hasCostoSpedizione()) ? ($t + $this->getCostoSpedizione()) : $t;
     }
     
-    function getTotaleSenzaIva() {
+    
+    // TOTALE ORDINE (Senza costo di spedizione)
+    function getTotale() 
+    {
         $t = 0;
-        if(count($this->_arProd) > 0) {
-            foreach ($this->_arProd as $idprodotto => $objProd) {
-                $t += $objProd->getTotaleSenzaIva();
+        if(count($this->getProdotti()) > 0) 
+        {
+            foreach ($this->getProdotti() as $idprodotto => $objProd) 
+            {
+                if($objProd->isDisponibile())
+                    $t += $objProd->getTotale();
+            }
+        }
+        return $t;
+    }
+    
+    // TOTALE INCLUSO SPEDIZIONE
+    function getTotaleConSpedizione() 
+    {
+        return ($this->hasCostoSpedizione()) ? ($this->getTotale() + $this->getCostoSpedizione()) : $this->getTotale();
+    }
+    
+    function getTotaleSenzaIva() 
+    {
+        $t = 0;
+        if(count($this->getProdotti()) > 0) 
+        {
+            foreach ($this->getProdotti() as $idprodotto => $objProd) 
+            {
+                if($objProd->isDisponibile())
+                    $t += $objProd->getTotaleSenzaIva();
             }
         }
         return $t;
@@ -31,26 +65,17 @@ class Model_Ordini_Calcoli_Totali
     
     function getTotaleColli() {
         $c = 0;
-        if(count($this->_arProd) > 0) {
-            foreach ($this->_arProd as $idprodotto => $objProd) {
-                $c += $objProd->getQta();
+        if(count($this->getProdotti()) > 0) {
+            foreach ($this->getProdotti() as $idprodotto => $objProd) {
+                if($objProd->isDisponibile())
+                    $c += $objProd->qta;
             }
         }
         return $c;
     }
     
-    
-    
-    
-    protected function setArray() {
-        $ordObj = new Model_Ordini();
-        $listOrd = $ordObj->getTotaleProdottiOrdinati($this->_idordine);
-        if(count($listOrd) > 0) {
-            // Create instance Model_Ordini_Calcoli_Prodotto for any Product
-            foreach ($listOrd as $value) {
-                $this->_arProd[$value->idprodotto] = new Model_Ordini_Calcoli_Prodotto($value);
-            }
-        }
+    function isThereSomeProductsOrdered() {
+        return (count($this->getTotale()) > 0) ? true : false;
     }
     
     

@@ -8,12 +8,38 @@ class Model_Ordini_Ordine {
     
     protected $_idordine;
     protected $_ordObj;
-    protected $_arProd;
+    protected $_arProdOriginal = array();
+    protected $_arProd = array();
     
-    function __construct($idordine, $ordObj) {
-        $this->_idordine = $idordine;
-        $this->_ordObj = $ordObj;
-        $this->setArray();
+    function setOrdObj($o) {
+        $this->_ordObj = $o;
+    }
+    
+    function getOrdObj() {
+        return $this->_ordObj;
+    }
+    
+    function setProdotti($listProd) {
+        if(count($listProd) > 0) {
+            // set Products array original
+            $this->_arProdOriginal = $listProd;
+            // Create instance Model_Ordini_Prodotto for any Product
+            foreach ($listProd as $value) {
+                if(!isset($this->_arProd[$value->idprodotto])) {
+                    $prObj = new Model_Ordini_Prodotto($value);
+                    $prObj->setQta(0);
+                    $this->_arProd[$value->idprodotto] = $prObj;
+                }
+            }
+        }
+    }
+    
+    function getProdotti() {
+        return $this->_arProd;
+    }
+    
+    function getProdotto($idprodotto) {
+        return $this->_arProd[$idprodotto];
     }
     
     function getCostoSpedizione() {
@@ -24,12 +50,8 @@ class Model_Ordini_Ordine {
         return ($this->getCostoSpedizione() > 0);
     }
     
-    function getElenco() {
-        return $this->_arProd;
+    function getIdgroup() {
+        return $this->_ordObj->idgroup;
     }
     
-    function getNum() {
-        return count($this->_arProd);
-    }    
-        
 }
