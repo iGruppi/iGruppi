@@ -38,7 +38,7 @@
                     <p>
                         Codice: <strong><?php echo $pObj->codice; ?></strong><br />
                         <br />
-                        <label>Costo:</label>
+                        <label>Prezzo:</label>
                         <input type="text" id="prodotto_<?php echo $idprodotto;?>" name="prodotti[<?php echo $idprodotto;?>][costo]" value="<?php echo $pObj->getPrezzo();?>" size="10" /> <strong>&euro;</strong> / <strong><?php echo $pObj->udm; ?></strong>
                         <input type="hidden" id="prod_sel_<?php echo $idprodotto;?>" name="prodotti[<?php echo $idprodotto;?>][disponibile]" value="<?php echo ($pObj->isDisponibile()) ? "S" : "N" ; ?>" />
                     </p>

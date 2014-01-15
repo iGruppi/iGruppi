@@ -27,7 +27,7 @@
             <h3 class="no-margin"><?php echo $pObj->descrizione;?></h3>
             <p>
                 Codice: <strong><?php echo $pObj->codice; ?></strong><br />
-                Costo: <strong><?php echo $this->valuta($pObj->getPrezzoListino()); ?> / <?php echo $pObj->udm; ?></strong><br />
+                Prezzo: <strong><?php echo $this->valuta($pObj->getPrezzoListino()); ?> / <?php echo $pObj->udm; ?></strong><br />
             <?php if(!$pObj->isAttivo()): ?>
                 <strong class="alert_red">Disabilitato</strong> (Non viene inserito quando crei un nuovo ordine)
             <?php endif; ?>

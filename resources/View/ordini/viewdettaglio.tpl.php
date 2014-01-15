@@ -18,7 +18,7 @@
             <h3 class="no-margin"><?php echo $pObj->descrizione;?></h3>
             <p>
                 Categoria: <strong><?php echo $pObj->categoria; ?></strong><br />
-                Costo: <strong><?php echo $this->valuta($pObj->getPrezzo());?></strong> / <strong><?php echo $pObj->udm; ?></strong><br />
+                Prezzo: <strong><?php echo $this->valuta($pObj->getPrezzo());?></strong> / <strong><?php echo $pObj->udm; ?></strong><br />
             </p>
         </div>
         <div class="col-md-3">

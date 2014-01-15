@@ -53,10 +53,18 @@ class Form_Prodotti extends MyFw_Form {
 
         $this->addField('costo', array(
                         'type'      => 'input',
-                        'label'     => 'Costo (&euro;)',
+                        'label'     => 'Prezzo (&euro;)',
                         'size'      => 10,
                         'required'  => true,
                         'validators' => array('Number')
+            ));
+        
+        $this->addField('aliquota_iva', array(
+                        'type'      => 'input',
+                        'label'     => 'IVA (%)',
+                        'size'      => 3,
+                        'validators' => array('Number'),
+                        'note'      => "(Inserisci 0 per non gestire l'IVA)"
             ));
 
         $this->addField('offerta', array(

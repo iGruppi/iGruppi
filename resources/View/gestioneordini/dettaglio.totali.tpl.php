@@ -7,7 +7,7 @@
           <tr>
             <th>Quantità</th>
             <th>Codice</th>
-            <th>Costo unitario</th>
+            <th>Prezzo unitario</th>
             <th>Descrizione</th>
             <th class="text-right">Totale senza IVA</th>
             <th class="text-right">Totale</th>
@@ -24,14 +24,20 @@
                 <td><strong><?php echo $pObj->codice;?></strong></td>
                 <td><?php echo $pObj->getPrezzo();?> &euro; / <?php echo $pObj->udm; ?></td>
                 <td><?php echo $pObj->descrizione;?></td>
-                <td class="text-right"><strong><?php echo $this->valuta($pObj->getTotaleSenzaIva()); ?></strong> - <?php $pObj->getAliquotaIva(); ?></td>
+                <td class="text-right">
+                    <?php if( $pObj->hasAliquotaIva()): ?>
+                    <strong><?php echo $this->valuta($pObj->getTotaleSenzaIva()); ?></strong> (<?php echo $pObj->getAliquotaIva(); ?>%)
+                    <?php else: ?>
+                    <span class="glyphicon glyphicon-info-sign iva_tooltip" data-toggle="tooltip" data-placement="left" title="Il campo IVA non è gestito per questo prodotto!"></span>
+                    <?php endif; ?>
+                </td>
                 <td class="text-right"><strong><?php echo $this->valuta($pObj->getTotale()); ?></strong></td>
             </tr>
     <?php endforeach; ?>
         
         </tbody>
     </table>
-        
+
     <div class="totale_line">
         <div class="sub_menu">
             <h3 class="totale">Totale colli: <strong><?php echo $this->ordCalcObj->getTotaleColli(); ?></strong></h3>
@@ -49,4 +55,6 @@
     
   </div>
 </div>
-    
+<script>    
+    $('.iva_tooltip').tooltip('hide');
+</script>

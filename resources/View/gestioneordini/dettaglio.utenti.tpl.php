@@ -9,7 +9,7 @@
               <tr>
                 <th>Quantità</th>
                 <th>Codice</th>
-                <th>Costo unitario</th>
+                <th>Prezzo unitario</th>
                 <th>Descrizione</th>
                 <th class="text-right">Totale</th>
               </tr>

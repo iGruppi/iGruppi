@@ -5,9 +5,14 @@
         <?php echo $this->form->renderField('codice'); ?>
         <?php echo $this->form->renderField('descrizione'); ?>
         <?php echo $this->form->renderField('idsubcat'); ?>
-        <?php echo $this->form->renderField('udm'); ?>
-        <?php echo $this->form->renderField('costo'); ?>
         <?php echo $this->form->renderField('attivo'); ?>
+    </fieldset>
+
+    <fieldset class="border_top">
+        <legend>Dati prodotto</legend>
+        <?php echo $this->form->renderField('costo'); ?>
+        <?php echo $this->form->renderField('aliquota_iva'); ?>
+        <?php echo $this->form->renderField('udm'); ?>
     </fieldset>
 
     <fieldset class="border_top">

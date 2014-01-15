@@ -26,7 +26,7 @@
                     <h3 class="no-margin"><?php echo $pObj->descrizione;?></h3>
                     <p>
                         Codice: <strong><?php echo $pObj->codice; ?></strong><br />
-                        Costo: <strong><?php echo $this->valuta($pObj->getPrezzo());?></strong> / <strong><?php echo $pObj->udm; ?></strong>
+                        Prezzo: <strong><?php echo $this->valuta($pObj->getPrezzo());?></strong> / <strong><?php echo $pObj->udm; ?></strong>
                     </p>
                 </div>
             </div>
