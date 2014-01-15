@@ -171,12 +171,22 @@ class Controller_GestioneOrdini extends MyFw_Controller {
             }
         }
 
-        // elenco prodotti (aggiornato dopo eventuale POST)
-        $listProd = $ordObj->getProdottiByIdOrdine($idordine, $this->_ordine->idproduttore);
+        // creo elenco prodotti (aggiornato dopo eventuale POST)
+        $listProd = $ordObj->getProdottiByIdOrdine($idordine);
+        $listProdObj = array();
+        if(count($listProd) > 0)
+        {
+            foreach ($listProd as $value)
+            {
+                $listProdObj[$value->idprodotto] = new Model_Ordini_Prodotto($value);
+            }
+        }
+        $this->view->lpObjs = $listProdObj;
+        
+        // Categorie/SubCat array organizer
         $scoObj = new Model_Prodotti_SubCatOrganizer($listProd);
         $this->view->listProdotti = $scoObj->getListProductsCategorized();
         $this->view->listSubCat = $scoObj->getListCategories();
-        //Zend_Debug::dump($this->view->list);
     }
     
     function dettaglioAction() {

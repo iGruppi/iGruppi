@@ -1,4 +1,5 @@
 <h2>Produttore <strong><?php echo $this->produttore->ragsoc;?></strong></h2>
+
 <form id="prod_ordini_form" class="ordini" action="/ordini/ordina/idordine/<?php echo $this->ordine->idordine;?>" method="post">
 
 <div class="row">
@@ -25,18 +26,19 @@
     <span id="cat_<?php echo $idcat; ?>" style="visibility: hidden;"><?php echo $this->listSubCat[$idcat]["categoria"]; ?></span>
 <?php foreach ($cat as $idsubcat => $prodotti): ?>
         <?php include $this->template('prodotti/subcat-title.tpl.php'); ?>
-<?php   foreach ($prodotti as $idprodotto => $pObj): 
+<?php   foreach ($prodotti as $idprodotto): 
+            // GET Prodotto object from cuObj (Model_Ordini_Calcoli_Utente)
             $prodotto = $this->cuObj->getProdotto($idprodotto);
     ?>
         
       <div class="row row-myig<?php if(!$prodotto->isDisponibile()) { echo " box_row_dis"; } ; ?>">
         <div class="col-md-9">
-            <h3 class="no-margin"><?php echo $pObj->descrizione;?></h3>
+            <h3 class="no-margin"><?php echo $prodotto->descrizione;?></h3>
             <p>
-                Categoria: <strong><?php echo $pObj->categoria_sub; ?></strong><br />
-                Prezzo: <strong><?php echo $this->valuta($prodotto->getPrezzo());?></strong> / <strong><?php echo $pObj->udm; ?></strong><br />
-        <?php if($pObj->note != ""): ?>
-                <a href="javascript:void(0)" class="note" data-toggle="popover" title="" data-content="<?php echo $pObj->note; ?>">Visualizza note</a>
+                Categoria: <strong><?php echo $prodotto->categoria_sub; ?></strong><br />
+                Prezzo: <strong><?php echo $this->valuta($prodotto->getPrezzo());?></strong> / <strong><?php echo $prodotto->udm; ?></strong><br />
+        <?php if($prodotto->note != ""): ?>
+                <a href="javascript:void(0)" class="note" data-toggle="popover" title="" data-content="<?php echo $prodotto->note; ?>">Visualizza note</a>
         <?php endif; ?>
             </p>
         </div>

@@ -18,17 +18,18 @@
         
         <?php include $this->template('prodotti/subcat-title.tpl.php'); ?>
         
-<?php   foreach ($prodotti as $idprodotto => $pObj): ?>
+<?php   foreach ($prodotti as $idprodotto): 
+                $pObj = $this->lpObjs[$idprodotto];
+            ?>
       
       <div class="row row-myig">
         <div class="col-md-10">
-            <h3 class="no-margin"><?php echo $pObj->getDescrizione();?></h3>
+            <h3 class="no-margin"><?php echo $pObj->descrizione;?></h3>
             <p>
-                Codice: <strong><?php echo $pObj->getCodice(); ?></strong><br />
-                Categoria: <strong><?php echo $pObj->getCategoria(); ?></strong><br />
-                Costo: <strong><?php echo $this->valuta($pObj->getPrezzoListino()); ?> / <?php echo $pObj->getUdm(); ?></strong><br />
+                Codice: <strong><?php echo $pObj->codice; ?></strong><br />
+                Costo: <strong><?php echo $this->valuta($pObj->getPrezzoListino()); ?> / <?php echo $pObj->udm; ?></strong><br />
             <?php if(!$pObj->isAttivo()): ?>
-                <strong class="alert_red">Disabilitato</strong> (Non disponibile negli ordini)
+                <strong class="alert_red">Disabilitato</strong> (Non viene inserito quando crei un nuovo ordine)
             <?php endif; ?>
             </p>
         </div>
@@ -46,15 +47,15 @@
     <h3>Nessun prodotto!</h3>
 <?php endif; ?>
   </div>
-<?php if($this->produttore->refObj->is_Referente()): ?>    
   <div class="col-md-4 col-right">
     <div class="bs-sidebar" data-spy="affix" role="complementary">
+<?php if($this->produttore->refObj->is_Referente()): ?>    
       <a class="btn btn-default btn-mylg" href="/prodotti/add/idproduttore/<?php echo $this->produttore->idproduttore;?>"><span class="glyphicon glyphicon-plus"></span> Nuovo prodotto</a>
       <br />
       <br />
+<?php endif; ?>
       <?php echo $this->partial('prodotti/subcat-navigation.tpl.php', array('listSubCat' => $this->listSubCat)); ?>
     </div>
   </div>
-<?php endif; ?>
 
 </div>

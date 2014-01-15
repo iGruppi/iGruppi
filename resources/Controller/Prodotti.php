@@ -38,10 +38,21 @@ class Controller_Prodotti extends MyFw_Controller {
         // get All Prodotti by Produttore
         $objModel = new Model_Prodotti();
         $listProd = $objModel->getProdottiByIdProduttore($idproduttore);
+        $listProdObj = array();
+        if(count($listProd) > 0)
+        {
+            foreach ($listProd as $value)
+            {
+                $listProdObj[$value->idprodotto] = new Model_Prodotti_Prodotto($value);
+            }
+        }
+        $this->view->lpObjs = $listProdObj;        
+        
         // organize by category and subCat
         $scoObj = new Model_Prodotti_SubCatOrganizer($listProd);
         $this->view->listProdotti = $scoObj->getListProductsCategorized();
         $this->view->listSubCat = $scoObj->getListCategories();
+//        Zend_Debug::dump($this->view->listProdotti);die;
     }
 
     function editAction() {

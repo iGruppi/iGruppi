@@ -9,22 +9,24 @@
   <div class="col-md-8">
       
     <h3>Prodotti:</h3>
-    <p>Segue l'elenco di <b>tutti</b> i <a href="/prodotti/list/idproduttore/<?php echo $this->produttore->idproduttore;?>">prodotti di <?php echo $this->produttore->ragsoc;?></a>.<br />
-        La lista non è modificabile perchè l'ordine è <strong><?php echo $this->statusObj->getStatus(); ?></strong>.</p>
+    <p><strong>La lista prodotti per quest'ordine non è modificabile</strong>.</p>
+    
     <?php if(count($this->listProdotti) > 0): ?>
     <?php 
         foreach ($this->listProdotti as $idcat => $cat): ?>
         <span id="cat_<?php echo $idcat; ?>" style="visibility: hidden;"><?php echo $this->listSubCat[$idcat]["categoria"]; ?></span>
     <?php foreach ($cat as $idsubcat => $prodotti): ?>
         <?php include $this->template('prodotti/subcat-title.tpl.php'); ?>
-    <?php   foreach ($prodotti as $idprodotto => $pObj): ?>
+    <?php   foreach ($prodotti as $idprodotto): 
+                $pObj = $this->lpObjs[$idprodotto];
+            ?>
 
             <div class="row row-myig<?php echo ($pObj->isDisponibile()) ? "" : " box_row_dis" ; ?>">
                 <div class="col-md-8">
-                    <h3 class="no-margin"><?php echo $pObj->getDescrizione();?></h3>
+                    <h3 class="no-margin"><?php echo $pObj->descrizione;?></h3>
                     <p>
-                        Codice: <strong><?php echo $pObj->getCodice(); ?></strong><br />
-                        Costo: <strong><?php echo $this->valuta($pObj->getPrezzo());?></strong> / <strong><?php echo $pObj->getUdm(); ?></strong>
+                        Codice: <strong><?php echo $pObj->codice; ?></strong><br />
+                        Costo: <strong><?php echo $this->valuta($pObj->getPrezzo());?></strong> / <strong><?php echo $pObj->udm; ?></strong>
                     </p>
                 </div>
             </div>
