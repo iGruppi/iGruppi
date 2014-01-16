@@ -87,7 +87,8 @@ class Controller_Ordini extends MyFw_Controller {
         
         // SAVE FORM if there is POST data
         $this->view->updated = false;
-        if($this->getRequest()->isPost()) {
+        if($this->getRequest()->isPost()) 
+        {
             // get Post and check if is valid
             $fv = $this->getRequest()->getPost();
             $prod_qta = isset($fv["prod_qta"]) ? $fv["prod_qta"] : array();
@@ -98,13 +99,15 @@ class Controller_Ordini extends MyFw_Controller {
         $ordine = $ordObj->getByIdOrdine($idordine);
         
         // Validate ORDINE for this GROUP
-        if(is_null($ordine) || $ordine->idgroup != $this->_userSessionVal->idgroup) {
+        if(is_null($ordine) || $ordine->idgroup != $this->_userSessionVal->idgroup) 
+        {
             $this->redirect("ordini");
         }
         $this->view->ordine = $ordine;
         // Check ORDINE Status (can Order Products?)
         $statusObj = new Model_Ordini_Status($ordine);
-        if(!$statusObj->can_OrderProducts()) {
+        if(!$statusObj->can_OrderProducts()) 
+        {
             $this->redirect("ordini");
         }
         $this->view->statusObj = $statusObj;

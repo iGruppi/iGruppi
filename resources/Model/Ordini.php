@@ -151,7 +151,7 @@ class Model_Ordini extends MyFw_DB_Base {
                 return false;
             }
             // prepare SQL INSERT
-            $sth = $this->db->prepare("INSERT INTO ordini_user_prodotti SET iduser= :iduser, idprodotto= :idprodotto, idordine= :idordine, qta= :qta, data_ins=NOW()");
+            $sth = $this->db->prepare("INSERT INTO ordini_user_prodotti SET iduser= :iduser, idprodotto= :idprodotto, idordine= :idordine, qta= :qta, qta_reale= :qta, data_ins=NOW()");
             foreach ($arQta as $idprodotto => $qta) {
                 if( $qta > 0) {
                     // insert product selected
