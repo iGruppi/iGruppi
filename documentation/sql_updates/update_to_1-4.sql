@@ -1,6 +1,6 @@
-
-/* Script to update DB to iGruppi 1.4 */
-
+-- 
+-- Script to update Schema DB iGruppi 1.4
+-- 
 
 ALTER TABLE  `ordini` ADD  `costo_spedizione` DECIMAL( 8, 2 ) NOT NULL,
                       ADD  `data_inconsegna` DATETIME NULL DEFAULT NULL AFTER  `data_fine` ,
@@ -27,3 +27,11 @@ ALTER TABLE  `prodotti` ADD  `aliquota_iva` TINYINT NOT NULL DEFAULT  '0' AFTER 
 ALTER TABLE  `categorie` ADD  `aliquota_iva` TINYINT NOT NULL DEFAULT  '0' AFTER  `descrizione`;
 
 ALTER TABLE  `ordini_prodotti` ADD  `disponibile` ENUM(  'S',  'N' ) NOT NULL DEFAULT  'S' AFTER  `sconto`;
+
+ALTER TABLE  `ordini_user_prodotti` ADD  `qta_reale` DECIMAL( 6, 3 ) NOT NULL AFTER  `qta`;
+
+-- 
+-- UPDATE DATA
+-- 
+
+UPDATE `ordini_user_prodotti` SET qta_reale = qta;
