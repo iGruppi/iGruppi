@@ -42,7 +42,7 @@
   </div>
   <div class="col-md-4 col-right">
 <?php if(count($this->cuObj->getProdottiUtente()) > 0): ?>      
-    <div class="bs-sidebar" data-spy="affix" role="complementary">
+    <div class="bs-sidebar" data-spy="affix" data-offset-top="80" role="complementary">
         <div class="totale">
     <?php if($this->cuObj->hasCostoSpedizione()): ?>
             <h5>Totale ordine: <b id="totale"><?php echo $this->valuta($this->cuObj->getTotale()) ?></b></h5>

@@ -48,7 +48,7 @@
 <?php endif; ?>
   </div>
   <div class="col-md-4 col-right">
-    <div class="bs-sidebar" data-spy="affix" role="complementary">
+    <div class="bs-sidebar" data-spy="affix" data-offset-top="76" role="complementary">
 <?php if($this->produttore->refObj->is_Referente()): ?>    
       <a class="btn btn-default btn-mylg" href="/prodotti/add/idproduttore/<?php echo $this->produttore->idproduttore;?>"><span class="glyphicon glyphicon-plus"></span> Nuovo prodotto</a>
       <br />

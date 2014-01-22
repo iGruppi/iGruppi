@@ -69,7 +69,7 @@
   </div>
   <div class="col-md-4 col-right">
 <?php if(count($this->listProdotti) > 0): ?>      
-    <div class="bs-sidebar" data-spy="affix" role="complementary">
+    <div class="bs-sidebar" data-spy="affix" data-offset-top="76" role="complementary">
         <div class="totale">
             <input disabled id="f_totale" type="hidden" name="f_totale" value="<?php echo $this->cuObj->getTotale(); ?>" />
             <h4>Totale: <strong id="totale"><?php echo $this->valuta($this->cuObj->getTotale()); ?></strong></h4>
