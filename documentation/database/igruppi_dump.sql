@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Jan 16, 2014 at 09:58 AM
+-- Generation Time: Jan 23, 2014 at 04:09 PM
 -- Server version: 5.5.27
 -- PHP Version: 5.3.21
 
@@ -242,7 +242,8 @@ CREATE TABLE IF NOT EXISTS `users` (
   `provincia` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
   `role` enum('User','Admin') COLLATE utf8_unicode_ci NOT NULL DEFAULT 'User',
   PRIMARY KEY (`iduser`),
-  KEY `fk_users_province1_idx` (`provincia`)
+  KEY `fk_users_province1_idx` (`provincia`),
+  KEY `INDEX_email` (`email`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
