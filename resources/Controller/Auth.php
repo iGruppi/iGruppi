@@ -18,7 +18,7 @@ class Controller_Auth extends MyFw_Controller {
         
         // reset errorLogin
         $this->view->errorLogin = false;
-        
+
         if($this->getRequest()->isPost()) {
             $fv = $this->getRequest()->getPost();
             if( $form->isValid($fv) ) {
@@ -42,9 +42,14 @@ class Controller_Auth extends MyFw_Controller {
                     $userSessionVal = new Zend_Session_Namespace('userSessionVal');
                     $userSessionVal->idgroup = $row->idgroup;
                     
-                    // redirect to Dashboard
-                    $this->redirect('dashboard');
-                    
+                    // redirect HTTP_REFERER if it comes from a different URI
+                    if(strpos($_SERVER["HTTP_REFERER"], "auth/login") === false)
+                    {
+                        header("Location: " . $_SERVER["HTTP_REFERER"]);
+                        exit;
+                    } else {
+                        $this->redirect('dashboard');
+                    }
                 } else {
                     // Set ERROR: ACCOUNT NOT VALID!!
                     $this->view->errorLogin = "Email and/or Password are wrong!";
