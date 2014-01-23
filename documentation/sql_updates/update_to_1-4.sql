@@ -30,6 +30,8 @@ ALTER TABLE  `ordini_prodotti` ADD  `disponibile` ENUM(  'S',  'N' ) NOT NULL DE
 
 ALTER TABLE  `ordini_user_prodotti` ADD  `qta_reale` DECIMAL( 6, 3 ) NOT NULL AFTER  `qta`;
 
+ALTER TABLE  `users` ADD INDEX  `INDEX_email` (  `email` );
+
 -- 
 -- UPDATE DATA
 -- 
