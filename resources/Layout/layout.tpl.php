@@ -11,13 +11,14 @@
     <!-- jQuery -->
     <script type="text/javascript" language="JavaScript" src="/js/jquery/jquery-1.8.3.js"></script>
     <script type="text/javascript" language="JavaScript" src="/js/jquery/jquery-ui.js"></script>
-    <script type="text/javascript" language="JavaScript" src="/bootstrap/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="/css/jquery/jquery-ui.css" type="text/css" />
+    <!-- Bootstrap -->
+    <script type="text/javascript" language="JavaScript" src="/bootstrap/js/bootstrap.min.js"></script>
+    <!-- DateTimePicker -->
+    <script type="text/javascript" language="JavaScript" src="/datetimepicker/jquery.datetimepicker.js"></script>
+    <link rel="stylesheet" href="/datetimepicker/jquery.datetimepicker.css" type="text/css" />
     
-    <!-- Personalized CSS and JS 
-	<link rel="stylesheet" href="/css/style.css" type="text/css" media="screen" />
-    <link rel="stylesheet" href="/css/style_print.css" type="text/css" media="print" />
-	<link rel="stylesheet" href="/css/form.css" type="text/css" /> -->
+    <!-- Personalized CSS and JS -->
     <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css" />
     <link rel="stylesheet" href="/css/custom-bs.css" type="text/css" />
 	<script type="text/javascript" language="JavaScript" src="/js/jx.js"></script>
