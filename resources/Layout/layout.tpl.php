@@ -17,6 +17,8 @@
     <!-- DateTimePicker -->
     <script type="text/javascript" language="JavaScript" src="/datetimepicker/jquery.datetimepicker.js"></script>
     <link rel="stylesheet" href="/datetimepicker/jquery.datetimepicker.css" type="text/css" />
+    <!-- Moment -->
+    <script type="text/javascript" language="JavaScript" src="/moment/moment.js"></script>
     
     <!-- Personalized CSS and JS -->
     <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css" />
