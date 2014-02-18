@@ -14,14 +14,12 @@ class Form_Prodotti extends MyFw_Form {
     function createFields() {
         
         $this->addField('codice', array(
-                        'type'      => 'input',
                         'label'     => 'Codice',
                         'size'      => 10,
                         'maxlength' => 20,
                         'required'  => true
             ));
         $this->addField('descrizione', array(
-                        'type'      => 'input',
                         'label'     => 'Descrizione',
                         'size'      => 60,
                         'maxlength' => 255,
@@ -52,18 +50,16 @@ class Form_Prodotti extends MyFw_Form {
             ));
 
         $this->addField('costo', array(
-                        'type'      => 'input',
                         'label'     => 'Prezzo (&euro;)',
                         'size'      => 10,
                         'required'  => true,
-                        'validators' => array('Number')
+                        'class'     => 'is_Number'
             ));
         
         $this->addField('aliquota_iva', array(
-                        'type'      => 'input',
                         'label'     => 'IVA (%)',
                         'size'      => 3,
-                        'validators' => array('Number'),
+                        'class'     => 'is_Number',
                         'note'      => "(Inserisci 0 per non gestire l'IVA)"
             ));
 
@@ -74,7 +70,6 @@ class Form_Prodotti extends MyFw_Form {
             ));
         
         $this->addField('sconto', array(
-                        'type'      => 'input',
                         'label'     => 'Sconto (%)',
                         'size'      => 10
             ));

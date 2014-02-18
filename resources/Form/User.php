@@ -13,14 +13,12 @@ class Form_User extends MyFw_Form {
     function createFields() {
         
         $this->addField('nome', array(
-                        'type'      => 'input',
                         'label'     => 'Nome',
                         'size'      => 30,
                         'maxlength' => 45,
                         'required'  => true
             ));
         $this->addField('cognome', array(
-                        'type'      => 'input',
                         'label'     => 'Cognome',
                         'size'      => 30,
                         'maxlength' => 45,
@@ -28,7 +26,6 @@ class Form_User extends MyFw_Form {
             ));
 
         $this->addField('num_members', array(
-                        'type'      => 'input',
                         'label'     => 'Num. nucleo familiare',
                         'size'      => 10,
                         'maxlength' => 2,
@@ -36,7 +33,6 @@ class Form_User extends MyFw_Form {
             ));
 
         $this->addField('email', array(
-                        'type'      => 'input',
                         'label'     => 'Email',
                         'size'      => 40,
                         'maxlength' => 100,
