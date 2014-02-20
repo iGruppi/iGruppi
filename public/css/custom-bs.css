@@ -364,6 +364,8 @@ ul.errors li { padding: 3px; color: #f00; list-style-image: url(/images/icon/ico
 ul.form-errors { list-style: none; margin-right: 20px; padding: 10px; background: #FBDCCA url(/images/icon/icona_stop_48.png) no-repeat 8px; border: 1px solid #f00; }
 ul.form-errors li ul.errors li { list-style-image: none; }
 
+.is_Number_invalid { border: solid 1px red; background-color: rgba(255,0,0,0.1); }
+
 
 /***********************************
 FORM - Model 1 - Label 200px
