@@ -19,7 +19,7 @@
             </p>
             <ul>
             <?php foreach ($utenti AS $iduser => $user): ?>
-                <li><?php echo $user["cognome"] . " " . $user["nome"]; ?> (<strong><?php echo $user["qta"]; ?></strong>)</li>
+                <li><?php echo $user["nome"] . " " . $user["cognome"]; ?> (<strong><?php echo $user["qta"]; ?></strong>)</li>
             <?php endforeach; ?>
             </ul>        
             <div class="my_clear" style="clear:both;">&nbsp;</div>

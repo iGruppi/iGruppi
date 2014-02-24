@@ -16,6 +16,7 @@ class Model_Ordini_Prodotto
         'sconto',
         'offerta',
         'qta',
+        'qta_reale',
         'disponibile'
     );
     
@@ -67,6 +68,10 @@ class Model_Ordini_Prodotto
     function isDisponibile() {
         return ($this->disponibile == "S") ? true : false;
     }
-
+    
+    function getQtaReale()
+    {
+        return ((float)$this->qta_reale > 0) ? (float)$this->qta_reale : 0;
+    }
     
 }

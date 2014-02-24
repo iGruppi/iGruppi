@@ -1,23 +1,8 @@
-<h2>Produttore <strong><?php echo $this->produttore->ragsoc;?></strong></h2>
 
 <form id="prod_ordini_form" class="ordini" action="/gestione-ordini/prodotti/idordine/<?php echo $this->ordine->idordine;?>" method="post">
     
 <div class="row">
   <div class="col-md-8">
-
-    <h3>Ordine <strong class="<?php echo $this->statusObj->getStatus(); ?>"><?php echo $this->statusObj->getStatus(); ?></strong></h3>
-    <p>
-        Data apertura: <strong><?php echo $this->date($this->ordine->data_inizio, '%d/%m/%Y');?></strong> alle <?php echo $this->date($this->ordine->data_inizio, '%H:%M');?></strong><br />
-        Data chiusura: <strong><?php echo $this->date($this->ordine->data_fine, '%d/%m/%Y');?></strong> alle <?php echo $this->date($this->ordine->data_fine, '%H:%M');?></strong>
-    </p>    
-
-    <?php if($this->updated): ?>
-        <div class="alert alert-success alert-dismissable">
-          <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-          La lista dei prodotti per quest'ordine è stata aggiornata con <strong>successo</strong>!
-        </div>
-    <?php endif; ?>   
-
     <h3>Prodotti:</h3>
     <p>Segue l'elenco dei <a href="/prodotti/list/idproduttore/<?php echo $this->produttore->idproduttore;?>">prodotti di <?php echo $this->produttore->ragsoc;?></a> inseriti in quest'ordine.<br />
         Puoi escludere i prodotti non disponibili cliccando sulla X a destra e modificare il prezzo nel caso di variazioni per quest'ordine.
@@ -33,18 +18,25 @@
             ?>
 
             <div class="row row-myig<?php echo ($pObj->isDisponibile()) ? "" : " box_row_dis" ; ?>" id="box_<?php echo $pObj->idprodotto;?>">
-                <div class="col-md-8">
+                <div class="col-md-9">
                     <h3 class="no-margin"><?php echo $pObj->descrizione;?></h3>
                     <p>
                         Codice: <strong><?php echo $pObj->codice; ?></strong><br />
                         <br />
                         <label>Prezzo:</label>
                         <input type="text" id="prodotto_<?php echo $idprodotto;?>" name="prodotti[<?php echo $idprodotto;?>][costo]" value="<?php echo $pObj->getPrezzo();?>" size="10" /> <strong>&euro;</strong> / <strong><?php echo $pObj->udm; ?></strong>
+                        <input type="hidden" name="prodotti[<?php echo $idprodotto;?>][co]" value="<?php echo $pObj->getPrezzo();?>" />
                         <input type="hidden" id="prod_sel_<?php echo $idprodotto;?>" name="prodotti[<?php echo $idprodotto;?>][disponibile]" value="<?php echo ($pObj->isDisponibile()) ? "S" : "N" ; ?>" />
                     </p>
                 </div>
-                <div class="col-md-4">
-                    <a href="javascript:void(0)" onclick="jx_SelProdottoOrdine(<?php echo $idprodotto;?>)"><img class="btn_icon <?php echo ($pObj->isDisponibile()) ? "delete" : "ok" ; ?>" src="/images/icon/empty_32.png" id="img_sel_<?php echo $idprodotto;?>" /></a>
+                <div class="col-md-3">
+                    <a href="javascript:void(0)" onclick="jx_SelProdottoOrdine(<?php echo $idprodotto;?>)">
+                    <?php if($pObj->isDisponibile()): ?>
+                        <img data-toggle="tooltip" data-placement="bottom" title="Disabilita prodotto per quest'ordine!" class="btn_icon delete tip_info_prod" src="/images/icon/empty_32.png" id="img_sel_<?php echo $idprodotto;?>" />
+                    <?php else: ?>
+                        <img data-toggle="tooltip" data-placement="bottom" title="Rendi disponibile il prodotto" class="btn_icon ok tip_info_prod" src="/images/icon/empty_32.png" id="img_sel_<?php echo $idprodotto;?>" />
+                    <?php endif; ?>
+                    </a>
                 </div>
             </div>
               <?php endforeach; ?>
@@ -61,11 +53,15 @@
 
   </div>
   <div class="col-md-4 col-right">
-      <div class="bs-sidebar" data-spy="affix" role="complementary">
-        <button type="submit" id="submit" class="btn btn-success btn-mylg"><span class="glyphicon glyphicon-<?php echo($this->updated) ? "saved" : "save"; ?>"></span> SALVA</button><br />
-        <br />
+      <div class="bs-sidebar" data-spy="affix" data-offset-top="176" role="complementary">
+        <div class="totale big-margin-top">
+          <button type="submit" id="submit" class="btn btn-success btn-mylg"><span class="glyphicon glyphicon-<?php echo($this->updated) ? "saved" : "save"; ?>"></span> SALVA</button>
+        </div>
         <?php echo $this->partial('prodotti/subcat-navigation.tpl.php', array('listSubCat' => $this->listSubCat)); ?>
       </div>
   </div>    
 </div>
 </form>
+<script>    
+    $('.tip_info_prod').tooltip('hide');
+</script>

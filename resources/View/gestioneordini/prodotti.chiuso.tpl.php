@@ -1,10 +1,3 @@
-<h2>Produttore <strong><?php echo $this->produttore->ragsoc;?></strong></h2>
-<h3>Ordine <strong class="<?php echo $this->statusObj->getStatus(); ?>"><?php echo $this->statusObj->getStatus(); ?></strong></h3>
-<p>
-    Data apertura: <strong><?php echo $this->date($this->ordine->data_inizio, '%d/%m/%Y');?></strong> alle <?php echo $this->date($this->ordine->data_inizio, '%H:%M');?></strong><br />
-    Data chiusura: <strong><?php echo $this->date($this->ordine->data_fine, '%d/%m/%Y');?></strong> alle <?php echo $this->date($this->ordine->data_fine, '%H:%M');?></strong>
-</p>    
-
 <div class="row">
   <div class="col-md-8">
       
@@ -39,8 +32,10 @@
     <?php endif; ?>
   </div>
   <div class="col-md-4 col-right">
-    <div class="bs-sidebar" data-spy="affix" role="complementary">
-      <?php echo $this->partial('prodotti/subcat-navigation.tpl.php', array('listSubCat' => $this->listSubCat)); ?>
+    <div class="bs-sidebar" data-spy="affix" data-offset-top="176" role="complementary">
+      <div class="big-margin-top">
+        <?php echo $this->partial('prodotti/subcat-navigation.tpl.php', array('listSubCat' => $this->listSubCat)); ?>
+      </div>
     </div>
   </div>    
 </div>

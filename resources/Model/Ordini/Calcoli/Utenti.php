@@ -34,6 +34,24 @@ class Model_Ordini_Calcoli_Utenti
         return $t;
     }
     
+    function getElencoUtenti()
+    {
+        $prodotti = $this->getProdottiUtenti();
+        $users = array();
+        if(count($prodotti) > 0)
+        {
+            foreach ($prodotti as $iduser => $value)
+            {
+                $users[$iduser] = array(
+                                'nome'      => $value["nome"],
+                                'cognome'   => $value["cognome"],
+                                'email'     => $value["email"],
+                );
+            }
+        }
+        return $users;
+    }
+    
     function isThereSomeProductsOrdered() {
         return (count($this->getProdottiUtenti()) > 0) ? true : false;
     }

@@ -171,7 +171,7 @@ class Model_Ordini extends MyFw_DB_Base {
     function getProdottiOrdinatiByIdordine($idordine) {
         $sqlp = "SELECT p.*, op.costo AS costo_op, op.sconto, op.offerta, op.disponibile, "
               ." cs.descrizione AS categoria_sub, cs.idsubcat, c.descrizione AS categoria, c.idcat, "
-              ." u.nome, u.cognome, u.email, oup.qta, oup.iduser "
+              ." u.nome, u.cognome, u.email, oup.qta, oup.qta_reale, oup.iduser "
               ." FROM ordini_prodotti AS op"
               ." LEFT OUTER JOIN ordini_user_prodotti AS oup ON op.idprodotto=oup.idprodotto AND op.idordine=oup.idordine"
               ." LEFT OUTER JOIN users AS u ON oup.iduser=u.iduser"
