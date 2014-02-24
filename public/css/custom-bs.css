@@ -133,15 +133,8 @@ h3.green {color: #47a447;}
  * Scrollspy and affixed enhanced navigation to highlight sections and secondary sections
  */
 
-/* By default it's not affixed in mobile views, so undo that */
-.bs-sidebar.affix {
-  position: static;
-}
-
 /* First level of nav */
 .bs-sidenav {
-  margin-top: 30px;
-  margin-bottom: 30px;
   padding-top:    10px;
   padding-bottom: 10px;
   text-shadow: 0 1px 0 #fff;
@@ -170,6 +163,11 @@ h3.green {color: #47a447;}
   border-right: 1px solid #060;
 }
 
+.bs-sidebar .nav > li > a.restricted,
+.bs-sidebar .nav > .active > a.restricted {  
+    padding: 2px 20px;
+}
+
 /* Nav: second level (shown on .active) */
 .bs-sidebar .nav .nav {
   display: none; /* Hide by default, but at >768px, show it */
@@ -188,12 +186,12 @@ h3.green {color: #47a447;}
   .bs-sidebar { margin-left: 0; }
   /* Widen the fixed sidebar */
   .bs-sidebar.affix,
+  .bs-sidebar.affix-top,
   .bs-sidebar.affix-bottom {
-    width: 270px;
+    width: 260px;
   }
   .bs-sidebar.affix {
-    position: fixed; /* Undo the static from mobile first approach */
-    top: 110px;
+    top: 80px;
   }
   .bs-sidebar.affix-bottom {
     position: absolute; /* Undo the static from mobile first approach */
@@ -234,7 +232,12 @@ h3.green {color: #47a447;}
 .btn-inform { font-size: 14px; padding: 3px 10px; line-height: 1.428571429; vertical-align: top;}
 .btn-primary.disabled { color: #fff; }
 
+.nav-pills-secondary>li>a { border-radius: 2px; padding: 4px 10px; }
 .nav-pills>li>a { border-radius: 2px; }
+.nav-pills>li.active>a, .nav-pills>li.active>a:hover, .nav-pills>li.active>a:focus {
+    color: rgb(255, 255, 255);
+    background-color: rgb(92, 184, 92);
+}
 .btn-group-myig { margin-top: 4px; }
 
 .panel-group .panel { border-radius: 2px; }
@@ -318,6 +321,9 @@ select {
     -webkit-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
     transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
 }
+input[type="number"] { width: 100px; }
+.field_in_table { margin-bottom: 0; }
+
 option { padding-left: 2px; padding-right: 10px; }
 fieldset { padding: 15px; padding-top: 40px; margin: 0; margin-top: 10px; text-align: left; border: none; }
 fieldset.border_top { border-top: 1px solid #eee; }
@@ -363,8 +369,6 @@ ul.errors { margin: 0 0 10px 103px; list-style: none; }
 ul.errors li { padding: 3px; color: #f00; list-style-image: url(/images/icon/icona_error_16.png); }
 ul.form-errors { list-style: none; margin-right: 20px; padding: 10px; background: #FBDCCA url(/images/icon/icona_stop_48.png) no-repeat 8px; border: 1px solid #f00; }
 ul.form-errors li ul.errors li { list-style-image: none; }
-
-.is_Number_invalid { border: solid 1px red; background-color: rgba(255,0,0,0.1); }
 
 
 /***********************************

@@ -8,15 +8,6 @@
             </p>
         </div>
         <div class="col-md-4">
-            <div class="btn-group btn-group-myig">
-                <button type="button" id="gest_ordine_<?php echo $this->ordine->idordine;?>" " class="btn btn-success dropdown-toggle" data-toggle="dropdown">Gestisci Ordine <span class="caret"></span></button>
-                <ul class="dropdown-menu" role="menu">
-                  <li><a href="/gestione-ordini/edit/idordine/<?php echo $this->ordine->idordine;?>">Modifica ordine</a></li>
-                  <li><a href="/gestione-ordini/prodotti/idordine/<?php echo $this->ordine->idordine;?>">Prodotti</a></li>
-                  <li><a href="/gestione-ordini/dettaglio/idordine/<?php echo $this->ordine->idordine;?>">Dettaglio ordine</a></li>
-                  <li class="divider"></li>
-                  <li><a href="javascript:void(0)" onclick="jx_OrdineInConsegna(<?php echo $this->ordine->idordine;?>, <?php echo $this->ordine->idproduttore; ?>)"><span class="glyphicon glyphicon-arrow-right"></span> In consegna</a></li>
-                </ul>
-            </div>            
+            <a role="button" id="gest_ordine_<?php echo $this->ordine->idordine;?>" class="btn btn-success" href="/gestione-ordini/dashboard/idordine/<?php echo $this->ordine->idordine; ?>"><span class="glyphicon glyphicon-pencil"></span> Gestisci Ordine</a>
         </div>
       </div>

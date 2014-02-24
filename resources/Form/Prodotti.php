@@ -50,16 +50,16 @@ class Form_Prodotti extends MyFw_Form {
             ));
 
         $this->addField('costo', array(
+                        'type'      => 'number',
                         'label'     => 'Prezzo (&euro;)',
                         'size'      => 10,
-                        'required'  => true,
-                        'class'     => 'is_Number'
+                        'required'  => true
             ));
         
         $this->addField('aliquota_iva', array(
+                        'type'      => 'number',
                         'label'     => 'IVA (%)',
                         'size'      => 3,
-                        'class'     => 'is_Number',
                         'note'      => "(Inserisci 0 per non gestire l'IVA)"
             ));
 
@@ -70,6 +70,7 @@ class Form_Prodotti extends MyFw_Form {
             ));
         
         $this->addField('sconto', array(
+                        'type'      => 'number',
                         'label'     => 'Sconto (%)',
                         'size'      => 10
             ));

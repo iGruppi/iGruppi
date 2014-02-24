@@ -12,21 +12,12 @@
     // Start these procedures always
     $(function() {
         
-        // CHECK Validity for Number fields
-        $('.is_Number').on('change keyup', function(event) {
-            if ( event.target.validity.valid ) {
-                $(this).removeClass("is_Number_invalid");
-            } else {
-                $(this).addClass("is_Number_invalid");
-            }
-        });
-
         // CHECK Validity FORM on submit for Number fields
         $(this).find('form').submit(function( event ) {
             var myForm = $(this)[0];
             if(!myForm.checkValidity())
             {
-                $(this).find('.is_Number').each(function(){
+                $(this).find('input[type="number"]').each(function(){
                     var myField = $(this)[0];
                     if ( !myField.checkValidity() ) 
                     {

@@ -3,7 +3,7 @@
     <h3 class="big-margin-top">Dettaglio Parziali per utente</h3>
 <?php if($this->ordCalcObj->getProdottiUtenti() > 0): ?>
     <?php foreach ($this->ordCalcObj->getProdottiUtenti() AS $iduser => $user): ?>
-        <h3 class="big-margin-top"><strong><?php echo $user["cognome"] . " " . $user["nome"]; ?></strong></h3>
+        <h3 class="big-margin-top"><strong><?php echo $user["nome"] . " " . $user["cognome"]; ?></strong></h3>
         <table class="table table-condensed">
             <thead>
               <tr>

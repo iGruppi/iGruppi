@@ -12,10 +12,17 @@ class Model_Prodotti extends MyFw_DB_Base {
     }
 
 
-    function getProdottoById($idprodotto) {
-
+    function getProdottoById($idprodotto) 
+    {
         $sth_app = $this->db->prepare("SELECT * FROM prodotti WHERE idprodotto= :idprodotto");
         $sth_app->execute(array('idprodotto' => $idprodotto));
+        return $sth_app->fetch(PDO::FETCH_OBJ);
+    }
+    
+    function getProdottoByCodice($codice) 
+    {
+        $sth_app = $this->db->prepare("SELECT * FROM prodotti WHERE codice= :codice");
+        $sth_app->execute(array('codice' => $codice));
         return $sth_app->fetch(PDO::FETCH_OBJ);
     }
 

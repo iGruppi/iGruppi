@@ -120,3 +120,30 @@
                 $('#ordine_'+idordine).html(data.myTpl);
 			});
     }
+    
+    function jx_ReferenteModifyQta(iduser, idprodotto)
+    {
+        if($('#qta_eff_'+iduser+'_'+idprodotto).val() != $('#qta_eff_old_'+iduser+'_'+idprodotto).val())
+        {
+            $('#btn_'+iduser+'_'+idprodotto).show();
+        } else {
+            $('#btn_'+iduser+'_'+idprodotto).hide();
+        }
+    }
+    
+    function jx_RefModQta_Save(iduser, idprodotto, idordine)
+    {
+        var btn = $('#btn_'+iduser+'_'+idprodotto);
+        btn.button('loading');
+		$.post(
+			'/gestione-ordini/changeqta/idordine/'+idordine,
+			$('#qta_ord_form_'+iduser+'_'+idprodotto).serialize(),
+			function(data){
+                console.log(data);
+                if(data.res)
+				{
+                    //$('#btn_'+iduser+'_'+idprodotto).html(data.myTpl);
+                }
+			},
+			"json");
+    }
