@@ -168,7 +168,10 @@ class Model_Ordini extends MyFw_DB_Base {
     }
     
     
-    function getProdottiOrdinatiByIdordine($idordine) {
+    function getProdottiOrdinatiByIdordine($idordine, $iduser=false, $idprodotto=false) 
+    {
+        // init array to execute
+        $arExecute = array('idordine' => $idordine);
         $sqlp = "SELECT p.*, op.costo AS costo_op, op.sconto, op.offerta, op.disponibile, "
               ." cs.descrizione AS categoria_sub, cs.idsubcat, c.descrizione AS categoria, c.idcat, "
               ." u.nome, u.cognome, u.email, oup.qta, oup.qta_reale, oup.iduser "
@@ -178,11 +181,20 @@ class Model_Ordini extends MyFw_DB_Base {
               ." JOIN prodotti AS p ON op.idprodotto=p.idprodotto "
               ." JOIN categorie_sub AS cs ON p.idsubcat=cs.idsubcat "
               ." JOIN categorie AS c ON cs.idcat=c.idcat "
-              ." WHERE op.idordine= :idordine"
-//              ." GROUP BY u.iduser, oup.idprodotto"
-              ." ORDER BY p.codice";
+              ." WHERE op.idordine= :idordine";
+        if($iduser !== false)
+        {
+            $sqlp .= " AND oup.iduser= :iduser";
+            $arExecute["iduser"] = $iduser;
+        }
+        if($idprodotto !== false)
+        {
+            $sqlp .= " AND oup.idprodotto= :idprodotto";
+            $arExecute["idprodotto"] = $idprodotto;
+        }
+        $sqlp .= " ORDER BY p.codice";
         $sthp = $this->db->prepare($sqlp);
-        $sthp->execute(array('idordine' => $idordine));
+        $sthp->execute($arExecute);
         $prodotti = $sthp->fetchAll(PDO::FETCH_OBJ);
         return $prodotti;
     }

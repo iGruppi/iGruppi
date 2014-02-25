@@ -139,10 +139,12 @@
 			'/gestione-ordini/changeqta/idordine/'+idordine,
 			$('#qta_ord_form_'+iduser+'_'+idprodotto).serialize(),
 			function(data){
-                console.log(data);
+//                console.log(data);
                 if(data.res)
 				{
-                    //$('#btn_'+iduser+'_'+idprodotto).html(data.myTpl);
+                    var tot = parseFloat(data.newTotale);
+                    $('#tdrow_'+iduser+'_'+idprodotto).html("<strong>"+tot.formatNumber(2, ',', '')+"&nbsp;&euro;</strong>");
+                    btn.button('reset').hide();
                 }
 			},
 			"json");
