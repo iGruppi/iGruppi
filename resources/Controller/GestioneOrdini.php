@@ -238,10 +238,25 @@ class Controller_GestioneOrdini extends MyFw_Controller {
             $idordine = $fv["idordine"];
             $iduser = $fv["iduser"];
             $idprodotto = $fv["idprodotto"];
+            $qta_reale = $fv["qta_reale"];
             
-            //Zend_Debug::dump($_POST);die;
+            $sth = $this->getDB()->prepare("UPDATE ordini_user_prodotti SET qta_reale= :qta_reale, data_ins=NOW() WHERE iduser= :iduser AND idprodotto= :idprodotto AND idordine= :idordine");
+            // UPDATE product selected
+            $fields = array('iduser' => $iduser, 'idprodotto' => $idprodotto, 'idordine' => $idordine, 'qta_reale' => $qta_reale);
+            $rsth = $sth->execute($fields);
+            if($rsth) 
+            {
+                $ordModel = new Model_Ordini();
+                $prodotto = $ordModel->getProdottiOrdinatiByIdordine($idordine, $iduser, $idprodotto);
+                if(isset($prodotto[0]))
+                {
+                    $pObj = new Model_Ordini_Prodotto($prodotto[0]);
+                    echo json_encode(array('res' => true, 'newTotale' => $pObj->getTotaleReale()));
+                    exit;
+                }
+            }
         }
-        echo json_encode($fv);
+        echo json_encode(array('res' => false));
     }
     
     function dettaglioAction() {

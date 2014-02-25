@@ -61,6 +61,10 @@ class Model_Ordini_Prodotto
         return $this->getPrezzo() * $this->getQta();
     }
     
+    function getTotaleReale() {
+        return $this->getPrezzo() * $this->getQtaReale();
+    }
+    
     function getTotaleSenzaIva() {
         return $this->getPrezzoSenzaIva() * $this->getQta();
     }
