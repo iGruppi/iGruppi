@@ -16,4 +16,4 @@
     </form>
 <?php endif; ?>
 </td>
-<td class="text-right" id="tdrow_<?php echo $iduser; ?>_<?php echo $idprodotto;?>"><strong><?php echo $this->valuta($pObj->getTotaleReale()); ?></strong></td>
+<td class="text-right" id="tdrow_<?php echo $iduser; ?>_<?php echo $idprodotto;?>"><strong><?php echo $this->valuta($pObj->getTotale()); ?></strong></td>

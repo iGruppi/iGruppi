@@ -251,7 +251,7 @@ class Controller_GestioneOrdini extends MyFw_Controller {
                 if(isset($prodotto[0]))
                 {
                     $pObj = new Model_Ordini_Prodotto($prodotto[0]);
-                    echo json_encode(array('res' => true, 'newTotale' => $pObj->getTotaleReale()));
+                    echo json_encode(array('res' => true, 'newTotale' => $pObj->getTotale()));
                     exit;
                 }
             }
