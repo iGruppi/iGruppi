@@ -40,12 +40,6 @@ class Controller_Prodotti extends MyFw_Controller {
         $produttore->refObj = new Model_Produttori_Referente($produttore->iduser_ref);
         $this->_produttore = $this->view->produttore = $produttore;
         
-        // check REFERENTE, controllo per i furbi (non Referenti)
-        $user_ref = new Model_Produttori_Referente($produttore->iduser_ref);
-        if(!$user_ref->is_Referente()) {
-            $this->redirect("index", "error", array('code' => 404));
-        }
-        
         // Get updated if it is set
         $this->view->updated = $this->getParam("updated");        
         
@@ -79,7 +73,12 @@ class Controller_Prodotti extends MyFw_Controller {
     }
 
     function editAction() {
-
+        
+        // check REFERENTE, controllo per i furbi (non Referenti)
+        if(!$this->_produttore->refObj->is_Referente()) {
+            $this->redirect("index", "error", array('code' => 404));
+        }
+        
         $idprodotto = $this->_prodotto->idprodotto;
         if(is_null($this->_prodotto)) 
         {
@@ -95,7 +94,11 @@ class Controller_Prodotti extends MyFw_Controller {
         // set Categories
         $objCat = new Model_Categorie();
         $form->setOptions("idsubcat", $objCat->convertToSingleArray($objCat->getSubCategories($this->_userSessionVal->idgroup, $this->_prodotto->idproduttore), "idsubcat", "descrizione"));
-
+        
+        // set array values Udm that need Multiplier
+        $udmObj = new Model_Prodotti_UdM();
+        $this->view->arValWithMultip = json_encode($udmObj->getArWithMultip());
+        
         if($this->getRequest()->isPost()) {
             $fv = $this->getRequest()->getPost();
             if( $form->isValid($fv) ) {
@@ -115,32 +118,35 @@ class Controller_Prodotti extends MyFw_Controller {
     
     function addAction() {
         
+        // check REFERENTE, controllo per i furbi (non Referenti)
+        if(!$this->_produttore->refObj->is_Referente()) {
+            $this->redirect("index", "error", array('code' => 404));
+        }
+                
         $idproduttore = $this->_produttore->idproduttore;
         
         $form = new Form_Prodotti();
         $form->setAction("/prodotti/add/idproduttore/$idproduttore");
         $form->setValue("idproduttore", $idproduttore);
         // remove useless fields
+        $form->removeField("idprodotto");
         $form->removeField("offerta");
         $form->removeField("sconto");
-        $form->removeField("idprodotto");
 
         // set Categories
         $objCat = new Model_Categorie();
         $form->setOptions("idsubcat", $objCat->convertToSingleArray($objCat->getSubCategories($this->_userSessionVal->idgroup, $idproduttore), "idsubcat", "descrizione"));
         
-        if($this->getRequest()->isPost()) {
-            
+        if($this->getRequest()->isPost()) 
+        {
             // get Post and check if is valid
             $fv = $this->getRequest()->getPost();
-            if( $form->isValid($fv) ) {
-                
-                // ADD Produttore
-                $this->getDB()->makeInsert("prodotti", $form->getValues());
-
-                $this->view->added = true;
-                // REDIRECT
-                $this->redirect("prodotti", "list", array("idproduttore" => $fv["idproduttore"]));
+            if( $form->isValid($fv) ) 
+            {
+                // ADD NEW Prodotto
+                $idprodotto = $this->getDB()->makeInsert("prodotti", $form->getValues());
+                // REDIRECT to EDIT
+                $this->redirect("prodotti", "edit", array("idprodotto" => $idprodotto));
             }
         }
         

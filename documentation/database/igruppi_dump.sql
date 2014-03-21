@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Jan 23, 2014 at 04:09 PM
+-- Generation Time: Feb 26, 2014 at 01:39 AM
 -- Server version: 5.5.27
 -- PHP Version: 5.3.21
 
@@ -168,6 +168,7 @@ CREATE TABLE IF NOT EXISTS `prodotti` (
   `codice` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
   `descrizione` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `udm` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
+  `moltiplicatore` decimal(8,2) NOT NULL DEFAULT '1',
   `attivo` enum('S','N') COLLATE utf8_unicode_ci NOT NULL DEFAULT 'S',
   `costo` decimal(8,2) NOT NULL,
   `aliquota_iva` tinyint(4) NOT NULL DEFAULT '0',

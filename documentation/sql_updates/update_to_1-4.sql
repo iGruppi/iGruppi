@@ -23,6 +23,7 @@ ENGINE = MyISAM;
 
 
 ALTER TABLE  `prodotti` ADD  `aliquota_iva` TINYINT NOT NULL DEFAULT  '0' AFTER  `costo`;
+ALTER TABLE  `prodotti` ADD  `moltiplicatore` decimal(8,2) NOT NULL DEFAULT  '1' AFTER  `udm`;
 
 ALTER TABLE  `categorie` ADD  `aliquota_iva` TINYINT NOT NULL DEFAULT  '0' AFTER  `descrizione`;
 

@@ -34,33 +34,49 @@ class Form_Prodotti extends MyFw_Form {
                         'required'  => true
             ));
         
-        // UDM 
-        $udmObj = new Model_Prodotti_UdM();
-        $this->addField('udm', array(
-                        'type'      => 'select',
-                        'label'     => 'Unità di misura',
-                        'options'   => $udmObj->getArUdm(),
-                        'required'  => true
-            ));
-        
         $this->addField('attivo', array(
                         'type'      => 'select',
                         'label'     => 'Disponibile',
                         'options'   => array('S' => 'SI', 'N' => 'NO')
             ));
-
-        $this->addField('costo', array(
-                        'type'      => 'number',
-                        'label'     => 'Prezzo (&euro;)',
-                        'size'      => 10,
+        
+        // UDM 
+        $udmObj = new Model_Prodotti_UdM();
+        $this->addField('udm', array(
+                        'type'      => 'select',
+                        'label'     => 'Prezzo per',
+                        'options'   => $udmObj->getArUdm(),
                         'required'  => true
             ));
-        
-        $this->addField('aliquota_iva', array(
+        // MOLTIPLICATORE
+        $this->addField('moltiplicatore', array(
                         'type'      => 'number',
-                        'label'     => 'IVA (%)',
-                        'size'      => 3,
-                        'note'      => "(Inserisci 0 per non gestire l'IVA)"
+                        'label'     => 'Pezzatura/Taglio',
+                        'size'      => 10,
+                        'required'  => true,
+                        'pattern'   => '',
+                        'step'      => '',
+                        'note'      => '-'
+            ));
+        
+        // COSTO
+        $this->addField('costo', array(
+                        'type'      => 'number',
+                        'label'     => 'Prezzo',
+                        'size'      => 10,
+                        'required'  => true,
+                        'pattern'   => '[0-9]+([\.|,][0-9]+)?',
+                        'step'      => '0.01',
+                        'note'      => '&nbsp;&euro;'
+            ));
+        // IVA
+        $ivaObj = new Model_Prodotti_IVA();
+        $this->addField('aliquota_iva', array(
+                        'type'      => 'select',
+                        'label'     => 'IVA',
+                        'options'   => $ivaObj->getArIVA(),
+                        'required'  => true,
+                        'onchange'  => 'setCostoLabel();'
             ));
 
         $this->addField('offerta', array(

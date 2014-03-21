@@ -357,7 +357,7 @@ li.witherrors { background-color: #F8FFDD; border: 1px solid #ddFFdd; padding: 2
 li.form_row a.info { background-position: 0 1px; padding: 0 0 0 18px; font-size: 10pt; margin-left: 6px; color: #999; }
 li.form_row a.info:hover {color: #060; }
 
-legend{ background-color: #eee; font-size: 16px; width: auto; margin: 10px 0 0 30px; padding: 3px 5px 3px 5px; color: #666; font-weight: bold; border: 1px solid #ddd; }
+legend{ background-color: #eee; font-size: 16px; width: auto; margin: 10px 0 0 30px; padding: 3px 5px 3px 5px; color: #666; font-weight: 200; border: 1px solid #ddd; }
 
 /* Other class in form */
 .intro{ margin: 0 10px 20px 0; border: 1px solid #060;}
@@ -370,6 +370,7 @@ ul.errors li { padding: 3px; color: #f00; list-style-image: url(/images/icon/ico
 ul.form-errors { list-style: none; margin-right: 20px; padding: 10px; background: #FBDCCA url(/images/icon/icona_stop_48.png) no-repeat 8px; border: 1px solid #f00; }
 ul.form-errors li ul.errors li { list-style-image: none; }
 
+.np_form { font-weight: bold; }
 
 /***********************************
 FORM - Model 1 - Label 200px

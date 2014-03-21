@@ -1,0 +1,20 @@
+<?php
+/**
+ * Description of IVA
+ * 
+ * @author gullo
+ */
+class Model_Prodotti_IVA {
+    
+    private $_arIVA = array(
+        '0'     => "Non voglio gestire l'IVA",
+        '4'     => '4 %',
+        '10'    => '10 %',
+        '22'    => '22%'
+    );
+    
+    function getArIVA(){
+        return $this->_arIVA;
+    }
+    
+}
