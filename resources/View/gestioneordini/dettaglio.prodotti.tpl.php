@@ -5,13 +5,13 @@
     <?php foreach ($this->ordCalcObj->getProdotti() AS $idprodotto => $prodRow): 
         $pObj = $prodRow["prodotto"];
         $utenti = $prodRow["utenti"];
-        if($pObj->getQta() > 0):
+        if($pObj->getQtaReale() > 0):
         ?>
         <div<?php if(!$pObj->isDisponibile()) { echo ' class="text-danger strike"';} ?>>
             <div class="sub_menu">
                 <h3 class="totale">Totale prodotto: <strong<?php if(!$pObj->isDisponibile()) { echo ' class="text-danger strike"';} ?>><?php echo $this->valuta($pObj->getTotale()); ?></strong></h3>
             </div>
-            <h3 class="big-margin-top"><strong><?php echo $pObj->getQta();?></strong> x <?php echo $pObj->descrizione;?></h3>
+            <h3 class="big-margin-top"><strong><?php echo $pObj->getQtaReale();?></strong> x <?php echo $pObj->descrizione;?></h3>
             <p>
                 Codice: <strong><?php echo $pObj->codice;?></strong><br />
                 Prezzo: <?php echo $pObj->getPrezzo();?> &euro; / <?php echo $pObj->udm; ?><br />

@@ -28,7 +28,7 @@ class Model_Ordini_Calcoli_Utente
         if(count($this->_arProdOriginal) > 0) {
             foreach ($this->_arProdOriginal AS $value) {
                 if($value->iduser == $this->_iduser)
-                    $this->getProdotto($value->idprodotto)->setQta($value->qta);
+                    $this->getProdotto($value->idprodotto)->setQtaReale($value->qta);
             }
         }
     }

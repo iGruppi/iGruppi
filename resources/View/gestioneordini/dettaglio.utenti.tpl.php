@@ -21,7 +21,7 @@
             <?php else: ?>
                 <tr class="danger strike">
             <?php endif; ?>
-                    <td><strong><?php echo $pObj->getQta();?></strong></td>
+                    <td><strong><?php echo $pObj->getQtaReale();?></strong></td>
                     <td><strong><?php echo $pObj->codice;?></strong></td>
                     <td><?php echo $pObj->getPrezzo();?> &euro; / <?php echo $pObj->udm; ?></td>
                     <td><?php echo $pObj->descrizione;?></td>

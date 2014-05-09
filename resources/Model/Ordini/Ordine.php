@@ -27,7 +27,7 @@ class Model_Ordini_Ordine {
             foreach ($listProd as $value) {
                 if(!isset($this->_arProd[$value->idprodotto])) {
                     $prObj = new Model_Ordini_Prodotto($value);
-                    $prObj->setQta(0);
+                    $prObj->setQtaReale(0);
                     $this->_arProd[$value->idprodotto] = $prObj;
                 }
             }

@@ -46,7 +46,7 @@
             <div class="sub_menu">
             <?php if($prodotto->isDisponibile()): ?>
                 <a class="menu_icon" href="javascript:void(0)" onclick="jx_SelQtaProdotto(<?php echo $idprodotto;?>, '<?php echo $prodotto->getPrezzo();?>', '+')">+</a>
-                <input readonly class="prod_qta" type="text" id="prod_qta_<?php echo $idprodotto;?>" name="prod_qta[<?php echo $idprodotto;?>]" value="<?php echo $prodotto->getQta();?>" />
+                <input readonly class="prod_qta" type="text" id="prod_qta_<?php echo $idprodotto;?>" name="prod_qta[<?php echo $idprodotto;?>]" value="<?php echo $prodotto->getQtaReale();?>" />
                 <a class="menu_icon" href="javascript:void(0)" onclick="jx_SelQtaProdotto(<?php echo $idprodotto;?>, '<?php echo $prodotto->getPrezzo();?>', '-')">-</a>
                 <div class="sub_totale" id="subtotale_<?php echo $idprodotto;?>"><?php echo $this->valuta($prodotto->getTotale()) ?></div>
             <?php else: ?>

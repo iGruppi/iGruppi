@@ -22,7 +22,7 @@ class Model_Ordini_Calcoli_Totali
         {
             foreach ($this->_arProdOriginal AS $value) 
             {
-                $this->getProdotto($value->idprodotto)->addQta($value->qta);
+                $this->getProdotto($value->idprodotto)->addQtaReale($value->qta);
             }
         }
     }
