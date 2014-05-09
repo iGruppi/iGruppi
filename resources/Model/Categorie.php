@@ -14,8 +14,8 @@ class Model_Categorie extends MyFw_DB_Base {
 
     function getCategoriaById($idcat) {
 
-        $sth_app = $this->db->prepare("SELECT * FROM categorie WHERE $idcat= :$idcat");
-        $sth_app->execute(array('$idcat' => $idcat));
+        $sth_app = $this->db->prepare("SELECT * FROM categorie WHERE idcat= :$idcat");
+        $sth_app->execute(array('idcat' => $idcat));
         return $sth_app->fetch(PDO::FETCH_ASSOC);
     }
 

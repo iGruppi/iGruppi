@@ -42,12 +42,12 @@ class Model_Ordini_Prodotto
  */
 
     function setQta($qta) {
-        $this->qta = (int)$qta;
+        $this->qta_reale = (float)$qta;
     }
     
     function addQta($qta) {
         if($this->getQta() > 0) {
-            $this->qta += (int)$qta;
+            $this->qta_reale += (float)$qta;
         } else {
             $this->setQta($qta);
         }

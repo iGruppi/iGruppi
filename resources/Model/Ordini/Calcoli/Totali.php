@@ -68,7 +68,7 @@ class Model_Ordini_Calcoli_Totali
         if(count($this->getProdotti()) > 0) {
             foreach ($this->getProdotti() as $idprodotto => $objProd) {
                 if($objProd->isDisponibile())
-                    $c += $objProd->qta;
+                    $c += $objProd->qta_reale;
             }
         }
         return $c;
