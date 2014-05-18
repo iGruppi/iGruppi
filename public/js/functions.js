@@ -9,26 +9,36 @@
        return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
     };
     
+    // Prototype HTMLInputElement to improve localization
+    HTMLInputElement.prototype.formatNumber = function() {
+        this.value = this.value.replace(".", ",");
+    };
+    HTMLInputElement.prototype.setNumber = function() {
+        this.value = this.value.replace(",", ".");
+    },
+    HTMLInputElement.prototype.getNumber = function() {
+        return parseFloat( this.value.replace(",", ".") );
+    };
+    
+    
     // Start these procedures always
-    $(function() {
+	$(document).ready(function(){
         
-        // CHECK Validity FORM on submit for Number fields
-        $(this).find('form').submit(function( event ) {
-            var myForm = $(this)[0];
-            if(!myForm.checkValidity())
-            {
-                $(this).find('input[type="number"]').each(function(){
-                    var myField = $(this)[0];
-                    if ( !myField.checkValidity() ) 
-                    {
-                        $(this).focus();
-                        return false;
-                    }
-                });                 
-                return false;
-            } else {
-                return true;
-            }
+        // SET some specific functions for _number_ input field (defined by "is_Number" class)
+        $(this).find('.is_Number').each(function(){
+            $(this)[0].formatNumber(); // $(this)[0] return the HTMLInputElement
         });
-    });
+        $('.is_Number').on('change keyup', function(event) {
+            $(this)[0].formatNumber();
+        });
+        
+        // Convert all number fields in real number format
+        $(this).find('form').submit(function( event ) {
+            $(this).find('.is_Number').each(function(){
+                $(this)[0].setNumber();
+            });                 
+        });
 
+
+
+    });
