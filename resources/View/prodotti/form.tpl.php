@@ -11,7 +11,7 @@
     <fieldset class="border_top">
         <legend>Prezzo</legend>
         <label for="costo" id="label_costo">Prezzo:</label>
-        <input type="number" name="costo" id="costo" pattern="[0-9]+([\.|,][0-9]+)?" step="0.01" size="10" required value="<?php echo $this->prodotto->costo; ?>">&nbsp;&euro;
+        <input type="text" class="is_Number" name="costo" id="costo" size="10" required value="<?php echo $this->prodotto->costo; ?>">&nbsp;&euro;
         <br />
         <label for="aliquota_iva">IVA:</label>
         <select name="aliquota_iva" id="aliquota_iva" required onchange="setCostoLabel();">

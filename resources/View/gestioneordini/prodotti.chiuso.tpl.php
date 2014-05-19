@@ -19,7 +19,7 @@
                     <h3 class="no-margin"><?php echo $pObj->descrizione;?></h3>
                     <p>
                         Codice: <strong><?php echo $pObj->codice; ?></strong><br />
-                        Prezzo: <strong><?php echo $this->valuta($pObj->getPrezzo());?></strong> / <strong><?php echo $pObj->udm; ?></strong>
+                        <?php echo $this->partial('prodotti/price-box.tpl.php', array('prodotto' => $pObj)); ?>
                     </p>
                 </div>
             </div>
