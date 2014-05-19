@@ -62,8 +62,8 @@
     {
         var myMultip = arValWithMultip[$('#udm').val()];
         var mObj = $('#moltiplicatore');
-        // Format number for integer step 1
-        if( myMultip.step === "1" )
+        // Format number for integer step 0
+        if( myMultip.ndec === "0" )
         {
             var roundedVal = Math.round( mObj[0].getNumber() );
             mObj.val( roundedVal );
