@@ -26,34 +26,6 @@
         
     }
     
-    function jx_SelQtaProdotto(idprodotto, cst, op) {
-
-        var idSelected = $('#prod_qta_'+idprodotto);
-        var idSubtotale = $('#subtotale_'+idprodotto);
-        var qta = parseInt(idSelected.val());
-        var costo = parseFloat(cst);
-        var newQta;
-        var totale = parseFloat($('#f_totale').val());
-        if( op === "+" ) {
-            newQta = qta + 1;
-            totale += costo;
-        } else {
-            if(idSelected.val() > 0) {
-                newQta = qta - 1;
-                totale -= costo;
-            } else {
-                newQta = 0;
-            }
-        }
-        idSelected.val(newQta);
-        var subtotale = newQta * costo;
-        idSubtotale.html(subtotale.formatNumber(2, ',', '') + "&nbsp;&euro;");
-        $('#totale').html(totale.formatNumber(2, ',', '') + "&nbsp;&euro;");
-        $('#f_totale').val(totale);
-    }
-    
-    
-    
     function jx_AddSubCategoria(idproduttore) {
         $('#no_subCat').hide();
         var idcat = $('#idcat').val();

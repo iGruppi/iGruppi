@@ -21,6 +21,10 @@ class Model_Ordini_Calcoli_Utenti
         return isset($prodotti[$iduser]) ? $prodotti[$iduser]["prodotti"] : null;
     }
     
+    function getProdottoByIduser($iduser, $idprodotto) {
+        $prodotti = $this->getProdottiUtenti();
+        return isset($prodotti[$iduser]["prodotti"][$idprodotto]) ? $prodotti[$iduser]["prodotti"][$idprodotto] : null;
+    }
     
     function getTotaleByIduser($iduser) {
         $t = 0;
@@ -71,9 +75,15 @@ class Model_Ordini_Calcoli_Utenti
         return $this->spedObj;
     }
     
+    // TOTALE INCLUSO SPEDIZIONE
     function getTotaleConSpedizioneByIduser($iduser) {
-        return ($this->getTotaleByIduser($iduser) + $this->getSpedizione()->getCostoSpedizioneRipartitoByIduser($iduser));
+        return ($this->getTotaleByIduser($iduser) + $this->getCostoSpedizioneByIduser($iduser));
     }
+    
+    function getCostoSpedizioneByIduser($iduser) {
+        return $this->getSpedizione()->getCostoSpedizioneRipartitoByIduser($iduser);
+    }
+    
     
 /************************************************************
  * Private Misc, init settings

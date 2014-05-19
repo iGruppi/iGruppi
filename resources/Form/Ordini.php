@@ -34,6 +34,7 @@ class Form_Ordini extends MyFw_Form {
         ));
         $this->addField('costo_spedizione', array(
                     'label'     => 'Costo spedizione',
+                    'class'     => 'is_Number',
                     'size'      => 15
         ));
         $this->addField('note_consegna', array(

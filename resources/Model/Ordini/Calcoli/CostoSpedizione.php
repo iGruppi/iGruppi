@@ -39,7 +39,7 @@ class Model_Ordini_Calcoli_CostoSpedizione {
     {
         // Paga Costo Spedizione solo se il totale ordinato è > 0
         // questo per evitare che paghi solo le spese di spedizione quando ordina 1 solo prodotto che poi risulta NON disponibile
-        return ($this->ocuObj->getTotaleByIduser($iduser) > 0) ? $this->getCostoSpedizioneRipartito() : 0;
+        return ($this->ocuObj->hasCostoSpedizione() && $this->ocuObj->getTotaleByIduser($iduser) > 0) ? $this->getCostoSpedizioneRipartito() : 0;
     }
     
 }

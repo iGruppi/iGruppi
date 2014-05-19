@@ -19,6 +19,7 @@ class Model_Prodotti_Prodotto {
         'udm',
         'attivo',
         'costo',
+        'moltiplicatore',
         'aliquota_iva',
         'note',
         'categoria',
@@ -38,6 +39,50 @@ class Model_Prodotti_Prodotto {
     
 /************************************************************
  * Products methods
+ */
+    
+    function getDescrizionePrezzo()
+    {
+        return number_format($this->getPrezzo(), 2, ",", ".") . " " . $this->getUdmDescrizione();
+    }
+    
+    function getDescrizionePezzatura()
+    {
+        $arUdm = Model_Prodotti_UdM::getArWithMultip();
+        $pp = "";
+        if( $this->hasPezzatura() ) {
+            $pp .= round($this->moltiplicatore, $arUdm[$this->udm]["ndec"]) . " " . $arUdm[$this->udm]["label"];
+        }
+        return $pp;
+    }
+    
+    function hasPezzatura()
+    {
+        $arUdm = Model_Prodotti_UdM::getArWithMultip();
+        return ( isset($arUdm[$this->udm]) && $this->moltiplicatore != 1 ) ? true : false;
+    }
+    
+    function getUdm()
+    {
+        return $this->udm;
+    }
+    
+    function getUdmDescrizione()
+    {
+        $fpz = ($this->hasPezzatura()) ? "**" : "";
+        return "&euro; / " . $this->getUdm() . $fpz;
+    }
+    
+    
+    function isAttivo() 
+    {
+        return ($this->attivo == "S") ? true : false;
+    }
+    
+
+    
+/************************************************************
+ *  Prezzo & IVA methods
  */
     
     function getPrezzoSenzaIva() 
@@ -75,11 +120,6 @@ class Model_Prodotti_Prodotto {
         return (!is_null($this->aliquota_iva) && $this->aliquota_iva > 0);
     }
 
-    function isAttivo() 
-    {
-        return ($this->attivo == "S") ? true : false;
-    }
-    
     
 /************************************************************
  * GET FIELDS values

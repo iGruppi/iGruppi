@@ -96,8 +96,7 @@ class Controller_Prodotti extends MyFw_Controller {
         $form->setOptions("idsubcat", $objCat->convertToSingleArray($objCat->getSubCategories($this->_userSessionVal->idgroup, $this->_prodotto->idproduttore), "idsubcat", "descrizione"));
         
         // set array values Udm that need Multiplier
-        $udmObj = new Model_Prodotti_UdM();
-        $this->view->arValWithMultip = json_encode($udmObj->getArWithMultip());
+        $this->view->arValWithMultip = json_encode( Model_Prodotti_UdM::getArWithMultip() );
         
         if($this->getRequest()->isPost()) {
             $fv = $this->getRequest()->getPost();
