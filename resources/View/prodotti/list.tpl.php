@@ -62,6 +62,6 @@
     $(function() {
         var myTag = "#prod_<?php echo $this->updated; ?>";
         $('html,body').animate({scrollTop: ($(myTag).offset().top - 100)});
-        $('#alert_save_box').prependTo(myTag);
+        $('#alert_save_box').prependTo(myTag).fadeOut(10000);
     });
 </script>
