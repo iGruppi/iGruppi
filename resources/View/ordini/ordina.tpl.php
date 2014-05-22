@@ -44,9 +44,8 @@
         </div>
         <div class="col-md-3">
             <div class="sub_menu">
-            <?php if($prodotto->isDisponibile()): 
-                    $pObj = $this->cuObj->getProdottoByIduser(1, $idprodotto);
-                    $qta_ordinata = is_null($pObj) ? 0 : $pObj->getQtaOrdinata();
+            <?php if($prodotto->isDisponibile()):
+                    $qta_ordinata = isset($this->prodottiIduser[$idprodotto]) ? $this->prodottiIduser[$idprodotto]->getQtaOrdinata() : 0;
                 ?>
 <script>
     // Start these procedures always
@@ -58,7 +57,7 @@
                 <a class="menu_icon" href="javascript:void(0)" onclick="Trolley_setQtaProdotto(<?php echo $idprodotto;?>, '+')">+</a>
                 <input readonly class="prod_qta" type="text" id="prod_qta_<?php echo $idprodotto;?>" name="prod_qta[<?php echo $idprodotto;?>]" value="<?php echo $qta_ordinata;?>" />
                 <a class="menu_icon" href="javascript:void(0)" onclick="Trolley_setQtaProdotto(<?php echo $idprodotto;?>, '-')">-</a>
-                <div class="sub_totale" id="subtotale_<?php echo $idprodotto;?>"><?php echo $this->valuta($prodotto->getTotale()) ?></div>
+                <div class="sub_totale" id="subtotale_<?php echo $idprodotto;?>">...</div>
             <?php else: ?>
                 <h4 class="non-disponibile">NON disponibile!</h4>
             <?php endif; ?>
@@ -81,8 +80,7 @@
 <?php if(count($this->listProdotti) > 0): ?>      
     <div class="bs-sidebar" data-spy="affix" data-offset-top="76" role="complementary">
         <div class="totale">
-            <input disabled id="f_totale" type="hidden" name="f_totale" value="<?php //echo $this->cuObj->getTotale(); ?>" />
-            <h4>Totale: <strong id="totale"><?php //echo $this->valuta($this->cuObj->getTotale()); ?></strong></h4>
+            <h4>Totale: <strong id="totale">Loading...</strong></h4>
             <button type="submit" id="submit" class="btn btn-success btn-mylg"><span class="glyphicon glyphicon-<?php echo($this->updated) ? "saved" : "save"; ?>"></span> SALVA ORDINE</button>
         </div>
         <?php echo $this->partial('prodotti/subcat-navigation.tpl.php', array('listSubCat' => $this->listSubCat)); ?>

@@ -125,6 +125,5 @@
     {
         var totale = Trolley.calculateTotal();
         $('#totale').html(totale.formatNumber(2, ',', '') + "&nbsp;&euro;");
-        $('#f_totale').val(totale);
     }
     

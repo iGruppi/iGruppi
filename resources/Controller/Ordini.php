@@ -130,6 +130,7 @@ class Controller_Ordini extends MyFw_Controller {
         $cuObj->setOrdObj($ordine);
         $cuObj->setProdotti($listProdOrdered);
         $this->view->cuObj = $cuObj;
+        $this->view->prodottiIduser = $cuObj->getProdottiByIduser($this->_iduser);
         
         // ORGANIZE by category and subCat
         $scoObj = new Model_Prodotti_SubCatOrganizer($listProdOrdered);

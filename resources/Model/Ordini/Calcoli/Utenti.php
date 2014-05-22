@@ -21,11 +21,6 @@ class Model_Ordini_Calcoli_Utenti
         return isset($prodotti[$iduser]) ? $prodotti[$iduser]["prodotti"] : null;
     }
     
-    function getProdottoByIduser($iduser, $idprodotto) {
-        $prodotti = $this->getProdottiUtenti();
-        return isset($prodotti[$iduser]["prodotti"][$idprodotto]) ? $prodotti[$iduser]["prodotti"][$idprodotto] : null;
-    }
-    
     function getTotaleByIduser($iduser) {
         $t = 0;
         $arProd = $this->getProdottiByIduser($iduser);
