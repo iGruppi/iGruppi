@@ -104,7 +104,7 @@ class Controller_Prodotti extends MyFw_Controller {
 
                 $this->getDB()->makeUpdate("prodotti", "idprodotto", $form->getValues());
                 // REDIRECT
-                $this->redirect("prodotti", "list", array("idproduttore" => $this->_prodotto->idproduttore, "updated" => true));
+                $this->redirect("prodotti", "list", array("idproduttore" => $this->_prodotto->idproduttore, "updated" => $idprodotto));
             }
         } else {
             $form->setValues((array)$this->_prodotto);

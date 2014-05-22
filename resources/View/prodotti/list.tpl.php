@@ -3,8 +3,8 @@
 <div class="row">
   <div class="col-md-8">
       
-<?php if($this->updated): ?>
-    <div class="alert alert-success alert-dismissable">
+<?php if($this->updated > 0): ?>
+    <div class="alert alert-success alert-dismissable" id="alert_save_box">
       <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
       Prodotto aggiornato con <strong>successo</strong>!
     </div>
@@ -22,7 +22,7 @@
                 $pObj = $this->lpObjs[$idprodotto];
             ?>
       
-      <div class="row row-myig">
+      <div class="row row-myig" id="prod_<?php echo $pObj->idprodotto;?>">
         <div class="col-md-10">
             <h3 class="no-margin"><?php echo $pObj->descrizione;?></h3>
             <p>
@@ -57,5 +57,11 @@
       <?php echo $this->partial('prodotti/subcat-navigation.tpl.php', array('listSubCat' => $this->listSubCat)); ?>
     </div>
   </div>
-
 </div>
+<script>
+    $(function() {
+        var myTag = "#prod_<?php echo $this->updated; ?>";
+        $('html,body').animate({scrollTop: ($(myTag).offset().top - 100)});
+        $('#alert_save_box').prependTo(myTag);
+    });
+</script>
