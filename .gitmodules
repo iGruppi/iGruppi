@@ -7,3 +7,9 @@
 [submodule "library/bootstrap"]
 	path = library/bootstrap
 	url = https://github.com/Jazzo/bootstrap.git
+[submodule "library/datetimepicker"]
+	path = library/datetimepicker
+	url = https://github.com/Jazzo/datetimepicker
+[submodule "library/moment"]
+	path = library/moment
+	url = https://github.com/moment/moment/

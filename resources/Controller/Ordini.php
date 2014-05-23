@@ -58,84 +58,85 @@ class Controller_Ordini extends MyFw_Controller {
     
     function viewdettaglioAction() {
         $idordine = $this->getParam("idordine");
+        
+        // INIT Ordine
         $ordObj = new Model_Ordini();
         $ordine = $ordObj->getByIdOrdine($idordine);
         $this->view->ordine = $ordine;
         $this->view->statusObj = new Model_Ordini_Status($ordine);
 
+        // GET PRODUTTORE
         $produttoreObj = new Model_Produttori();
         $produttore = $produttoreObj->getProduttoreById($ordine->idproduttore, $this->_userSessionVal->idgroup);
         $this->view->produttore = $produttore;
         
-        // elenco prodotti
-        $this->view->list = $ordObj->getProdottiByIdOrdine($idordine, $ordine->idproduttore, $this->_iduser);
+        // GET PRODUCTS LIST with Qta Ordered
+        $listProdOrdered = $ordObj->getProdottiOrdinatiByIdordine($idordine);
+        // init Calcoli Utente class
+        $cuObj = new Model_Ordini_Calcoli_Utenti();
+        $cuObj->setOrdObj($ordine);
+        $cuObj->setProdotti($listProdOrdered);
+        $this->view->listaProdotti = $cuObj->getProdottiByIduser($this->_iduser);
+        // Costo di SPEDIZIONE
+        $this->view->costo_spedizione = $cuObj->getCostoSpedizioneByIduser($this->_iduser);
+        $this->view->totale_ordine = $cuObj->getTotaleByIduser($this->_iduser);
+        $this->view->totale_con_spedizione = $cuObj->getTotaleConSpedizioneByIduser($this->_iduser);
+//        Zend_Debug::dump($this->view->listaProdotti);die;
     }
 
+    
     function ordinaAction() {
         
         $idordine = $this->getParam("idordine");
         $ordObj = new Model_Ordini();
+        
+        // SAVE FORM if there is POST data
+        $this->view->updated = false;
+        if($this->getRequest()->isPost()) 
+        {
+            // get Post and check if is valid
+            $fv = $this->getRequest()->getPost();
+            $prod_qta = isset($fv["prod_qta"]) ? $fv["prod_qta"] : array();
+            $this->view->updated = $ordObj->setQtaProdottiForOrdine($idordine, $this->_iduser, $prod_qta);
+        }
+        
+        // INIT Ordine
         $ordine = $ordObj->getByIdOrdine($idordine);
-        if(is_null($ordine)) {
+        
+        // Validate ORDINE for this GROUP
+        if(is_null($ordine) || $ordine->idgroup != $this->_userSessionVal->idgroup) 
+        {
             $this->redirect("ordini");
         }
         $this->view->ordine = $ordine;
+        // Check ORDINE Status (can Order Products?)
         $statusObj = new Model_Ordini_Status($ordine);
-        if(!$statusObj->is_Aperto()) {
+        if(!$statusObj->can_OrderProducts()) 
+        {
             $this->redirect("ordini");
         }
         $this->view->statusObj = $statusObj;
-
+        
+        // GET PRODUTTORE
         $produttoreObj = new Model_Produttori();
         $produttore = $produttoreObj->getProduttoreById($ordine->idproduttore, $this->_userSessionVal->idgroup);
         $this->view->produttore = $produttore;
         
-        # TODO : Inserire controllo per i furbi che vogliono visualizzare/cancellare ordini non loro
+        // GET PRODUCTS LIST with Qta Ordered
+        $listProdOrdered = $ordObj->getProdottiOrdinatiByIdordine($idordine);
         
-        // Reset updated flag
-        $this->view->updated = false;
+        // init Calcoli Utente class
+        $cuObj = new Model_Ordini_Calcoli_Utenti();
+        $cuObj->setOrdObj($ordine);
+        $cuObj->setProdotti($listProdOrdered);
+        $this->view->cuObj = $cuObj;
+        $this->view->prodottiIduser = $cuObj->getProdottiByIduser($this->_iduser);
         
-        // SAVE FORM
-        if($this->getRequest()->isPost()) {
-            
-            // get Post and check if is valid
-            $fv = $this->getRequest()->getPost();
-            
-            $prod_qta = isset($fv["prod_qta"]) ? $fv["prod_qta"] : array();
-            if(count($prod_qta) > 0) {
-                // delete all records in ordini_user_prodotti
-                $this->getDB()->query("DELETE FROM ordini_user_prodotti WHERE iduser='".$this->_iduser."' AND idordine='$idordine'");
-                // insert product selected
-                foreach ($prod_qta as $idprodotto => $qta) {
-                    if( $qta > 0) {
-                        // prepare SQL INSERT
-                        $sql = "INSERT INTO ordini_user_prodotti SET iduser= :iduser, idprodotto= :idprodotto, idordine= :idordine, qta= :qta, data_ins=NOW()";
-                        $sth = $this->getDB()->prepare($sql);
-                        $fields = array('iduser' => $this->_iduser, 'idprodotto' => $idprodotto, 'idordine' => $idordine, 'qta' => $qta);
-                        $sth->execute($fields);
-                    }
-                }
-                
-                $this->view->updated = true;
-            }
-        }
-
-        // elenco prodotti (aggiornato dopo eventuale POST)
-        $listProd = $ordObj->getProdottiByIdOrdine($idordine, $ordine->idproduttore, $this->_iduser);
-        // rebuild array
-        $subCat = array();
-        $prodotti = array();
-        if(count($listProd) > 0) {
-            foreach ($listProd as $key => $value) {
-                $prodotti[$value->idcat][$value->idsubcat][$value->idprodotto] = $value;
-                $subCat[$value->idcat]["categoria"] = $value->categoria;
-                $subCat[$value->idcat]["subcat"][$value->idsubcat] = $value->categoria_sub;
-            }
-        }
-        
-        $this->view->listProdotti = $prodotti;
-        $this->view->listSubCat = $subCat;
-        //Zend_Debug::dump($subCat);
+        // ORGANIZE by category and subCat
+        $scoObj = new Model_Prodotti_SubCatOrganizer($listProdOrdered);
+        //Zend_Debug::dump($scoObj);
+        $this->view->listProdotti = $scoObj->getListProductsCategorized();
+        $this->view->listSubCat = $scoObj->getListCategories();
     }
 
 }

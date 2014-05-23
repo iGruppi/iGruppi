@@ -15,7 +15,6 @@ class Form_Login extends MyFw_Form {
     function createFields() {
         
         $this->addField('email', array(
-                        'type'      => 'input',
                         'label'     => 'Email',
                         'size'      => 40,
                         'maxlength' => 100,

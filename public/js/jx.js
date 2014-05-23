@@ -1,10 +1,5 @@
 /* Jx Functions */
 
-    Number.prototype.formatMoney = function(c, d, t){
-        var n = this, c = isNaN(c = Math.abs(c)) ? 2 : c, d = d == undefined ? "," : d, t = t == undefined ? "." : t, s = n < 0 ? "-" : "", i = parseInt(n = Math.abs(+n || 0).toFixed(c)) + "", j = (j = i.length) > 3 ? j % 3 : 0;
-       return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
-     };
-
 	function Loading(id)
 	{
 		$(id).show().html('<img src="/images/loading.gif" />');
@@ -30,34 +25,6 @@
         }
         
     }
-    
-    function jx_SelQtaProdotto(idprodotto, cst, op) {
-
-        var idSelected = $('#prod_qta_'+idprodotto);
-        var idSubtotale = $('#subtotale_'+idprodotto);
-        var qta = parseInt(idSelected.val());
-        var costo = parseFloat(cst);
-        var newQta;
-        var totale = parseFloat($('#f_totale').val());
-        if( op == "+" ) {
-            newQta = qta + 1;
-            totale += costo;
-        } else {
-            if(idSelected.val() > 0) {
-                newQta = qta - 1;
-                totale -= costo;
-            } else {
-                newQta = 0;
-            }
-        }
-        idSelected.val(newQta);
-        var subtotale = newQta * costo;
-        idSubtotale.html(subtotale.formatMoney(2, ',', '') + "&nbsp;&euro;");
-        $('#totale').html(totale.formatMoney(2, ',', '') + "&nbsp;&euro;");
-        $('#f_totale').val(totale);
-    }
-    
-    
     
     function jx_AddSubCategoria(idproduttore) {
         $('#no_subCat').hide();
@@ -114,4 +81,43 @@
                     $('#disabled_button_'+iduser).remove();
                 }
 			});
+    }
+
+    function jx_OrdineInConsegna(idordine, idproduttore) {
+        $('#gest_ordine_'+idordine).button('loading');
+        $.getJSON(
+			'/gestione-ordini/inconsegna/',
+            {idordine: idordine, idproduttore: idproduttore},
+			function(data) {
+                $('#ordine_'+idordine).html(data.myTpl);
+			});
+    }
+    
+    function jx_ReferenteModifyQta(iduser, idprodotto)
+    {
+        if($('#qta_eff_'+iduser+'_'+idprodotto).val() != $('#qta_eff_old_'+iduser+'_'+idprodotto).val())
+        {
+            $('#btn_'+iduser+'_'+idprodotto).show();
+        } else {
+            $('#btn_'+iduser+'_'+idprodotto).hide();
+        }
+    }
+    
+    function jx_RefModQta_Save(iduser, idprodotto, idordine)
+    {
+        var btn = $('#btn_'+iduser+'_'+idprodotto);
+        btn.button('loading');
+		$.post(
+			'/gestione-ordini/changeqta/idordine/'+idordine,
+			$('#qta_ord_form_'+iduser+'_'+idprodotto).serialize(),
+			function(data){
+//                console.log(data);
+                if(data.res)
+				{
+                    var tot = parseFloat(data.newTotale);
+                    $('#tdrow_'+iduser+'_'+idprodotto).html("<strong>"+tot.formatNumber(2, ',', '')+"&nbsp;&euro;</strong>");
+                    btn.button('reset').hide();
+                }
+			},
+			"json");
     }

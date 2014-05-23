@@ -11,36 +11,54 @@ class Model_Ordini_Status {
     const STATUS_APERTO = "Aperto";
     const STATUS_CHIUSO = "Chiuso";
     const STATUS_ARCHIVIATO = "Archiviato";
+    const STATUS_INCONSEGNA = "In_Consegna";
+    const STATUS_CONSEGNATO = "Consegnato";
     
     private $_inizio;
     private $_fine;
+    private $_inconsegna = null;
+    private $_consegnato = null;
     private $_archiviato;
     
     function __construct($o) {
         $this->_inizio = $o->data_inizio;
         $this->_fine = $o->data_fine;
+        $this->_inconsegna = isset($o->data_inconsegna) ? $o->data_inconsegna : null; // CAN BE NULL!
+        $this->_consegnato = isset($o->data_consegnato) ? $o->data_consegnato : null; // CAN BE NULL!
         $this->_archiviato = $o->archiviato;
     }
     
     function getStatus() {
         
         if($this->_archiviato != "S") {
-            $startObj = new Zend_Date($this->_inizio, "y-MM-dd HH:mm:ss");
-            $endObj = new Zend_Date($this->_fine, "y-MM-dd HH:mm:ss");
-            
+            $startObj = $this->getDateObj($this->_inizio);
+            $endObj = $this->getDateObj($this->_fine);
+            $inObj = $this->getDateObj($this->_inconsegna);
+            $consObj = $this->getDateObj($this->_consegnato);
+
             $timestampNow = Zend_Date::now()->toString("U");
             
             if( $timestampNow < $startObj->toString("U") ) {
                 return self::STATUS_PIANIFICATO;
-                
             } else if(
                 $timestampNow >= $startObj->toString("U") &&
                 $timestampNow <= $endObj->toString("U")
                     ) {
                 return self::STATUS_APERTO;
-                
-            } else if( $timestampNow > $endObj->toString("U") ) {
+            } else if( 
+                $timestampNow > $endObj->toString("U") && 
+                $timestampNow <= $inObj->toString("U")
+                    ) {
                 return self::STATUS_CHIUSO;
+            } else if( 
+                $timestampNow > $inObj->toString("U") && 
+                $timestampNow <= $consObj->toString("U")
+                    ) {
+                return self::STATUS_INCONSEGNA;
+            } else if( 
+                $timestampNow > $consObj->toString("U")
+                    ) {
+                return self::STATUS_CONSEGNATO;
             }
             
         } else {
@@ -74,10 +92,26 @@ class Model_Ordini_Status {
         return ( !$this->is_Archiviato() ) ? true : false;
     }
     
+    function can_OrderProducts() {
+        return $this->is_Aperto();
+    }
+    
+    function can_RefInviaOrdine() {
+        return $this->is_Chiuso();
+    }
+    
+    function can_UserViewDettaglio() {
+        return !$this->is_Pianificato();
+    }
+    
 
 /* ***************************
  *  MISCELLANEOUS
  *************************** */
+    
+    private function getDateObj($dt) {
+        return new Zend_Date($dt, "y-MM-dd HH:mm:ss");
+    }
     
     // get simple array with all status
     static function getArrayStatus() {
@@ -85,6 +119,8 @@ class Model_Ordini_Status {
             self::STATUS_PIANIFICATO,
             self::STATUS_APERTO,
             self::STATUS_CHIUSO,
+            self::STATUS_INCONSEGNA,
+            self::STATUS_CONSEGNATO,
             self::STATUS_ARCHIVIATO
         );
     }
@@ -107,7 +143,15 @@ class Model_Ordini_Status {
                 break;
             
             case self::STATUS_CHIUSO:
-                $sql = " AND NOW() > o.data_fine AND o.archiviato='N'";
+                $sql = " AND NOW() > o.data_fine AND NOW() <= o.data_inconsegna AND o.archiviato='N'";
+                break;
+
+            case self::STATUS_INCONSEGNA:
+                $sql = " AND NOW() > o.data_inconsegna AND NOW() <= o.data_consegnato AND o.archiviato='N'";
+                break;
+
+            case self::STATUS_CONSEGNATO:
+                $sql = " AND NOW() > o.data_consegnato AND o.archiviato='N'";
                 break;
 
             case self::STATUS_ARCHIVIATO:

@@ -14,14 +14,12 @@ class Form_Prodotti extends MyFw_Form {
     function createFields() {
         
         $this->addField('codice', array(
-                        'type'      => 'input',
                         'label'     => 'Codice',
                         'size'      => 10,
                         'maxlength' => 20,
                         'required'  => true
             ));
         $this->addField('descrizione', array(
-                        'type'      => 'input',
                         'label'     => 'Descrizione',
                         'size'      => 60,
                         'maxlength' => 255,
@@ -36,27 +34,47 @@ class Form_Prodotti extends MyFw_Form {
                         'required'  => true
             ));
         
-        // UDM 
-        $udmObj = new Model_Prodotti_UdM();
-        $this->addField('udm', array(
-                        'type'      => 'select',
-                        'label'     => 'Unità di misura',
-                        'options'   => $udmObj->getArUdm(),
-                        'required'  => true
-            ));
-        
         $this->addField('attivo', array(
                         'type'      => 'select',
                         'label'     => 'Disponibile',
                         'options'   => array('S' => 'SI', 'N' => 'NO')
             ));
-
-        $this->addField('costo', array(
-                        'type'      => 'input',
-                        'label'     => 'Costo (&euro;)',
+        
+        // UDM 
+        $udmObj = new Model_Prodotti_UdM();
+        $this->addField('udm', array(
+                        'type'      => 'select',
+                        'label'     => 'Prezzo per',
+                        'options'   => $udmObj->getArUdm(),
+                        'required'  => true
+            ));
+        // MOLTIPLICATORE
+        $this->addField('moltiplicatore', array(
+                        'type'      => 'text',
+                        'label'     => 'Pezzatura/Taglio',
                         'size'      => 10,
                         'required'  => true,
-                        'validators' => array('Number')
+                        'class'     => 'is_Number',
+                        'note'      => '-'
+            ));
+        
+        // COSTO
+        $this->addField('costo', array(
+                        'type'      => 'text',
+                        'label'     => 'Prezzo',
+                        'size'      => 10,
+                        'required'  => true,
+                        'class'     => 'is_Number',
+                        'note'      => '&nbsp;&euro;'
+            ));
+        // IVA
+        $ivaObj = new Model_Prodotti_IVA();
+        $this->addField('aliquota_iva', array(
+                        'type'      => 'select',
+                        'label'     => 'IVA',
+                        'options'   => $ivaObj->getArIVA(),
+                        'required'  => true,
+                        'onchange'  => 'setCostoLabel();'
             ));
 
         $this->addField('offerta', array(
@@ -66,7 +84,7 @@ class Form_Prodotti extends MyFw_Form {
             ));
         
         $this->addField('sconto', array(
-                        'type'      => 'input',
+                        'type'      => 'text',
                         'label'     => 'Sconto (%)',
                         'size'      => 10
             ));

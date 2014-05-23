@@ -78,6 +78,8 @@ h3.green {color: #47a447;}
 .Pianificato { color: #666; }
 .Aperto { color: #2b2; }
 .Chiuso { color: #f22; }
+.In_Consegna { color: #ec971f; }
+.Consegnato { color: #CC00FF; }
 .Archiviato { color: #ccc; }
 
 .btn_icon { float: right; height: 32px; width: 32px; margin: 2px 20px; }
@@ -86,14 +88,14 @@ h3.green {color: #47a447;}
 .ok { background: url(/images/icon/ok_32.png) no-repeat left top; }
 .ok:hover { background: url(/images/icon/ok_32-hover.png) no-repeat left top; }
 
+.strike { text-decoration: line-through; }
+
 /* box_row disabled style */
-.box_row_dis p,
-.box_row_dis strong,
-.box_row_dis label,
-.box_row_dis input,
+.box_row_dis,
+.box_row_dis *,
 .box_row_dis a.gray,
 .box_row_dis a.gray:hover,
-.box_row_dis h3,
+.box_row_dis .sub_totale,
 .box_row_dis h3.dom_title a { color: #ddd; }
 .box_row_dis input { border: solid 1px #ddd; }
 
@@ -106,13 +108,16 @@ h3.green {color: #47a447;}
 .sub_menu a.selected { color: #0c0; }
 .sub_menu a.menu_dis { color:#ddd; }
 .sub_menu .sub_totale { font-size: 18px; font-weight: 200; color: #666; clear: left; border: 1px solid #EEE; width: 127px; text-align: center; }
-.totale_line { padding: 38px 0px 12px 8px; margin-bottom: 50px; border-bottom: 3px dashed #CCC; }
+.totale_line { padding: 38px 0px 12px 8px; margin-bottom: 50px; }
 .totale_line h2 { float: left; padding: 0; margin: 0; }
 .totale_line .tot_right { margin: 0; padding: 0; color: #000; float: right; }
 .sub_menu a.menu_icon { font-family: sans-serif; font-size: 27px; font-weight: bold; border: 1px solid #CCC; background-color: #eee; float: left; text-decoration: none; width: 35px; text-align: center; }
 .sub_menu a.menu_icon:hover { background-color: #fff; color: #000; }
-.sub_menu .prod_qta { font-size: 24px; font-weight: bold; border: 1px solid #eee; float: left; width: 50px; text-align: center; margin: 0px 3px 3px 3px; color: #000; padding: 2px;}
+.sub_menu .prod_qta, .sub_menu .prod_qta_dis { font-size: 24px; font-weight: bold; border: 1px solid #eee; float: left; width: 50px; text-align: center; margin: 0px 3px 3px 3px; color: #000; padding: 2px;}
+.sub_menu .prod_qta_dis { color: #ddd; }
 .sub_menu .menu_icon_empty { width: 34px; float: left; }
+.sub_menu .non-disponibile { color: #f00; clear: left; }
+
 .box_note { background-color: #fcfcfc; border: 1px solid #ccc; padding: 15px; margin-top: 20px; }
 .box_note h4 { margin-bottom: 0px; color: #444;}
 .box_note h5 { margin-top: 2px;}
@@ -121,21 +126,15 @@ h3.green {color: #47a447;}
 .subcat-title { background-color: #d6e9c6; color: #060; padding: 4px 10px; margin: 75px 0px 10px -10px; margin-top: 75px; }
 .totale { margin-bottom: 20px; padding: 10px 20px; background-color: #fcfcfc; border-radius: 2px;}
 .totale h2 { margin-top: 10px; }
+.totale h4 { margin-bottom: 15px; }
 
 /*
  * Side navigation ORDINI
  * Scrollspy and affixed enhanced navigation to highlight sections and secondary sections
  */
 
-/* By default it's not affixed in mobile views, so undo that */
-.bs-sidebar.affix {
-  position: static;
-}
-
 /* First level of nav */
 .bs-sidenav {
-  margin-top: 30px;
-  margin-bottom: 30px;
   padding-top:    10px;
   padding-bottom: 10px;
   text-shadow: 0 1px 0 #fff;
@@ -164,6 +163,11 @@ h3.green {color: #47a447;}
   border-right: 1px solid #060;
 }
 
+.bs-sidebar .nav > li > a.restricted,
+.bs-sidebar .nav > .active > a.restricted {  
+    padding: 2px 20px;
+}
+
 /* Nav: second level (shown on .active) */
 .bs-sidebar .nav .nav {
   display: none; /* Hide by default, but at >768px, show it */
@@ -182,12 +186,12 @@ h3.green {color: #47a447;}
   .bs-sidebar { margin-left: 0; }
   /* Widen the fixed sidebar */
   .bs-sidebar.affix,
+  .bs-sidebar.affix-top,
   .bs-sidebar.affix-bottom {
-    width: 270px;
+    width: 260px;
   }
   .bs-sidebar.affix {
-    position: fixed; /* Undo the static from mobile first approach */
-    top: 110px;
+    top: 80px;
   }
   .bs-sidebar.affix-bottom {
     position: absolute; /* Undo the static from mobile first approach */
@@ -228,7 +232,12 @@ h3.green {color: #47a447;}
 .btn-inform { font-size: 14px; padding: 3px 10px; line-height: 1.428571429; vertical-align: top;}
 .btn-primary.disabled { color: #fff; }
 
+.nav-pills-secondary>li>a { border-radius: 2px; padding: 4px 10px; }
 .nav-pills>li>a { border-radius: 2px; }
+.nav-pills>li.active>a, .nav-pills>li.active>a:hover, .nav-pills>li.active>a:focus {
+    color: rgb(255, 255, 255);
+    background-color: rgb(92, 184, 92);
+}
 .btn-group-myig { margin-top: 4px; }
 
 .panel-group .panel { border-radius: 2px; }
@@ -312,6 +321,9 @@ select {
     -webkit-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
     transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
 }
+input[type="number"] { width: 100px; }
+.field_in_table { margin-bottom: 0; }
+
 option { padding-left: 2px; padding-right: 10px; }
 fieldset { padding: 15px; padding-top: 40px; margin: 0; margin-top: 10px; text-align: left; border: none; }
 fieldset.border_top { border-top: 1px solid #eee; }
@@ -345,7 +357,7 @@ li.witherrors { background-color: #F8FFDD; border: 1px solid #ddFFdd; padding: 2
 li.form_row a.info { background-position: 0 1px; padding: 0 0 0 18px; font-size: 10pt; margin-left: 6px; color: #999; }
 li.form_row a.info:hover {color: #060; }
 
-legend{ background-color: #eee; font-size: 16px; width: auto; margin: 10px 0 0 30px; padding: 3px 5px 3px 5px; color: #666; font-weight: bold; border: 1px solid #ddd; }
+legend{ background-color: #eee; font-size: 16px; width: auto; margin: 10px 0 0 30px; padding: 3px 5px 3px 5px; color: #666; font-weight: 200; border: 1px solid #ddd; }
 
 /* Other class in form */
 .intro{ margin: 0 10px 20px 0; border: 1px solid #060;}
@@ -358,6 +370,7 @@ ul.errors li { padding: 3px; color: #f00; list-style-image: url(/images/icon/ico
 ul.form-errors { list-style: none; margin-right: 20px; padding: 10px; background: #FBDCCA url(/images/icon/icona_stop_48.png) no-repeat 8px; border: 1px solid #f00; }
 ul.form-errors li ul.errors li { list-style-image: none; }
 
+.np_form { font-weight: bold; }
 
 /***********************************
 FORM - Model 1 - Label 200px
@@ -378,6 +391,8 @@ form.f1n150 fieldset .checkbox_box,
 form.f1n150 .hint,
 form.f1n150 fieldset .error p { margin-left: 158px; }
 form.f1n150 input#submit, form.f1n150 button#submit { margin-left: 167px; }
+
+.is_Number_invalid { border: solid 1px red; background-color: rgba(255,0,0,0.1); }
 
 
 /***********************************

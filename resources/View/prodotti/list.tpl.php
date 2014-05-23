@@ -3,38 +3,39 @@
 <div class="row">
   <div class="col-md-8">
       
-<?php if($this->updated): ?>
-    <div class="alert alert-success alert-dismissable">
+<?php if($this->updated > 0): ?>
+    <div class="alert alert-success alert-dismissable" id="alert_save_box">
       <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
       Prodotto aggiornato con <strong>successo</strong>!
     </div>
 <?php endif; ?>
 
       
-<?php if(count($this->listProdotti) > 0): ?>
-    <?php 
+<?php if(count($this->listProdotti) > 0): 
     foreach ($this->listProdotti as $idcat => $cat): ?>
     <span id="cat_<?php echo $idcat; ?>" style="visibility: hidden;"><?php echo $this->listSubCat[$idcat]["categoria"]; ?></span>
 <?php foreach ($cat as $idsubcat => $prodotti): ?>
-        <h2 id="subcat_<?php echo $idsubcat; ?>" class="subcat-title"><?php echo $this->listSubCat[$idcat]["categoria"]; ?> - <?php echo $this->listSubCat[$idcat]["subcat"][$idsubcat]; ?></h2>
         
-<?php   foreach ($prodotti as $idprodotto => $prodotto): ?>
+        <?php include $this->template('prodotti/subcat-title.tpl.php'); ?>
+        
+<?php   foreach ($prodotti as $idprodotto): 
+                $pObj = $this->lpObjs[$idprodotto];
+            ?>
       
-      <div class="row row-myig">
+      <div class="row row-myig" id="prod_<?php echo $pObj->idprodotto;?>">
         <div class="col-md-10">
-            <h3 class="no-margin"><?php echo $prodotto->descrizione;?></h3>
+            <h3 class="no-margin"><?php echo $pObj->descrizione;?></h3>
             <p>
-                Codice: <strong><?php echo $prodotto->codice; ?></strong><br />
-                Categoria: <strong><?php echo $prodotto->categoria; ?></strong><br />
-                Costo: <strong><?php echo $this->valuta($prodotto->costo); ?> / <?php echo $prodotto->udm; ?></strong><br />
-            <?php if( !$this->yesnoToBool($prodotto->attivo)): ?>
-                <strong class="alert_red">Disabilitato</strong> (Non disponibile negli ordini)
+                Codice: <strong><?php echo $pObj->codice; ?></strong><br />
+            <?php echo $this->partial('prodotti/price-box.tpl.php', array('prodotto' => $pObj)); ?>
+            <?php if(!$pObj->isAttivo()): ?>
+                <strong class="alert_red">Disabilitato</strong> (Non viene inserito quando crei un nuovo ordine)
             <?php endif; ?>
             </p>
         </div>
         <div class="col-md-2">
         <?php if($this->produttore->refObj->is_Referente()): ?>
-            <a class="btn btn-success" href="/prodotti/edit/idprodotto/<?php echo $prodotto->idprodotto;?>">Modifica</a>
+            <a class="btn btn-success" href="/prodotti/edit/idprodotto/<?php echo $idprodotto;?>">Modifica</a>
         <?php endif; ?>
         </div>
       </div>
@@ -46,15 +47,21 @@
     <h3>Nessun prodotto!</h3>
 <?php endif; ?>
   </div>
-<?php if($this->produttore->refObj->is_Referente()): ?>    
   <div class="col-md-4 col-right">
-    <div class="bs-sidebar" data-spy="affix" role="complementary">
+    <div class="bs-sidebar" data-spy="affix" data-offset-top="76" role="complementary">
+<?php if($this->produttore->refObj->is_Referente()): ?>    
       <a class="btn btn-default btn-mylg" href="/prodotti/add/idproduttore/<?php echo $this->produttore->idproduttore;?>"><span class="glyphicon glyphicon-plus"></span> Nuovo prodotto</a>
       <br />
       <br />
+<?php endif; ?>
       <?php echo $this->partial('prodotti/subcat-navigation.tpl.php', array('listSubCat' => $this->listSubCat)); ?>
     </div>
   </div>
-<?php endif; ?>
-
 </div>
+<script>
+    $(function() {
+        var myTag = "#prod_<?php echo $this->updated; ?>";
+        $('html,body').animate({scrollTop: ($(myTag).offset().top - 100)});
+        $('#alert_save_box').prependTo(myTag).fadeOut(10000);
+    });
+</script>

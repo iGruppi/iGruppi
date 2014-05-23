@@ -18,7 +18,7 @@ class Controller_Auth extends MyFw_Controller {
         
         // reset errorLogin
         $this->view->errorLogin = false;
-        
+
         if($this->getRequest()->isPost()) {
             $fv = $this->getRequest()->getPost();
             if( $form->isValid($fv) ) {
@@ -26,28 +26,44 @@ class Controller_Auth extends MyFw_Controller {
                 $sql = "SELECT u.*, ug.attivo, ug.fondatore, ug.contabile, g.nome AS gruppo, g.idgroup "
                       ."FROM users AS u LEFT JOIN users_group AS ug ON u.iduser=ug.iduser "
                       ."LEFT JOIN groups AS g ON ug.idgroup=g.idgroup "
-                      ."WHERE u.email= :email AND u.password= :password AND ug.attivo='S'";
+                      ."WHERE u.email= :email";
                 $checkSth = $this->getDB()->prepare($sql);
-                $checkSth->execute(array('email' => $form->getValue("email"), 'password' => $form->getValue('password')));
-                if( $checkSth->rowCount() > 0 ) {
-                    // store user values
-                    $auth = Zend_Auth::getInstance();
-                    $auth->clearIdentity();
-                    $storage = $auth->getStorage();
-                    // remove password
+                $checkSth->execute(array('email' => $form->getValue("email")));
+                if( $checkSth->rowCount() > 0 ) 
+                {
+                    // Fetch User data
                     $row = $checkSth->fetch(PDO::FETCH_OBJ);
-                    $storage->write($row);
-                    
-                    // set idgroup in session
-                    $userSessionVal = new Zend_Session_Namespace('userSessionVal');
-                    $userSessionVal->idgroup = $row->idgroup;
-                    
-                    // redirect to Dashboard
-                    $this->redirect('dashboard');
-                    
+                    if($row->password == $form->getValue("password") &&
+                       $row->attivo == "S" )
+                    {
+                        // store user values
+                        $auth = Zend_Auth::getInstance();
+                        $auth->clearIdentity();
+                        $storage = $auth->getStorage();
+                        
+                        // remove password & write data to the store
+                        unset($row->password);
+                        $storage->write($row);
+
+                        // set idgroup in session
+                        $userSessionVal = new Zend_Session_Namespace('userSessionVal');
+                        $userSessionVal->idgroup = $row->idgroup;
+
+                        // redirect HTTP_REFERER if it comes from a different URI
+                        if(strpos($_SERVER["HTTP_REFERER"], "auth/login") === false)
+                        {
+                            header("Location: " . $_SERVER["HTTP_REFERER"]);
+                            exit;
+                        } else {
+                            $this->redirect('dashboard');
+                        }
+                    } else {
+                        // Set ERROR: ACCOUNT NOT VALID!!
+                        $this->view->errorLogin = "Password non corretta o Account non ancora abilitato.";
+                    }
                 } else {
                     // Set ERROR: ACCOUNT NOT VALID!!
-                    $this->view->errorLogin = "Email and/or Password are wrong!";
+                    $this->view->errorLogin = "Email non corretta o inesistente!";
                 }
             }
             //Zend_Debug::dump($sth); die;
@@ -84,58 +100,67 @@ class Controller_Auth extends MyFw_Controller {
 
             // get Post and check if is valid
             $fv = $this->getRequest()->getPost();
-            if( $form->isValid($fv) ) {
-
-                // ADD User
+            if( $form->isValid($fv) ) 
+            {
+                // GET FORM VALUES
                 $fValues = $form->getValues();
-                if( $fValues["password"] != $fValues["password2"] ) {
-                    $form->setError("password2", "Riscrivi correttamente la password");
+                
+                // check EMAIL DUPLICATI
+                $checkSth = $this->getDB()->prepare("SELECT email FROM users WHERE email= :email");
+                $checkSth->execute(array('email' => $fValues["email"]));
+                if( $checkSth->rowCount() > 0 ) 
+                {
+                    $form->setError("email", "Questo indirizzo email è stato già utilizzato!");
                 } else {
-                    try {
-                        // remove password2 field
-                        unset($fValues["password2"]);
-                        // get idgroup
-                        $idgroup = $fValues["idgroup"];
-                        unset($fValues["idgroup"]);
+                    if( $fValues["password"] != $fValues["password2"] ) {
+                        $form->setError("password2", "Riscrivi correttamente la password");
+                    } else {
+                        try {
+                            // remove password2 field
+                            unset($fValues["password2"]);
+                            // get idgroup
+                            $idgroup = $fValues["idgroup"];
+                            unset($fValues["idgroup"]);
 
-                        $gObj = new Model_Groups();
-                        $group = $gObj->getGroupById($idgroup);
-                        if($group !== false) {
+                            $gObj = new Model_Groups();
+                            $group = $gObj->getGroupById($idgroup);
+                            if($group !== false) {
 
-                            // ADD USER
-                            $iduser = $this->getDB()->makeInsert("users", $fValues);
-                            
-                            // ADD USER TO GROUP
-                            $ugFields = array(
-                                'iduser' => $iduser,
-                                'idgroup'=> $idgroup
-                            );
-                            $this->getDB()->makeInsert("users_group", $ugFields);
-                            
-                            // Get Founder of the Group
-                            $ugObj = $gObj->getGroupFoundersById($idgroup);
-                            if(count($ugObj) > 0) {
-                                // INVIO EMAIL al FONDATORE per NUOVO UTENTE
-                                $mail = new MyFw_Mail();
-                                $mail->setSubject("Nuovo iscritto al Gruppo ".$group->nome);
-                                foreach($ugObj AS $ugVal) {
-                                    $mail->addTo($ugVal["email"]);
+                                // ADD USER
+                                $iduser = $this->getDB()->makeInsert("users", $fValues);
+
+                                // ADD USER TO GROUP
+                                $ugFields = array(
+                                    'iduser' => $iduser,
+                                    'idgroup'=> $idgroup
+                                );
+                                $this->getDB()->makeInsert("users_group", $ugFields);
+
+                                // Get Founder of the Group
+                                $ugObj = $gObj->getGroupFoundersById($idgroup);
+                                if(count($ugObj) > 0) {
+                                    // INVIO EMAIL al FONDATORE per NUOVO UTENTE
+                                    $mail = new MyFw_Mail();
+                                    $mail->setSubject("Nuovo iscritto al Gruppo ".$group->nome);
+                                    foreach($ugObj AS $ugVal) {
+                                        $mail->addTo($ugVal["email"]);
+                                    }
+                                    $mail->setViewParam("new_user", $fValues["nome"] . " " . $fValues["cognome"] );
+                                    $mail->setViewParam("gruppo", $group->nome);
+                                    $mail->setViewParam("email_user", $fValues["email"]);
+                                    $config = Zend_Registry::get("appConfig");
+                                    $mail->setViewParam("url_environment", $config->url_environment);
+                                    $this->view->sended = $mail->sendHtmlTemplate("registration.new_user_subscribe.tpl.php");
                                 }
-                                $mail->setViewParam("new_user", $fValues["nome"] . " " . $fValues["cognome"] );
-                                $mail->setViewParam("gruppo", $group->nome);
-                                $mail->setViewParam("email_user", $fValues["email"]);
-                                $config = Zend_Registry::get("appConfig");
-                                $mail->setViewParam("url_environment", $config->url_environment);
-                                $this->view->sended = $mail->sendHtmlTemplate("registration.new_user_subscribe.tpl.php");
-                            }
 
-                            // REGISTRATION OK!
-                            $this->redirect("auth", "registerok");
-                        } else {
-                            $form->setError("idgroup", "Devi selezionare un gruppo esistente!");
+                                // REGISTRATION OK!
+                                $this->redirect("auth", "registerok");
+                            } else {
+                                $form->setError("idgroup", "Devi selezionare un gruppo esistente!");
+                            }
+                        } catch (Exception $exc) {
+                            echo $exc->getTraceAsString();
                         }
-                    } catch (Exception $exc) {
-                        echo $exc->getTraceAsString();
                     }
                 }
             }

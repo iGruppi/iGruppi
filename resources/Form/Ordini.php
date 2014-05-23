@@ -15,18 +15,28 @@ class Form_Ordini extends MyFw_Form {
 
         $this->addField('data_inizio', array(
                     'label'     => 'Data apertura',
-                    'size'      => 15,
+                    'size'      => 20,
                     'required'  => true,
+                    'readonly'  => true,
+                    'placeholder' => 'Seleziona data...'
         ));
         $this->addField('data_fine', array(
                     'label'     => 'Data chiusura',
-                    'size'      => 15,
+                    'size'      => 20,
                     'required'  => true,
+                    'readonly'  => true,
+                    'placeholder' => 'Seleziona data...'
         ));
         $this->addField('archiviato', array(
                     'label'     => 'Archiviato',
                     'type'      => 'select',
                     'options'   => array('S'=>'SI','N'=>'NO')
+        ));
+        $this->addField('costo_spedizione', array(
+                    'label'     => 'Costo spedizione',
+                    'class'     => 'is_Number',
+                    'size'      => 10,
+                    'note'      => '&euro;'
         ));
         $this->addField('note_consegna', array(
                     'type'      => 'textarea',
@@ -42,5 +52,18 @@ class Form_Ordini extends MyFw_Form {
         
     }
     
+    function setFieldData_View($field, $d)
+    {
+        $dt = new Zend_Date($d, "YYYY-MM-dd HH:mm:ss");
+        $value = $dt->toString("dd/MM/YYYY HH:mm");
+        $this->setValue($field, $value);
+    }
+    
+    function setFieldData_Save($field, $d)
+    {
+        $dt = new Zend_Date($d, "dd/MM/YYYY HH:mm");
+        $value = $dt->toString("YYYY-MM-dd HH:mm:ss");
+        $this->setValue($field, $value);
+    }
     
 }

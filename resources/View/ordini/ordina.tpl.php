@@ -1,4 +1,5 @@
 <h2>Produttore <strong><?php echo $this->produttore->ragsoc;?></strong></h2>
+
 <form id="prod_ordini_form" class="ordini" action="/ordini/ordina/idordine/<?php echo $this->ordine->idordine;?>" method="post">
 
 <div class="row">
@@ -21,20 +22,21 @@
     
 <?php 
     if(count($this->listProdotti) > 0):
-    $totale = 0;
     foreach ($this->listProdotti as $idcat => $cat): ?>
     <span id="cat_<?php echo $idcat; ?>" style="visibility: hidden;"><?php echo $this->listSubCat[$idcat]["categoria"]; ?></span>
 <?php foreach ($cat as $idsubcat => $prodotti): ?>
-        <h2 id="subcat_<?php echo $idsubcat; ?>" class="subcat-title"><?php echo $this->listSubCat[$idcat]["categoria"]; ?> - <?php echo $this->listSubCat[$idcat]["subcat"][$idsubcat]; ?></h2>
+        <?php include $this->template('prodotti/subcat-title.tpl.php'); ?>
+<?php   foreach ($prodotti as $idprodotto): 
+            // GET Prodotto object from cuObj (Model_Ordini_Calcoli_Utenti)
+            $prodotto = $this->cuObj->getProdotto($idprodotto);
+    ?>
         
-<?php   foreach ($prodotti as $idprodotto => $prodotto): ?>
-        
-      <div class="row row-myig">
+      <div class="row row-myig<?php if(!$prodotto->isDisponibile()) { echo " box_row_dis"; } ; ?>">
         <div class="col-md-9">
             <h3 class="no-margin"><?php echo $prodotto->descrizione;?></h3>
             <p>
                 Categoria: <strong><?php echo $prodotto->categoria_sub; ?></strong><br />
-                Costo: <strong><?php echo $this->valuta($prodotto->costo_op);?></strong> / <strong><?php echo $prodotto->udm; ?></strong><br />
+                <?php echo $this->partial('prodotti/price-box.tpl.php', array('prodotto' => $prodotto)); ?>
         <?php if($prodotto->note != ""): ?>
                 <a href="javascript:void(0)" class="note" data-toggle="popover" title="" data-content="<?php echo $prodotto->note; ?>">Visualizza note</a>
         <?php endif; ?>
@@ -42,14 +44,23 @@
         </div>
         <div class="col-md-3">
             <div class="sub_menu">
-                <a class="menu_icon" href="javascript:void(0)" onclick="jx_SelQtaProdotto(<?php echo $prodotto->idprodotto;?>, '<?php echo $prodotto->costo_op;?>', '+')">+</a>
-                <input readonly class="prod_qta" type="text" id="prod_qta_<?php echo $prodotto->idprodotto;?>" name="prod_qta[<?php echo $prodotto->idprodotto;?>]" value="<?php echo $prodotto->qta;?>" />
-                <a class="menu_icon" href="javascript:void(0)" onclick="jx_SelQtaProdotto(<?php echo $prodotto->idprodotto;?>, '<?php echo $prodotto->costo_op;?>', '-')">-</a>
-        <?php 
-                $subtotale = ($prodotto->qta * $prodotto->costo_op);
-                $totale += $subtotale;
-        ?>
-                <div class="sub_totale" id="subtotale_<?php echo $prodotto->idprodotto;?>"><?php echo $this->valuta($subtotale) ?></div>
+            <?php if($prodotto->isDisponibile()):
+                    $qta_ordinata = isset($this->prodottiIduser[$idprodotto]) ? $this->prodottiIduser[$idprodotto]->getQtaOrdinata() : 0;
+                ?>
+<script>
+    // Start these procedures always
+	$(document).ready(function(){
+        Trolley.initByParams(<?php echo $idprodotto;?>, <?php echo $prodotto->getPrezzo();?>, <?php echo $prodotto->moltiplicatore; ?>, <?php echo $qta_ordinata;?>);
+        Trolley_rebuildPartial(<?php echo $idprodotto;?>);
+    });
+</script>
+                <a class="menu_icon" href="javascript:void(0)" onclick="Trolley_setQtaProdotto(<?php echo $idprodotto;?>, '+')">+</a>
+                <input readonly class="prod_qta" type="text" id="prod_qta_<?php echo $idprodotto;?>" name="prod_qta[<?php echo $idprodotto;?>]" value="<?php echo $qta_ordinata;?>" />
+                <a class="menu_icon" href="javascript:void(0)" onclick="Trolley_setQtaProdotto(<?php echo $idprodotto;?>, '-')">-</a>
+                <div class="sub_totale" id="subtotale_<?php echo $idprodotto;?>">...</div>
+            <?php else: ?>
+                <h4 class="non-disponibile">NON disponibile!</h4>
+            <?php endif; ?>
             </div>
         </div>
       </div>
@@ -67,10 +78,9 @@
   </div>
   <div class="col-md-4 col-right">
 <?php if(count($this->listProdotti) > 0): ?>      
-    <div class="bs-sidebar" data-spy="affix" role="complementary">
+    <div class="bs-sidebar" data-spy="affix" data-offset-top="76" role="complementary">
         <div class="totale">
-            <input disabled id="f_totale" type="hidden" name="f_totale" value="<?php echo $totale; ?>" />
-            <h4>Totale: <b id="totale"><?php echo $this->valuta($totale) ?></b></h4>
+            <h4>Totale: <strong id="totale">Loading...</strong></h4>
             <button type="submit" id="submit" class="btn btn-success btn-mylg"><span class="glyphicon glyphicon-<?php echo($this->updated) ? "saved" : "save"; ?>"></span> SALVA ORDINE</button>
         </div>
         <?php echo $this->partial('prodotti/subcat-navigation.tpl.php', array('listSubCat' => $this->listSubCat)); ?>
@@ -79,6 +89,14 @@
   </div>
 </div>
 </form>
+
 <script>
-    $('.note').popover();
+    // Start these procedures always
+	$(document).ready(function(){
+        
+        Trolley_rebuildTotal();
+        
+        //enable POPUP
+        $('.note').popover();
+    });
 </script>

@@ -26,7 +26,8 @@ class Controller_GestioneOrdini extends MyFw_Controller {
                 $ordObj = new Model_Ordini();
                 $ordine = $ordObj->getByIdOrdine($idordine);
                 if(!is_null($ordine)) {
-                    $this->_ordine = $ordine;
+                    $this->_ordine = $this->view->ordine = $ordine;
+                    $this->view->statusObj = new Model_Ordini_Status($ordine);                    
                     $idproduttore = $ordine->idproduttore;
                 }
             }
@@ -36,20 +37,20 @@ class Controller_GestioneOrdini extends MyFw_Controller {
         }
         $produttoreObj = new Model_Produttori();
         $produttore = $produttoreObj->getProduttoreById($idproduttore, $this->_userSessionVal->idgroup);
-        $this->_produttore = $produttore;
+        $this->_produttore = $this->view->produttore = $produttore;
+        
         // check REFERENTE, controllo per i furbi (non Referenti)
         $user_ref = new Model_Produttori_Referente($produttore->iduser_ref);
         if(!$user_ref->is_Referente()) {
             $this->redirect("index", "error", array('code' => 404));
         }
-    }
-    
-    function indexAction() {
         
         // Get updated if it is set
         $this->view->updated = $this->getParam("updated");        
-        // SET Produttore
-        $this->view->produttore = $this->_produttore;
+        
+    }
+    
+    function indexAction() {
         
         $ordObj = new Model_Ordini();
         $listOrd = $ordObj->getAllByIdProduttore($this->_produttore->idproduttore, $this->_userSessionVal->idgroup, $this->_iduser);
@@ -63,31 +64,29 @@ class Controller_GestioneOrdini extends MyFw_Controller {
     
     function newAction() {
         
-        $this->view->produttore = $this->_produttore;
-        
         $form = new Form_Ordini();
         $form->setAction("/gestione-ordini/new/idproduttore/".$this->_produttore->idproduttore);
         $form->setValue("idgroup", $this->_userSessionVal->idgroup);
         $form->setValue("idproduttore", $this->_produttore->idproduttore);
         // remove useless fields
+        $form->removeField("costo_spedizione");
         $form->removeField("archiviato");
         $form->removeField("idordine");
-
+        
         if($this->getRequest()->isPost()) {
             
             // get Post and check if is valid
             $fv = $this->getRequest()->getPost();
-            if( $form->isValid($fv) ) {
+            if( $form->isValid($fv) ) 
+            {
+                // Fix date values to save in DB
+                $form->setFieldData_Save("data_inizio", $fv["data_inizio"]);
+                $form->setFieldData_Save("data_fine", $fv["data_fine"]);
                 
-                // ADD Ordine in stato NEW
-                $fValues = $form->getValues();
-                $dt_inizio = new Zend_Date($fValues["data_inizio"], "dd/mm/yyyy");
-                $fValues["data_inizio"] = $dt_inizio->toString("yyyy-mm-dd") . " 00:00:00"; // set default START time
-                $dt_fine = new Zend_Date($fValues["data_fine"], "dd/mm/yyyy");
-                $fValues["data_fine"] = $dt_fine->toString("yyyy-mm-dd") . " 23:59:59"; // set default END time
-                $idordine = $this->getDB()->makeInsert("ordini", $fValues);
+                // SAVE to DB
+                $idordine = $this->getDB()->makeInsert("ordini", $form->getValues());
                 
-                // Add ALL prodotti by Default!
+                // Add ALL prodotti ATTIVI by Default!
                 $prodObj = new Model_Prodotti();
                 $prodotti = $prodObj->getProdottiByIdProduttore($this->_produttore->idproduttore, 'S');
                 if(count($prodotti) > 0) {
@@ -98,7 +97,7 @@ class Controller_GestioneOrdini extends MyFw_Controller {
                     $ordObj->addProdottiToOrdine($idordine, $arVal);
                 }
                 
-                $this->redirect("gestione-ordini", "index", array("idproduttore" => $this->_produttore->idproduttore, "updated" => true));
+                $this->redirect("gestione-ordini", "dashboard", array("idordine" => $idordine, "updated" => true));
             }
         }
         
@@ -106,40 +105,51 @@ class Controller_GestioneOrdini extends MyFw_Controller {
         $this->view->form = $form;
     }
     
+/******************
+ *  ACTIONs TO MANAGE a SINGLE ORDER
+ * 
+ */    
+    function dashboardAction()
+    {
+        // Get Log Variazioni
+        $sth = $this->getDB()->prepare("SELECT * FROM ordini_variazioni WHERE idordine= :idordine");
+        $sth->execute(array('idordine' => $this->_ordine->idordine));
+        $this->view->logs = $sth->fetchAll(PDO::FETCH_OBJ);
+        
+        
+    }
+    
     function editAction() {
-
-        $this->view->produttore = $this->_produttore;
 
         $form = new Form_Ordini();
         $form->setAction("/gestione-ordini/edit/idordine/".$this->_ordine->idordine);
         $form->setValue("idgroup", $this->_userSessionVal->idgroup);
         $form->setValue("idproduttore", $this->_produttore->idproduttore);
         $form->setValue("idordine", $this->_ordine->idordine);
+        // remove useless fields
+        $form->removeField("archiviato");
 
         if($this->getRequest()->isPost()) {
             
             // get Post and check if is valid
             $fv = $this->getRequest()->getPost();
-            if( $form->isValid($fv) ) {
-                
+            if( $form->isValid($fv) ) 
+            {    
+                // Fix date values to save in DB
+                $form->setFieldData_Save("data_inizio", $fv["data_inizio"]);
+                $form->setFieldData_Save("data_fine", $fv["data_fine"]);
                 // ADD Ordine in stato NEW
-                $fValues = $form->getValues();
-                $dt_inizio = new Zend_Date($fValues["data_inizio"], "dd/mm/yyyy");
-                $fValues["data_inizio"] = $dt_inizio->toString("yyyy-mm-dd") . " 00:00:00"; // set default START time
-                $dt_fine = new Zend_Date($fValues["data_fine"], "dd/mm/yyyy");
-                $fValues["data_fine"] = $dt_fine->toString("yyyy-mm-dd") . " 23:59:59"; // set default END time
-                $this->getDB()->makeUpdate("ordini", "idordine", $fValues );
+                $this->getDB()->makeUpdate("ordini", "idordine", $form->getValues() );
                 // REDIRECT
-                $this->redirect("gestione-ordini", "index", array("idproduttore" => $this->_produttore->idproduttore, "updated" => true));
+                $this->redirect("gestione-ordini", "dashboard", array("idordine" => $this->_ordine->idordine, "updated" => true));
             }
         } else {
-            // get only dates without time
-            $dt_inizio = new Zend_Date($this->_ordine->data_inizio, "yyyy-mm-dd HH:mm:ss");
-            $this->_ordine->data_inizio = $dt_inizio->toString("dd/mm/yyyy");
-            $dt_fine = new Zend_Date($this->_ordine->data_fine, "yyyy-mm-dd HH:mm:ss");
-            $this->_ordine->data_fine = $dt_fine->toString("dd/mm/yyyy");
-            
-            $form->setValues($this->_ordine);
+            // build array values for form
+            $ordVal = clone $this->_ordine;
+            $form->setValues($ordVal);
+//            Zend_Debug::dump($form->getValues());die;
+            $form->setFieldData_View("data_inizio", $ordVal->data_inizio);
+            $form->setFieldData_View("data_fine", $ordVal->data_fine);
         }
         
         // set Form in the View
@@ -148,11 +158,6 @@ class Controller_GestioneOrdini extends MyFw_Controller {
 
     function prodottiAction() {
         
-        $idordine = $this->_ordine->idordine;
-        $this->view->ordine = $this->_ordine;
-        $this->view->produttore = $this->_produttore;
-        $this->view->statusObj = new Model_Ordini_Status($this->_ordine);
-        $this->view->updated = false;
         $ordObj = new Model_Ordini();
         
         // SAVE FORM
@@ -161,93 +166,161 @@ class Controller_GestioneOrdini extends MyFw_Controller {
             // get Post and check if is valid
             $fv = $this->getRequest()->getPost();
             
-            $prod_sel = isset($fv["prod_sel"]) ? $fv["prod_sel"] : array();
-            $prodotto = isset($fv["prodotto"]) ? $fv["prodotto"] : array();
-            $arVal = array();
-            if(count($prod_sel) > 0) {
-                // insert products selected
-                foreach ($prod_sel as $idprodotto => $selected) {
-                    if( $selected == "S") {
-                        $arVal[] = array('idprodotto' => $idprodotto, 'costo' => (isset($prodotto[$idprodotto]) ? $prodotto[$idprodotto] : 0));
-                    } else {
-                        // delete all records in ordini_prodotti
-                        $this->getDB()->query("DELETE FROM ordini_prodotti WHERE idordine='$idordine' AND idprodotto='$idprodotto'");
+            $prodotti = isset($fv["prodotti"]) ? $fv["prodotti"] : array();
+            if(count($prodotti) > 0) {
+                // UPDATE products
+                foreach ($prodotti as $idprodotto => &$val) {
+                    $val["idprodotto"] = $idprodotto;
+                    
+                    // LOG VARIAZIONE PREZZO PRODOTTO
+                    if($val["costo"] != $val["co"] )
+                    {
+                        Model_Ordini_Logger::LogVariazionePrezzo($this->_ordine->idordine, $idprodotto, $val["co"], $val["costo"]);
                     }
+                    // remove "co" field
+                    unset($val["co"]);
                 }
-                if(count($arVal) > 0) {
-                    $ordObj->addProdottiToOrdine($idordine, $arVal);
+                $updated = $ordObj->updateProdottiForOrdine($this->_ordine->idordine, $prodotti);
+                if($updated)
+                {
+                    // REDIRECT
+                    $this->redirect("gestione-ordini", "prodotti", array("idordine" => $this->_ordine->idordine, "updated" => true));
                 }
-                
-                $this->view->updated = true;
             }
         }
+        
+        // Check for UPDATED flag
+        if($this->view->updated)
+        {
+            $this->view->updated_msg = "La lista dei prodotti per quest'ordine è stata aggiornata con <strong>successo</strong>!";
+        }
 
-        // elenco prodotti (aggiornato dopo eventuale POST)
-        $this->view->list = $ordObj->getProdottiByIdOrdine_Gestione($idordine, $this->_ordine->idproduttore);
-        //Zend_Debug::dump($this->view->list);
+        // creo elenco prodotti (aggiornato dopo eventuale POST)
+        $listProd = $ordObj->getProdottiByIdOrdine($this->_ordine->idordine);
+        $listProdObj = array();
+        if(count($listProd) > 0)
+        {
+            foreach ($listProd as $value)
+            {
+                $listProdObj[$value->idprodotto] = new Model_Ordini_Prodotto($value);
+            }
+        }
+        $this->view->lpObjs = $listProdObj;
+        
+        // Categorie/SubCat array organizer
+        $scoObj = new Model_Prodotti_SubCatOrganizer($listProd);
+        $this->view->listProdotti = $scoObj->getListProductsCategorized();
+        $this->view->listSubCat = $scoObj->getListCategories();
+    }
+    
+    function qtaordineAction()
+    {
+        // GET PRODUCTS LIST with Qta Ordered
+        $ordObj = new Model_Ordini();
+        $listProdOrdered = $ordObj->getProdottiOrdinatiByIdordine($this->_ordine->idordine);
+        $ordCalcObj = new Model_Ordini_Calcoli_Utenti();
+        // SET ORDINE e PRODOTTI
+        $ordCalcObj->setOrdObj($this->_ordine);
+        $ordCalcObj->setProdotti($listProdOrdered);
+        $this->view->ordCalcObj = $ordCalcObj;
+        $this->view->users = $ordCalcObj->getElencoUtenti();
+    }
+    
+    function changeqtaAction()
+    {
+        $layout = Zend_Registry::get("layout");
+        $layout->disableDisplay();
+        
+        if($this->getRequest()->isPost()) {
+            // get Post values
+            $fv = $this->getRequest()->getPost();
+            $idordine = $fv["idordine"];
+            $iduser = $fv["iduser"];
+            $idprodotto = $fv["idprodotto"];
+            $qta_reale = $fv["qta_reale"];
+            
+            $sth = $this->getDB()->prepare("UPDATE ordini_user_prodotti SET qta_reale= :qta_reale, data_ins=NOW() WHERE iduser= :iduser AND idprodotto= :idprodotto AND idordine= :idordine");
+            // UPDATE product selected
+            $fields = array('iduser' => $iduser, 'idprodotto' => $idprodotto, 'idordine' => $idordine, 'qta_reale' => $qta_reale);
+            $rsth = $sth->execute($fields);
+            if($rsth) 
+            {
+                $ordModel = new Model_Ordini();
+                $prodotto = $ordModel->getProdottiOrdinatiByIdordine($idordine, $iduser, $idprodotto);
+                if(isset($prodotto[0]))
+                {
+                    $pObj = new Model_Ordini_Prodotto($prodotto[0]);
+                    echo json_encode(array('res' => true, 'newTotale' => $pObj->getTotale()));
+                    exit;
+                }
+            }
+        }
+        echo json_encode(array('res' => false));
     }
     
     function dettaglioAction() {
         
-        $this->view->ordine = $this->_ordine;
-        $this->view->statusObj = new Model_Ordini_Status($this->_ordine);
-        $this->view->produttore = $this->_produttore;
-        
-        $ordObj = new Model_Ordini();
-        $listOrd = $ordObj->getProdottiOrdinatiByIdOrdine($this->_ordine->idordine);
-        
-        // CREO array RIEPILOGO prodotti ordinati e DETTAGLIO
-        $riepilogo = array();
-        $dettaglio = array();
-        if(count($listOrd) > 0) {
-            foreach ($listOrd as $value) {
-                $idprodotto = $value->idprodotto;
-                
-            // RIEPILOGO
-                if(!isset($riepilogo[$idprodotto])) {
-                    $riepilogo[$idprodotto] = array(
-                        'codice' => $value->codice,
-                        'descrizione' => $value->descrizione,
-                        'udm' => $value->udm,
-                        'costo_op' => $value->costo_op,
-                        'sconto' => $value->sconto,
-                        'offerta' => $value->offerta,
-                        'qta_ord' => 0,
-                    );
-                }
-                $riepilogo[$idprodotto]["qta_ord"] += $value->qta_ord;
-                
-            // DETTAGLIO
-                $iduser = $value->iduser;
-                if(!isset($dettaglio[$iduser])) {
-                    $dettaglio[$iduser] = array(
-                        'nome' => $value->nome,
-                        'cognome' => $value->cognome,
-                        'prodotti' => array(),
-                    );
-                }
-                $dettaglio[$iduser]["prodotti"][] = array(
-                        'idprodotto' => $value->idprodotto,
-                        'codice' => $value->codice,
-                        'descrizione' => $value->descrizione,
-                        'udm' => $value->udm,
-                        'costo_op' => $value->costo_op,
-                        'qta_ord' => $value->qta_ord,
-                );
-            }
-
+        // get View by Tipo
+        $tipo = $this->getParam("tipo");
+        if(is_null($tipo)) 
+        {
+            $tipo = "totali";
         }
-        //Zend_Debug::dump((object)$riepilogo);die;
-        $this->view->riepilogo = (object)$riepilogo;
-        $this->view->dettaglio = $dettaglio;
+        
+        // GET PRODUCTS LIST with Qta Ordered
+        $ordObj = new Model_Ordini();
+        $listProdOrdered = $ordObj->getProdottiOrdinatiByIdordine($this->_ordine->idordine);
+        //Zend_Debug::dump( $listProdOrdered ); die;
+        $this->view->tipo = $tipo;
+        switch ($tipo) 
+        {
+            case "totali":
+                $ordCalcObj = new Model_Ordini_Calcoli_Totali();
+                break;
+
+            case "utenti":
+                $ordCalcObj = new Model_Ordini_Calcoli_Utenti();
+                break;
+
+            case "prodotti":
+                $ordCalcObj = new Model_Ordini_Calcoli_Prodotti();
+                break;
+        }
+        // SET ORDINE e PRODOTTI
+        $ordCalcObj->setOrdObj($this->_ordine);
+        $ordCalcObj->setProdotti($listProdOrdered);
+        $this->view->ordCalcObj = $ordCalcObj;
     }
     
     function inviaAction() {
-        $this->view->ordine = $this->_ordine;
-        $this->view->statusObj = new Model_Ordini_Status($this->_ordine);
-        $this->view->produttore = $this->_produttore;
-        
         // TODO: Invia email...
     }
+    
+    function inconsegnaAction() {
+        
+        $layout = Zend_Registry::get("layout");
+        $layout->disableDisplay();
+        
+        $idordine = $this->getParam("idordine");
+        $ordObj = new Model_Ordini();
+        $ordine = $ordObj->getByIdOrdine($idordine);
+        $result = array('res' => false);
+        if(!is_null($ordine)) {
+            // UPDATE Status -> IN CONSEGNA
+            $dti = new Zend_Date();
+            $sth_update = $this->getDB()->prepare("UPDATE ordini SET data_inconsegna= :dti WHERE idordine= :idordine");
+            $result = $sth_update->execute(array('idordine' => $idordine, 'dti' => $dti->toString("yyyy-MM-dd HH:mm:ss")));
+            if($result) {
+                // update data_inconsegna in my object
+                $ordine->data_inconsegna = $dti->toString("yyyy-MM-dd HH:mm:ss");
+                $ordine->statusObj = new Model_Ordini_Status($ordine);
+                $this->view->ordine = $ordine;
+                $myTpl = $this->view->fetch("gestioneordini/index-ordine.tpl.php");
+                $result = array('res' => true, 'myTpl' => $myTpl);
+            }
+        }
+        echo json_encode($result);
+    }
+    
     
 }

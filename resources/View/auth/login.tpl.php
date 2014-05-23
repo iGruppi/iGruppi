@@ -1,6 +1,13 @@
 <h1>Login</h1>
 <?php if( $this->errorLogin !== false): ?>
-<h2 class="alert"><?php echo $this->errorLogin; ?></h2>
+<div class="row">
+  <div class="col-md-8">
+        <div class="alert alert-danger alert-dismissable">
+          <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+            <?php echo $this->errorLogin; ?>       
+        </div>
+  </div>
+</div>
 <?php endif; ?>
 
 <div class="row">

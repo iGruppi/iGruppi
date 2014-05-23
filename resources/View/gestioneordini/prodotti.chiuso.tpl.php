@@ -1,18 +1,41 @@
+<div class="row">
+  <div class="col-md-8">
+      
+    <h3>Prodotti:</h3>
+    <p><strong>La lista prodotti per quest'ordine non è modificabile</strong>.</p>
     
-<h3>Prodotti:</h3>
-<p>Segue l'elenco di <b>tutti</b> i <a href="/prodotti/list/idproduttore/<?php echo $this->produttore->idproduttore;?>">prodotti di <?php echo $this->produttore->ragsoc;?></a>.<br />
-    La lista non è modificabile perchè l'ordine è <strong><?php echo $this->statusObj->getStatus(); ?></strong>.</p>
+    <?php if(count($this->listProdotti) > 0): ?>
+    <?php 
+        foreach ($this->listProdotti as $idcat => $cat): ?>
+        <span id="cat_<?php echo $idcat; ?>" style="visibility: hidden;"><?php echo $this->listSubCat[$idcat]["categoria"]; ?></span>
+    <?php foreach ($cat as $idsubcat => $prodotti): ?>
+        <?php include $this->template('prodotti/subcat-title.tpl.php'); ?>
+    <?php   foreach ($prodotti as $idprodotto): 
+                $pObj = $this->lpObjs[$idprodotto];
+            ?>
 
-<?php foreach ($this->list as $key => $prodotto): ?>
+            <div class="row row-myig<?php echo ($pObj->isDisponibile()) ? "" : " box_row_dis" ; ?>">
+                <div class="col-md-8">
+                    <h3 class="no-margin"><?php echo $pObj->descrizione;?></h3>
+                    <p>
+                        Codice: <strong><?php echo $pObj->codice; ?></strong><br />
+                        <?php echo $this->partial('prodotti/price-box.tpl.php', array('prodotto' => $pObj)); ?>
+                    </p>
+                </div>
+            </div>
 
-    <div class="row row-myig<?php echo ($prodotto->selected) ? "" : " box_row_dis" ; ?>">
-        <div class="col-md-8">
-            <h3 class="no-margin"><?php echo $prodotto->descrizione;?></h3>
-            <p>
-                Categoria: <strong><?php echo $prodotto->categoria; ?></strong><br />
-                Costo: <strong><?php echo $this->valuta($prodotto->costo);?></strong> / <strong><?php echo $prodotto->udm; ?></strong>
-            </p>
-        </div>
+          <?php endforeach; ?>
+        <?php endforeach; ?>
+      <?php endforeach; ?>
+    <?php else: ?>
+        <h3>Nessun prodotto disponibile!</h3>
+    <?php endif; ?>
+  </div>
+  <div class="col-md-4 col-right">
+    <div class="bs-sidebar" data-spy="affix" data-offset-top="176" role="complementary">
+      <div class="big-margin-top">
+        <?php echo $this->partial('prodotti/subcat-navigation.tpl.php', array('listSubCat' => $this->listSubCat)); ?>
+      </div>
     </div>
-
-<?php endforeach; ?>
+  </div>    
+</div>
