@@ -10,8 +10,7 @@
             <thead>
               <tr>
                 <th style="width:320px">Prodotto</th>
-                <th style="width:40px"><span data-toggle="tooltip" data-placement="top" title="Tooltip on top">Q.ta</span></th>
-                <th style="width:150px">Qta effettiva</th>
+                <th style="width:190px">Quantità</th>
                 <th class="text-right" style="width:80px">Totale</th>
               </tr>
             </thead>

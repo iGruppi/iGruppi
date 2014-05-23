@@ -23,7 +23,7 @@ class Model_Ordini_Calcoli_Prodotti
             foreach ($this->getProdotti() as $idprodotto => $prodObj) 
             {
                 $prodotto = $prodObj["prodotto"];
-                if($prodotto->getQta() > 0) 
+                if($prodotto->getQtaReale() > 0) 
                 {
                     return true;
                 }
@@ -50,7 +50,7 @@ class Model_Ordini_Calcoli_Prodotti
                         $this->_arProdProdotti[$idprodotto]["prodotto"] = new Model_Ordini_Prodotto($value);
                     } else {
                         // update Totale Prodotto
-                        $this->_arProdProdotti[$idprodotto]["prodotto"]->addQta($value->qta);
+                        $this->_arProdProdotti[$idprodotto]["prodotto"]->addQtaReale($value->qta);
                     }
                     $this->_arProdProdotti[$idprodotto]["utenti"][$value->iduser] = array( 
                         'nome'    => $value->nome, 

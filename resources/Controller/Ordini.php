@@ -73,13 +73,18 @@ class Controller_Ordini extends MyFw_Controller {
         // GET PRODUCTS LIST with Qta Ordered
         $listProdOrdered = $ordObj->getProdottiOrdinatiByIdordine($idordine);
         // init Calcoli Utente class
-        $cuObj = new Model_Ordini_Calcoli_Utente($this->_iduser);
+        $cuObj = new Model_Ordini_Calcoli_Utenti();
         $cuObj->setOrdObj($ordine);
         $cuObj->setProdotti($listProdOrdered);
-        $this->view->cuObj = $cuObj;
-//        Zend_Debug::dump($listProdOrdered);die;                
+        $this->view->listaProdotti = $cuObj->getProdottiByIduser($this->_iduser);
+        // Costo di SPEDIZIONE
+        $this->view->costo_spedizione = $cuObj->getCostoSpedizioneByIduser($this->_iduser);
+        $this->view->totale_ordine = $cuObj->getTotaleByIduser($this->_iduser);
+        $this->view->totale_con_spedizione = $cuObj->getTotaleConSpedizioneByIduser($this->_iduser);
+//        Zend_Debug::dump($this->view->listaProdotti);die;
     }
 
+    
     function ordinaAction() {
         
         $idordine = $this->getParam("idordine");
@@ -119,11 +124,13 @@ class Controller_Ordini extends MyFw_Controller {
         
         // GET PRODUCTS LIST with Qta Ordered
         $listProdOrdered = $ordObj->getProdottiOrdinatiByIdordine($idordine);
+        
         // init Calcoli Utente class
-        $cuObj = new Model_Ordini_Calcoli_Utente($this->_iduser);
+        $cuObj = new Model_Ordini_Calcoli_Utenti();
         $cuObj->setOrdObj($ordine);
         $cuObj->setProdotti($listProdOrdered);
         $this->view->cuObj = $cuObj;
+        $this->view->prodottiIduser = $cuObj->getProdottiByIduser($this->_iduser);
         
         // ORGANIZE by category and subCat
         $scoObj = new Model_Prodotti_SubCatOrganizer($listProdOrdered);

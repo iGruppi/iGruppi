@@ -16,7 +16,7 @@
           <span class="glyphicon glyphicon-pencil"></span> Modifica <span class="caret"></span>
         </a>
         <ul class="dropdown-menu" role="menu">
-          <li><a href="/gestione-ordini/edit/idordine/<?php echo $this->ordine->idordine;?>">Date e Note</a></li>
+          <li><a href="/gestione-ordini/edit/idordine/<?php echo $this->ordine->idordine;?>">Dati ordine</a></li>
           <li><a href="/gestione-ordini/prodotti/idordine/<?php echo $this->ordine->idordine;?>">Prodotti</a></li>
           <li><a href="/gestione-ordini/qtaordine/idordine/<?php echo $this->ordine->idordine; ?>">Quantità ordinate</a></li>
         </ul>

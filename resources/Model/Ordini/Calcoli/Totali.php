@@ -22,7 +22,7 @@ class Model_Ordini_Calcoli_Totali
         {
             foreach ($this->_arProdOriginal AS $value) 
             {
-                $this->getProdotto($value->idprodotto)->addQta($value->qta);
+                $this->getProdotto($value->idprodotto)->addQtaReale($value->qta);
             }
         }
     }
@@ -68,7 +68,7 @@ class Model_Ordini_Calcoli_Totali
         if(count($this->getProdotti()) > 0) {
             foreach ($this->getProdotti() as $idprodotto => $objProd) {
                 if($objProd->isDisponibile())
-                    $c += $objProd->qta;
+                    $c += $objProd->qta_reale;
             }
         }
         return $c;

@@ -11,14 +11,14 @@
     
 <?php echo $this->partial('ordini/box-note.tpl.php', array('ordine' => $this->ordine, 'produttore' => $this->produttore)); ?>
 
-<?php if(count($this->cuObj->getProdottiUtente()) > 0): ?>
-    <?php foreach ($this->cuObj->getProdottiUtente() as $key => $pObj): ?>
+<?php if(count($this->listaProdotti) > 0): ?>
+    <?php foreach ($this->listaProdotti as $idprodotto => $pObj): ?>
       <div class="row row-myig<?php echo ($pObj->isDisponibile()) ? "" : " box_row_dis" ; ?>">
         <div class="col-md-9">
             <h3 class="no-margin"><?php echo $pObj->descrizione;?></h3>
             <p>
                 Categoria: <strong><?php echo $pObj->categoria; ?></strong><br />
-                Prezzo: <strong><?php echo $this->valuta($pObj->getPrezzo());?></strong> / <strong><?php echo $pObj->udm; ?></strong><br />
+        <?php echo $this->partial('prodotti/price-box.tpl.php', array('prodotto' => $pObj)); ?>
             </p>
         </div>
         <div class="col-md-3">
@@ -41,14 +41,14 @@
 <?php endif; ?>
   </div>
   <div class="col-md-4 col-right">
-<?php if(count($this->cuObj->getProdottiUtente()) > 0): ?>      
+<?php if(count($this->listaProdotti) > 0): ?>
     <div class="bs-sidebar" data-spy="affix" data-offset-top="80" role="complementary">
         <div class="totale">
-    <?php if($this->cuObj->hasCostoSpedizione()): ?>
-            <h5>Totale ordine: <b id="totale"><?php echo $this->valuta($this->cuObj->getTotale()) ?></b></h5>
-            <h5>Costo di spedizione: <b><?php echo $this->valuta($this->cuObj->getCostoSpedizioneRipartito()); ?></b></h5>
+    <?php if($this->costo_spedizione > 0): ?>
+            <h5>Totale ordine: <b id="totale"><?php echo $this->valuta($this->totale_ordine) ?></b></h5>
+            <h5>Costo di spedizione: <b><?php echo $this->valuta($this->costo_spedizione); ?></b></h5>
     <?php endif; ?>            
-            <h4>Totale: <strong><?php echo $this->valuta($this->cuObj->getTotaleConSpedizione()); ?></strong></h4>
+            <h4>Totale: <strong><?php echo $this->valuta($this->totale_con_spedizione); ?></strong></h4>
         </div>
     </div>
 <?php endif; ?>

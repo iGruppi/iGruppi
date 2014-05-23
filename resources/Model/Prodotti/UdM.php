@@ -11,25 +11,25 @@ class Model_Prodotti_UdM {
     const _KG         = "Kg";
     const _LITRO      = "Litro";
     
-    private $_arUdM = array(
+    static private $_arUdM = array(
         self::_CONFEZIONE => 'Confezione',
         self::_PEZZO      => 'Pezzo',
         self::_KG         => 'Kg',
         self::_LITRO      => 'Litro'
     );
     
-    private $_arUdMWithMultip = array(
-        self::_PEZZO      => array('label' => 'Pezzi', 'pattern' => '[0-9]+',                'step' => '1'),
-        self::_KG         => array('label' => 'Kg',    'pattern' => '[0-9]+([\.|,][0-9]+)?', 'step' => '0.01'),
-        self::_LITRO      => array('label' => 'Litri', 'pattern' => '[0-9]+([\.|,][0-9]+)?', 'step' => '0.01')
+    static private $_arUdMWithMultip = array(
+        self::_PEZZO      => array('label' => 'Pezzi', 'ndec' => '0'),
+        self::_KG         => array('label' => 'Kg',    'ndec' => '2'),
+        self::_LITRO      => array('label' => 'Litri', 'ndec' => '2')
     );
 
-    function getArUdm(){
-        return $this->_arUdM;
+    public static function getArUdm(){
+        return self::$_arUdM;
     }
     
-    function getArWithMultip()
+    public static function getArWithMultip()
     {
-        return $this->_arUdMWithMultip;
+        return self::$_arUdMWithMultip;
     }
 }

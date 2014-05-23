@@ -50,23 +50,21 @@ class Form_Prodotti extends MyFw_Form {
             ));
         // MOLTIPLICATORE
         $this->addField('moltiplicatore', array(
-                        'type'      => 'number',
+                        'type'      => 'text',
                         'label'     => 'Pezzatura/Taglio',
                         'size'      => 10,
                         'required'  => true,
-                        'pattern'   => '',
-                        'step'      => '',
+                        'class'     => 'is_Number',
                         'note'      => '-'
             ));
         
         // COSTO
         $this->addField('costo', array(
-                        'type'      => 'number',
+                        'type'      => 'text',
                         'label'     => 'Prezzo',
                         'size'      => 10,
                         'required'  => true,
-                        'pattern'   => '[0-9]+([\.|,][0-9]+)?',
-                        'step'      => '0.01',
+                        'class'     => 'is_Number',
                         'note'      => '&nbsp;&euro;'
             ));
         // IVA
@@ -86,7 +84,7 @@ class Form_Prodotti extends MyFw_Form {
             ));
         
         $this->addField('sconto', array(
-                        'type'      => 'number',
+                        'type'      => 'text',
                         'label'     => 'Sconto (%)',
                         'size'      => 10
             ));

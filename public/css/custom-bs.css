@@ -392,6 +392,8 @@ form.f1n150 .hint,
 form.f1n150 fieldset .error p { margin-left: 158px; }
 form.f1n150 input#submit, form.f1n150 button#submit { margin-left: 167px; }
 
+.is_Number_invalid { border: solid 1px red; background-color: rgba(255,0,0,0.1); }
+
 
 /***********************************
 FORM - Model 1 - Label 120px

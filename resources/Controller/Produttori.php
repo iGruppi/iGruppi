@@ -19,13 +19,20 @@ class Controller_Produttori extends MyFw_Controller {
         
         $pObj = new Model_Produttori();
         $listProduttori = $pObj->getProduttoriByIdGroup($this->_userSessionVal->idgroup);        
-        // add Referente object to every Produttore
+        // add Referente object to every Produttore and ORDER them keeping isReferente on the TOP
+        $listProduttoriOrdered = array();
         if(count($listProduttori) > 0) {
             foreach($listProduttori AS &$produttore) {
                 $produttore->refObj = new Model_Produttori_Referente($produttore->iduser_ref);
+                // check for Referente
+                if( $produttore->refObj->is_Referente() ) {
+                    array_unshift($listProduttoriOrdered, $produttore);
+                } else {
+                    array_push($listProduttoriOrdered, $produttore);
+                }
             }
         }
-        $this->view->list = $listProduttori;
+        $this->view->list = $listProduttoriOrdered;
         
         // Create array Categorie prodotti for Produttori
         $catObj = new Model_Categorie();

@@ -28,7 +28,7 @@ class Model_Ordini_Prodotto
     
     
 /************************************************************
- * Products methods
+ * GET PREZZO ORDINE (it could be not the same of Prodotti)
  */
     
     // OVERWRITE getPrezzo of Model_Prodotti_Prodotto
@@ -38,36 +38,44 @@ class Model_Ordini_Prodotto
 
     
 /************************************************************
- * Products ORDINATI methods
+ * GET QTA REALE (it could be different than QTA Ordinata)
  */
 
-    function setQta($qta) {
-        $this->qta = (int)$qta;
-    }
-    
-    function addQta($qta) {
-        if($this->getQta() > 0) {
-            $this->qta += (int)$qta;
-        } else {
-            $this->setQta($qta);
-        }
-    }
-    
-    function getQtaOrdinata() {
-        return ((int)$this->qta > 0) ? (int)$this->qta : 0;
-    }
-    
-    function getQta()
+    function getQtaReale()
     {
         return ((float)$this->qta_reale > 0) ? (float)$this->qta_reale : 0;
     }
     
+    function setQtaReale($qta) {
+        $this->qta_reale = (float)$qta;
+    }
+    
+    function addQtaReale($qta) {
+        if($this->getQtaReale() > 0) {
+            $this->qta_reale += (float)$qta;
+        } else {
+            $this->setQtaReale($qta);
+        }
+    }
+    
+/************************************************************
+ * Products ORDINATI methods
+ */
+
+    function getQtaOrdinata() {
+        return ((int)$this->qta > 0) ? (int)$this->qta : 0;
+    }
+    
+/************************************************************
+ * Products ORDINATI methods
+ */
+
     function getTotale() {
-        return $this->getPrezzo() * $this->getQta();
+        return $this->getPrezzo() * $this->getQtaReale();
     }
     
     function getTotaleSenzaIva() {
-        return $this->getPrezzoSenzaIva() * $this->getQta();
+        return $this->getPrezzoSenzaIva() * $this->getQtaReale();
     }
 
     function isDisponibile() {

@@ -127,7 +127,6 @@ class Controller_GestioneOrdini extends MyFw_Controller {
         $form->setValue("idproduttore", $this->_produttore->idproduttore);
         $form->setValue("idordine", $this->_ordine->idordine);
         // remove useless fields
-        $form->removeField("costo_spedizione");
         $form->removeField("archiviato");
 
         if($this->getRequest()->isPost()) {
