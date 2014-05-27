@@ -5,6 +5,8 @@
     <?php endif; ?>
 </td>
 <td>Ordinata: <strong><?php echo $pObj->getQtaOrdinata();?></strong><br />
+    Effettiva: <strong><?php echo $pObj->getQtaReale();?></strong> <?php echo $pObj->getUdm(); ?><br />
+<!--    
     <form id="qta_ord_form_<?php echo $iduser; ?>_<?php echo $idprodotto;?>" class="ordini" onsubmit="jx_RefModQta_Save(<?php echo $iduser; ?>,<?php echo $idprodotto;?>,<?php echo $this->ordine->idordine;?>); return false;" method="post">
        Effettiva: <input type="text" class="field_in_table is_Number" id="qta_eff_<?php echo $iduser; ?>_<?php echo $idprodotto;?>"
                required data-loading-text="Loading..." size="5"
@@ -16,10 +18,7 @@
             <input type='hidden' name="idprodotto" value="<?php echo $idprodotto;?>" />
             <button style="display: none;" class="btn btn-success btn-xs" id="btn_<?php echo $iduser; ?>_<?php echo $idprodotto;?>">Aggiorna</button>
         </form>
-    
-    
-    
-    
+-->    
 
 <?php /* if($pObj->isDisponibile()): ?>
     <form id="qta_ord_form_<?php echo $iduser; ?>_<?php echo $idprodotto;?>" class="ordini" onsubmit="jx_RefModQta_Save(<?php echo $iduser; ?>,<?php echo $idprodotto;?>,<?php echo $this->ordine->idordine;?>); return false;" method="post">

@@ -70,15 +70,9 @@ class Model_Ordini_Calcoli_Utenti
         return $this->spedObj;
     }
     
-    // TOTALE INCLUSO SPEDIZIONE
     function getTotaleConSpedizioneByIduser($iduser) {
-        return ($this->getTotaleByIduser($iduser) + $this->getCostoSpedizioneByIduser($iduser));
+        return ($this->getTotaleByIduser($iduser) + $this->getSpedizione()->getCostoSpedizioneRipartitoByIduser($iduser));
     }
-    
-    function getCostoSpedizioneByIduser($iduser) {
-        return $this->getSpedizione()->getCostoSpedizioneRipartitoByIduser($iduser);
-    }
-    
     
 /************************************************************
  * Private Misc, init settings
