@@ -63,12 +63,20 @@ class Model_Ordini_Calcoli_Totali
         return $t;
     }
     
+/*
+ *  TODO:
+ *  Questo metodo è da sistemare perchè con la nuova implementazione Pezzatura/Taglio e la qta_reale
+ *  il numero risultante potrebbe avere dei decimali, il che non ha senso
+ *  Conviene visualizzare un riepilogo basato sui vari Udm, es: Totale Confezioni, Totale Pezzi, Totale Kg, ecc.
+ * 
+ *  Per ora, per non visualizzare decimali, lascio la sommatoria dei qta (quantità ordinata)
+ */    
     function getTotaleColli() {
         $c = 0;
         if(count($this->getProdotti()) > 0) {
             foreach ($this->getProdotti() as $idprodotto => $objProd) {
                 if($objProd->isDisponibile())
-                    $c += $objProd->qta_reale;
+                    $c += $objProd->qta;
             }
         }
         return $c;
