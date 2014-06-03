@@ -226,6 +226,25 @@ class Controller_GestioneOrdini extends MyFw_Controller {
         $this->view->users = $ordCalcObj->getElencoUtenti();
     }
     
+    function getformqtaAction() 
+    {
+        $layout = Zend_Registry::get("layout");
+        $layout->disableDisplay();
+        $this->view->iduser = $iduser = $this->getParam("iduser");
+        $this->view->idprodotto = $idprodotto = $this->getParam("idprodotto");
+        $this->view->idordine = $idordine = $this->getParam("idordine");
+        // GET Prodotto ordinato
+        $mObj = new Model_Ordini();
+        $prodotti = $mObj->getProdottiOrdinatiByIdordine($idordine, $iduser, $idprodotto);
+        if(isset($prodotti[0])) {
+            $pObj = new Model_Ordini_Prodotto($prodotti[0]);
+            $this->view->pObj = $pObj;
+            echo json_encode(array('res' => true, 'myTpl' => $this->view->fetch('gestioneordini/qtaordine-row.form.tpl.php')));
+        } else {
+            echo json_encode(array('res' => false));
+        }
+    }
+    
     function changeqtaAction()
     {
         $layout = Zend_Registry::get("layout");

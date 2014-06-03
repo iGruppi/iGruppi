@@ -1,22 +1,40 @@
-<td><?php echo $pObj->descrizione;?><br />
-    <?php echo $pObj->getDescrizionePrezzo();?> (Codice: <?php echo $pObj->codice;?>)<br />
-    <?php if($pObj->hasPezzatura()): ?>
-        <small>Pezzatura/Taglio: <?php echo $pObj->getDescrizionePezzatura(); ?></small>
-    <?php endif; ?>
-</td>
-<td>Ordinata: <strong><?php echo $pObj->getQtaOrdinata();?></strong><br />
-<?php  if($pObj->isDisponibile()): ?>
-    <form id="qta_ord_form_<?php echo $iduser; ?>_<?php echo $idprodotto;?>" class="ordini" onsubmit="jx_RefModQta_Save(<?php echo $iduser; ?>,<?php echo $idprodotto;?>,<?php echo $this->ordine->idordine;?>); return false;" method="post">
-       Effettiva: <input type="text" class="field_in_table is_Number" id="qta_eff_<?php echo $iduser; ?>_<?php echo $idprodotto;?>"
-               required data-loading-text="Loading..." size="5"
-               name="qta_reale" value="<?php echo $pObj->getQtaReale();?>" 
-               onkeyup="jx_ReferenteModifyQta(<?php echo $iduser; ?>,<?php echo $idprodotto;?>)" /> <strong><?php echo $pObj->getUdm(); ?><br />
-        <input type='hidden' id="qta_eff_old_<?php echo $iduser; ?>_<?php echo $idprodotto;?>" value="<?php echo $pObj->getQtaReale();?>" />
-        <input type='hidden' name="idordine" value="<?php echo $this->ordine->idordine;?>" /> 
-        <input type='hidden' name="iduser" value="<?php echo $iduser;?>" />
-        <input type='hidden' name="idprodotto" value="<?php echo $idprodotto;?>" />
-        <button style="display: none;" class="btn btn-success btn-xs" id="btn_<?php echo $iduser; ?>_<?php echo $idprodotto;?>">Aggiorna</button>
-    </form>
+<?php if($pObj->isDisponibile()): 
+        $keyrow = $iduser . "_" . $idprodotto;
+    ?>
+<tr>
+    <td><?php echo $pObj->descrizione;?><br />
+        <?php echo $pObj->getDescrizionePrezzo();?> (Codice: <?php echo $pObj->codice;?>)<br />
+        <?php if($pObj->hasPezzatura()): ?>
+            <small>Pezzatura/Taglio: <?php echo $pObj->getDescrizionePezzatura(); ?></small>
+        <?php endif; ?>
+    </td>
+    <td><a id="btn_<?php echo $keyrow;?>" data-loading-text="..." onclick="jx_ReferenteModifyQta(<?php echo $iduser; ?>,<?php echo $idprodotto;?>, <?php echo $this->ordCalcObj->getIdOrdine();?>)" class="btn btn-default pull-left" href="javascript:void(0)"><span class="glyphicon glyphicon-pencil"></span></a></td>
+    <td>
+        Ordinata: <strong><?php echo $pObj->getQtaOrdinata();?></strong><br />
+        <span id="qtareal_<?php echo $keyrow;?>">
+            Effettiva: <strong><?php echo $pObj->getQtaReale();?></strong> <?php echo $pObj->getUdm(); ?>
+        </span>
+        <div style="display: none;" id="div_chgqta_<?php echo $keyrow;?>"></div>
+    </td>
+    <td class="text-right" id="td_totrow_<?php echo $keyrow;?>">
+        <strong><?php echo $this->valuta($pObj->getTotale()); ?></strong>
+    </td>
+</tr>
+<?php else: ?>
+<tr>
+    <td class="danger strike"><?php echo $pObj->descrizione;?><br />
+        <?php echo $pObj->getDescrizionePrezzo();?> (Codice: <?php echo $pObj->codice;?>)<br />
+        <?php if($pObj->hasPezzatura()): ?>
+            <small>Pezzatura/Taglio: <?php echo $pObj->getDescrizionePezzatura(); ?></small>
+        <?php endif; ?>
+    </td>
+    <td class="danger">&nbsp;</td>
+    <td class="danger strike">
+        Ordinata: <strong><?php echo $pObj->getQtaOrdinata();?></strong><br />
+        Effettiva: <strong><?php echo $pObj->getQtaReale();?></strong> <?php echo $pObj->getUdm(); ?>
+    </td>
+    <td class="danger text-right">
+        <strong class="no_strike">NON DISPONIBILE!</strong>
+    </td>
+</tr>
 <?php endif; ?>
-</td>
-<td class="text-right" id="tdrow_<?php echo $iduser; ?>_<?php echo $idprodotto;?>"><strong><?php echo $this->valuta($pObj->getTotale()); ?></strong></td>

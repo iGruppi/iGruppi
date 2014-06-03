@@ -13,6 +13,7 @@ class Model_Ordini_Ordine {
     
     function setOrdObj($o) {
         $this->_ordObj = $o;
+        $this->_idordine = $o->idordine;
     }
     
     function getOrdObj() {
@@ -32,6 +33,10 @@ class Model_Ordini_Ordine {
                 }
             }
         }
+    }
+    
+    function getIdOrdine() {
+        return $this->_idordine;
     }
     
     function getProdotti() {

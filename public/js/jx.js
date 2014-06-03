@@ -1,15 +1,5 @@
 /* Jx Functions */
 
-	function Loading(id)
-	{
-		$(id).show().html('<img src="/images/loading.gif" />');
-	}
-    
-    function StopLoading(id) {
-		$(id).hide().html('');
-    }
-
-
     function jx_SelProdottoOrdine(idprodotto) {
         
         var idSelected = $('#prod_sel_'+idprodotto);
@@ -93,31 +83,43 @@
 			});
     }
     
-    function jx_ReferenteModifyQta(iduser, idprodotto)
+    function jx_ReferenteModifyQta(iduser, idprodotto, idordine)
     {
-        if($('#qta_eff_'+iduser+'_'+idprodotto).val() != $('#qta_eff_old_'+iduser+'_'+idprodotto).val())
-        {
-            $('#btn_'+iduser+'_'+idprodotto).show();
-        } else {
-            $('#btn_'+iduser+'_'+idprodotto).hide();
-        }
+        var keyRow = iduser+'_'+idprodotto;
+        $('#btn_'+keyRow).button('loading');
+        $.getJSON(
+			'/gestione-ordini/getformqta/',
+            {iduser: iduser, idprodotto: idprodotto, idordine: idordine},
+			function(data) {
+                if(data.res)
+				{
+                    $('#qtareal_'+keyRow).hide();
+                    $('#div_chgqta_'+keyRow).html(data.myTpl).show();
+                }
+			});
     }
     
     function jx_RefModQta_Save(iduser, idprodotto, idordine)
     {
-        var btn = $('#btn_'+iduser+'_'+idprodotto);
-        btn.button('loading');
+        var keyRow = iduser+'_'+idprodotto;
+        $('#submit_'+keyRow).button('loading');
+        // SET Number field value
+        $('#qta_eff_'+keyRow)[0].setNumber();
+        // store the new value
+        var newValue = parseFloat($('#qta_eff_'+keyRow).val());
+        $('#qtareal_'+keyRow+' > strong').html(newValue);
 		$.post(
 			'/gestione-ordini/changeqta/idordine/'+idordine,
-			$('#qta_ord_form_'+iduser+'_'+idprodotto).serialize(),
+			$('#qta_ord_form_'+keyRow).serialize(),
 			function(data){
-//                console.log(data);
                 if(data.res)
 				{
                     var tot = parseFloat(data.newTotale);
-                    $('#tdrow_'+iduser+'_'+idprodotto).html("<strong>"+tot.formatNumber(2, ',', '')+"&nbsp;&euro;</strong>");
-                    btn.button('reset').hide();
-                    $('#qta_eff_'+iduser+'_'+idprodotto)[0].formatNumber();
+                    console.log(tot);
+                    $('#td_totrow_'+keyRow+' > strong').html(tot.formatNumber(2, ',', '')+"&nbsp;&euro;");
+                    $('#qtareal_'+keyRow).show();
+                    $('#div_chgqta_'+keyRow).html(' ').hide();
+                    $('#btn_'+keyRow).button('reset');
                 }
 			},
 			"json");
