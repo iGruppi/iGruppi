@@ -265,11 +265,19 @@ class Controller_GestioneOrdini extends MyFw_Controller {
             if($rsth) 
             {
                 $ordModel = new Model_Ordini();
-                $prodotto = $ordModel->getProdottiOrdinatiByIdordine($idordine, $iduser, $idprodotto);
-                if(isset($prodotto[0]))
+                $prodotti = $ordModel->getProdottiOrdinatiByIdordine($idordine);
+                if(is_array($prodotti) && count($prodotti) > 0)
                 {
-                    $pObj = new Model_Ordini_Prodotto($prodotto[0]);
-                    echo json_encode(array('res' => true, 'newTotale' => $pObj->getTotale()));
+                    $ordCalcObj = new Model_Ordini_Calcoli_Utenti();
+                    $ordCalcObj->setOrdObj($this->_ordine);
+                    $ordCalcObj->setProdotti($prodotti);
+                    $prodObj = $ordCalcObj->getProdottiByIduser($iduser);
+                    $newTotale = 0;
+                    if( isset($prodObj[$idprodotto]) ) {
+                        $pObj = $prodObj[$idprodotto];
+                        $newTotale = $pObj->getTotale();
+                    }
+                    echo json_encode(array('res' => true, 'newTotale' => $newTotale, 'grandTotal' => $ordCalcObj->getTotaleConSpedizioneByIduser($iduser)));
                     exit;
                 }
             }

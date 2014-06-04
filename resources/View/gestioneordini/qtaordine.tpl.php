@@ -29,7 +29,7 @@
                 <tr>
                     <td colspan="2">&nbsp;</td>
                     <td><b>Totale:</b></td>
-                    <td class="text-right"><strong><?php echo $this->valuta($this->ordCalcObj->getTotaleConSpedizioneByIduser($iduser)); ?></strong></td>
+                    <td class="text-right" id="td_grandtotrow_<?php echo $iduser;?>"><strong><?php echo $this->valuta($this->ordCalcObj->getTotaleConSpedizioneByIduser($iduser)); ?></strong></td>
                 </tr>
                 <tr>
                     <td colspan="4">

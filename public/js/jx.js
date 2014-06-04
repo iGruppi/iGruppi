@@ -115,8 +115,9 @@
                 if(data.res)
 				{
                     var tot = parseFloat(data.newTotale);
-                    console.log(tot);
+                    var grandTot = parseFloat(data.grandTotal);
                     $('#td_totrow_'+keyRow+' > strong').html(tot.formatNumber(2, ',', '')+"&nbsp;&euro;");
+                    $('#td_grandtotrow_'+iduser+' > strong').html(grandTot.formatNumber(2, ',', '')+"&nbsp;&euro;");
                     $('#qtareal_'+keyRow).show();
                     $('#div_chgqta_'+keyRow).html(' ').hide();
                     $('#btn_'+keyRow).button('reset');
