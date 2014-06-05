@@ -58,6 +58,7 @@
     </div>
   </div>
 </div>
+<?php if($this->updated > 0): ?>
 <script>
     $(function() {
         var myTag = "#prod_<?php echo $this->updated; ?>";
@@ -65,3 +66,4 @@
         $('#alert_save_box').prependTo(myTag).fadeOut(10000);
     });
 </script>
+<?php endif; ?>
