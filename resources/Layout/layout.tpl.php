@@ -9,9 +9,10 @@
     <script type="text/javascript" language="JavaScript" src="http://code.jquery.com/ui/1.9.2/jquery-ui.js"></script>
     -->
     <!-- jQuery -->
-    <script type="text/javascript" language="JavaScript" src="/js/jquery/jquery-1.8.3.js"></script>
-    <script type="text/javascript" language="JavaScript" src="/js/jquery/jquery-ui.js"></script>
-    <link rel="stylesheet" href="/css/jquery/jquery-ui.css" type="text/css" />
+    <script type="text/javascript" language="JavaScript" src="/jquery/jquery.js"></script>
+    <script type="text/javascript" language="JavaScript" src="http://code.jquery.com/jquery-migrate-1.2.1.js"></script>        
+    <script type="text/javascript" language="JavaScript" src="/jquery-ui/jquery-ui.js"></script>
+    <link rel="stylesheet" href="/jquery-ui/jquery-ui.css" type="text/css" />
     <!-- Bootstrap -->
     <script type="text/javascript" language="JavaScript" src="/bootstrap/js/bootstrap.min.js"></script>
     <!-- DateTimePicker -->

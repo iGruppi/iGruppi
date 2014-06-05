@@ -13,3 +13,6 @@
 [submodule "library/moment"]
 	path = library/moment
 	url = https://github.com/moment/moment/
+[submodule "library/jquery"]
+	path = library/jquery
+	url = https://github.com/Jazzo/jquery.git
