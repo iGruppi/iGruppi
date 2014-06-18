@@ -17,8 +17,9 @@
             </thead>
             <tbody>
         <?php foreach ($user["prodotti"] AS $idprodotto => $pObj):
-                include $this->template('gestioneordini/qtaordine-row.tpl.php');
+                echo $this->partial('gestioneordini/qtaordine-row.tpl.php', array('pObj' => $pObj, 'idordine' => $this->ordCalcObj->getIdOrdine(), 'iduser' => $iduser, 'idprodotto' => $idprodotto));
               endforeach; ?>
+                <tr id="tr_last_<?php echo $iduser; ?>" style="display: none;"><td colspan="4"></td></tr>
         <?php if($this->ordCalcObj->hasCostoSpedizione() && $this->ordCalcObj->getTotaleByIduser($iduser)): ?>
                 <tr class="warning">
                     <td><b>Spese di spedizione</b></td>
@@ -32,8 +33,9 @@
                     <td class="text-right" id="td_grandtotrow_<?php echo $iduser;?>"><strong><?php echo $this->valuta($this->ordCalcObj->getTotaleConSpedizioneByIduser($iduser)); ?></strong></td>
                 </tr>
                 <tr>
-                    <td colspan="4">
-                        <a href="#" class="btn btn-success" id="btn_<?php echo $iduser; ?>"><span class="glyphicon glyphicon-plus"></span> Aggiungi</a>
+                    <td colspan="4" id="td_add_<?php echo $iduser; ?>">
+                        <a href="javascript:void(0);" onclick="jx_ReferenteAddNewProd(<?php echo $iduser; ?>,<?php echo $this->ordCalcObj->getIdOrdine(); ?>)" class="btn btn-success"><span class="glyphicon glyphicon-plus"></span> Aggiungi</a>
+                        <div id="div_add_<?php echo $iduser; ?>" style="padding: 5px; display: none;"></div>
                     </td>
                 </tr>
             </tbody>
@@ -77,23 +79,3 @@
     <?php endif; ?>
     </div>
 </div>
-<div id="form_qta_modify" style="display: none; padding: 5px;">
-    <form id="qta_ord_form" class="ordini" 
-          onsubmit="" method="post">
-        <input type="text" class="field_in_table is_Number" id="qta_eff"
-               required data-loading-text="Loading..." size="5"
-               name="qta_reale" value="" 
-               onkeyup="this.formatNumber()" />
-        Udm<br />
-        <button style="margin: 2px;" class="btn btn-warning btn-xs" id="submit_aggiorna">Aggiorna</button>
-        <input type='hidden' name="idordine" value="" /> 
-        <input type='hidden' name="iduser" value="" />
-        <input type='hidden' name="idprodotto" value="" />
-    </form>
-</div>  
-<script>
-    // Start these procedures always
-	$(document).ready(function(){
-        console.log(UserOrder.calculateTotal(1));
-    });
-</script>

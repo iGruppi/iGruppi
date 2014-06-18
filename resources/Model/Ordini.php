@@ -169,6 +169,24 @@ class Model_Ordini extends MyFw_DB_Base {
         return $this->db->commit();
     }
     
+    function addQtaProdottoForOrdine($idordine, $iduser, $idprodotto) 
+    {
+        $sth = $this->db->prepare("SELECT * FROM ordini_user_prodotti WHERE iduser= :iduser AND idordine= :idordine AND idprodotto= :idprodotto");
+        $sth->execute(array('idordine' => $idordine, 'iduser' => $iduser, 'idprodotto' => $idprodotto));
+        if($sth->rowCount() == 0) {
+            // prepare SQL INSERT
+            $sthi = $this->db->prepare("INSERT INTO ordini_user_prodotti "
+                    ."SET iduser= :iduser, idprodotto= :idprodotto, idordine= :idordine, qta= :qta, "
+                    ."qta_reale= ((SELECT moltiplicatore FROM prodotti WHERE idprodotto= :idprodotto) * :qta), data_ins=NOW()");
+            // insert product selected
+            $fields = array('iduser' => $iduser, 'idprodotto' => $idprodotto, 'idordine' => $idordine, 'qta' => 1);
+            $res = $sthi->execute($fields);
+            if($res) {
+                return true;
+            }
+        }
+        return false;
+    }
     
     function getProdottiOrdinatiByIdordine($idordine, $iduser=false, $idprodotto=false) 
     {

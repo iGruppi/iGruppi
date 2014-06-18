@@ -285,6 +285,66 @@ class Controller_GestioneOrdini extends MyFw_Controller {
         echo json_encode(array('res' => false));
     }
     
+    function newprodformAction() {
+        $layout = Zend_Registry::get("layout");
+        $layout->disableDisplay();
+        $this->view->iduser = $iduser = $this->getParam("iduser");
+        $this->view->idordine = $idordine = $this->getParam("idordine");
+        
+        // GET All products available
+        $ordObj = new Model_Ordini();
+        $listProd = $ordObj->getProdottiByIdOrdine($idordine);
+        $arRes = array();
+        if(is_array($listProd) && count($listProd) > 0) {
+            foreach($listProd AS $prodotto) 
+            {
+                $arRes[] = array('id' => $prodotto->idprodotto, 'label' => $prodotto->descrizione, 'category' => $prodotto->categoria_sub);
+            }
+        }
+        $this->view->arRes = json_encode($arRes);
+        
+        echo json_encode(array('res' => true, 'myTpl' => $this->view->fetch('gestioneordini/qtaordine-newprod.form.tpl.php')));
+
+    }
+    
+    function newprodsaveAction() {
+        $layout = Zend_Registry::get("layout");
+        $layout->disableDisplay();
+        
+        if($this->getRequest()->isPost()) {
+            // get Post values
+            $fv = $this->getRequest()->getPost();
+            $idordine = $fv["idordine"];
+            $iduser = $fv["iduser"];
+            $idprodotto = $fv["idprodotto"];
+        
+            $ordObj = new Model_Ordini();
+            $added = $ordObj->addQtaProdottoForOrdine($idordine, $iduser, $idprodotto);
+            if($added) {
+                $prodotti = $ordObj->getProdottiOrdinatiByIdordine($idordine);
+                if(is_array($prodotti) && count($prodotti) > 0) {
+                    $ordCalcObj = new Model_Ordini_Calcoli_Utenti();
+                    $ordCalcObj->setOrdObj($this->_ordine);
+                    $ordCalcObj->setProdotti($prodotti);
+                    $prodObj = $ordCalcObj->getProdottiByIduser($iduser);
+                    if( isset($prodObj[$idprodotto]) ) {
+                        $this->view->pObj = $prodObj[$idprodotto];
+                        $this->view->iduser = $iduser;
+                        $this->view->idordine = $idordine;
+                        $this->view->idprodotto = $idprodotto;
+                        echo json_encode(array('res' => true, 
+                                   'grandTotal' => $ordCalcObj->getTotaleConSpedizioneByIduser($iduser), 
+                                   'myTpl' => $this->view->fetch('gestioneordini/qtaordine-row.tpl.php')));
+                        exit();
+                    }
+                }
+            }
+        }
+        
+        // Some error...
+        echo json_encode(array('res' => false));
+    }
+    
     function dettaglioAction() {
         
         // get View by Tipo

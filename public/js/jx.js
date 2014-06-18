@@ -125,3 +125,45 @@
 			},
 			"json");
     }
+    
+    function jx_ReferenteAddNewProd(iduser, idordine)
+    {
+        $('#td_add_'+iduser+' > a').button('loading');
+        $.getJSON(
+			'/gestione-ordini/newprodform/',
+            {iduser: iduser, idordine: idordine},
+			function(data) {
+                if(data.res)
+				{
+                    $('#td_add_'+iduser+' > a').button('reset').hide();
+                    $('#div_add_'+iduser).html(data.myTpl).show();
+                }
+			});
+    }
+
+    function jx_ReferenteAddNewProd_Save(iduser, idordine)
+    {
+        $('#submit_'+iduser).button('loading');
+        var idprodotto = $('#addprod_form_'+iduser+' > #idprodotto').val();
+        if(idprodotto > 0) {
+            $.post(
+			'/gestione-ordini/newprodsave/idordine/'+idordine,
+			$('#addprod_form_'+iduser).serialize(),
+			function(data){
+                if(data.res)
+				{
+                    // update grand Total
+                    var grandTot = parseFloat(data.grandTotal);
+                    $('#td_grandtotrow_'+iduser+' > strong').html(grandTot.formatNumber(2, ',', '')+"&nbsp;&euro;");
+                    // add product row
+                    $('#tr_last_'+iduser).before(data.myTpl);
+                }
+                $('#td_add_'+iduser+' > a').button('reset').show();
+                $('#div_add_'+iduser).html('-');
+			},
+			"json");
+        } else {
+            alert('Nessun prodotto selezionato!');
+            $('#submit_'+iduser).button('reset');
+        }
+    }
