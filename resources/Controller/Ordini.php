@@ -111,7 +111,7 @@ class Controller_Ordini extends MyFw_Controller {
         $this->view->ordine = $ordine;
         // Check ORDINE Status (can Order Products?)
         $statusObj = new Model_Ordini_Status($ordine);
-        if(!$statusObj->can_OrderProducts()) 
+        if(!$statusObj->canUser_OrderProducts()) 
         {
             $this->redirect("ordini");
         }

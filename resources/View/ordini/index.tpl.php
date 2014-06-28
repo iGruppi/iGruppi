@@ -37,10 +37,10 @@
         <?php endif; ?>
         </div>
         <div class="col-md-4">
-        <?php if($ordine->statusObj->can_OrderProducts()): ?>
+        <?php if($ordine->statusObj->canUser_OrderProducts()): ?>
             <a href="/ordini/ordina/idordine/<?php echo $ordine->idordine;?>" class="btn btn-success" style="margin-bottom: 5px;"><span class="glyphicon glyphicon-shopping-cart"></span> Ordina ora!</a>
         <?php endif; ?>
-        <?php if($ordine->statusObj->can_UserViewDettaglio()): ?>
+        <?php if($ordine->statusObj->canUser_ViewDettaglio()): ?>
             <a href="/ordini/viewdettaglio/idordine/<?php echo $ordine->idordine;?>" class="btn btn-default"><span class="glyphicon glyphicon-list"></span> Visualizza dettaglio</a>
         <?php endif; ?>
         </div>

@@ -31,7 +31,7 @@
           <li><a href="/gestione-ordini/dettaglio/idordine/<?php echo $this->ordine->idordine; ?>/tipo/prodotti">Parziali per prodotto</a></li>
         </ul>
     </div>
-    <?php if( $this->statusObj->can_RefInviaOrdine()): ?>
+    <?php if( $this->statusObj->canRef_InviaOrdine()): ?>
       <a class="btn btn-success" href="/gestione-ordini/invia/idordine/<?php echo $this->ordine->idordine;?>"><span class="glyphicon glyphicon-envelope"></span> Invia al Produttore</a>
     <?php endif; ?>
 <!--  <a class="btn btn-default" role="button"  href="javascript:void(0)" onclick="jx_OrdineInConsegna(<?php echo $this->ordine->idordine;?>, <?php echo $this->ordine->idproduttore; ?>)"><span class="glyphicon glyphicon-arrow-right"></span> In consegna</a> -->

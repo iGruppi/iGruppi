@@ -84,23 +84,30 @@ class Model_Ordini_Status {
     }
     
 
-    /*
+/* ***********************
     PERMESSI STATI
- */   
-
-    function can_ModificaProdotti() {
+ * *********************** */   
+    
+    // Se il Referente può modificare i prodotti (prezzi e disponibilità)
+    function canRef_ModificaProdotti() {
         return ( !$this->is_Archiviato() ) ? true : false;
+    }    
+    // Se il Referente può modificare le Quantità ordinate dagli utenti
+    function canRef_ModificaQtaOrdinate() {
+        return ( $this->is_Aperto() || $this->is_Archiviato() ) ? false : true;
     }
-    
-    function can_OrderProducts() {
-        return $this->is_Aperto();
-    }
-    
-    function can_RefInviaOrdine() {
+    // Se il referente può inviare l'ordine
+    function canRef_InviaOrdine() {
         return $this->is_Chiuso();
     }
     
-    function can_UserViewDettaglio() {
+    
+    // Se l'utente può ordinare prodotti
+    function canUser_OrderProducts() {
+        return $this->is_Aperto();
+    }
+    // Se l'utente può visualizzare il Dettaglio di un ordine
+    function canUser_ViewDettaglio() {
         return !$this->is_Pianificato();
     }
     
