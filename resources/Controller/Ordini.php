@@ -78,7 +78,7 @@ class Controller_Ordini extends MyFw_Controller {
         $cuObj->setProdotti($listProdOrdered);
         $this->view->listaProdotti = $cuObj->getProdottiByIduser($this->_iduser);
         // Costo di SPEDIZIONE
-        $this->view->costo_spedizione = $cuObj->getCostoSpedizioneByIduser($this->_iduser);
+        $this->view->costo_spedizione = $cuObj->getSpedizione()->getCostoSpedizioneRipartitoByIduser($this->_iduser);
         $this->view->totale_ordine = $cuObj->getTotaleByIduser($this->_iduser);
         $this->view->totale_con_spedizione = $cuObj->getTotaleConSpedizioneByIduser($this->_iduser);
 //        Zend_Debug::dump($this->view->listaProdotti);die;
