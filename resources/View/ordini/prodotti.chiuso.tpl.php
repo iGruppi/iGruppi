@@ -1,7 +1,7 @@
 <div class="row">
   <div class="col-md-8">
       
-    <h3>Ordine <strong class="<?php echo $this->statusObj->getStatus(); ?>"><?php echo $this->statusObj->getStatus(); ?></strong></h3>
+    <h3>Ordine <strong class="<?php echo $this->statusObj->getStatusCSSClass(); ?>"><?php echo $this->statusObj->getStatus(); ?></strong></h3>
     
     <?php echo $this->partial('ordini/box-note.tpl.php', array('ordine' => $this->ordine, 'produttore' => $this->produttore)); ?>
 

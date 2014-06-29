@@ -73,13 +73,13 @@
 			});
     }
 
-    function jx_OrdineInConsegna(idordine, idproduttore) {
-        $('#gest_ordine_'+idordine).button('loading');
+    function jx_OrdineMoveStatus(idordine, newStatus) {
+        $('#a_mso').button('loading');
         $.getJSON(
-			'/gestione-ordini/inconsegna/',
-            {idordine: idordine, idproduttore: idproduttore},
+			'/gestione-ordini/movestatus/',
+            {idordine: idordine, newStatus: newStatus},
 			function(data) {
-                $('#ordine_'+idordine).html(data.myTpl);
+                $('#ordine_header').html(data.myTpl);
 			});
     }
     

@@ -7,79 +7,104 @@
  */
 class Model_Ordini_Status {
     
+    // Constants for labels
     const STATUS_PIANIFICATO = "Pianificato";
     const STATUS_APERTO = "Aperto";
     const STATUS_CHIUSO = "Chiuso";
-    const STATUS_ARCHIVIATO = "Archiviato";
-    const STATUS_INCONSEGNA = "In_Consegna";
+    const STATUS_INCONSEGNA = "In Consegna";
     const STATUS_CONSEGNATO = "Consegnato";
+    const STATUS_ARCHIVIATO = "Archiviato";
     
+    private $_arStatusOrder = array(
+        self::STATUS_PIANIFICATO,
+        self::STATUS_APERTO,
+        self::STATUS_CHIUSO,
+        self::STATUS_INCONSEGNA,
+        self::STATUS_CONSEGNATO,
+        self::STATUS_ARCHIVIATO
+    );
+    
+    // Private properties for date fields
     private $_inizio;
     private $_fine;
     private $_inconsegna = null;
     private $_consegnato = null;
     private $_archiviato;
     
-    function __construct($o) {
+    public function __construct($o) {
         $this->_inizio = $o->data_inizio;
         $this->_fine = $o->data_fine;
-        $this->_inconsegna = isset($o->data_inconsegna) ? $o->data_inconsegna : null; // CAN BE NULL!
-        $this->_consegnato = isset($o->data_consegnato) ? $o->data_consegnato : null; // CAN BE NULL!
+        $this->_inconsegna = $o->data_inconsegna; // CAN BE NULL!
+        $this->_consegnato = $o->data_consegnato; // CAN BE NULL!
         $this->_archiviato = $o->archiviato;
     }
     
-    function getStatus() {
+    public function getStatus() {
         
         if($this->_archiviato != "S") {
             $startObj = $this->getDateObj($this->_inizio);
             $endObj = $this->getDateObj($this->_fine);
-            $inObj = $this->getDateObj($this->_inconsegna);
-            $consObj = $this->getDateObj($this->_consegnato);
 
             $timestampNow = Zend_Date::now()->toString("U");
-            
             if( $timestampNow < $startObj->toString("U") ) {
                 return self::STATUS_PIANIFICATO;
+                
             } else if(
                 $timestampNow >= $startObj->toString("U") &&
                 $timestampNow <= $endObj->toString("U")
-                    ) {
+            ) {
                 return self::STATUS_APERTO;
+                
             } else if( 
-                $timestampNow > $endObj->toString("U") && 
-                $timestampNow <= $inObj->toString("U")
-                    ) {
-                return self::STATUS_CHIUSO;
-            } else if( 
-                $timestampNow > $inObj->toString("U") && 
-                $timestampNow <= $consObj->toString("U")
-                    ) {
-                return self::STATUS_INCONSEGNA;
-            } else if( 
-                $timestampNow > $consObj->toString("U")
-                    ) {
-                return self::STATUS_CONSEGNATO;
+                $timestampNow > $endObj->toString("U")
+            ) {
+                
+                $inObj = $this->getDateObj($this->_inconsegna);
+                $consObj = $this->getDateObj($this->_consegnato);
+                
+                if( is_null($this->_inconsegna)) {
+                    return self::STATUS_CHIUSO;
+                } else if(
+                    $timestampNow >= $inObj->toString("U") &&
+                    is_null($this->_consegnato)
+                ) {
+                    return self::STATUS_INCONSEGNA;
+                } else if(
+                    $timestampNow >= $consObj->toString("U")
+                ) {
+                    return self::STATUS_CONSEGNATO;
+                }
+                    
             }
-            
         } else {
             return self::STATUS_ARCHIVIATO;
         }
     }
-
     
+    public function getStatusCSSClass()
+    {
+        return str_replace(" ", "_", $this->getStatus());
+    }
+
     /*
     VERIFICHE STATI
  */   
-    function is_Pianificato() {
+    public function is_Pianificato() {
         return ($this->getStatus() == self::STATUS_PIANIFICATO);
     }
-    function is_Aperto() {
+    public function is_Aperto() {
         return ($this->getStatus() == self::STATUS_APERTO);
     }
-    function is_Chiuso() {
+    public function is_Chiuso() {
         return ($this->getStatus() == self::STATUS_CHIUSO);
     }
-    function is_Archiviato() {
+    public function is_InConsegna() {
+        return ($this->getStatus() == self::STATUS_INCONSEGNA);
+    }
+    public function is_Consegnato() {
+        return ($this->getStatus() == self::STATUS_CONSEGNATO);
+    }
+    public function is_Archiviato() {
         return ($this->getStatus() == self::STATUS_ARCHIVIATO);
     }
     
@@ -89,25 +114,25 @@ class Model_Ordini_Status {
  * *********************** */   
     
     // Se il Referente può modificare i prodotti (prezzi e disponibilità)
-    function canRef_ModificaProdotti() {
+    public function canRef_ModificaProdotti() {
         return ( !$this->is_Archiviato() ) ? true : false;
     }    
     // Se il Referente può modificare le Quantità ordinate dagli utenti
-    function canRef_ModificaQtaOrdinate() {
+    public function canRef_ModificaQtaOrdinate() {
         return ( $this->is_Aperto() || $this->is_Archiviato() ) ? false : true;
     }
     // Se il referente può inviare l'ordine
-    function canRef_InviaOrdine() {
+    public function canRef_InviaOrdine() {
         return $this->is_Chiuso();
     }
     
     
     // Se l'utente può ordinare prodotti
-    function canUser_OrderProducts() {
+    public function canUser_OrderProducts() {
         return $this->is_Aperto();
     }
     // Se l'utente può visualizzare il Dettaglio di un ordine
-    function canUser_ViewDettaglio() {
+    public function canUser_ViewDettaglio() {
         return !$this->is_Pianificato();
     }
     
@@ -121,24 +146,15 @@ class Model_Ordini_Status {
     }
     
     // get simple array with all status
-    static function getArrayStatus() {
-        return array(
-            self::STATUS_PIANIFICATO,
-            self::STATUS_APERTO,
-            self::STATUS_CHIUSO,
-            self::STATUS_INCONSEGNA,
-            self::STATUS_CONSEGNATO,
-            self::STATUS_ARCHIVIATO
-        );
+    static public function getArrayStatus() {
+        return $this->_arStatusOrder;
     }
-        
-
     
     
     // TODO: DA SISTEMARE!
     // Lo so, è orrendo. Piazzato qui è un morto!
     // Ma la logica per identificare lo Stato lasciamola per tutti qui dentro!
-    static function getSqlFilterByStato($stato) {
+    static public function getSqlFilterByStato($stato) {
         switch ($stato)
         {
             case self::STATUS_PIANIFICATO:

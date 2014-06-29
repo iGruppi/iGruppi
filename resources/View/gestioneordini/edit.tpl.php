@@ -1,4 +1,6 @@
-<?php include $this->template('gestioneordini/gestione-header.tpl.php'); ?>
+<div id="ordine_header">
+    <?php include $this->template('gestioneordini/gestione-header.tpl.php'); ?>
+</div>
 
 <h3>Modifica dati ordine</h3>
 

@@ -1,4 +1,6 @@
-<?php include $this->template('gestioneordini/gestione-header.tpl.php'); ?>
+<div id="ordine_header">
+    <?php include $this->template('gestioneordini/gestione-header.tpl.php'); ?>
+</div>
 <div class="row">
   <div class="col-md-8">
     <h3>Elenco variazioni</h3>

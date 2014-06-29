@@ -383,26 +383,26 @@ class Controller_GestioneOrdini extends MyFw_Controller {
         // TODO: Invia email...
     }
     
-    function inconsegnaAction() {
+    function movestatusAction() {
         
         $layout = Zend_Registry::get("layout");
         $layout->disableDisplay();
         
-        $idordine = $this->getParam("idordine");
-        $ordObj = new Model_Ordini();
-        $ordine = $ordObj->getByIdOrdine($idordine);
+        // MOVE order to the newStatus
+        $newStatus = $this->getParam("newStatus");        
+        $moverStatusObj = new Model_Ordini_Status_Mover($this->_ordine);
+        $moved = $moverStatusObj->moveToStatus($newStatus);
         $result = array('res' => false);
-        if(!is_null($ordine)) {
-            // UPDATE Status -> IN CONSEGNA
-            $dti = new Zend_Date();
-            $sth_update = $this->getDB()->prepare("UPDATE ordini SET data_inconsegna= :dti WHERE idordine= :idordine");
-            $result = $sth_update->execute(array('idordine' => $idordine, 'dti' => $dti->toString("yyyy-MM-dd HH:mm:ss")));
-            if($result) {
-                // update data_inconsegna in my object
-                $ordine->data_inconsegna = $dti->toString("yyyy-MM-dd HH:mm:ss");
-                $ordine->statusObj = new Model_Ordini_Status($ordine);
+        if($moved) {
+            // GET new ORDER data
+            $orderObj = new Model_Ordini();
+            $ordine = $orderObj->getByIdOrdine($this->_ordine->idordine);
+            if($ordine) {
                 $this->view->ordine = $ordine;
-                $myTpl = $this->view->fetch("gestioneordini/index-ordine.tpl.php");
+//                Zend_Debug::dump($this->view->ordine);
+                $this->view->statusObj = new Model_Ordini_Status($ordine);
+//                Zend_Debug::dump($this->view->statusObj);die;
+                $myTpl = $this->view->fetch("gestioneordini/gestione-header.tpl.php");
                 $result = array('res' => true, 'myTpl' => $myTpl);
             }
         }

@@ -79,7 +79,7 @@ h3.green {color: #47a447;}
 .Aperto { color: #2b2; }
 .Chiuso { color: #f22; }
 .In_Consegna { color: #ec971f; }
-.Consegnato { color: #CC00FF; }
+.Consegnato { color: #ec971f; }
 .Archiviato { color: #ccc; }
 
 .btn_icon { float: right; height: 32px; width: 32px; margin: 2px 20px; }

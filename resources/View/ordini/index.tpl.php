@@ -17,19 +17,19 @@
             
         <?php if($ordine->statusObj->is_Pianificato()): ?>
             <h4 class="ordine">
-                Ordine <span class="<?php echo $ordine->statusObj->getStatus(); ?>"><?php echo $ordine->statusObj->getStatus(); ?></span>
+                Ordine <span class="<?php echo $ordine->statusObj->getStatusCSSClass(); ?>"><?php echo $ordine->statusObj->getStatus(); ?></span>
                 per il <strong><?php echo $this->date($ordine->data_inizio, '%d/%m/%Y');?></strong>
             </h4>
         <?php elseif($ordine->statusObj->is_Aperto()): ?>
-            <h4 class="ordine">Ordine <strong class="<?php echo $ordine->statusObj->getStatus(); ?>"><?php echo $ordine->statusObj->getStatus(); ?></strong></h4>            
+            <h4 class="ordine">Ordine <strong class="<?php echo $ordine->statusObj->getStatusCSSClass(); ?>"><?php echo $ordine->statusObj->getStatus(); ?></strong></h4>            
             <p class="no-margin">Chiusura prevista il <strong><?php echo $this->date($ordine->data_fine, '%d/%m/%Y');?></strong> alle <?php echo $this->date($ordine->data_fine, '%H:%M');?></p>
         <?php elseif($ordine->statusObj->is_Chiuso()): ?>
             <h4 class="ordine">
-                Ordine <span class="<?php echo $ordine->statusObj->getStatus(); ?>"><?php echo $ordine->statusObj->getStatus(); ?></span>
+                Ordine <span class="<?php echo $ordine->statusObj->getStatusCSSClass(); ?>"><?php echo $ordine->statusObj->getStatus(); ?></span>
                 il <strong><?php echo $this->date($ordine->data_fine, '%d/%m/%Y');?></strong>
             </h4>
         <?php elseif($ordine->statusObj->is_Archiviato()): ?>
-            <h4 class="ordine">Ordine <span class="<?php echo $ordine->statusObj->getStatus(); ?>"><?php echo $ordine->statusObj->getStatus(); ?></span></h4>            
+            <h4 class="ordine">Ordine <span class="<?php echo $ordine->statusObj->getStatusCSSClass(); ?>"><?php echo $ordine->statusObj->getStatus(); ?></span></h4>            
             <p class="no-margin">
                 <em>Apertura</em>: <strong><?php echo $this->date($ordine->data_inizio, '%d/%m/%Y');?></strong> alle <?php echo $this->date($ordine->data_inizio, '%H:%M');?><br />
                 <em>Chiusura</em>: <strong><?php echo $this->date($ordine->data_fine, '%d/%m/%Y');?></strong> alle <?php echo $this->date($ordine->data_fine, '%H:%M');?>

@@ -1,4 +1,6 @@
-<?php include $this->template('gestioneordini/gestione-header.tpl.php'); ?>
+<div id="ordine_header">
+    <?php include $this->template('gestioneordini/gestione-header.tpl.php'); ?>
+</div>
 
 <div class="row">
 <?php if($this->statusObj->canRef_ModificaQtaOrdinate()): ?>
@@ -83,7 +85,7 @@
 <?php else: ?>
     <div class="col-md-8">
     <h3 class="big-margin-top">Quantità ordinate per utente</h3>
-        <p>Non è possibile modificare le quantità ordinate perchè l'ordine è in stato: <span class="<?php echo $this->statusObj->getStatus(); ?>"><?php echo $this->statusObj->getStatus(); ?></span></p>
+        <p>Non è possibile modificare le quantità ordinate perchè l'ordine è in stato: <span class="<?php echo $this->statusObj->getStatusCSSClass(); ?>"><?php echo $this->statusObj->getStatus(); ?></span></p>
     </div>
 <?php endif; ?>
 </div>
