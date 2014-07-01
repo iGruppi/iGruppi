@@ -2,7 +2,7 @@
     <?php include $this->template('gestioneordini/gestione-header.tpl.php'); ?>
 </div>
 <div class="row">
-  <div class="col-md-8">
+  <div class="col-md-11">
     <h3>Elenco variazioni</h3>
 <?php if(count($this->logs) > 0): ?>
     <table class="table table-condensed">
@@ -17,9 +17,6 @@
 <?php else: ?>
     <p>Non è stata effettuata alcuna variazione a quest'ordine.</p>
 <?php endif; ?>
-  </div>
-  <div class="col-md-4">
-      RIGHT
   </div>
 </div>
 
