@@ -10,7 +10,7 @@
     -->
     <!-- jQuery -->
     <script type="text/javascript" language="JavaScript" src="/jquery/jquery.js"></script>
-    <script type="text/javascript" language="JavaScript" src="/js/jquery-migrate-1.2.1.js"></script>        
+    <!-- script type="text/javascript" language="JavaScript" src="/js/jquery-migrate-1.2.1.js"></script -->
     <script type="text/javascript" language="JavaScript" src="/jquery-ui/jquery-ui.js"></script>
     <link rel="stylesheet" href="/jquery-ui/jquery-ui.css" type="text/css" />
     <!-- Bootstrap -->
