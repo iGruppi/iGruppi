@@ -86,7 +86,7 @@
     <div id="footer" class="hidden-print">
       <div class="container">
             <div class="info">
-                <p><a href="http://igruppi.com"><b>iGruppi</b></a><br /><small>Open Source Software per i Gruppi di acquisto</small></p>
+                <p><a href="http://igruppi.com"><b>iGruppi</b></a><br /><small>Free Software per i Gruppi di acquisto</small></p>
                 <p class="icon_social github"><a href="https://github.com/Jazzo/iGruppi"><small>Code hosted by Github</small></a></p>
             </div>
             <div class="social">
