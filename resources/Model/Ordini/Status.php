@@ -15,7 +15,7 @@ class Model_Ordini_Status {
     const STATUS_CONSEGNATO = "Consegnato";
     const STATUS_ARCHIVIATO = "Archiviato";
     
-    private $_arStatusOrder = array(
+    static private $_arStatusOrder = array(
         self::STATUS_PIANIFICATO,
         self::STATUS_APERTO,
         self::STATUS_CHIUSO,
@@ -147,7 +147,7 @@ class Model_Ordini_Status {
     
     // get simple array with all status
     static public function getArrayStatus() {
-        return $this->_arStatusOrder;
+        return self::$_arStatusOrder;
     }
     
     
