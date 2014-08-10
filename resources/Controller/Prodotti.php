@@ -128,9 +128,15 @@ class Controller_Prodotti extends MyFw_Controller {
         $form->setAction("/prodotti/add/idproduttore/$idproduttore");
         $form->setValue("idproduttore", $idproduttore);
         // remove useless fields
-        $form->removeField("idprodotto");
+        $form->removeField("attivo");
+        $form->removeField("udm");
+        $form->removeField("moltiplicatore");
+        $form->removeField("costo");
+        $form->removeField("aliquota_iva");
         $form->removeField("offerta");
         $form->removeField("sconto");
+        $form->removeField("note");
+        $form->removeField("idprodotto");
 
         // set Categories
         $objCat = new Model_Categorie();
