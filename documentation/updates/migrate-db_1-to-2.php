@@ -41,6 +41,7 @@ $db2->query("SET FOREIGN_KEY_CHECKS=0");
 // Tables not changed
 copyTable("users", "users");
 copyTable("produttori", "produttori");
+$db2->query("UPDATE produttori SET production='S'");
 copyTable("groups", "groups");
 copyTable("users_group", "users_group");
 copyTable("groups_produttori", "referenti", array(
