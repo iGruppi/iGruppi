@@ -78,7 +78,8 @@ h3.green {color: #47a447;}
 .Pianificato { color: #666; }
 .Aperto { color: #2b2; }
 .Chiuso { color: #f22; }
-.In_Consegna { color: #ec971f; }
+.Inviato { color: #ec971f; }
+.Arrivato { color: #ec9700; }
 .Consegnato { color: #ec971f; }
 .Archiviato { color: #ccc; }
 

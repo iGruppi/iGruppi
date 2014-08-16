@@ -11,7 +11,8 @@ class Model_Ordini_Status {
     const STATUS_PIANIFICATO = "Pianificato";
     const STATUS_APERTO = "Aperto";
     const STATUS_CHIUSO = "Chiuso";
-    const STATUS_INCONSEGNA = "In Consegna";
+    const STATUS_INVIATO = "Inviato";
+    const STATUS_ARRIVATO = "Arrivato";
     const STATUS_CONSEGNATO = "Consegnato";
     const STATUS_ARCHIVIATO = "Archiviato";
     
@@ -19,7 +20,8 @@ class Model_Ordini_Status {
         self::STATUS_PIANIFICATO,
         self::STATUS_APERTO,
         self::STATUS_CHIUSO,
-        self::STATUS_INCONSEGNA,
+        self::STATUS_INVIATO,
+        self::STATUS_ARRIVATO,
         self::STATUS_CONSEGNATO,
         self::STATUS_ARCHIVIATO
     );
@@ -27,16 +29,18 @@ class Model_Ordini_Status {
     // Private properties for date fields
     private $_inizio;
     private $_fine;
-    private $_inconsegna = null;
+    private $_inviato = null;
+    private $_arrivato = null;
     private $_consegnato = null;
     private $_archiviato;
     
     public function __construct($o) {
         $this->_inizio = $o->data_inizio;
         $this->_fine = $o->data_fine;
-        $this->_inconsegna = $o->data_inconsegna; // CAN BE NULL!
+        $this->_inviato = $o->data_inviato;       // CAN BE NULL!
+        $this->_arrivato = $o->data_arrivato;     // CAN BE NULL!
         $this->_consegnato = $o->data_consegnato; // CAN BE NULL!
-        $this->_archiviato = $o->archiviato;
+        $this->_archiviato = $o->archiviato;      // it's a FLAG (S,N)
     }
     
     public function getStatus() {
@@ -59,18 +63,24 @@ class Model_Ordini_Status {
                 $timestampNow > $endObj->toString("U")
             ) {
                 
-                $inObj = $this->getDateObj($this->_inconsegna);
-                $consObj = $this->getDateObj($this->_consegnato);
+                $invObj = $this->getDateObj($this->_inviato);
+                $arrObj = $this->getDateObj($this->_arrivato);
+                $conObj = $this->getDateObj($this->_consegnato);
                 
-                if( is_null($this->_inconsegna)) {
+                if( is_null($this->_inviato)) {
                     return self::STATUS_CHIUSO;
                 } else if(
-                    $timestampNow >= $inObj->toString("U") &&
+                    $timestampNow >= $invObj->toString("U") &&
+                    is_null($this->_arrivato)
+                ) {
+                    return self::STATUS_INVIATO;
+                } else if(
+                    $timestampNow >= $arrObj->toString("U") &&
                     is_null($this->_consegnato)
                 ) {
-                    return self::STATUS_INCONSEGNA;
+                    return self::STATUS_ARRIVATO;
                 } else if(
-                    $timestampNow >= $consObj->toString("U")
+                    $timestampNow >= $conObj->toString("U")
                 ) {
                     return self::STATUS_CONSEGNATO;
                 }
@@ -98,8 +108,11 @@ class Model_Ordini_Status {
     public function is_Chiuso() {
         return ($this->getStatus() == self::STATUS_CHIUSO);
     }
-    public function is_InConsegna() {
-        return ($this->getStatus() == self::STATUS_INCONSEGNA);
+    public function is_Inviato() {
+        return ($this->getStatus() == self::STATUS_INVIATO);
+    }
+    public function is_Arrivato() {
+        return ($this->getStatus() == self::STATUS_ARRIVATO);
     }
     public function is_Consegnato() {
         return ($this->getStatus() == self::STATUS_CONSEGNATO);
@@ -166,11 +179,15 @@ class Model_Ordini_Status {
                 break;
             
             case self::STATUS_CHIUSO:
-                $sql = " AND NOW() > o.data_fine AND NOW() <= o.data_inconsegna AND o.archiviato='N'";
+                $sql = " AND NOW() > o.data_fine AND NOW() <= o.data_inviato AND o.archiviato='N'";
                 break;
 
-            case self::STATUS_INCONSEGNA:
-                $sql = " AND NOW() > o.data_inconsegna AND NOW() <= o.data_consegnato AND o.archiviato='N'";
+            case self::STATUS_INVIATO:
+                $sql = " AND NOW() > o.data_inviato AND NOW() <= o.data_arrivato AND o.archiviato='N'";
+                break;
+
+            case self::STATUS_ARRIVATO:
+                $sql = " AND NOW() > o.data_arrivato AND NOW() <= o.data_consegnato AND o.archiviato='N'";
                 break;
 
             case self::STATUS_CONSEGNATO:
