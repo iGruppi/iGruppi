@@ -48,6 +48,10 @@ copyTable("groups_produttori", "referenti", array(
     'idproduttore'  => 'idproduttore',
     'iduser_ref'    => 'iduser'
 ));
+copyTable("groups_produttori", "users_produttori", array(
+    'idproduttore'  => 'idproduttore',
+    'iduser_ref'    => 'iduser'
+));
  */
 
 /*
