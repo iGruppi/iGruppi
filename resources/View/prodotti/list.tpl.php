@@ -34,7 +34,7 @@
             </p>
         </div>
         <div class="col-md-2">
-        <?php if($this->produttore->refObj->is_Referente()): ?>
+        <?php if($this->userSessionVal->refObject->canEditProdotti($this->produttore->idproduttore)): ?>
             <a class="btn btn-success" href="/prodotti/edit/idprodotto/<?php echo $idprodotto;?>">Modifica</a>
         <?php endif; ?>
         </div>
@@ -49,7 +49,7 @@
   </div>
   <div class="col-md-4 col-right">
     <div class="bs-sidebar" data-spy="affix" data-offset-top="76" role="complementary">
-<?php if($this->produttore->refObj->is_Referente()): ?>    
+<?php if($this->userSessionVal->refObject->canAddProdotti($this->produttore->idproduttore)): ?>
       <a class="btn btn-default btn-mylg" href="/prodotti/add/idproduttore/<?php echo $this->produttore->idproduttore;?>"><span class="glyphicon glyphicon-plus"></span> Nuovo prodotto</a>
       <br />
       <br />

@@ -12,7 +12,7 @@ class Controller_Produttori extends MyFw_Controller {
     function _init() {
         $auth = Zend_Auth::getInstance();
         $this->_iduser = $auth->getIdentity()->iduser;
-        $this->_userSessionVal = new Zend_Session_Namespace('userSessionVal');
+        $this->view->userSessionVal = $this->_userSessionVal = new Zend_Session_Namespace('userSessionVal');
     }
 
     function indexAction() {
@@ -23,9 +23,8 @@ class Controller_Produttori extends MyFw_Controller {
         $listProduttoriOrdered = array();
         if(count($listProduttori) > 0) {
             foreach($listProduttori AS &$produttore) {
-                $produttore->refObj = new Model_Produttori_Referente($produttore->iduser_ref);
                 // check for Referente
-                if( $produttore->refObj->is_Referente() ) {
+                if( $this->_userSessionVal->refObject->is_Referente($produttore->idproduttore) ) {
                     array_unshift($listProduttoriOrdered, $produttore);
                 } else {
                     array_push($listProduttoriOrdered, $produttore);
@@ -91,8 +90,7 @@ class Controller_Produttori extends MyFw_Controller {
         if($produttore === false) {
             $this->redirect("produttori");
         }
-        $pRefObj = new Model_Produttori_Referente($produttore->iduser_ref);
-        if(!$pRefObj->is_Referente()) {
+        if(!$this->_userSessionVal->refObject->canManageProduttore($idproduttore)) {
             $this->forward("produttori", "view", array('idproduttore' => $idproduttore));
         }
         $this->view->produttore = $produttore;

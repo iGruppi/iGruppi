@@ -8,7 +8,7 @@
       
       <div class="row row-myig">
         <div class="col-md-12">
-            <h3 class="no-margin <?php echo ($produttore->refObj->is_Referente()) ? "green" : "text-dark"; ?>"><?php echo $produttore->ragsoc;?></h3>
+            <h3 class="no-margin <?php echo ($this->userSessionVal->refObject->is_Referente($produttore->idproduttore)) ? "green" : "text-dark"; ?>"><?php echo $produttore->ragsoc;?></h3>
         </div>
         <div class="col-md-8">
             <p>Referente: <strong><?php echo $produttore->nome . " " . $produttore->cognome; ?></strong></p>

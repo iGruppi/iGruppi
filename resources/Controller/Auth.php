@@ -40,7 +40,6 @@ class Controller_Auth extends MyFw_Controller {
                         $auth = Zend_Auth::getInstance();
                         $auth->clearIdentity();
                         $storage = $auth->getStorage();
-                        
                         // remove password & write data to the store
                         unset($row->password);
                         $storage->write($row);
@@ -48,7 +47,12 @@ class Controller_Auth extends MyFw_Controller {
                         // set idgroup in session
                         $userSessionVal = new Zend_Session_Namespace('userSessionVal');
                         $userSessionVal->idgroup = $row->idgroup;
-
+                        
+                        // set Referente Object in Session
+                        $uObj = new Model_Users();
+                        $refObj = new Model_Produttori_Referente($uObj->getGlobalRefByIduser($row->iduser), $uObj->getRefByIduserAndIdgroup($row->iduser, $row->idgroup));
+                        $userSessionVal->refObject = $refObj;
+                        
                         // redirect HTTP_REFERER if it comes from a different URI
                         if(strpos($_SERVER["HTTP_REFERER"], "auth/login") === false)
                         {

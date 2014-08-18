@@ -8,8 +8,7 @@ class Model_Acl
         // create roles
         $this->addRole('Guest');
         $this->addRole('User', 'Guest');
-        $this->addRole('Premium', 'User');
-        $this->addRole('Admin', 'Premium');
+        $this->addRole('Admin', 'User');
 
         $this->addResource('Index');
         $this->addResource('Error');
@@ -33,7 +32,7 @@ class Model_Acl
         $this->allow('Guest', 'Auth');
         $this->allow('Guest', 'Cronjobs');
 
-        // Free vede tutto quello che vede Guest più questi sotto
+        // USER
         $this->allow('User', 'Dashboard');
         $this->allow('User', 'Users');
         $this->allow('User', 'Ordini');
@@ -47,7 +46,7 @@ class Model_Acl
 //        $this->allow('Free', 'verifica');
 //        $this->allow('Free', 'previsione');
 
-        // Administrator: TUTTO è PERMESSO!!
+        // ADMIN (Administrator: TUTTO è PERMESSO!)
         $this->allow('Admin');
     }
 

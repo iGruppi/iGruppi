@@ -15,7 +15,7 @@ class Controller_Prodotti extends MyFw_Controller {
     function _init() {
         $auth = Zend_Auth::getInstance();
         $this->_iduser = $auth->getIdentity()->iduser;
-        $this->_userSessionVal = new Zend_Session_Namespace('userSessionVal');
+        $this->view->userSessionVal = $this->_userSessionVal = new Zend_Session_Namespace('userSessionVal');
         
         // Try to GET Produttore
         $idproduttore = $this->getParam("idproduttore");
@@ -35,10 +35,7 @@ class Controller_Prodotti extends MyFw_Controller {
             $this->redirect("index", "error", array('code' => 404));
         }
         $produttoreObj = new Model_Produttori();
-        $produttore = $produttoreObj->getProduttoreById($idproduttore, $this->_userSessionVal->idgroup);
-        // ADD Referente object to Produttore (so I can check the ref directly into the view)
-        $produttore->refObj = new Model_Produttori_Referente($produttore->iduser_ref);
-        $this->_produttore = $this->view->produttore = $produttore;
+        $this->_produttore = $this->view->produttore = $produttoreObj->getProduttoreById($idproduttore, $this->_userSessionVal->idgroup);
         
         // Get updated if it is set
         $this->view->updated = $this->getParam("updated");        
@@ -75,7 +72,7 @@ class Controller_Prodotti extends MyFw_Controller {
     function editAction() {
         
         // check REFERENTE, controllo per i furbi (non Referenti)
-        if(!$this->_produttore->refObj->is_Referente()) {
+        if(!$this->_userSessionVal->refObject->canEditProdotti($this->_produttore->idproduttore)) {
             $this->redirect("index", "error", array('code' => 404));
         }
         
@@ -118,7 +115,7 @@ class Controller_Prodotti extends MyFw_Controller {
     function addAction() {
         
         // check REFERENTE, controllo per i furbi (non Referenti)
-        if(!$this->_produttore->refObj->is_Referente()) {
+        if(!$this->_userSessionVal->refObject->canAddProdotti($this->_produttore->idproduttore)) {
             $this->redirect("index", "error", array('code' => 404));
         }
                 

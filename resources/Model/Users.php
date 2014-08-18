@@ -30,5 +30,21 @@ class Model_Users extends MyFw_DB_Base {
         $sth->execute(array('idgroup' => $idgroup));
         return $sth->fetchAll(PDO::FETCH_CLASS);
     }
+    
+    function getRefByIduserAndIdgroup($iduser, $idgroup) 
+    {
+        $sql = "SELECT idproduttore FROM referenti WHERE iduser_ref= :iduser AND idgroup= :idgroup";
+        $sth = $this->db->prepare($sql);
+        $sth->execute(array('iduser' => $iduser, 'idgroup' => $idgroup));
+        return $sth->fetchAll(PDO::FETCH_CLASS);
+    }
 
+    function getGlobalRefByIduser($iduser) 
+    {
+        $sql = "SELECT idproduttore, livello FROM users_produttori WHERE iduser= :iduser";
+        $sth = $this->db->prepare($sql);
+        $sth->execute(array('iduser' => $iduser));
+        return $sth->fetchAll(PDO::FETCH_CLASS);
+    }
+    
 }
