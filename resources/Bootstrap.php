@@ -22,8 +22,12 @@ class Bootstrap {
     }
     
     private function startPhpSettings () {
-        ini_set("display_errors", Zend_Registry::get("appConfig")->phpSettings->display_errors);
-        ini_set("display_startup_errors", Zend_Registry::get("appConfig")->phpSettings->display_startup_errors);
+        if(isset(Zend_Registry::get("appConfig")->phpSettings)) {
+            $phpSettings = Zend_Registry::get("appConfig")->phpSettings;
+            foreach ($phpSettings as $key => $value) {
+                ini_set($key, $value);
+            }
+        }
     }  
     
     private function startDB () {
