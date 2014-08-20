@@ -8,7 +8,7 @@ class Bootstrap {
     
     public function run() {
         $this->startConfigIni();
-//        $this->startSession();
+        $this->startPhpSettings();
         $this->startLocale();
         $this->startDB();
         $this->startLayout();
@@ -21,16 +21,16 @@ class Bootstrap {
         Zend_Registry::set('appConfig', $appConfig);
     }
     
+    private function startPhpSettings () {
+        ini_set("display_errors", Zend_Registry::get("appConfig")->phpSettings->display_errors);
+        ini_set("display_startup_errors", Zend_Registry::get("appConfig")->phpSettings->display_startup_errors);
+    }  
+    
     private function startDB () {
         $db = new MyFw_DB();
         Zend_Registry::set('db', $db);
     }
-/*    
-    private function startSession () {
-        $userSessionVal = new Zend_Session_Namespace('userSessionVal');
-        $userSessionVal->idgroup = 1; // TODO: The users should be choose it! 
-    }
- */   
+    
     private function startLocale () {
     	date_default_timezone_set('Europe/Rome');
     	setlocale(LC_TIME, 'it_IT');
