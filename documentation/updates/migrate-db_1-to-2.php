@@ -50,7 +50,8 @@ copyTable("groups_produttori", "referenti", array(
     'idproduttore'  => 'idproduttore',
     'iduser_ref'    => 'iduser'
 ));
-// REFERENTI Globali (Sono poi da sistemare!)
+// REFERENTI Globali 
+// TODO: Eventualmente da sistemare nel caso vi sia 1 solo referente globale!
 copyTable("groups_produttori", "users_produttori", array(
     'idproduttore'  => 'idproduttore',
     'iduser_ref'    => 'iduser'

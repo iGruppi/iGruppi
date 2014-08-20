@@ -63,6 +63,8 @@
                   <ul class="dropdown-menu" role="menu">
                     <li><a href="/gruppo/iscritti">Utenti</a></li>
                     <li><a href="/produttori">Produttori</a></li>
+                    <li><a href="/listini">Listini</a></li>
+                    <li><a href="/gestione-ordini">Gestione ordini</a></li>
                   </ul>
                 </div>            
               </li>
