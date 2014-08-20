@@ -79,8 +79,8 @@ class Controller_GestioneOrdini extends MyFw_Controller {
             if( $form->isValid($fv) ) 
             {
                 // Fix date values to save in DB
-                $form->setFieldData_Save("data_inizio", $fv["data_inizio"]);
-                $form->setFieldData_Save("data_fine", $fv["data_fine"]);
+                $form->setFieldDateTime_Save("data_inizio", $fv["data_inizio"]);
+                $form->setFieldDateTime_Save("data_fine", $fv["data_fine"]);
                 
                 // SAVE to DB
                 $idordine = $this->getDB()->makeInsert("ordini", $form->getValues());
@@ -135,8 +135,8 @@ class Controller_GestioneOrdini extends MyFw_Controller {
             if( $form->isValid($fv) ) 
             {    
                 // Fix date values to save in DB
-                $form->setFieldData_Save("data_inizio", $fv["data_inizio"]);
-                $form->setFieldData_Save("data_fine", $fv["data_fine"]);
+                $form->setFieldDateTime_Save("data_inizio", $fv["data_inizio"]);
+                $form->setFieldDateTime_Save("data_fine", $fv["data_fine"]);
                 // ADD Ordine in stato NEW
                 $this->getDB()->makeUpdate("ordini", "idordine", $form->getValues() );
                 // REDIRECT
@@ -147,8 +147,8 @@ class Controller_GestioneOrdini extends MyFw_Controller {
             $ordVal = clone $this->_ordine;
             $form->setValues($ordVal);
 //            Zend_Debug::dump($form->getValues());die;
-            $form->setFieldData_View("data_inizio", $ordVal->data_inizio);
-            $form->setFieldData_View("data_fine", $ordVal->data_fine);
+            $form->setFieldDateTime_View("data_inizio", $ordVal->data_inizio);
+            $form->setFieldDateTime_View("data_fine", $ordVal->data_fine);
         }
         
         // set Form in the View

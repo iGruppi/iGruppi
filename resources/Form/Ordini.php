@@ -52,18 +52,4 @@ class Form_Ordini extends MyFw_Form {
         
     }
     
-    function setFieldData_View($field, $d)
-    {
-        $dt = new Zend_Date($d, "YYYY-MM-dd HH:mm:ss");
-        $value = $dt->toString("dd/MM/YYYY HH:mm");
-        $this->setValue($field, $value);
-    }
-    
-    function setFieldData_Save($field, $d)
-    {
-        $dt = new Zend_Date($d, "dd/MM/YYYY HH:mm");
-        $value = $dt->toString("YYYY-MM-dd HH:mm:ss");
-        $this->setValue($field, $value);
-    }
-    
 }
