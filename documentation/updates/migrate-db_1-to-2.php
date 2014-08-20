@@ -44,11 +44,13 @@ copyTable("produttori", "produttori");
 $db2->query("UPDATE produttori SET production='S'");
 copyTable("groups", "groups");
 copyTable("users_group", "users_group");
+// REFERENTI di Gruppo
 copyTable("groups_produttori", "referenti", array(
     'idgroup'       => 'idgroup',
     'idproduttore'  => 'idproduttore',
     'iduser_ref'    => 'iduser'
 ));
+// REFERENTI Globali (Sono poi da sistemare!)
 copyTable("groups_produttori", "users_produttori", array(
     'idproduttore'  => 'idproduttore',
     'iduser_ref'    => 'iduser'
@@ -72,7 +74,12 @@ $db2->query("UPDATE prodotti SET production='S'");
 /*
  * LISTINI Prodotti
 
-$sth_p = $db2->prepare("SELECT DISTINCT prod.idproduttore, p.ragsoc FROM prodotti AS prod LEFT JOIN produttori AS p ON prod.idproduttore=p.idproduttore");
+$sql_p = "SELECT DISTINCT prod.idproduttore, p.ragsoc, up.iduser AS iduser_ref "
+        . "FROM prodotti AS prod "
+        . "LEFT JOIN produttori AS p ON prod.idproduttore=p.idproduttore "
+        . "LEFT JOIN users_produttori AS up ON prod.idproduttore=up.idproduttore "
+        . "GROUP BY prod.idproduttore";
+$sth_p = $db2->prepare($sql_p);
 $sth_p->execute();
 if($sth_p->rowCount() > 0) {
     $recs = $sth_p->fetchAll(PDO::FETCH_ASSOC);
@@ -80,9 +87,10 @@ if($sth_p->rowCount() > 0) {
     {
         $idproduttore = $ffp["idproduttore"];
         $ragsoc = $ffp["ragsoc"];
+        $iduser_ref = $ffp["iduser_ref"];
         
         // ADD NEW LISTINO
-        $db2->query("INSERT INTO listini SET descrizione='Listino pubblico $ragsoc [imported]'");
+        $db2->query("INSERT INTO listini SET iduser_ref='$iduser_ref', descrizione='Listino imported: $ragsoc '");
         $idlistino = $db2->lastInsertId();
         $db2->query("INSERT INTO groups_listini SET idlistino= $idlistino, idgroup_master=1, idgroup_slave=1");
         
