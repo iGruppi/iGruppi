@@ -12,28 +12,19 @@ class Model_Produttori extends MyFw_DB_Base {
     }
 
     
-    function getProduttoreById($idp, $idgroup) {
-        /*
-         * Utilizzo idgroup come filtro per i furbi
-         * In questo modo non possono visualizzare Produttori di altri Gruppi cambiando l'idproduttore
-         */
-        
-        $sql = "SELECT *, u.nome, u.cognome, u.email FROM produttori AS p"
-              ." LEFT JOIN groups_produttori AS gp ON p.idproduttore=gp.idproduttore"
-              ." LEFT JOIN users AS u ON gp.iduser_ref=u.iduser"
-              ." WHERE gp.idproduttore= :idproduttore"
-              ." AND gp.idgroup= :idgroup";
+    function getProduttoreById($idproduttore) {
+        $sql = "SELECT * FROM produttori WHERE idproduttore= :idproduttore";
         $sth_app = $this->db->prepare($sql);
-        $sth_app->execute(array('idgroup' => $idgroup, 'idproduttore' => $idp));
+        $sth_app->execute(array('idproduttore' => $idproduttore));
         return $sth_app->fetch(PDO::FETCH_OBJ);
     }
 
     function getProduttoriByIdGroup($idgroup) {
-        $sql = "SELECT p.*, gp.stato, gp.iduser_ref, u.nome, u.cognome "
+        $sql = "SELECT p.*, r.iduser_ref, u.nome, u.cognome "
               ." FROM produttori AS p"
-              ." LEFT JOIN groups_produttori AS gp ON p.idproduttore=gp.idproduttore"
-              ." LEFT JOIN users AS u ON gp.iduser_ref=u.iduser"
-              ." WHERE gp.idgroup= :idgroup"
+              ." LEFT JOIN referenti AS r ON p.idproduttore=r.idproduttore"
+              ." LEFT JOIN users AS u ON r.iduser_ref=u.iduser"
+              ." WHERE r.idgroup= :idgroup"
               ." ORDER BY p.ragsoc";
         $sth_app = $this->db->prepare($sql);
         $sth_app->execute(array('idgroup' => $idgroup));

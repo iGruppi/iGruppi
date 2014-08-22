@@ -12,9 +12,7 @@ class Model_Ordini extends MyFw_DB_Base {
     }
     
     function getByIdOrdine($idordine) {
-        $sql = "SELECT * FROM ordini AS o"
-              ." LEFT JOIN groups_produttori AS gp ON o.idgroup=gp.idgroup AND o.idproduttore=gp.idproduttore"
-              ." WHERE o.idordine= :idordine";
+        $sql = "SELECT * FROM ordini WHERE idordine= :idordine";
         $sth = $this->db->prepare($sql);
         $sth->execute(array('idordine' => $idordine));
         if($sth->rowCount() > 0) {
@@ -26,10 +24,10 @@ class Model_Ordini extends MyFw_DB_Base {
     function getAllByIdProduttore($idproduttore, $idgroup, $iduser_ref) {
         
         $sql = "SELECT * FROM ordini AS o"
-              ." LEFT JOIN groups_produttori AS gp ON o.idgroup=gp.idgroup AND o.idproduttore=gp.idproduttore"
-              ." WHERE gp.idproduttore= :idproduttore"
-              ." AND gp.iduser_ref= :iduser_ref"
-              ." AND gp.idgroup= :idgroup"
+              ." LEFT JOIN referenti AS r ON o.idgroup=r.idgroup AND o.idproduttore=r.idproduttore"
+              ." WHERE r.idproduttore= :idproduttore"
+              ." AND r.iduser_ref= :iduser_ref"
+              ." AND r.idgroup= :idgroup"
               ." ORDER BY o.archiviato, o.data_fine DESC";
         $sth = $this->db->prepare($sql);
         $sth->execute(array('idproduttore' => $idproduttore, 'idgroup' => $idgroup, 'iduser_ref' => $iduser_ref));

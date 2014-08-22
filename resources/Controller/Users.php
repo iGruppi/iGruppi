@@ -84,12 +84,12 @@ class Controller_Users extends MyFw_Controller {
         $idproduttore = $this->getParam("idproduttore");
         $iduser = $this->getParam("iduser");
         
-        $sth = $this->getDB()->prepare("SELECT * FROM groups_produttori WHERE idproduttore= :idproduttore AND idgroup= :idgroup");
+        $sth = $this->getDB()->prepare("SELECT * FROM referenti WHERE idproduttore= :idproduttore AND idgroup= :idgroup");
         $arVal = array('idproduttore' => $idproduttore, 'idgroup' => $this->_userSessionVal->idgroup);
         $sth->execute($arVal);
         if($sth->rowCount() > 0) {
             // UPDATE
-            $sth_update = $this->getDB()->prepare("UPDATE groups_produttori SET iduser_ref= :iduser_ref WHERE idproduttore= :idproduttore AND idgroup= :idgroup");
+            $sth_update = $this->getDB()->prepare("UPDATE referenti SET iduser_ref= :iduser_ref WHERE idproduttore= :idproduttore AND idgroup= :idgroup");
             $arVal["iduser_ref"] = $iduser;
             $result = $sth_update->execute($arVal);
         } else {

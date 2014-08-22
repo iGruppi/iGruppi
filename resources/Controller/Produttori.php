@@ -54,14 +54,19 @@ class Controller_Produttori extends MyFw_Controller {
                 // ADD Produttore
                 $idproduttore = $this->getDB()->makeInsert("produttori", $fv);
 
-                // Add Relationship with Group
-                $this->getDB()->makeInsert("groups_produttori", array(
+                // Add Relationship to REFERENTI
+                $this->getDB()->makeInsert("referenti", array(
                     'idproduttore'  => $idproduttore,
                     'idgroup'       => $this->_userSessionVal->idgroup,
-                    'stato'         => 'A',
                     'iduser_ref'    => $this->_iduser
                 ));
      
+                // Add Relationship to USERS_PRODUTTORI (Super Referente)
+                $this->getDB()->makeInsert("users_produttori", array(
+                    'idproduttore'  => $idproduttore,
+                    'iduser'    => $this->_iduser
+                ));
+                
                 // REDIRECT TO EDIT
                 $this->redirect("produttori", "edit", array('idproduttore' => $idproduttore));
             }
