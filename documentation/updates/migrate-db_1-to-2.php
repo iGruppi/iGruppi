@@ -31,13 +31,15 @@ $db1->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 $db2->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
 
-
 // disable Foreign key check for db2
 $db2->query("SET FOREIGN_KEY_CHECKS=0");
 
-/*
- * Users, Groups and Produttori
 
+
+/*
+ *  STEP 1
+ *  Users, Groups and Produttori
+ */
 // Tables not changed
 copyTable("users", "users");
 copyTable("produttori", "produttori");
@@ -48,19 +50,18 @@ copyTable("users_group", "users_group");
 copyTable("groups_produttori", "referenti", array(
     'idgroup'       => 'idgroup',
     'idproduttore'  => 'idproduttore',
-    'iduser_ref'    => 'iduser'
+    'iduser_ref'    => 'iduser_ref'
 ));
 // REFERENTI Globali 
-// TODO: Eventualmente da sistemare nel caso vi sia 1 solo referente globale!
 copyTable("groups_produttori", "users_produttori", array(
     'idproduttore'  => 'idproduttore',
     'iduser_ref'    => 'iduser'
 ));
- */
 
 /*
- * PRODOTTI (Tabelle base)
-
+ *  STEP 2
+ *  PRODOTTI (Tabelle base)
+ */
 copyTable("prodotti", "prodotti");
 copyTable("categorie", "categorie");
 copyTable("categorie_sub", "categorie_sub", array(
@@ -70,16 +71,16 @@ copyTable("categorie_sub", "categorie_sub", array(
     'descrizione'   => 'descrizione'
 ));
 $db2->query("UPDATE prodotti SET production='S'");
- */
+
 
 /*
- * LISTINI Prodotti
-
-$sql_p = "SELECT DISTINCT prod.idproduttore, p.ragsoc, up.iduser AS iduser_ref "
+ *  STEP 3
+ *  LISTINI Prodotti
+ */
+$sql_p = "SELECT DISTINCT prod.idproduttore, p.ragsoc, r.idgroup "
         . "FROM prodotti AS prod "
         . "LEFT JOIN produttori AS p ON prod.idproduttore=p.idproduttore "
-        . "LEFT JOIN users_produttori AS up ON prod.idproduttore=up.idproduttore "
-        . "GROUP BY prod.idproduttore";
+        . "LEFT JOIN referenti AS r ON prod.idproduttore=r.idproduttore ";
 $sth_p = $db2->prepare($sql_p);
 $sth_p->execute();
 if($sth_p->rowCount() > 0) {
@@ -88,12 +89,12 @@ if($sth_p->rowCount() > 0) {
     {
         $idproduttore = $ffp["idproduttore"];
         $ragsoc = $ffp["ragsoc"];
-        $iduser_ref = $ffp["iduser_ref"];
+        $idgroup = $ffp["idgroup"];
         
         // ADD NEW LISTINO
-        $db2->query("INSERT INTO listini SET iduser_ref='$iduser_ref', descrizione='Listino imported: $ragsoc '");
+        $db2->query("INSERT INTO listini SET idproduttore='$idproduttore', descrizione='Listino imported: $ragsoc ', condivisione='PRI'");
         $idlistino = $db2->lastInsertId();
-        $db2->query("INSERT INTO groups_listini SET idlistino= $idlistino, idgroup_master=1, idgroup_slave=1");
+        $db2->query("INSERT INTO listini_groups SET idlistino= $idlistino, idgroup_master=$idgroup, idgroup_slave=$idgroup"); 
         
         $sth_pp = $db2->prepare("SELECT * FROM prodotti WHERE idproduttore= :idproduttore");
         $sth_pp->execute(array('idproduttore' => $idproduttore));
@@ -101,17 +102,18 @@ if($sth_p->rowCount() > 0) {
             $recpp = $sth_pp->fetchAll(PDO::FETCH_ASSOC);
             foreach( $recpp AS $fields )
             {
-                $sth_pl = $db2->prepare("INSERT INTO prodotti_listini SET idlistino= :idlistino, idprodotto= :idprodotto, descrizione= :descrizione, costo= :costo, note= :note, attivo= :attivo");
+                $sth_pl = $db2->prepare("INSERT INTO listini_prodotti SET idlistino= :idlistino, idprodotto= :idprodotto, descrizione= :descrizione, costo= :costo, note= :note, attivo= :attivo");
                 $sth_pl->execute(array('idlistino' => $idlistino, 'idprodotto' => $fields["idprodotto"], 'descrizione' => $fields["descrizione"], 'costo' => $fields["costo"], 'note' => $fields["note"], 'attivo' => $fields["attivo"]));
             }            
         }
     }
 }
- */
+
 
 /*
+ *  STEP 4
  *  ORDINI
-
+ */
 $sth_o = $db1->prepare("SELECT * FROM ordini");
 $sth_o->execute();
 if($sth_o->rowCount() > 0) {
@@ -120,34 +122,30 @@ if($sth_o->rowCount() > 0) {
     {
         // GET LISTINO
         $idproduttore = $ffo["idproduttore"];
-        $sth1 = $db2->prepare("SELECT idlistino FROM prodotti_listini AS pl LEFT JOIN prodotti AS p ON pl.idprodotto=p.idprodotto WHERE p.idproduttore= :idproduttore LIMIT 0,1");
-        $sth1->execute(array('idproduttore' => $idproduttore));
+        $idgroup = $ffo["idgroup"];
+        $sth1 = $db2->prepare("SELECT l.idlistino, r.iduser_ref FROM listini AS l"
+                . " LEFT JOIN referenti AS r ON r.idproduttore=l.idproduttore AND r.idgroup= :idgroup"
+                . " WHERE l.idproduttore= :idproduttore");
+        $sth1->execute(array('idproduttore' => $idproduttore, 'idgroup' => $idgroup));
         if($sth1->rowCount() > 0) {
             $rec1 = $sth1->fetch(PDO::FETCH_ASSOC);
             $idlistino = $rec1["idlistino"];
-        // Insert ORDINE
+            $iduser_ref = $rec1["iduser_ref"];
+            
+        // Insert ORDINE in ordini
             $idordine = $ffo["idordine"];
             $data_inviato = is_null($ffo["data_inconsegna"]) ? "NULL" : "'".$ffo["data_inconsegna"]."'";
             $data_arrivato = is_null($ffo["data_consegnato"]) ? "NULL" : "'".$ffo["data_consegnato"]."'"; // it does not exists in db1
             $data_consegnato = is_null($ffo["data_consegnato"]) ? "NULL" : "'".$ffo["data_consegnato"]."'";
             $db2->query("INSERT INTO ordini "
-                    . "(`idordine`, `idlistino`, `idgroup_slave`, `data_inizio`, `data_fine`, `data_inviato`, `data_arrivato`, `data_consegnato`, `archiviato`, `note_consegna`, `costo_spedizione`) VALUES "
-                    . "('".$idordine."', '".$idlistino."', '".$ffo["idgroup"]."', '".$ffo["data_inizio"]."', '".$ffo["data_fine"]."', ".$data_inviato.", ".$data_arrivato.", ".$data_consegnato.", '".$ffo["archiviato"]."', '".$ffo["note_consegna"]."', '".$ffo["costo_spedizione"]."')");
+                    . "(`idordine`, `data_inizio`, `data_fine`, `data_inviato`, `data_arrivato`, `data_consegnato`, `archiviato`, `costo_spedizione`, `condivisione`) VALUES "
+                    . "('".$idordine."', '".$ffo["data_inizio"]."', '".$ffo["data_fine"]."', ".$data_inviato.", ".$data_arrivato.", ".$data_consegnato.", '".$ffo["archiviato"]."', '".$ffo["costo_spedizione"]."', 'PRI')");
+        // Insert ORDINE in ordini_groups
+            $db2->query("INSERT INTO ordini_groups "
+                    . "(idordine, idgroup_master, idgroup_slave, iduser_ref, visibile, note_consegna) VALUES "
+                    . "('".$idordine."', '".$ffo["idgroup"]."', '".$ffo["idgroup"]."', '".$iduser_ref."', 'S', '".$ffo["note_consegna"]."')");
             
-        // Insert records in ordini_user
-            $sth3 = $db1->prepare("SELECT DISTINCT iduser FROM ordini_user_prodotti WHERE idordine='$idordine'");
-            $sth3->execute();
-            if($sth3->rowCount() > 0) {
-                $recs3 = $sth3->fetchAll(PDO::FETCH_ASSOC);
-                $iii = 0;
-                foreach( $recs3 AS $ffi3 )
-                {
-                    $db2->query("INSERT INTO ordini_user SET iduser='".$ffi3["iduser"]."', idordine='$idordine', note='note $iii'");
-                    $iii++;
-                }
-            }
-            
-        // Insert records in ordini_prodotti
+        // Insert prodotti in ordini_prodotti
             $sth4 = $db1->prepare("SELECT * FROM ordini_prodotti WHERE idordine='$idordine'");
             $sth4->execute();
             if($sth4->rowCount() > 0) {
@@ -157,6 +155,19 @@ if($sth_o->rowCount() > 0) {
                     $db2->query("INSERT INTO `ordini_prodotti` "
                             . "(`idordine`, `idlistino`, `idprodotto`, `costo`, `offerta`, `sconto`, `disponibile`) VALUES "
                             . "($idordine, $idlistino, '".$ffp4["idprodotto"]."', '".$ffp4["costo"]."', '".$ffp4["offerta"]."', '".$ffp4["sconto"]."', '".$ffp4["disponibile"]."')");
+                }
+            }
+            
+        // Insert records in ordini_user
+            $sth3 = $db1->prepare("SELECT DISTINCT iduser FROM ordini_user_prodotti WHERE idordine='$idordine'");
+            $sth3->execute();
+            if($sth3->rowCount() > 0) {
+                $recs3 = $sth3->fetchAll(PDO::FETCH_ASSOC);
+                $iii = 0;
+                foreach( $recs3 AS $ffi3 )
+                {
+                    $db2->query("INSERT INTO ordini_users SET iduser='".$ffi3["iduser"]."', idordine='$idordine', note='note $iii'");
+                    $iii++;
                 }
             }
             
@@ -176,7 +187,7 @@ if($sth_o->rowCount() > 0) {
         }
     }
 }
- */
+
 
 // RE-enable Foreign key check for db2
 $db2->query("SET FOREIGN_KEY_CHECKS=1");
