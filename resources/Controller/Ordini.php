@@ -67,7 +67,7 @@ class Controller_Ordini extends MyFw_Controller {
 
         // GET PRODUTTORE
         $produttoreObj = new Model_Produttori();
-        $produttore = $produttoreObj->getProduttoreById($ordine->idproduttore, $this->_userSessionVal->idgroup);
+        $produttore = $produttoreObj->getProduttoreById($ordine->idproduttore);
         $this->view->produttore = $produttore;
         
         // GET PRODUCTS LIST with Qta Ordered
@@ -119,7 +119,7 @@ class Controller_Ordini extends MyFw_Controller {
         
         // GET PRODUTTORE
         $produttoreObj = new Model_Produttori();
-        $produttore = $produttoreObj->getProduttoreById($ordine->idproduttore, $this->_userSessionVal->idgroup);
+        $produttore = $produttoreObj->getProduttoreById($ordine->idproduttore);
         $this->view->produttore = $produttore;
         
         // GET PRODUCTS LIST with Qta Ordered

@@ -35,7 +35,7 @@ class Controller_Prodotti extends MyFw_Controller {
             $this->redirect("index", "error", array('code' => 404));
         }
         $produttoreObj = new Model_Produttori();
-        $this->_produttore = $this->view->produttore = $produttoreObj->getProduttoreById($idproduttore, $this->_userSessionVal->idgroup);
+        $this->_produttore = $this->view->produttore = $produttoreObj->getProduttoreById($idproduttore);
         
         // Get updated if it is set
         $this->view->updated = $this->getParam("updated");        

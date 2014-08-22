@@ -79,7 +79,7 @@ class Controller_Produttori extends MyFw_Controller {
     function viewAction() {
         $idproduttore = $this->getParam("idproduttore");
         $myObj = new Model_Produttori();
-        $this->view->produttore = $myObj->getProduttoreById($idproduttore, $this->_userSessionVal->idgroup);
+        $this->view->produttore = $myObj->getProduttoreById($idproduttore);
     }
     
     function editAction() {
@@ -90,7 +90,7 @@ class Controller_Produttori extends MyFw_Controller {
         
         // check if CAN edit this Produttore
         $myObj = new Model_Produttori();
-        $produttore = $myObj->getProduttoreById($idproduttore, $this->_userSessionVal->idgroup);
+        $produttore = $myObj->getProduttoreById($idproduttore);
         // Un po' di controlli per i furbi...
         if($produttore === false) {
             $this->redirect("produttori");

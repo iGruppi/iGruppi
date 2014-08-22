@@ -36,7 +36,7 @@ class Controller_GestioneOrdini extends MyFw_Controller {
             $this->redirect("index", "error", array('code' => 404));
         }
         $produttoreObj = new Model_Produttori();
-        $produttore = $produttoreObj->getProduttoreById($idproduttore, $this->_userSessionVal->idgroup);
+        $produttore = $produttoreObj->getProduttoreById($idproduttore);
         $this->_produttore = $this->view->produttore = $produttore;
         
         // check REFERENTE, controllo per i furbi (non Referenti)
