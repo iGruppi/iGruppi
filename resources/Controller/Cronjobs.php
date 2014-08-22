@@ -41,7 +41,7 @@ class Controller_Cronjobs extends MyFw_Controller {
                 
                 // SET array Categorie prodotti for Produttore
                 $catObj = new Model_Categorie();
-                $arCat = $catObj->getSubCategoriesByIdgroup($idgroup);
+                $arCat = $catObj->getCategories_withKeyIdProduttore();
                 if(isset($arCat[$idproduttore]) && count($arCat[$idproduttore]) > 0) {
                     $mail->setViewParam("arCat", $arCat[$idproduttore]);
                 }

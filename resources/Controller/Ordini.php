@@ -42,7 +42,7 @@ class Controller_Ordini extends MyFw_Controller {
         $this->view->produttori = $produttori;
         // Create array Categorie prodotti for Produttori
         $catObj = new Model_Categorie();
-        $arCat = $catObj->getSubCategoriesByIdgroup($this->_userSessionVal->idgroup);
+        $arCat = $catObj->getCategories_withKeyIdProduttore();
         $this->view->arCat = $arCat;
         
         $ordiniObj = new Model_Ordini();

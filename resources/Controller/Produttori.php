@@ -35,7 +35,7 @@ class Controller_Produttori extends MyFw_Controller {
         
         // Create array Categorie prodotti for Produttori
         $catObj = new Model_Categorie();
-        $arCat = $catObj->getSubCategoriesByIdgroup($this->_userSessionVal->idgroup);
+        $arCat = $catObj->getCategories_withKeyIdProduttore();
         $this->view->arCat = $arCat;
         
     }
@@ -141,7 +141,7 @@ class Controller_Produttori extends MyFw_Controller {
         }
         
         // get Elenco subCat
-        $this->view->arSubCat =  $catObj->getSubCategories($this->_userSessionVal->idgroup, $idproduttore);
+        $this->view->arSubCat =  $catObj->getSubCategoriesByIdproduttore($idproduttore);
         // set Form in the View
         $this->view->form = $form;
     }
@@ -163,7 +163,6 @@ class Controller_Produttori extends MyFw_Controller {
         
         // prepare array
         $arVal = array(
-                'idgroup'       => $this->_userSessionVal->idgroup,
                 'idproduttore'  => $idproduttore,
                 'idcat'         => $idcat,
                 'descrizione'   => $catName

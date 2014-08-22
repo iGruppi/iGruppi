@@ -24,24 +24,22 @@ class Model_Categorie extends MyFw_DB_Base {
         return $sth->fetchAll(PDO::FETCH_ASSOC);
     }
     
-    function getSubCategories($idgroup, $idproduttore) {
+    function getSubCategoriesByIdproduttore($idproduttore) {
         $sql = "SELECT cs.*, c.descrizione AS cat_descrizione "
               ."FROM categorie_sub AS cs "
               ."LEFT JOIN categorie AS c ON cs.idcat=c.idcat "
-              ."LEFT JOIN groups_produttori AS gp ON cs.idgroup=gp.idgroup AND cs.idproduttore=gp.idproduttore "
-              ."WHERE gp.idgroup= :idgroup AND gp.idproduttore= :idproduttore";
+              ."WHERE cs.idproduttore= :idproduttore";
         $sth = $this->db->prepare($sql);
-        $sth->execute(array('idgroup' => $idgroup, 'idproduttore' => $idproduttore));
+        $sth->execute(array('idproduttore' => $idproduttore));
         return $sth->fetchAll(PDO::FETCH_ASSOC);        
     }
     
-    function getSubCategoriesByIdgroup($idgroup) {
+    function getCategories_withKeyIdProduttore() {
         $sql = "SELECT cs.*, c.descrizione AS cat_descrizione "
               ."FROM categorie_sub AS cs "
-              ."LEFT JOIN categorie AS c ON cs.idcat=c.idcat "
-              ."WHERE cs.idgroup= :idgroup";
+              ."LEFT JOIN categorie AS c ON cs.idcat=c.idcat ";
         $sth = $this->db->prepare($sql);
-        $sth->execute(array('idgroup' => $idgroup));
+        $sth->execute();
         $subCat = $sth->fetchAll(PDO::FETCH_OBJ);
         $res = array();
         if(count($subCat) > 0) {
@@ -54,7 +52,7 @@ class Model_Categorie extends MyFw_DB_Base {
 
     
     function addSubCategoria($arVal) {
-        $sth = $this->db->prepare("INSERT INTO categorie_sub SET idgroup= :idgroup, idproduttore= :idproduttore, idcat= :idcat, descrizione= :descrizione");
+        $sth = $this->db->prepare("INSERT INTO categorie_sub SET idproduttore= :idproduttore, idcat= :idcat, descrizione= :descrizione");
         if( $sth->execute($arVal)) {
             return $this->db->lastInsertId();
         } else {
