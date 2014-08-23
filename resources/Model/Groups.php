@@ -15,7 +15,7 @@ class Model_Groups extends MyFw_DB_Base {
         $sth = $this->db->prepare("SELECT * FROM groups WHERE 1 ORDER BY nome ASC");
         $sth->execute();
         if($sth->rowCount() > 0) {
-            return $sth->fetchAll(PDO::FETCH_ASSOC);
+            return $sth->fetchAll(PDO::FETCH_OBJ);
         }
         return null;
     }
