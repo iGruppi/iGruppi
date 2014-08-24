@@ -86,8 +86,6 @@ class Controller_Produttori extends MyFw_Controller {
 
         $idproduttore = $this->getParam("idproduttore");
         
-        $this->view->updated = false;
-        
         // check if CAN edit this Produttore
         $myObj = new Model_Produttori();
         $produttore = $myObj->getProduttoreById($idproduttore);
@@ -137,10 +135,8 @@ class Controller_Produttori extends MyFw_Controller {
                     $catObj->editSubCategorie($arVal);
                 }
 
-                $this->view->updated = true;
+                $this->redirect("produttori", "edit", array('idproduttore' => $idproduttore, 'updated' => true));
             }
-            //Zend_Debug::dump($sth); die;
-            
         } else {
             $form->setValues($produttore);
         }
@@ -149,6 +145,7 @@ class Controller_Produttori extends MyFw_Controller {
         $this->view->arSubCat =  $catObj->getSubCategoriesByIdproduttore($idproduttore);
         // set Form in the View
         $this->view->form = $form;
+        $this->view->updated = $this->getParam("updated");        
     }
 
 
