@@ -1,40 +1,17 @@
 <?php
-
-namespace Model\Sharing\GroupBuilder;
-
 /**
  * OrdineBuilder builds group for Condivisione ORDINI
  */
-class OrdineBuilder implements BuilderInterface
+class Model_Sharing_GroupBuilder_OrdineBuilder 
+    extends Model_Sharing_GroupBuilder_BuilderInterface
 {
-    /**
-     * @var Parts\Ordine
-     */
-    protected $ordine;
 
     /**
      * @return void
      */
-    public function addIdgroup()
+    public function addNoteConsegna()
     {
-        $this->ordine->setPart('idgroup', new Parts\Idgroup());
-    }
-
-    /**
-     * @return void
-     */
-    public function addValidita()
-    {
-        $this->ordine->setPart('valido_dal', new Parts\Validita());
-        $this->ordine->setPart('valido_dal', new Parts\Validita());
-    }
-
-    /**
-     * @return void
-     */
-    public function addVisibile()
-    {
-        $this->ordine->setPart('visibile', new Parts\Visibile());
+        $this->group->setPart('note_consegna', new Model_Sharing_GroupBuilder_Parts_Text());
     }
 
     /**
@@ -42,14 +19,7 @@ class OrdineBuilder implements BuilderInterface
      */
     public function createGroup()
     {
-        $this->ordine = new Parts\Ordine();
+        $this->group = new Model_Sharing_GroupBuilder_Parts_Ordine();
     }
 
-    /**
-     * @return Parts\Ordine
-     */
-    public function getGroup()
-    {
-        return $this->ordine;
-    }
 }
