@@ -14,8 +14,8 @@ class Model_Sharing_GroupBuilder_Parts_Listino
             'idlistino'         => $this->getIdListino(),
             'idgroup_master'    => $this->getIdGroupMaster(),
             'idgroup_slave'     => $this->getIdGroup(),
-            'valido_dal'        => $this->getValidita()->getDal("YYYY-MM-dd"),
-            'valido_al'         => $this->getValidita()->getAl("YYYY-MM-dd"),
+            'valido_dal'        => $this->getValidita()->getDal(MyFw_Form_Filters_Date::_MYFORMAT_DATE_DB),
+            'valido_al'         => $this->getValidita()->getAl(MyFw_Form_Filters_Date::_MYFORMAT_DATE_DB),
             'visibile'          => $this->getVisibile()->getString()
         );
         return $ar;

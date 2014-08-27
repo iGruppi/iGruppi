@@ -18,14 +18,16 @@ class Form_Ordini extends MyFw_Form {
                     'size'      => 20,
                     'required'  => true,
                     'readonly'  => true,
-                    'placeholder' => 'Seleziona data...'
+                    'placeholder' => 'Seleziona data...',
+                    'filters'   => array('date' => array( 'format' => MyFw_Form_Filters_Date::_MYFORMAT_DATETIME_DB) )
         ));
         $this->addField('data_fine', array(
                     'label'     => 'Data chiusura',
                     'size'      => 20,
                     'required'  => true,
                     'readonly'  => true,
-                    'placeholder' => 'Seleziona data...'
+                    'placeholder' => 'Seleziona data...',
+                    'filters'   => array('date' => array( 'format' => MyFw_Form_Filters_Date::_MYFORMAT_DATETIME_DB) )            
         ));
         $this->addField('archiviato', array(
                     'label'     => 'Archiviato',

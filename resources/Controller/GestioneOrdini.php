@@ -77,11 +77,7 @@ class Controller_GestioneOrdini extends MyFw_Controller {
             // get Post and check if is valid
             $fv = $this->getRequest()->getPost();
             if( $form->isValid($fv) ) 
-            {
-                // Fix date values to save in DB
-                $form->setFieldDateTime_Save("data_inizio", $fv["data_inizio"]);
-                $form->setFieldDateTime_Save("data_fine", $fv["data_fine"]);
-                
+            {                
                 // SAVE to DB
                 $idordine = $this->getDB()->makeInsert("ordini", $form->getValues());
                 
@@ -134,9 +130,6 @@ class Controller_GestioneOrdini extends MyFw_Controller {
             $fv = $this->getRequest()->getPost();
             if( $form->isValid($fv) ) 
             {    
-                // Fix date values to save in DB
-                $form->setFieldDateTime_Save("data_inizio", $fv["data_inizio"]);
-                $form->setFieldDateTime_Save("data_fine", $fv["data_fine"]);
                 // ADD Ordine in stato NEW
                 $this->getDB()->makeUpdate("ordini", "idordine", $form->getValues() );
                 // REDIRECT
@@ -146,9 +139,9 @@ class Controller_GestioneOrdini extends MyFw_Controller {
             // build array values for form
             $ordVal = clone $this->_ordine;
             $form->setValues($ordVal);
+            $form->setValue("data_inizio", MyFw_Form_Filters_Date::filter($ordVal->data_inizio, array('date' => array( 'format' => MyFw_Form_Filters_Date::_MYFORMAT_DATETIME_VIEW))));
+            $form->setValue("data_fine", MyFw_Form_Filters_Date::filter($ordVal->data_fine, array('date' => array( 'format' => MyFw_Form_Filters_Date::_MYFORMAT_DATETIME_VIEW))));
 //            Zend_Debug::dump($form->getValues());die;
-            $form->setFieldDateTime_View("data_inizio", $ordVal->data_inizio);
-            $form->setFieldDateTime_View("data_fine", $ordVal->data_fine);
         }
         
         // set Form in the View

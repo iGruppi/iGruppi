@@ -14,7 +14,7 @@ class Controller_Cronjobs extends MyFw_Controller {
         // some usefull date
         $today = new Zend_Date();
         $tomorrow = $today->addDay(1);
-        $this->_dateTomorrow = $tomorrow->toString("YYYY-MM-dd");
+        $this->_dateTomorrow = $tomorrow->toString(MyFw_Form_Filters_Date::_MYFORMAT_DATE_DB);
         
     }
     
