@@ -2,7 +2,7 @@
 /**
  * Class Validita
  */
-class Model_Sharing_GroupBuilder_Parts_Validita
+class Model_Builder_Parts_Validita
 {
     private $_inizio = null;
     private $_fine = null;

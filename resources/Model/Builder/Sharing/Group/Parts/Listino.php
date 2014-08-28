@@ -2,8 +2,8 @@
 /**
  * Listino is a group for listini sharing environment
  */
-class Model_Sharing_GroupBuilder_Parts_Listino 
-    extends Model_Sharing_GroupBuilder_Parts_Group
+class Model_Builder_Sharing_Group_Parts_Listino 
+    extends Model_Builder_Sharing_Group_Parts_Group
 {
     /**
      * @return array

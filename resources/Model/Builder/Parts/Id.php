@@ -2,7 +2,7 @@
 /**
  * Class Id
  */
-class Model_Sharing_GroupBuilder_Parts_Id
+class Model_Builder_Parts_Id
 {
     private $_id;
     

@@ -2,7 +2,7 @@
 /**
  * Class Text
  */
-class Model_Sharing_GroupBuilder_Parts_Text
+class Model_Builder_Parts_Text
 {
     private $_text;
     

@@ -2,7 +2,7 @@
 /**
  * Class FlagSN
  */
-class Model_Sharing_GroupBuilder_Parts_FlagSN
+class Model_Builder_Parts_FlagSN
 {
     private $_flag;
     

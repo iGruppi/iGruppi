@@ -63,8 +63,8 @@ class Model_Listini_Groups {
      */
     private function _createGroup(stdClass $g)
     {
-        $builderGroup = new Model_Sharing_GroupBuilder_ListinoBuilder();
-        $director = new Model_Sharing_GroupBuilder_Director();
+        $builderGroup = new Model_Builder_Sharing_Group_ListinoBuilder();
+        $director = new Model_Builder_Sharing_Group_Director();
         $group = $director->build($builderGroup);
         $group->setIdListino($g->idlistino);
         $group->setIdGroupMaster($g->idgroup_master);

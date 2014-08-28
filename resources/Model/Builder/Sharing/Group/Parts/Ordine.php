@@ -2,8 +2,8 @@
 /**
  * Ordine is a group for ordini sharing environment
  */
-class Model_Sharing_GroupBuilder_Parts_Ordine 
-    extends Model_Sharing_GroupBuilder_Parts_Group
+class Model_Builder_Sharing_Group_Parts_Ordine 
+    extends Model_Builder_Sharing_Group_Parts_Group
 {
     /**
      * @param string $note
