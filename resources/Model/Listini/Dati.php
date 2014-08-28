@@ -68,10 +68,10 @@ class Model_Listini_Dati {
             $db = Zend_Registry::get("db");
             // check for INSERT or UPDATE
             if( isset($this->_fValues["idlistino"]) ) {
-                $sth = $db->prepare("UPDATE listini SET descrizione= :descrizione, condivisione= :condivisione WHERE idlistino= :idlistino");
+                $sth = $db->prepare("UPDATE listini SET descrizione= :descrizione, condivisione= :condivisione, last_update=NOW() WHERE idlistino= :idlistino");
                 return $sth->execute(array('idlistino' => $this->idlistino, 'descrizione' => $this->descrizione, 'condivisione' => $this->condivisione));
             } else {
-                $sth = $db->prepare("INSERT INTO listini SET descrizione= :descrizione, condivisione= :condivisione, idproduttore= :idproduttore");
+                $sth = $db->prepare("INSERT INTO listini SET descrizione= :descrizione, condivisione= :condivisione, idproduttore= :idproduttore, last_update=NOW()");
                 $res = $sth->execute(array('idproduttore' => $this->idproduttore, 'descrizione' => $this->descrizione, 'condivisione' => $this->condivisione));
                 $this->idlistino = $db->lastInsertId();
                 return $res;

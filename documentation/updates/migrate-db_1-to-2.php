@@ -92,7 +92,7 @@ if($sth_p->rowCount() > 0) {
         $idgroup = $ffp["idgroup"];
         
         // ADD NEW LISTINO
-        $db2->query("INSERT INTO listini SET idproduttore='$idproduttore', descrizione='Listino imported: $ragsoc ', condivisione='PRI'");
+        $db2->query("INSERT INTO listini SET idproduttore='$idproduttore', descrizione='Listino imported: $ragsoc ', condivisione='PRI', last_update=NOW()");
         $idlistino = $db2->lastInsertId();
         $db2->query("INSERT INTO listini_groups SET idlistino= $idlistino, idgroup_master=$idgroup, idgroup_slave=$idgroup, visibile='S'"); 
         
