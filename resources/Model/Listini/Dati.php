@@ -19,6 +19,23 @@ class Model_Listini_Dati {
     private $_fValues = array();
     private $_isChanged = false;
     
+    public function initDatiByObject(stdClass $arValues)
+    {
+        foreach ($this->_fields AS $field) {
+            if(isset($arValues->$field)) {
+                $this->$field = $arValues->$field;
+            }
+        }
+    }
+    
+    public function getIdListino()
+    {
+        if(is_null($this->idlistino)) {
+            throw new Exception("IdListino is NOT set correctly!");
+        }
+        return $this->idlistino;
+    }
+    
     /*
 	* Overloading
 	* __get
@@ -46,11 +63,6 @@ class Model_Listini_Dati {
         }
     }
     
-    public function getIdListino()
-    {
-        return $this->idlistino;
-    }
-    
     public function getProduttoreName()
     {
         return $this->ragsoc;
@@ -69,7 +81,7 @@ class Model_Listini_Dati {
             // check for INSERT or UPDATE
             if( isset($this->_fValues["idlistino"]) ) {
                 $sth = $db->prepare("UPDATE listini SET descrizione= :descrizione, condivisione= :condivisione, last_update=NOW() WHERE idlistino= :idlistino");
-                return $sth->execute(array('idlistino' => $this->idlistino, 'descrizione' => $this->descrizione, 'condivisione' => $this->condivisione));
+                return $sth->execute(array('idlistino' => $this->getIdListino(), 'descrizione' => $this->descrizione, 'condivisione' => $this->condivisione));
             } else {
                 $sth = $db->prepare("INSERT INTO listini SET descrizione= :descrizione, condivisione= :condivisione, idproduttore= :idproduttore, last_update=NOW()");
                 $res = $sth->execute(array('idproduttore' => $this->idproduttore, 'descrizione' => $this->descrizione, 'condivisione' => $this->condivisione));

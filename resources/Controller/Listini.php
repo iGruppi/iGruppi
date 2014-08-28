@@ -24,9 +24,11 @@ class Controller_Listini extends MyFw_Controller {
         $listini = array();
         if(!is_null($listiniArray)) {
             foreach ($listiniArray as $stdListino) {
-                $mllObj = new Model_Listini_Listino($stdListino);
+                $mllObj = new Model_Listini_Listino();
+                // init Dati by stdClass
+                $mllObj->getDati()->initDatiByObject($stdListino);
                 // set Categories in Listini object
-                $categories = $lObj->getCategoriesByIdlistino($mllObj->getDati()->idlistino);
+                $categories = $lObj->getCategoriesByIdlistino($mllObj->getDati()->getIdListino());
                 $mllObj->setCategories($categories);
                 
                 // check for Referente Listino
@@ -70,14 +72,25 @@ class Controller_Listini extends MyFw_Controller {
             // check if values are valid
             if( $form->isValid($fv) ) 
             {   
-                $sth1 = $this->getDB()->prepare("INSERT INTO listini SET descrizione= :descrizione, idproduttore= :idproduttore, last_update=NOW()");
-                $resSave = $sth1->execute(array('descrizione' => $fv["descrizione"], 'idproduttore' => $fv["idproduttore"]));
-                $idlistino = $this->getDB()->lastInsertId();
-                $sth2 = $this->getDB()->prepare("INSERT INTO listini_groups SET idlistino= :idlistino, idgroup_master= :idgroup_master, idgroup_slave= :idgroup_slave");
-                $resSave = $sth2->execute(array('idlistino' => $idlistino, 'idgroup_master' => $this->_userSessionVal->idgroup, 'idgroup_slave' => $this->_userSessionVal->idgroup));
-                // REDIRECT
-                if($resSave) {
-                    $this->redirect("listini", "edit", array('idlistino' => $idlistino, 'updated' => true));
+                // create NEW Listino
+                $mllObj = new Model_Listini_Listino();
+                $mllObj->getDati()->descrizione = $fv["descrizione"];
+                $mllObj->getDati()->idproduttore = $fv["idproduttore"];
+                $mllObj->getDati()->condivisione = "PRI"; // Private
+                if( $mllObj->getDati()->saveToDB() ) {
+                    $idlistino = $mllObj->getDati()->getIdListino();
+                    // create a NEW group
+                    $group = new stdClass();
+                    $group->idlistino = $idlistino;
+                    $group->idgroup_master = $this->_userSessionVal->idgroup;
+                    $group->idgroup_slave = $this->_userSessionVal->idgroup;
+                    // add my group
+                    $mllObj->getGroups()->addGroup($group);
+                    $resSave = $mllObj->getGroups()->saveToDB();
+                    // REDIRECT to EDIT
+                    if($resSave) {
+                        $this->redirect("listini", "edit", array('idlistino' => $idlistino, 'updated' => true));
+                    }
                 }
             }            
         }
@@ -92,10 +105,11 @@ class Controller_Listini extends MyFw_Controller {
         // init Listino object
         $lObj = new Model_Listini();
         $listino = $lObj->getListinoById($idlistino);
-        $mllObj = new Model_Listini_Listino($listino);
+        $mllObj = new Model_Listini_Listino();
         $mllObj->setMyIdGroup($this->_userSessionVal->idgroup);
+        $mllObj->getDati()->initDatiByObject($listino);
         // set Groups in Listini object
-        $mllObj->initGroupsFromDb( $lObj->getGroupsByIdlistino($idlistino) );
+        $mllObj->getGroups()->initGroupsByArray( $lObj->getGroupsByIdlistino($idlistino) );
         
         // get elenco Groups
         $grObj = new Model_Groups();

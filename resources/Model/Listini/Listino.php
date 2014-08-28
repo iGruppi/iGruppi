@@ -12,10 +12,6 @@ class Model_Listini_Listino {
     private $_groups = null;
     private $_categories = null;
     
-    public function __construct(stdClass $l) 
-    {
-        $this->_setDati($l);
-    }
     
     public function setMyIdGroup($idgroup)
     {
@@ -33,19 +29,12 @@ class Model_Listini_Listino {
 /*  **************************************************************************
  *  DATI LISTINO
  */    
-    private function _setDati(stdClass $dati)
-    {
-        $d = new Model_Listini_Dati();
-        $d->idlistino =     $dati->idlistino;
-        $d->descrizione =   $dati->descrizione;
-        $d->condivisione =  $dati->condivisione;
-        $d->idproduttore =  $dati->idproduttore;
-        $d->ragsoc =        $dati->ragsoc;
-        $this->_dati = $d;
-    }
     
     public function getDati()
     {
+        if(is_null($this->_dati)) {
+            $this->_dati = new Model_Listini_Dati();
+        }
         return $this->_dati;
     }
     
@@ -117,15 +106,9 @@ class Model_Listini_Listino {
     public function getGroups()
     {
         if( is_null($this->_groups) ) {
-            throw new Exception("Groups array is not SET!");
+            $this->_groups = new Model_Listini_Groups();
         }
         return $this->_groups;
-    }
-    
-    public function initGroupsFromDb($g)
-    {
-        $this->_groups = new Model_Listini_Groups();
-        $this->_groups->initGroupsByArray($g);
     }
     
     public function getMyGroup()
@@ -137,7 +120,7 @@ class Model_Listini_Listino {
      * @return void
      * @param array $groups Array of idgroup values
      */
-    public function resetGroups($groups) {
+    public function resetGroups(array $groups=array()) {
         // check the condivisione type
         if( $this->getDati()->condivisione != "SHA" )
         {
