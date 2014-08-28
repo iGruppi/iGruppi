@@ -44,7 +44,45 @@ class Controller_Listini extends MyFw_Controller {
     
     function addAction()
     {
+        // init Listino form
+        $form = new Form_Listino();
+        $form->setAction("/listini/add");
+        $form->removeField("idlistino");
+        $form->removeField("valido_dal");
+        $form->removeField("valido_al");
+        $form->removeField("condivisione");
+        $form->removeField("visibile");
+        $form->removeField("idproduttore");
         
+        // get Produttori
+        $pObj = new Model_Produttori();
+        // modify inline the idproduttore field
+        $form->addField('idproduttore', array(
+                        'label'     => 'Produttore',
+                        'type'      => 'select',
+                        'required'  => true,
+                        'options'   => $pObj->convertToSingleArray($pObj->getProduttoriByIdRef($this->_iduser), "idproduttore", "ragsoc")
+            ));
+
+        if($this->getRequest()->isPost()) {
+            // get Post values
+            $fv = $this->getRequest()->getPost();
+            // check if values are valid
+            if( $form->isValid($fv) ) 
+            {   
+                $sth1 = $this->getDB()->prepare("INSERT INTO listini SET descrizione= :descrizione, idproduttore= :idproduttore, last_update=NOW()");
+                $resSave = $sth1->execute(array('descrizione' => $fv["descrizione"], 'idproduttore' => $fv["idproduttore"]));
+                $idlistino = $this->getDB()->lastInsertId();
+                $sth2 = $this->getDB()->prepare("INSERT INTO listini_groups SET idlistino= :idlistino, idgroup_master= :idgroup_master, idgroup_slave= :idgroup_slave");
+                $resSave = $sth2->execute(array('idlistino' => $idlistino, 'idgroup_master' => $this->_userSessionVal->idgroup, 'idgroup_slave' => $this->_userSessionVal->idgroup));
+                // REDIRECT
+                if($resSave) {
+                    $this->redirect("listini", "edit", array('idlistino' => $idlistino, 'updated' => true));
+                }
+            }            
+        }
+        // set Form in the View
+        $this->view->form = $form;        
     }
     
     function editAction()

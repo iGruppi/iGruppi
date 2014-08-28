@@ -7,7 +7,7 @@
     </div>
 <?php endif; ?>
 
-<form id="prodform" action="<?php echo $this->form->getAction(); ?>" method="post" class="f1n200" novalidate>
+<form id="prodform" action="<?php echo $this->form->getAction(); ?>" method="post" class="f1n200">
 
     <ul class="nav nav-tabs" id="myTab">
       <li class="active"><a href="#dati" data-toggle="tab">Dati listino</a></li>
