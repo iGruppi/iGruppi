@@ -19,19 +19,19 @@ abstract class Model_Builder_Sharing_Group_Parts_Group
     }
 
     /**
-     * @param int $idlistino
+     * @param int $id
      */
-    public function setIdListino($idlistino)
+    public function setId($id)
     {
-        $this->data["idlistino"]->set($idlistino);
+        $this->data["id"]->set($id);
     }
     
     /**
      * @return int
      */    
-    public function getIdListino()
+    public function getId()
     {
-        return $this->data["idlistino"]->get();
+        return $this->data["id"]->get();
     }
     
     /**
@@ -113,7 +113,7 @@ abstract class Model_Builder_Sharing_Group_Parts_Group
      */
     public function getRefNome()
     {
-        return $this->data["ref_nome"]->get() . " " . $this->data["ref_cognome"]->set($ref_cognome);
+        return $this->data["ref_nome"]->get() . " " . $this->data["ref_cognome"]->get();
     }
     
     /**
@@ -149,6 +149,22 @@ abstract class Model_Builder_Sharing_Group_Parts_Group
         return $this->data["validita"];
     }
 
+    /**
+     * @param string $note
+     */
+    public function setNoteConsegna($note)
+    {
+        $this->data["note_consegna"]->set($note);
+    }
+    
+    /**
+     * @return string
+     */    
+    public function getNoteConsegna()
+    {
+        return $this->data["note_consegna"]->get();
+    }
+    
     /**
      * @return array
      */    

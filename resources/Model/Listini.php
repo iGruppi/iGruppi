@@ -39,7 +39,7 @@ class Model_Listini extends MyFw_DB_Base {
     
     function getGroupsByIdlistino($idlistino)
     {
-        $sql = "SELECT gl.*, g_slave.nome AS group_nome, u_slave.iduser AS ref_iduser, u_slave.nome AS ref_nome, u_slave.cognome AS ref_cognome "
+        $sql = "SELECT gl.*, gl.idlistino AS id, g_slave.nome AS group_nome, u_slave.iduser AS ref_iduser, u_slave.nome AS ref_nome, u_slave.cognome AS ref_cognome "
                 . " FROM listini_groups AS gl "
             // JOIN SLAVES
                 . " JOIN groups AS g_slave ON gl.idgroup_slave=g_slave.idgroup "

@@ -1,17 +1,20 @@
 <?php
 
 /**
- * Description of Listini_Groups
+ * Description of Ordini_Groups
  * 
  * @author gullo
  */
-class Model_Listini_Groups 
+class Model_Ordini_Groups 
     extends Model_Builder_Sharing_Groups
 {
 
     /**
      * Save data to DB
      * @return bool
+     * 
+     * @todo TO IMPLEMENT!
+     * 
      */    
     public function saveToDB()
     {
@@ -19,7 +22,7 @@ class Model_Listini_Groups
         $db->beginTransaction();
         // UPDATE listini_groups table
         $idgroup_master = $this->getMasterGroup()->getIdGroup();
-        $idlistino = $this->getMasterGroup()->getId();
+        $idlistino = $this->getMasterGroup()->getIdListino();
         $resd = $db->query("DELETE FROM listini_groups WHERE idlistino='$idlistino' AND idgroup_master='$idgroup_master'");
         if(!$resd) {
             $db->rollBack();

@@ -13,7 +13,8 @@ class Model_Builder_Sharing_Group_Director
     public function build(Model_Builder_Sharing_Group_BuilderInterface $builder)
     {
         $builder->createGroup();
-        $builder->addKeys();
+        $builder->addId();
+        $builder->addGroupKeys();
         $builder->addGroupName();
         $builder->addRef();
         $builder->addValidita();

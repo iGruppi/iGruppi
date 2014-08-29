@@ -7,24 +7,10 @@
  */
 class Model_Listini_Listino {
     
-    private $_mygroup = null;
     private $_dati = null;
     private $_groups = null;
     private $_categories = null;
     
-    
-    public function setMyIdGroup($idgroup)
-    {
-        $this->_mygroup = $idgroup;
-    }
-    
-    public function getMyIdGroup()
-    {
-        if( is_null($this->_mygroup) ) {
-            throw new Exception("IdGroup of 'MyGroup' is not SET!");
-        }
-        return $this->_mygroup;
-    }
     
 /*  **************************************************************************
  *  DATI LISTINO
@@ -51,9 +37,8 @@ class Model_Listini_Listino {
     
     private function isOwner()
     {
-        return ($this->getMyIdGroup() == $this->getGroups()->getMasterGroup()->getIdGroup());
+        return ($this->getGroups()->getMyIdGroup() == $this->getGroups()->getMasterGroup()->getIdGroup());
     }
-    
     
     public function canManageListino()
     {
@@ -101,7 +86,7 @@ class Model_Listini_Listino {
     }
     
 /*  **************************************************************************
- *  GROUPS METHODS
+ *  GROUPS object
  */    
     public function getGroups()
     {
@@ -109,28 +94,6 @@ class Model_Listini_Listino {
             $this->_groups = new Model_Listini_Groups();
         }
         return $this->_groups;
-    }
-    
-    public function getMyGroup()
-    {
-        return $this->getGroups()->getGroupByIdGroup($this->getMyIdGroup());
-    }
-
-    /**
-     * @return void
-     * @param array $groups Array of idgroup values
-     */
-    public function resetGroups(array $groups=array()) {
-        // check the condivisione type
-        if( $this->getDati()->condivisione != "SHA" )
-        {
-            $groups = array();
-        }
-        // add My Group to $groups array because there must be ALMOST one group in listini_groups table
-        if(!in_array($this->getMyIdGroup(), $groups)) {
-            $groups[] = $this->getMyIdGroup();
-        }
-        $this->getGroups()->resetGroupsByArray($groups);
     }
     
 /*  **************************************************************************

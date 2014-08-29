@@ -13,13 +13,20 @@ abstract class Model_Builder_Sharing_Group_BuilderInterface
      * @return void
      */
     public function createGroup(){ }
-
+    
     /**
      * @return void
      */
-    public function addKeys()
+    public function addId()
     {
-        $this->group->setPart('idlistino', new Model_Builder_Parts_Id());
+        $this->group->setPart('id', new Model_Builder_Parts_Id());
+    }
+        
+    /**
+     * @return void
+     */
+    public function addGroupKeys()
+    {
         $this->group->setPart('idgroup_master', new Model_Builder_Parts_Id());
         $this->group->setPart('idgroup_slave', new Model_Builder_Parts_Id());
     }
@@ -61,7 +68,9 @@ abstract class Model_Builder_Sharing_Group_BuilderInterface
     /**
      * @return void
      */
-    public function addNoteConsegna(){ }
+    public function addNoteConsegna(){ 
+        $this->group->setPart('note_consegna', new Model_Builder_Parts_Text());        
+    }
 
     /**
      * @return Parts\Group

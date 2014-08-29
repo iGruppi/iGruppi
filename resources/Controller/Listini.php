@@ -106,7 +106,7 @@ class Controller_Listini extends MyFw_Controller {
         $lObj = new Model_Listini();
         $listino = $lObj->getListinoById($idlistino);
         $mllObj = new Model_Listini_Listino();
-        $mllObj->setMyIdGroup($this->_userSessionVal->idgroup);
+        $mllObj->getGroups()->setMyIdGroup($this->_userSessionVal->idgroup);
         $mllObj->getDati()->initDatiByObject($listino);
         // set Groups in Listini object
         $mllObj->getGroups()->initGroupsByArray( $lObj->getGroupsByIdlistino($idlistino) );
@@ -133,11 +133,12 @@ class Controller_Listini extends MyFw_Controller {
                 // Save DATI
                 $mllObj->getDati()->descrizione = $form->getValue("descrizione");
                 $mllObj->getDati()->condivisione = $form->getValue("condivisione");
-                $mllObj->getMyGroup()->setValidita($form->getValue("valido_dal"), $form->getValue("valido_al"));
-                $mllObj->getMyGroup()->setVisibile( $form->getValue("visibile") );
+                $mllObj->getGroups()->getMyGroup()->setValidita($form->getValue("valido_dal"), $form->getValue("valido_al"));
+                $mllObj->getGroups()->getMyGroup()->setVisibile( $form->getValue("visibile") );
                 
                 // Save GROUPS
-                $mllObj->resetGroups($fv["groups"]);
+                $groupsToShare = isset($fv["groups"]) ? $fv["groups"] : array();
+                $mllObj->getGroups()->resetGroups($form->getValue("condivisione"), $groupsToShare);
                 
 //                Zend_Debug::dump($mllObj);die;
                 // SAVE ALL DATA CHANGED TO DB
@@ -152,9 +153,9 @@ class Controller_Listini extends MyFw_Controller {
             // build array values for form
             $form->setValues($mllObj->getDati()->getValues());
             // set some values in the right format
-            $form->setValue("valido_dal", $mllObj->getMyGroup()->getValidita()->getDal("dd/MM/YYYY"));
-            $form->setValue("valido_al", $mllObj->getMyGroup()->getValidita()->getAl("dd/MM/YYYY"));
-            $form->setValue("visibile", $mllObj->getMyGroup()->getVisibile()->getString());
+            $form->setValue("valido_dal", $mllObj->getGroups()->getMyGroup()->getValidita()->getDal("dd/MM/YYYY"));
+            $form->setValue("valido_al", $mllObj->getGroups()->getMyGroup()->getValidita()->getAl("dd/MM/YYYY"));
+            $form->setValue("visibile", $mllObj->getGroups()->getMyGroup()->getVisibile()->getString());
         }
         
         $this->view->listino = $mllObj;

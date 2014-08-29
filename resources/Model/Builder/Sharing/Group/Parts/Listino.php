@@ -5,13 +5,14 @@
 class Model_Builder_Sharing_Group_Parts_Listino 
     extends Model_Builder_Sharing_Group_Parts_Group
 {
+    
     /**
      * @return array
      */    
     public function dumpValuesForDB()
     {
         $ar = array(
-            'idlistino'         => $this->getIdListino(),
+            'idlistino'         => $this->getId(),
             'idgroup_master'    => $this->getIdGroupMaster(),
             'idgroup_slave'     => $this->getIdGroup(),
             'valido_dal'        => $this->getValidita()->getDal(MyFw_Form_Filters_Date::_MYFORMAT_DATE_DB),

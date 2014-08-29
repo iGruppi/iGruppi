@@ -9,6 +9,12 @@ class Model_Builder_Sharing_Group_ListinoBuilder
     /**
      * @return void
      */
+    public function addNoteConsegna() { }
+
+    
+    /**
+     * @return void
+     */
     public function createGroup()
     {
         $this->group = new Model_Builder_Sharing_Group_Parts_Listino();

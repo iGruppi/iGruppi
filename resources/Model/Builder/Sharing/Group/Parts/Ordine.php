@@ -5,29 +5,14 @@
 class Model_Builder_Sharing_Group_Parts_Ordine 
     extends Model_Builder_Sharing_Group_Parts_Group
 {
-    /**
-     * @param string $note
-     */
-    public function setNoteConsegna($note)
-    {
-        $this->data["note_consegna"]->set($note);
-    }
-    
-    /**
-     * @return string
-     */    
-    public function getNoteConsegna()
-    {
-        return $this->data["note_consegna"]->get();
-    }
-    
+
     /**
      * @return array
      */    
     public function dumpValuesForDB()
     {
         $ar = array(
-            'idlistino'         => $this->getIdListino(),
+            'idordine'         => $this->getId(),
             'idgroup_master'    => $this->getIdGroupMaster(),
             'idgroup_slave'     => $this->getIdGroup(),
             'iduser_ref'        => $this->getRefIdUser(),
