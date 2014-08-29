@@ -22,7 +22,7 @@
             <?php endif; ?>
                 <td><strong><?php echo $pObj->getQtaReale();?></strong></td>
                 <td><strong><?php echo $pObj->codice;?></strong></td>
-                <td><?php echo $pObj->getDescrizionePrezzo();?></td>
+                <td><?php echo $pObj->getDescrizioneCosto();?></td>
                 <td><?php echo $pObj->descrizione;?></td>
                 <td class="text-right">
                     <?php if( $pObj->hasAliquotaIva()): ?>

@@ -45,12 +45,12 @@
         <div class="col-md-3">
             <div class="sub_menu">
             <?php if($prodotto->isDisponibile()):
-                    $qta_ordinata = isset($this->prodottiIduser[$idprodotto]) ? $this->prodottiIduser[$idprodotto]->getQtaOrdinata() : 0;
+                    $qta_ordinata = isset($this->prodottiIduser[$idprodotto]) ? $this->prodottiIduser[$idprodotto]->getQta() : 0;
                 ?>
 <script>
     // Start these procedures always
 	$(document).ready(function(){
-        Trolley.initByParams(<?php echo $idprodotto;?>, <?php echo $prodotto->getPrezzo();?>, <?php echo $prodotto->moltiplicatore; ?>, <?php echo $qta_ordinata;?>);
+        Trolley.initByParams(<?php echo $idprodotto;?>, <?php echo $prodotto->getCostoListino();?>, <?php echo $prodotto->moltiplicatore; ?>, <?php echo $qta_ordinata;?>);
         Trolley_rebuildPartial(<?php echo $idprodotto;?>);
     });
 </script>

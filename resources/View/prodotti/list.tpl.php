@@ -22,13 +22,13 @@
                 $pObj = $this->lpObjs[$idprodotto];
             ?>
       
-      <div class="row row-myig" id="prod_<?php echo $pObj->idprodotto;?>">
+      <div class="row row-myig" id="prod_<?php echo $pObj->getIdProdotto();?>">
         <div class="col-md-10">
-            <h3 class="no-margin"><?php echo $pObj->descrizione;?></h3>
+            <h3 class="no-margin"><?php echo $pObj->getDescrizione();?></h3>
             <p>
-                Codice: <strong><?php echo $pObj->codice; ?></strong><br />
+                Codice: <strong><?php echo $pObj->getCodice(); ?></strong><br />
             <?php echo $this->partial('prodotti/price-box.tpl.php', array('prodotto' => $pObj)); ?>
-            <?php if(!$pObj->isAttivo()): ?>
+            <?php if(!$pObj->getAttivo()): ?>
                 <strong class="alert_red">Disabilitato</strong> (Non viene inserito quando crei un nuovo ordine)
             <?php endif; ?>
             </p>

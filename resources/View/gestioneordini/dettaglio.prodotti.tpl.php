@@ -14,7 +14,7 @@
             <h3 class="big-margin-top"><strong><?php echo $pObj->getQtaReale();?></strong> x <?php echo $pObj->descrizione;?></h3>
             <p>
                 Codice: <strong><?php echo $pObj->codice;?></strong><br />
-                Prezzo: <?php echo $pObj->getDescrizionePrezzo();?><br />
+                Prezzo: <?php echo $pObj->getDescrizioneCosto();?><br />
                 Ordinato da:
             </p>
             <ul>

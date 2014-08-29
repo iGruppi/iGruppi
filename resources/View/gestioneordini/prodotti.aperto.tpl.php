@@ -24,8 +24,8 @@
                         Codice: <strong><?php echo $pObj->codice; ?></strong><br />
                         <br />
                         <label>Prezzo:</label>
-                        <input type="text" class="is_Number" id="prodotto_<?php echo $idprodotto;?>" name="prodotti[<?php echo $idprodotto;?>][costo]" value="<?php echo $pObj->getPrezzo();?>" size="10" /> <strong><?php echo $pObj->getUdmDescrizione(); ?></strong>
-                        <input type="hidden" name="prodotti[<?php echo $idprodotto;?>][co]" value="<?php echo $pObj->getPrezzo();?>" />
+                        <input type="text" class="is_Number" id="prodotto_<?php echo $idprodotto;?>" name="prodotti[<?php echo $idprodotto;?>][costo]" value="<?php echo $pObj->getCostoOrdine();?>" size="10" /> <strong><?php echo $pObj->getUdmDescrizione(); ?></strong>
+                        <input type="hidden" name="prodotti[<?php echo $idprodotto;?>][co]" value="<?php echo $pObj->getCostoOrdine();?>" />
                         <input type="hidden" id="prod_sel_<?php echo $idprodotto;?>" name="prodotti[<?php echo $idprodotto;?>][disponibile]" value="<?php echo ($pObj->isDisponibile()) ? "S" : "N" ; ?>" />
                     <?php if($pObj->hasPezzatura()): ?>
                         <br />[<b>**</b>] <small>Taglio/Pezzatura: <strong><?php echo $pObj->getDescrizionePezzatura(); ?></strong></small>
