@@ -1,6 +1,6 @@
 <?php
 /**
- * GroupInterface is a contract for a group
+ * Group is a the product group of my Builder, it must be extended
  */
 abstract class Model_Builder_Sharing_Group_Parts_Group
 {

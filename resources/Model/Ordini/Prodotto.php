@@ -21,6 +21,7 @@ class Model_Ordini_Prodotto
     );
     
     function __construct($a) {
+        trigger_error("DEPRECATED: Use the new BuilderProduct!");
         // Aggiungo campi da ordini_prodotti all'array generale
         $this->_arValAvailable = array_merge($this->_arValAvailable, $this->_arValAvailable_O);
         parent::__construct($a);

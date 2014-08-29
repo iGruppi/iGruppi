@@ -30,6 +30,8 @@ class Model_Prodotti_Prodotto {
     protected $_arVal;
     
     function __construct($a) {
+        trigger_error("DEPRECATED: Use the new BuilderProduct!");
+        
         $this->_arVal = new stdClass();
         foreach ($this->_arValAvailable AS $f) {
             $this->_arVal->$f = (isset($a->$f)) ? $a->$f : ""; // DO NOT USE "null", it creates error on magic __get method
@@ -37,7 +39,7 @@ class Model_Prodotti_Prodotto {
     }
     
     
-/************************************************************
+/* **********************************************************
  * Products methods
  */
     
