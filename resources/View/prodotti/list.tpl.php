@@ -1,4 +1,4 @@
-<h2>Listino Prodotti di <strong><?php echo $this->produttore->ragsoc;?></strong></h2>
+<h2>Prodotti di <strong><?php echo $this->produttore->ragsoc;?></strong></h2>
 
 <div class="row">
   <div class="col-md-8">
@@ -11,17 +11,16 @@
 <?php endif; ?>
 
       
-<?php if(count($this->listProdotti) > 0): 
-    foreach ($this->listProdotti as $idcat => $cat): ?>
-    <span id="cat_<?php echo $idcat; ?>" style="visibility: hidden;"><?php echo $this->listSubCat[$idcat]["categoria"]; ?></span>
-<?php foreach ($cat as $idsubcat => $prodotti): ?>
-        
-        <?php include $this->template('prodotti/subcat-title.tpl.php'); ?>
-        
-<?php   foreach ($prodotti as $idprodotto): 
-                $pObj = $this->lpObjs[$idprodotto];
-            ?>
-      
+<?php if($this->prodotti->count() > 0): 
+    foreach ($this->prodotti->getCategoryTree()->getChildren() AS $cat): ?>
+    <span id="cat_<?php echo $cat->getId(); ?>" style="visibility: hidden;"><?php echo $cat->getDescrizione(); ?></span>
+<?php foreach ($cat->getChildren() AS $subcat):
+        // create Sub Cat Title
+        echo $this->partial('prodotti/subcat-title.tpl.php', array('cat' => $cat, 'subcat' => $subcat));
+        // get Prodotti List by Idsubcat
+        $prodotti = $this->prodotti->getProdottiByIdsubcat($subcat->getId());
+        foreach ($prodotti AS $pObj): 
+?>
       <div class="row row-myig" id="prod_<?php echo $pObj->getIdProdotto();?>">
         <div class="col-md-10">
             <h3 class="no-margin"><?php echo $pObj->getDescrizione();?></h3>
@@ -54,7 +53,7 @@
       <br />
       <br />
 <?php endif; ?>
-      <?php echo $this->partial('prodotti/subcat-navigation.tpl.php', array('listSubCat' => $this->listSubCat)); ?>
+      <?php echo $this->partial('prodotti/subcat-navigation.tpl.php', array('categorie' => $this->prodotti->getCategoryTree())); ?>
     </div>
   </div>
 </div>

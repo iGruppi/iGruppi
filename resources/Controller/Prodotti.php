@@ -52,21 +52,16 @@ class Controller_Prodotti extends MyFw_Controller {
         // get All Prodotti by Produttore
         $objModel = new Model_Prodotti();
         $listProd = $objModel->getProdottiByIdProduttore($this->_produttore->idproduttore);
-        $listProdObj = array();
+        $prodotti = new Model_Produttori_Prodotti();
         if(count($listProd) > 0)
         {
-            foreach ($listProd as $value)
+            foreach ($listProd as $values)
             {
-                $listProdObj[$value->idprodotto] = new Model_Prodotti_Prodotto($value);
+                $prodotti->addProdotto($values);
             }
         }
-        $this->view->lpObjs = $listProdObj;        
-        
-        // organize by category and subCat
-        $scoObj = new Model_Prodotti_SubCatOrganizer($listProd);
-        $this->view->listProdotti = $scoObj->getListProductsCategorized();
-        $this->view->listSubCat = $scoObj->getListCategories();
-//        Zend_Debug::dump($this->view->listProdotti);die;
+        $this->view->prodotti = $prodotti;
+//        Zend_Debug::dump($prodotti->getCategoryTree()->render());
     }
 
     function editAction() {
@@ -94,7 +89,7 @@ class Controller_Prodotti extends MyFw_Controller {
              ->setOptions($objCat->convertToSingleArray($objCat->getSubCategoriesByIdproduttore($this->_prodotto->idproduttore), "idsubcat", "descrizione"));
         
         // set array values Udm that need Multiplier
-        $this->view->arValWithMultip = json_encode( Model_Prodotti_UdM::getArWithMultip() );
+        $this->view->arValWithMultip = json_encode( Model_Produttori_Prodotti_UdM::getArWithMultip() );
         
         if($this->getRequest()->isPost()) {
             $fv = $this->getRequest()->getPost();
