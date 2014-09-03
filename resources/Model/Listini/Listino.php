@@ -9,6 +9,7 @@ class Model_Listini_Listino {
     
     private $_dati = null;
     private $_groups = null;
+    private $_prodotti = null;
     private $_categories = null;
     
     
@@ -95,6 +96,20 @@ class Model_Listini_Listino {
         }
         return $this->_groups;
     }
+
+/*  **************************************************************************
+ *  PRODOTTI Object
+ */    
+    
+    public function getProdotti()
+    {
+        if(is_null($this->_prodotti)) {
+            $this->_prodotti = new Model_Listini_Prodotti();
+        }
+        return $this->_prodotti;
+    }
+    
+
     
 /*  **************************************************************************
  *  SAVE CHANGES TO DB

@@ -41,7 +41,7 @@ class Form_Prodotti extends MyFw_Form {
             ));
         
         // UDM 
-        $udmObj = new Model_Prodotti_UdM();
+        $udmObj = new Model_Produttori_Prodotti_UdM();
         $this->addField('udm', array(
                         'type'      => 'select',
                         'label'     => 'Prezzo per',
@@ -68,7 +68,7 @@ class Form_Prodotti extends MyFw_Form {
                         'note'      => '&nbsp;&euro;'
             ));
         // IVA
-        $ivaObj = new Model_Prodotti_IVA();
+        $ivaObj = new Model_Produttori_Prodotti_IVA();
         $this->addField('aliquota_iva', array(
                         'type'      => 'select',
                         'label'     => 'IVA',

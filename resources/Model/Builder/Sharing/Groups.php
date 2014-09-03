@@ -118,7 +118,7 @@ class Model_Builder_Sharing_Groups {
      * @return void
      * @param string $condivisione Condivisione type, it could be: PRI, PUB or SHA 
      * @param array $groups Array of "idgroup" values to reset $this->_groups 
-     *  If a group does not exists it creates a new one by KEYS (idlistino, idgroup_master, idgroup_slave) and default values for other fields
+     *  If a group does not exists it creates a new one by KEYS (id, idgroup_master, idgroup_slave) and default values for other fields
      *  If a group already exists it keeps the old data
      */
     public function resetGroups($condivisione, array $groups=array()) {

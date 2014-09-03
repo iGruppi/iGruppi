@@ -26,17 +26,16 @@ class Model_Prodotti extends MyFw_DB_Base {
         return $sth_app->fetch(PDO::FETCH_OBJ);
     }
 
-    function getProdottiByIdProduttore($idproduttore, $attivo=null) {
+    function getProdottiByIdProduttore($idproduttore) {
         $sql = "SELECT p.*, cs.descrizione AS categoria_sub, c.idcat, c.descrizione AS categoria "
               ." FROM prodotti AS p"
               ." JOIN categorie_sub AS cs ON p.idsubcat=cs.idsubcat"
               ." JOIN categorie AS c ON cs.idcat=c.idcat "
-              ." WHERE p.idproduttore= :idproduttore";
-        $sql .= (!is_null($attivo)) ? " AND p.attivo='$attivo'" : "";
-        $sql .=" ORDER BY c.descrizione, p.codice";
+              ." WHERE p.idproduttore= :idproduttore"
+              ." ORDER BY c.descrizione, p.codice";
         //echo $sql; die;
         $sth = $this->db->prepare($sql);
-        $sth->execute(array('idproduttore' => $idproduttore));        
+        $sth->execute(array('idproduttore' => $idproduttore));
         return $sth->fetchAll(PDO::FETCH_OBJ);
     }
     
