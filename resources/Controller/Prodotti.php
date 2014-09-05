@@ -53,15 +53,9 @@ class Controller_Prodotti extends MyFw_Controller {
         $objModel = new Model_Prodotti();
         $listProd = $objModel->getProdottiByIdProduttore($this->_produttore->idproduttore);
         $prodotti = new Model_Produttori_Prodotti();
-        if(count($listProd) > 0)
-        {
-            foreach ($listProd as $values)
-            {
-                $prodotti->addProdotto($values);
-            }
-        }
+        $prodotti->addProdottiByArray($listProd);
         $this->view->prodotti = $prodotti;
-//        Zend_Debug::dump($prodotti->getCategoryTree()->render());
+//        Zend_Debug::dump($prodotti->getCategorie()->getChild(8)->getChild(47)->getProdotti());
     }
 
     function editAction() {

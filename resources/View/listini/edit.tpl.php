@@ -1,6 +1,7 @@
 <h2>Modifica Listino <strong><?php echo $this->listino->getDati()->descrizione; ?></strong></h2>
 <h3>Produttore: <strong><?php echo $this->listino->getDati()->getProduttoreName(); ?></strong></h3>
 
+<form id="prodform" action="<?php echo $this->form->getAction(); ?>" method="post" class="f1n120">
 <div class="row">
   <div class="col-md-8">
 
@@ -11,7 +12,6 @@
     </div>
 <?php endif; ?>
 
-    <form id="prodform" action="<?php echo $this->form->getAction(); ?>" method="post" class="f1n200">
 
         <ul class="nav nav-tabs" id="myTab">
           <li class="active"><a href="#dati" data-toggle="tab">Dati listino</a></li>
@@ -27,28 +27,40 @@
               <?php include $this->template('listini/edit.condivisione.tpl.php'); ?>
           </div>
           <div class="tab-pane" id="prodotti">
-              <fieldset>
-                <?php echo $this->form->renderField('note'); ?>      
-              </fieldset>
+              <?php echo $this->partial('listini/edit.prodotti.tpl.php', array('prodotti' => $this->listino->getProdotti())); ?>
           </div>
         </div>
 
         <?php echo $this->form->renderField('idproduttore'); ?>
         <?php echo $this->form->renderField('idlistino'); ?>
-
-        <button type="submit" id="submit" class="btn btn-success btn-mylg">SALVA</button>
-
-    </form>
   </div>
-  <div class="col-md-1">&nbsp;</div>
-  <div class="col-md-3">
-      <!-- RIGHT SIDEBAR -->
+  <div class="col-md-3 col-md-offset-1">
+    <div class="row row-margin-bottom">
+        <div class="col-xs-12 col-sm-12 col-md-12">
+            <button type="submit" class="btn btn-success btn-mylg">SALVA</button>
+        </div>
+    </div>      
+    <?php if($this->listino->getProdotti()->countOutOfListino() > 0): ?>
+    <div class="row row-margin-bottom">
+        <div class="col-xs-12 col-sm-12 col-md-12">
+            <div class="alert alert-info alert-dismissible" role="alert">
+              <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+              Attenzione!<br />
+              <a href="#prodotti" data-toggle="tab"><?php echo $this->listino->getProdotti()->countOutOfListino(); ?> nuovi Prodotti</a><br /> 
+              <small>non presenti in Listino</small>
+            </div>
+        </div>
+    </div>      
+    <?php endif; ?>
   </div>
 </div>
+</form>
 <script>
     $(function() {
-        
-        $('#myTab a:first').tab('show');
+        // get Hash from URL
+        hash = window.location.hash;
+        // set TAB by hash (if it exists)
+        $('a[href="' + hash + '"]').tab('show');
         
         // Run always to init
         setCondivisione();

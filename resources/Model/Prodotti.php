@@ -26,6 +26,12 @@ class Model_Prodotti extends MyFw_DB_Base {
         return $sth_app->fetch(PDO::FETCH_OBJ);
     }
 
+    /**
+     * Elenco prodotti dell'anagrafica Produttore
+     * 
+     * @param int $idproduttore
+     * @return array
+     */
     function getProdottiByIdProduttore($idproduttore) {
         $sql = "SELECT p.*, cs.descrizione AS categoria_sub, c.idcat, c.descrizione AS categoria "
               ." FROM prodotti AS p"
@@ -38,6 +44,33 @@ class Model_Prodotti extends MyFw_DB_Base {
         $sth->execute(array('idproduttore' => $idproduttore));
         return $sth->fetchAll(PDO::FETCH_OBJ);
     }
+    
+    /**
+     * Elenco prodotti di un Listino
+     * 
+     * @param int $idlistino
+     * @return array
+     */
+    function getProdottiByIdListino($idlistino) {
+        $sql = "SELECT p.*, "
+              ." lp.idlistino, lp.descrizione AS descrizione_listino, lp.costo AS costo_listino, lp.note AS note_listino, lp.attivo AS attivo_listino, "
+              ." cs.descrizione AS categoria_sub, c.idcat, c.descrizione AS categoria "
+              ." FROM listini AS l "
+              ." JOIN prodotti AS p ON l.idproduttore=p.idproduttore "
+              ." LEFT JOIN listini_prodotti AS lp ON p.idprodotto=lp.idprodotto AND lp.idlistino= :idlistino"
+              ." JOIN categorie_sub AS cs ON p.idsubcat=cs.idsubcat"
+              ." JOIN categorie AS c ON cs.idcat=c.idcat "
+              ." WHERE l.idlistino= :idlistino"
+              ." ORDER BY c.descrizione, p.codice";
+        /**
+         * @todo Qui mancano i filtri per i prodotti in PRODUCTION=S o proprietario tramite iduser_creator
+         */
+        // echo $sql; die;
+        $sth = $this->db->prepare($sql);
+        $sth->execute(array('idlistino' => $idlistino));
+        return $sth->fetchAll(PDO::FETCH_OBJ);
+    }
+
     
     function getProdottiByIdSubCat($idsubcat) {
         

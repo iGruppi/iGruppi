@@ -10,6 +10,18 @@ class Model_Listini_Groups
 {
 
     /**
+     * @return Model_Builder_Sharing_Group_Parts_Listino
+     */
+    public function buildGroup()
+    {
+        $builderGroup = new Model_Builder_Sharing_Group_ListinoBuilder();
+        $director = new Model_Builder_Sharing_Group_Director();
+        $group = $director->build($builderGroup);
+        return $group;
+    }
+    
+    
+    /**
      * Save data to DB
      * @return bool
      */    

@@ -7,6 +7,12 @@ class Model_Builder_Sharing_Group_Parts_Ordine
 {
 
     /**
+     * This field does not exists in ORDINE
+     */
+    public function setValidita($dal, $al) {}
+    public function getValidita() {}
+    
+    /**
      * @return array
      */    
     public function dumpValuesForDB()

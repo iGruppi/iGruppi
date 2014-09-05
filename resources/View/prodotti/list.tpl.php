@@ -12,14 +12,14 @@
 
       
 <?php if($this->prodotti->count() > 0): 
-    foreach ($this->prodotti->getCategoryTree()->getChildren() AS $cat): ?>
+    foreach ($this->prodotti->getCategorie()->getChildren() AS $cat): ?>
     <span id="cat_<?php echo $cat->getId(); ?>" style="visibility: hidden;"><?php echo $cat->getDescrizione(); ?></span>
 <?php foreach ($cat->getChildren() AS $subcat):
         // create Sub Cat Title
         echo $this->partial('prodotti/subcat-title.tpl.php', array('cat' => $cat, 'subcat' => $subcat));
-        // get Prodotti List by Idsubcat
-        $prodotti = $this->prodotti->getProdottiByIdsubcat($subcat->getId());
-        foreach ($prodotti AS $pObj): 
+        // get Prodotti List in this Subcat
+        foreach ($subcat->getProdotti() AS $idprodotto): 
+        $pObj = $this->prodotti->getProdottoById($idprodotto);
 ?>
       <div class="row row-myig" id="prod_<?php echo $pObj->getIdProdotto();?>">
         <div class="col-md-10">
@@ -34,7 +34,7 @@
         </div>
         <div class="col-md-2">
         <?php if($this->userSessionVal->refObject->canEditProdotti($this->produttore->idproduttore)): ?>
-            <a class="btn btn-success" href="/prodotti/edit/idprodotto/<?php echo $idprodotto;?>">Modifica</a>
+            <a class="btn btn-success" href="/prodotti/edit/idprodotto/<?php echo $pObj->getIdProdotto();?>">Modifica</a>
         <?php endif; ?>
         </div>
       </div>
@@ -53,7 +53,7 @@
       <br />
       <br />
 <?php endif; ?>
-      <?php echo $this->partial('prodotti/subcat-navigation.tpl.php', array('categorie' => $this->prodotti->getCategoryTree())); ?>
+      <?php echo $this->partial('prodotti/subcat-navigation.tpl.php', array('categorie' => $this->prodotti->getCategorie())); ?>
     </div>
   </div>
 </div>

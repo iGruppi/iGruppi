@@ -7,6 +7,12 @@ class Model_Builder_Sharing_Group_Parts_Listino
 {
     
     /**
+     * This field does not exists in LISTINO
+     */
+    public function setNoteConsegna($note) {}
+    public function getNoteConsegna() {}
+
+    /**
      * @return array
      */    
     public function dumpValuesForDB()

@@ -5,12 +5,6 @@
 class Model_Builder_Sharing_Group_ListinoBuilder 
     extends Model_Builder_Sharing_Group_BuilderInterface
 {
-
-    /**
-     * @return void
-     */
-    public function addNoteConsegna() { }
-
     
     /**
      * @return void

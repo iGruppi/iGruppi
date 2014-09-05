@@ -2,7 +2,7 @@
 /**
  * This builds PRODOTTO for LISTINO
  */
-class Model_Builder_Prodotto_ListinoBuilder 
+class Model_Builder_Prodotto_ListinoProdottoBuilder 
     extends Model_Builder_Prodotto_BuilderInterface
 {
 

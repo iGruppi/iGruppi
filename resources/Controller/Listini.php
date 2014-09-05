@@ -81,12 +81,18 @@ class Controller_Listini extends MyFw_Controller {
                     $idlistino = $mllObj->getDati()->getIdListino();
                     // create a NEW group
                     $group = new stdClass();
-                    $group->idlistino = $idlistino;
+                    $group->id = $idlistino;
                     $group->idgroup_master = $this->_userSessionVal->idgroup;
                     $group->idgroup_slave = $this->_userSessionVal->idgroup;
                     // add my group
                     $mllObj->getGroups()->addGroup($group);
                     $resSave = $mllObj->getGroups()->saveToDB();
+
+                    // Save PRODUCTS
+                    /**
+                     * @todo 
+                     */
+                    
                     // REDIRECT to EDIT
                     if($resSave) {
                         $this->redirect("listini", "edit", array('idlistino' => $idlistino, 'updated' => true));
@@ -101,17 +107,32 @@ class Controller_Listini extends MyFw_Controller {
     function editAction()
     {
         $idlistino = $this->getParam("idlistino");
-
-        // init Listino object
+        if(is_null($idlistino)) 
+        {
+            $this->redirect("listini", "index");
+        }
+        
+        // init Listino DB Model to get data
         $lObj = new Model_Listini();
         $listino = $lObj->getListinoById($idlistino);
+
+        // check REFERENTE, controllo per i furbi (non Referenti)
+        if(!$this->_userSessionVal->refObject->canEditProdotti($listino->idproduttore)) {
+            $this->redirect("index", "error", array('code' => 401));
+        }
+        
+        // Create Listino Object
         $mllObj = new Model_Listini_Listino();
         $mllObj->getGroups()->setMyIdGroup($this->_userSessionVal->idgroup);
         $mllObj->getDati()->initDatiByObject($listino);
         // set Groups in Listini object
         $mllObj->getGroups()->initGroupsByArray( $lObj->getGroupsByIdlistino($idlistino) );
         
-        // get elenco Groups
+        // add All Prodotti by Listino
+        $objModel = new Model_Prodotti();
+        $mllObj->getProdotti()->addProdottiByArray( $objModel->getProdottiByIdListino($idlistino) );
+        
+        // get elenco All Groups
         $grObj = new Model_Groups();
         $this->view->groups = $groups = $grObj->getAll();
         
@@ -140,6 +161,11 @@ class Controller_Listini extends MyFw_Controller {
                 $groupsToShare = isset($fv["groups"]) ? $fv["groups"] : array();
                 $mllObj->getGroups()->resetGroups($form->getValue("condivisione"), $groupsToShare);
                 
+                // Save PRODUCTS
+                /**
+                 * @todo 
+                 */
+                
 //                Zend_Debug::dump($mllObj);die;
                 // SAVE ALL DATA CHANGED TO DB
                 $resSave = $mllObj->save();
@@ -163,11 +189,6 @@ class Controller_Listini extends MyFw_Controller {
         $this->view->form = $form;
         $this->view->updated = $this->getParam("updated");   
         // Zend_Debug::dump($master); die;
-    }
-    
-    function prodottiAction()
-    {
-        
     }
     
     function viewAction()

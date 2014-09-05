@@ -74,11 +74,11 @@ class Model_Builder_Sharing_Groups {
     public function addGroup(stdClass $g)
     {
         try {
-        $idgroup = $g->idgroup_slave;
-        if( !$this->issetGroup($idgroup) ) {
-            $this->_groups[$idgroup] = $this->_createGroup($g);
-        }
-        return $this->_groups[$idgroup];
+            $idgroup = $g->idgroup_slave;
+            if( !$this->issetGroup($idgroup) ) {
+                $this->_groups[$idgroup] = $this->_createGroup($g);
+            }
+            return $this->_groups[$idgroup];
             
         } catch (MyFw_Exception $exc) {
             $exc->displayError();
@@ -86,29 +86,34 @@ class Model_Builder_Sharing_Groups {
     }
     
     /**
-     * @return Model_Sharing_GroupBuilder_Parts_Group
+     *  @param stdClass $g is a Group object data
+     *  @return Model_Builder_Sharing_Group_Parts_Group 
      */
     private function _createGroup(stdClass $g)
     {
-        $builderGroup = new Model_Builder_Sharing_Group_ListinoBuilder();
-        $director = new Model_Builder_Sharing_Group_Director();
-        $group = $director->build($builderGroup);
+        // check mandatory fields
+        if( !isset($g->id) || !isset($g->idgroup_master) || !isset($g->idgroup_slave)) {
+            throw new MyFw_Exception('Cannot build a group, miss some data!');
+        }
+        // build a group and set data
+        $group = $this->buildGroup();
         $group->setId($g->id);
         $group->setIdGroupMaster($g->idgroup_master);
         $group->setIdGroup($g->idgroup_slave);
-        // Check and set Default values for other fields
-        $group->setGroupName( (isset($g->group_nome) ? $g->group_nome : "") );
-        $group->setRefIdUser( (isset($g->ref_iduser) ? $g->ref_iduser : 0) );
-        $group->setRefNome(   (isset($g->ref_nome) ? $g->ref_nome : ""), (isset($g->ref_cognome) ? $g->ref_cognome : "") );
-        $group->setValidita(  (isset($g->valido_dal) ? $g->valido_dal : null), (isset($g->valido_al) ? $g->valido_al : null) );
-        $group->setVisibile(  (isset($g->visibile) ? $g->visibile : "N") );
+        // Check and set Default values for ALL the others fields
+        $group->setGroupName(   (isset($g->group_nome) ? $g->group_nome : "") );
+        $group->setRefIdUser(   (isset($g->ref_iduser) ? $g->ref_iduser : 0) );
+        $group->setRefNome(     (isset($g->ref_nome) ? $g->ref_nome : ""), (isset($g->ref_cognome) ? $g->ref_cognome : "") );
+        $group->setVisibile(    (isset($g->visibile) ? $g->visibile : "N") );
+        $group->setValidita(    (isset($g->valido_dal) ? $g->valido_dal : null), (isset($g->valido_al) ? $g->valido_al : null) );
+        $group->setNoteConsegna((isset($g->note_consegna) ? $g->note_consegna : "") );
         
         // set idmaster_group (it should be the same for all the slaves groups!)
         $this->_idgroup_master = $g->idgroup_master;
         
         return $group;
     }
-    
+
     /**
      * @return void
      */    
@@ -145,11 +150,11 @@ class Model_Builder_Sharing_Groups {
             } else {
                 try {
                     // try to create a new group with default values
-                $group = new stdClass();
-                $group->id = $this->getMasterGroup()->getId();
-                $group->idgroup_master = $this->getMasterGroup()->getIdGroup();
-                $group->idgroup_slave = $idgroup;
-                $newArray[$idgroup] = $this->_createGroup($group);
+                    $group = new stdClass();
+                    $group->id = $this->getMasterGroup()->getId();
+                    $group->idgroup_master = $this->getMasterGroup()->getIdGroup();
+                    $group->idgroup_slave = $idgroup;
+                    $newArray[$idgroup] = $this->_createGroup($group);
                             
                 } catch (MyFw_Exception $exc) {
                     $exc->displayError();

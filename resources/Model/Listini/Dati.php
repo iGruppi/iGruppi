@@ -36,31 +36,9 @@ class Model_Listini_Dati {
         return $this->idlistino;
     }
     
-    /*
-	* Overloading
-	* __get
-	*/
-    public function __get($property)
+    public function getIdProduttore()
     {
-        if( in_array($property, $this->_fields)) {
-            return ( isset($this->_fValues[$property]) ? $this->_fValues[$property] : null);
-        } else {
-            throw new Exception("Impossibile leggere la proprieta: $property");
-        }
-    }
-
-	/*
-	* Overloading
-	* __set
-	*/
-    public function __set($property, $value)
-    {
-        if( in_array($property, $this->_fields)) {
-            $this->_fValues[$property] = $value;
-            $this->_isChanged = true;
-        } else {
-            throw new Exception("Impossibile scrivere la proprieta : $property");
-        }
+        return $this->idproduttore;
     }
     
     public function getProduttoreName()
@@ -90,4 +68,34 @@ class Model_Listini_Dati {
             }
         }
     }
+    
+    
+    
+    /*
+	* Overloading
+	* __get
+	*/
+    public function __get($property)
+    {
+        if( in_array($property, $this->_fields)) {
+            return ( isset($this->_fValues[$property]) ? $this->_fValues[$property] : null);
+        } else {
+            throw new MyFw_Exception("Impossibile leggere la proprieta: $property");
+        }
+    }
+
+	/*
+	* Overloading
+	* __set
+	*/
+    public function __set($property, $value)
+    {
+        if( in_array($property, $this->_fields)) {
+            $this->_fValues[$property] = $value;
+            $this->_isChanged = true;
+        } else {
+            throw new MyFw_Exception("Impossibile scrivere la proprieta : $property");
+        }
+    }
+    
 }
