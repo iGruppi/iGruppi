@@ -4,6 +4,13 @@
  */
 abstract class Model_Produttori_Prodotti_Categorie_CategoryElement
 {
+    protected $_idsubcat;
+    protected $_descrizione;
+    
+    /**
+     * @var array of IdProducts
+     */
+    protected $products = array();
     
     /**
      * renders the category code
@@ -18,10 +25,23 @@ abstract class Model_Produttori_Prodotti_Categorie_CategoryElement
     abstract public function add(Model_Produttori_Prodotti_Categorie_CategoryElement $element);
 
     /**
-     * remove element
+     * add IdProduct to the array
+     * @param type $idproduct
+     */
+    public function addIdProdotto($idproduct)
+    {
+        if(!in_array($idproduct, $this->products)) 
+        {
+            $this->products[] = $idproduct;
+        }
+    }
+    
+
+    /**
+     * remove element by id
      * @return void
      */
-//    abstract public function remove(Model_Produttori_Prodotti_Categorie_CategoryElement $element);
+    abstract public function remove($id);
     
     /**
      * get child by id
@@ -36,6 +56,15 @@ abstract class Model_Produttori_Prodotti_Categorie_CategoryElement
     abstract public function getChildren();    
 
     /**
+     * get array products
+     * @return array
+     */    
+    public function getProdotti()
+    {
+        return $this->products;
+    }
+
+    /**
      * return id of the element
      * @return id
      */
@@ -45,6 +74,9 @@ abstract class Model_Produttori_Prodotti_Categorie_CategoryElement
      * return descrizione
      * @return string
      */
-    abstract public function getDescrizione();
-    
+    public function getDescrizione() 
+    {
+        return $this->_descrizione;
+    }
+        
 }

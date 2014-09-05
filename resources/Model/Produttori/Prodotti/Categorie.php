@@ -5,9 +5,6 @@
 class Model_Produttori_Prodotti_Categorie 
     extends Model_Produttori_Prodotti_Categorie_CategoryElement
 {
-    private $_idcat;
-    private $_descrizione;
-
     /**
      * @var array|CategoryElement[]
      */
@@ -30,7 +27,7 @@ class Model_Produttori_Prodotti_Categorie
     {
         $ar = array();
         if(count($this->elements) > 0) {
-            $ar = array('idcat' => $this->_idcat, 'descrizione' => $this->_descrizione, 'subcat' => array());
+            $ar = array('idcat' => $this->_idcat, 'descrizione' => $this->_descrizione, 'products' => $this->products, 'subcat' => array());
             foreach ($this->elements as $element) {
                 $ar['subcat'][] = $element->render();
             }
@@ -54,13 +51,31 @@ class Model_Produttori_Prodotti_Categorie
     public function getChild($id)
     {
         if(count($this->elements) > 0) {
-            foreach ($this->elements as $key => $value) {
+            foreach ($this->elements AS $value) {
                 if($value->getId() == $id) {
                     return $value;
                 }
             }
         }
         return null;
+    }
+    
+    /**
+     * remove an element from the tree
+     * @param $id int
+     * @return bool
+     */
+    public function remove($id)
+    {
+        if(count($this->elements) > 0) {
+            foreach ($this->elements as $key => $value) {
+                if($value->getId() == $id) {
+                    unset($this->elements[$key]);
+                    return true;
+                }
+            }
+        }
+        return false;
     }
     
     /**
@@ -80,13 +95,4 @@ class Model_Produttori_Prodotti_Categorie
         return $this->_idcat;
     }
     
-    /**
-     * return descrizione
-     * @return string
-     */
-    public function getDescrizione() 
-    {
-        return $this->_descrizione;
-    }
-
 }
