@@ -58,7 +58,7 @@ class Model_Listini_Listino {
     private function _getCategories()
     {
         if( is_null($this->_categories) ) {
-            throw new Exception("Categories array is not SET!");
+            throw new MyFw_Exception("Categories array is not SET!");
         }
         return $this->_categories;
     }
@@ -81,8 +81,8 @@ class Model_Listini_Listino {
             } else {
                 return null;
             }
-        } catch (Exception $e) {
-            echo 'Caught exception: ',  $e->getMessage(), "\n";
+        } catch (MyFw_Exception $exc) {
+            $exc->displayError();
         }
     }
     

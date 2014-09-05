@@ -15,17 +15,6 @@ class Controller_Index extends MyFw_Controller {
 
     function errorAction() {
         $errorCode = $this->getParam("code");
-        
-        switch ($errorCode) {
-            case 404:
-                $this->view->errorMessage = "Page not found!";
-                break;
-
-            default:
-                $this->view->errorMessage = "";
-                break;
-        }
-        
         $this->view->errorCode = $errorCode;
     }
 

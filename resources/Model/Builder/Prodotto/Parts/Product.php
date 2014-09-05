@@ -29,13 +29,13 @@ abstract class Model_Builder_Prodotto_Parts_Product
      */
     public function setDataByObject(stdClass $obj)
     {
-        foreach ($obj AS $f => $v) {
-            try {
+        try {
+            foreach ($obj AS $f => $v) 
+            {
                 $this->_setValue($f, $v);
-            } catch (Exception $exc) {
-                echo $exc->getMessage();
-                echo $exc->getTraceAsString();
             }
+        } catch (MyFw_Exception $exc) {
+            $exc->displayError();
         }
     }
     
@@ -44,7 +44,7 @@ abstract class Model_Builder_Prodotto_Parts_Product
         if( isset($this->data[$f]) ) {
             $this->data[$f]->set($v);
         } else {
-            throw new Exception("Part '$f' NOT exists in Product: " . __CLASS__);
+            throw new MyFw_Exception("Part '$f' NOT exists in Product: " . __CLASS__);
         }
     }
 

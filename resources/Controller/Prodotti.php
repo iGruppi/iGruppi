@@ -68,7 +68,7 @@ class Controller_Prodotti extends MyFw_Controller {
         
         // check REFERENTE, controllo per i furbi (non Referenti)
         if(!$this->_userSessionVal->refObject->canEditProdotti($this->_produttore->idproduttore)) {
-            $this->redirect("index", "error", array('code' => 404));
+            $this->redirect("index", "error", array('code' => 401));
         }
         
         $idprodotto = $this->_prodotto->idprodotto;
@@ -112,7 +112,7 @@ class Controller_Prodotti extends MyFw_Controller {
         
         // check REFERENTE, controllo per i furbi (non Referenti)
         if(!$this->_userSessionVal->refObject->canAddProdotti($this->_produttore->idproduttore)) {
-            $this->redirect("index", "error", array('code' => 404));
+            $this->redirect("index", "error", array('code' => 401));
         }
                 
         $idproduttore = $this->_produttore->idproduttore;

@@ -162,8 +162,8 @@ class Controller_Auth extends MyFw_Controller {
                             } else {
                                 $form->setError("idgroup", "Devi selezionare un gruppo esistente!");
                             }
-                        } catch (Exception $exc) {
-                            echo $exc->getTraceAsString();
+                        } catch (MyFw_Exception $exc) {
+                            $exc->displayError();
                         }
                     }
                 }

@@ -20,7 +20,7 @@ class Model_Builder_Sharing_Groups {
     public function getMyIdGroup()
     {
         if( is_null($this->_mygroup) ) {
-            throw new Exception("IdGroup of 'MyGroup' is not SET!");
+            throw new MyFw_Exception("IdGroup of 'MyGroup' is not SET!");
         }
         return $this->_mygroup;
     }
@@ -35,7 +35,7 @@ class Model_Builder_Sharing_Groups {
     {   
         if(is_null($this->_idgroup_master) || !$this->issetGroup($this->_idgroup_master))
         {
-            throw new Exception("idgroup_master is NOT set or that groups does NOT exists!");
+            throw new MyFw_Exception("idgroup_master is NOT set or that groups does NOT exists!");
         }
         return $this->getGroupByIdGroup($this->_idgroup_master);
     }
@@ -68,15 +68,21 @@ class Model_Builder_Sharing_Groups {
     }
     
     /**
-     * @return array
+     * @return Model_Builder_Sharing_Group_Parts_Group 
+     *      return the group created
      */
     public function addGroup(stdClass $g)
     {
+        try {
         $idgroup = $g->idgroup_slave;
         if( !$this->issetGroup($idgroup) ) {
             $this->_groups[$idgroup] = $this->_createGroup($g);
         }
         return $this->_groups[$idgroup];
+            
+        } catch (MyFw_Exception $exc) {
+            $exc->displayError();
+        }
     }
     
     /**
@@ -137,11 +143,17 @@ class Model_Builder_Sharing_Groups {
             if($this->issetGroup($idgroup)) {
                 $newArray[$idgroup] = $this->getGroupByIdGroup($idgroup);
             } else {
+                try {
+                    // try to create a new group with default values
                 $group = new stdClass();
                 $group->id = $this->getMasterGroup()->getId();
                 $group->idgroup_master = $this->getMasterGroup()->getIdGroup();
                 $group->idgroup_slave = $idgroup;
                 $newArray[$idgroup] = $this->_createGroup($group);
+                            
+                } catch (MyFw_Exception $exc) {
+                    $exc->displayError();
+                }
             }
         }
         $this->_groups = $newArray;
@@ -162,7 +174,7 @@ class Model_Builder_Sharing_Groups {
                 $this->addGroup($group);
             }
         } else {
-            throw new Exception("Groups array is not correctly initializated!");
+            throw new MyFw_Exception("Groups array is not correctly initializated!");
         }
     }
 

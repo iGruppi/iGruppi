@@ -10,7 +10,10 @@ class Model_Produttori_Prodotti
     extends Model_Builder_Prodotti
 {
     
-    
+    /**
+     * add Prodotto to the array of the Product objects
+     * @param stdClass $values
+     */
     public function addProdotto(stdClass $values)
     {
         $builderProdotto = new Model_Builder_Prodotto_ProdottoBuilder();

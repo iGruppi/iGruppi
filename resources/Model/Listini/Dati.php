@@ -31,7 +31,7 @@ class Model_Listini_Dati {
     public function getIdListino()
     {
         if(is_null($this->idlistino)) {
-            throw new Exception("IdListino is NOT set correctly!");
+            throw new MyFw_Exception("IdListino is NOT set correctly!");
         }
         return $this->idlistino;
     }
