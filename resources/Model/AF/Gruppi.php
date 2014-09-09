@@ -1,17 +1,22 @@
 <?php
-
 /**
- * Description of Sharing_Groups
- * 
- * @author gullo
+ * This is the Abstract Product for GRUPPI
  */
-class Model_Builder_Sharing_Groups {
-    
+abstract class Model_AF_Gruppi implements Model_AF_AbstractProductInterface
+{
+
+    /**
+     *
+     * @var type 
+     */
     private $_mygroup = null;
     private $_idgroup_master = null;
     private $_groups = array();
-    
 
+    /**
+     * set My Id Group (it's the Group of the user session)
+     * @param $idgroup
+     */
     public function setMyIdGroup($idgroup)
     {
         $this->_mygroup = $idgroup;
@@ -30,7 +35,30 @@ class Model_Builder_Sharing_Groups {
         return $this->getGroupByIdGroup($this->getMyIdGroup());
     }
 
-    
+    /**
+     * @return void
+     * @param array $groups Array groups to init the class (every group has to be a stdClass)
+     */
+    public function initDatiByObject($groups)
+    {
+        // set all groups
+        if(is_array($groups) && count($groups) > 0)
+        {
+            foreach($groups AS $group)
+            {
+                // Add the group to _groups array
+                $this->addGroup($group);
+            }
+        } else {
+            throw new MyFw_Exception("Groups array is not correctly initializated!");
+        }
+    }
+
+
+    /**
+     * @return null
+     * @throws MyFw_Exception
+     */
     public function getMasterGroup()
     {   
         if(is_null($this->_idgroup_master) || !$this->issetGroup($this->_idgroup_master))
@@ -164,23 +192,4 @@ class Model_Builder_Sharing_Groups {
         $this->_groups = $newArray;
     }
     
-    /**
-     * @return void
-     * @param array $groups Array groups to init the class (every group has to be a stdClass)
-     */    
-    public function initGroupsByArray($groups)
-    {
-        // set all groups
-        if(is_array($groups) && count($groups) > 0)
-        {
-            foreach($groups AS $group)
-            {
-                // Add the group to _groups array
-                $this->addGroup($group);
-            }
-        } else {
-            throw new MyFw_Exception("Groups array is not correctly initializated!");
-        }
-    }
-
 }

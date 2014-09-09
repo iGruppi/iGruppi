@@ -1,13 +1,8 @@
 <?php
-
 /**
- * Description of Listini_Prodotti
- * 
- * @author Davide Gullo <gullo at m4ss.net>
- * 
+ * This is a Concrete Product PRODOTTI for LISTINO
  */
-class Model_Listini_Prodotti 
-    extends Model_Builder_Prodotti
+class Model_AF_Listino_Prodotti extends Model_AF_Prodotti
 {
     
     public function countOutOfListino()
@@ -15,7 +10,7 @@ class Model_Listini_Prodotti
         $outOfListino = 0;
         if($this->count() > 0) 
         {
-            foreach ($this->_prodotti as $idprodotto => $prodotto) {
+            foreach ($this->getProdotti() AS $prodotto) {
                 if(!$prodotto->isInListino())
                 {
                     $outOfListino++;
@@ -27,15 +22,13 @@ class Model_Listini_Prodotti
     
     public function addProdotto(stdClass $values)
     {
-        $builderProdotto = new Model_Builder_Prodotto_ListinoProdottoBuilder();
         $director = new Model_Builder_Prodotto_Director();
-        $prodotto = $director->build($builderProdotto);
+        $prodotto = $director->build( new Model_Builder_Prodotto_ListinoProdottoBuilder() );
         $prodotto->setDataByObject($values);
-        $this->_prodotti[$prodotto->getIdProdotto()] = $prodotto;
+        $this->_setProdotto($prodotto);
         
         // call addProdotto from subclass
         parent::addProdotto($values);
     }
-    
 
 }

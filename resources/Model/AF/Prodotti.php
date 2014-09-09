@@ -1,21 +1,24 @@
 <?php
-
 /**
- * Description of Builder_Prodotti
- * 
- * @author Davide Gullo <gullo at m4ss.net>
- * 
+ * This is the Abstract Product for PRODOTTI
  */
-abstract class Model_Builder_Prodotti {
+abstract class Model_AF_Prodotti implements Model_AF_AbstractProductInterface
+{
+    /**
+     * @var array
+     */
+    private $_prodotti = array();
+    /**
+     * @var array
+     */
+    private $_categories = null;
     
-    protected $_prodotti = array();
-    protected $_categories = null;
-    
+
     /**
      * add Products by an array of data
      * @param array $listProd
      */
-    public function addProdottiByArray(array $listProd)
+    public function initDatiByObject($listProd)
     {
         if(count($listProd) > 0)
         {
@@ -27,15 +30,6 @@ abstract class Model_Builder_Prodotti {
         }
     }
     
-    /**
-     * called by the superclass for some shared steps
-     * @param stdClass $values
-     */
-    protected function addProdotto(stdClass $values) { 
-        // set Cat and SubCat
-        $this->_addToCategoryTree($values);
-    }
-
     /**
      * get the number of the products available
      * @return int
@@ -59,8 +53,34 @@ abstract class Model_Builder_Prodotti {
         }
         return null;
     }
-    
 
+    /**
+     * used from the parent class to ADD products to the array
+     * It MUST be protected because the parent class has to instantiate the Builder before adding it
+     * @param Model_Builder_Prodotto_Parts_Product $prodotto
+     */
+    protected function _setProdotto(Model_Builder_Prodotto_Parts_Product $prodotto)
+    {
+        $this->_prodotti[$prodotto->getIdProdotto()] = $prodotto;
+    }
+
+    /**
+     * called by the superclass for some shared steps
+     * @param stdClass $values
+     */
+    protected function addProdotto(stdClass $values) {
+        // set Cat and SubCat
+        $this->_addToCategoryTree($values);
+    }
+
+    /**
+     * get array Products
+     * @return array
+     */
+    public function getProdotti()
+    {
+        return $this->_prodotti;
+    }
     /**
      * build the composite pattern for categories
      * 

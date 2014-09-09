@@ -1,13 +1,10 @@
 <?php
-
 /**
- * Description of Ordini_Groups
- * 
- * @author gullo
+ * This is a Concrete Product GRUPPI for ORDINE
  */
-class Model_Ordini_Groups 
-    extends Model_Builder_Sharing_Groups
+class Model_AF_Ordine_Gruppi extends Model_AF_Gruppi
 {
+    
     /**
      * @return Model_Builder_Sharing_Group_Parts_Ordine
      */
@@ -28,6 +25,8 @@ class Model_Ordini_Groups
      */    
     public function saveToDB()
     {
+        return false;
+        /*
         $db = Zend_Registry::get("db");
         $db->beginTransaction();
         // UPDATE listini_groups table
@@ -48,6 +47,8 @@ class Model_Ordini_Groups
             }
         }
         return $db->commit();
+         * 
+         */
     }
-    
+
 }

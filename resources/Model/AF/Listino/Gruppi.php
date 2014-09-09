@@ -1,14 +1,11 @@
 <?php
-
 /**
- * Description of Listini_Groups
- * 
- * @author gullo
+ * This is a Concrete Product GRUPPI for LISTINO
  */
-class Model_Listini_Groups 
-    extends Model_Builder_Sharing_Groups
+class Model_AF_Listino_Gruppi extends Model_AF_Gruppi
 {
-
+    
+    
     /**
      * @return Model_Builder_Sharing_Group_Parts_Listino
      */
@@ -49,4 +46,5 @@ class Model_Listini_Groups
         return $db->commit();
     }
     
+
 }
