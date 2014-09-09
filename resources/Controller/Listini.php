@@ -20,16 +20,20 @@ class Controller_Listini extends MyFw_Controller {
     {
         // get Elenco Listini per Gruppo
         $lObj = new Model_Listini();
+        $cObj = new Model_Categorie();
         $listiniArray = $lObj->getListiniByIdgroup($this->_userSessionVal->idgroup);
         $listini = array();
         if(!is_null($listiniArray)) {
             foreach ($listiniArray as $stdListino) {
+                // creates Listino by Abstract Factory Model_AF_ListinoFactory
                 $mllObj = new Model_Listini_Listino();
+                $mllObj->createListino(new Model_AF_ListinoFactory());
                 // init Dati by stdClass
                 $mllObj->getDati()->initDatiByObject($stdListino);
+                
                 // set Categories in Listini object
-                $categories = $lObj->getCategoriesByIdlistino($mllObj->getDati()->getIdListino());
-                $mllObj->setCategories($categories);
+                $categorie = $cObj->getCategoriesByIdListino( $mllObj->getDati()->getIdListino() );
+                $mllObj->getCategorie()->initDatiByObject($categorie);
                 
                 // check for Referente Listino
                 if( $mllObj->canManageListino() ) {
@@ -74,9 +78,10 @@ class Controller_Listini extends MyFw_Controller {
             {   
                 // create NEW Listino
                 $mllObj = new Model_Listini_Listino();
-                $mllObj->getDati()->descrizione = $fv["descrizione"];
-                $mllObj->getDati()->idproduttore = $fv["idproduttore"];
-                $mllObj->getDati()->condivisione = "PRI"; // Private
+                $mllObj->createListino(new Model_AF_ListinoFactory());
+                $mllObj->getDati()->setDescrizione($form->getValue("descrizione"));
+                $mllObj->getDati()->setIdProduttore($form->getValue("idproduttore"));
+                $mllObj->getDati()->setCondivisione("PRI"); // Default is Private
                 if( $mllObj->getDati()->saveToDB() ) {
                     $idlistino = $mllObj->getDati()->getIdListino();
                     // create a NEW group
@@ -123,14 +128,16 @@ class Controller_Listini extends MyFw_Controller {
         
         // Create Listino Object
         $mllObj = new Model_Listini_Listino();
-        $mllObj->getGroups()->setMyIdGroup($this->_userSessionVal->idgroup);
+        $mllObj->createListino(new Model_AF_ListinoFactory());
+        // set DATI in Listino
         $mllObj->getDati()->initDatiByObject($listino);
-        // set Groups in Listini object
-        $mllObj->getGroups()->initGroupsByArray( $lObj->getGroupsByIdlistino($idlistino) );
-        
-        // add All Prodotti by Listino
+        // set GROUPS in Listino
+        $mllObj->getGroups()->setMyIdGroup($this->_userSessionVal->idgroup);
+        $mllObj->getGroups()->initDatiByObject( $lObj->getGroupsByIdlistino($idlistino) );
+        //Zend_Debug::dump($mllObj->getGroups());die;
+        // add All PRODOTTI by Listino
         $objModel = new Model_Prodotti();
-        $mllObj->getProdotti()->addProdottiByArray( $objModel->getProdottiByIdListino($idlistino) );
+        $mllObj->getProdotti()->initDatiByObject( $objModel->getProdottiByIdListino($idlistino) );
         
         // get elenco All Groups
         $grObj = new Model_Groups();
@@ -152,8 +159,8 @@ class Controller_Listini extends MyFw_Controller {
             if( $form->isValid($fv) ) 
             {   
                 // Save DATI
-                $mllObj->getDati()->descrizione = $form->getValue("descrizione");
-                $mllObj->getDati()->condivisione = $form->getValue("condivisione");
+                $mllObj->getDati()->setDescrizione($form->getValue("descrizione"));
+                $mllObj->getDati()->setCondivisione($form->getValue("condivisione"));
                 $mllObj->getGroups()->getMyGroup()->setValidita($form->getValue("valido_dal"), $form->getValue("valido_al"));
                 $mllObj->getGroups()->getMyGroup()->setVisibile( $form->getValue("visibile") );
                 
