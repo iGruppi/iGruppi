@@ -6,6 +6,8 @@ class Model_Produttori_Prodotti_Categorie_SubcatElement
     extends Model_Produttori_Prodotti_Categorie_CategoryElement
 {
 
+    protected $_idsubcat;
+    
     /**
      * build a Subcat element
      * @param type $id

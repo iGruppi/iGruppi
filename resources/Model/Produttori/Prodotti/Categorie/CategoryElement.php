@@ -4,7 +4,6 @@
  */
 abstract class Model_Produttori_Prodotti_Categorie_CategoryElement
 {
-    protected $_idsubcat;
     protected $_descrizione;
     
     /**
