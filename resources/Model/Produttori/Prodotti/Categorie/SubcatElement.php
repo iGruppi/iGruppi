@@ -3,9 +3,12 @@
  * Class SubcatElement
  */
 class Model_Produttori_Prodotti_Categorie_SubcatElement 
-    extends Model_Produttori_Prodotti_Categorie_CategoryElement
+    extends Model_Produttori_Prodotti_Categorie_Element
 {
-
+    /**
+     * IdSubCat ID Sub-Categoria
+     * @var mixed
+     */
     protected $_idsubcat;
     
     /**
@@ -16,25 +19,24 @@ class Model_Produttori_Prodotti_Categorie_SubcatElement
     public function __construct($id, $descrizione)
     {
         $this->_idsubcat = $id;
-        $this->_descrizione = $descrizione;
+        $this->descrizione = $descrizione;
+        $this->elements = array();        
     }
     
     /**
-     * None of this batch of methods are used by Leaf because this element has not children
-     * However in order to correctly implement the interface we need some kind of implementation
-     */
-    public function add(Model_Produttori_Prodotti_Categorie_CategoryElement $element) {}
-    public function remove($id) {}
-    public function getChild($id) {}
-    public function getChildren() {}
-
-    /**
-     * renders the Subcat element
+     * renders the Subcat elements
      * @return mixed|string
      */
     public function render()
     {
-        return array('idsubcat' => $this->_idsubcat, 'descrizione' => $this->_descrizione, 'products' => $this->products);
+        $ar = array();
+        if(count($this->elements) > 0) {
+            $ar = array('idsubcat' => $this->_idsubcat, 'descrizione' => $this->descrizione, 'elements' => array());
+            foreach ($this->elements as $element) {
+                $ar['elements'][] = $element->render();
+            }
+        }
+        return $ar;
     }
     
     /**

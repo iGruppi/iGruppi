@@ -1,15 +1,20 @@
 <?php
 /**
- * Class CategoryElement
+ * Class Category Element
  */
-abstract class Model_Produttori_Prodotti_Categorie_CategoryElement
+abstract class Model_Produttori_Prodotti_Categorie_Element
 {
-    protected $_descrizione;
+    /**
+     * Descrizione element
+     * @var string
+     */
+    protected $descrizione;
     
     /**
-     * @var array of IdProducts
+     * @var array|CategoryElement[]
      */
-    protected $products = array();
+    protected $elements;
+    
     
     /**
      * renders the category code
@@ -19,48 +24,57 @@ abstract class Model_Produttori_Prodotti_Categorie_CategoryElement
     
     /**
      * add element
+     * @param Category Element $element
      * @return void
      */
-    abstract public function add(Model_Produttori_Prodotti_Categorie_CategoryElement $element);
-
-    /**
-     * add IdProduct to the array
-     * @param type $idproduct
-     */
-    public function addIdProdotto($idproduct)
+    public function add(Model_Produttori_Prodotti_Categorie_Element $element)
     {
-        if(!in_array($idproduct, $this->products)) 
-        {
-            $this->products[] = $idproduct;
-        }
+        $this->elements[] = $element;
     }
     
 
     /**
-     * remove element by id
-     * @return void
-     */
-    abstract public function remove($id);
-    
-    /**
      * get child by id
-     * @return Model_Produttori_Prodotti_Categorie_CategoryElement
-     */    
-    abstract public function getChild($id);    
+     * @param $id int
+     * @return Model_Produttori_Prodotti_Categorie_Element
+     */
+    public function getChild($id)
+    {
+        if(count($this->elements) > 0) {
+            foreach ($this->elements AS $value) {
+                if($value->getId() == $id) {
+                    return $value;
+                }
+            }
+        }
+        return null;
+    }
+    
     
     /**
      * get array childred
      * @return array
      */    
-    abstract public function getChildren();    
+    public function getChildren() {
+        return $this->elements;
+    }
 
     /**
-     * get array products
-     * @return array
-     */    
-    public function getProdotti()
+     * remove an element from the tree
+     * @param $id int
+     * @return bool
+     */
+    public function remove($id)
     {
-        return $this->products;
+        if(count($this->elements) > 0) {
+            foreach ($this->elements as $key => $value) {
+                if($value->getId() == $id) {
+                    unset($this->elements[$key]);
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     /**
@@ -75,7 +89,7 @@ abstract class Model_Produttori_Prodotti_Categorie_CategoryElement
      */
     public function getDescrizione() 
     {
-        return $this->_descrizione;
+        return $this->descrizione;
     }
         
 }

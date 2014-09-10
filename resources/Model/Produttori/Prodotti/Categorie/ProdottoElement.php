@@ -1,29 +1,32 @@
 <?php
 /**
- * Class SubcatElement
+ * Class ProductElement
  */
-class Model_Produttori_Prodotti_Categorie_SubcatElement 
-    extends Model_Produttori_Prodotti_Categorie_CategoryElement
+class Model_Produttori_Prodotti_Categorie_ProdottoElement 
+    extends Model_Produttori_Prodotti_Categorie_Element
 {
-
-    protected $_idsubcat;
+    /**
+     * IdProdotto
+     * @var mixed
+     */
+    protected $_idprodotto;
     
     /**
-     * build a Subcat element
+     * build a Prodotto element
      * @param type $id
      * @param type $descrizione
      */
     public function __construct($id, $descrizione)
     {
-        $this->_idsubcat = $id;
-        $this->_descrizione = $descrizione;
+        $this->_idprodotto = $id;
+        $this->descrizione = $descrizione;
     }
     
     /**
      * None of this batch of methods are used by Leaf because this element has not children
      * However in order to correctly implement the interface we need some kind of implementation
      */
-    public function add(Model_Produttori_Prodotti_Categorie_CategoryElement $element) {}
+    public function add(Model_Produttori_Prodotti_Categorie_Element $element) {}
     public function remove($id) {}
     public function getChild($id) {}
     public function getChildren() {}
@@ -34,7 +37,7 @@ class Model_Produttori_Prodotti_Categorie_SubcatElement
      */
     public function render()
     {
-        return array('idsubcat' => $this->_idsubcat, 'descrizione' => $this->_descrizione, 'products' => $this->products);
+        return array('idprodotto' => $this->_idprodotto, 'descrizione' => $this->descrizione);
     }
     
     /**
@@ -43,7 +46,7 @@ class Model_Produttori_Prodotti_Categorie_SubcatElement
      */
     public function getId()
     {
-        return $this->_idsubcat;
+        return $this->_idprodotto;
     }
     
 }
