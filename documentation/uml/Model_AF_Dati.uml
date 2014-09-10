@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>PHP</ID>
+  <OriginalElement>\Model_AF_Dati</OriginalElement>
+  <nodes>
+    <node x="1584.4285714285713" y="1667.7142857142853">\Model_Produttori_Prodotti_Categorie_SubcatElement</node>
+    <node x="716.0" y="733.0">\Model_AF_Dati</node>
+    <node x="437.0" y="744.0">\Model_AF_Categorie</node>
+    <node x="0.0" y="1208.0">\Model_AF_OrdineFactory</node>
+    <node x="981.0" y="744.0">\Model_AF_Prodotti</node>
+    <node x="864.5714285714287" y="1190.5714285714287">\Model_Builder_Categorie</node>
+    <node x="1269.9285714285713" y="1355.7142857142853">\Model_Produttori_Prodotti_Categorie_Element</node>
+    <node x="573.5" y="554.0">\Model_AF_AbstractProductInterface</node>
+    <node x="1298.4285714285713" y="1667.7142857142853">\Model_Produttori_Prodotti_Categorie</node>
+    <node x="99.75" y="1062.0">\Model_AF_AbstractFactory</node>
+    <node x="0.0" y="656.0">\Model_AF_Gruppi</node>
+    <node x="210.0" y="1208.0">\Model_AF_ListinoFactory</node>
+    <node x="901.4285714285713" y="1634.7142857142853">\Model_Produttori_Prodotti_Categorie_ProdottoElement</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="\Model_AF_Gruppi" target="\Model_AF_AbstractProductInterface">
+      <point x="0.0" y="-180.5" />
+      <point x="208.5" y="626.0" />
+      <point x="605.75" y="626.0" />
+      <point x="-96.75" y="26.0" />
+    </edge>
+    <edge source="\Model_AF_OrdineFactory" target="\Model_AF_AbstractFactory">
+      <point x="0.0" y="-48.0" />
+      <point x="95.0" y="1183.0" />
+      <point x="150.0" y="1183.0" />
+      <point x="-50.25" y="48.0" />
+    </edge>
+    <edge source="\Model_AF_Prodotti" target="\Model_AF_AbstractProductInterface">
+      <point x="0.0" y="-92.5" />
+      <point x="1107.0" y="626.0" />
+      <point x="799.25" y="626.0" />
+      <point x="96.75" y="26.0" />
+    </edge>
+    <edge source="\Model_Produttori_Prodotti_Categorie" target="\Model_Produttori_Prodotti_Categorie_Element">
+      <point x="0.0" y="-82.0" />
+      <point x="0.0" y="114.5" />
+    </edge>
+    <edge source="\Model_Produttori_Prodotti_Categorie_SubcatElement" target="\Model_Produttori_Prodotti_Categorie_Element">
+      <point x="0.0" y="-82.0" />
+      <point x="1766.9285714285713" y="1609.7142857142853" />
+      <point x="1539.095238095238" y="1609.7142857142853" />
+      <point x="107.66666666666674" y="114.5" />
+    </edge>
+    <edge source="\Model_AF_ListinoFactory" target="\Model_AF_AbstractFactory">
+      <point x="0.0" y="-48.0" />
+      <point x="305.5" y="1183.0" />
+      <point x="250.5" y="1183.0" />
+      <point x="50.25" y="48.0" />
+    </edge>
+    <edge source="\Model_Produttori_Prodotti_Categorie_ProdottoElement" target="\Model_Produttori_Prodotti_Categorie_Element">
+      <point x="2.2737367544323206E-13" y="-115.0" />
+      <point x="1089.9285714285716" y="1609.7142857142853" />
+      <point x="1323.7619047619046" y="1609.7142857142853" />
+      <point x="-107.66666666666674" y="114.5" />
+    </edge>
+    <edge source="\Model_AF_Categorie" target="\Model_AF_AbstractProductInterface">
+      <point x="0.0" y="-92.5" />
+      <point x="566.5" y="636.0" />
+      <point x="670.25" y="636.0" />
+      <point x="-32.25" y="26.0" />
+    </edge>
+    <edge source="\Model_AF_Dati" target="\Model_AF_AbstractProductInterface">
+      <point x="0.0" y="-103.5" />
+      <point x="838.5" y="636.0" />
+      <point x="734.75" y="636.0" />
+      <point x="32.25" y="26.0" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Group" zoom="0.7000000000000001" x="634.9999999999998" y="1312.7142857142858" />
+  <SelectedNodes>
+    <node>\Model_AF_Dati</node>
+  </SelectedNodes>
+  <Categories>
+    <Category>Methods</Category>
+    <Category>Fields</Category>
+    <Category>Constants</Category>
+    <Category>Constructors</Category>
+  </Categories>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+

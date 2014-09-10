@@ -20,12 +20,6 @@ abstract class Model_AF_AbstractFactory
     abstract public function createGruppi();
 
     /**
-     * Creates CATEGORIE component
-     * @return Categorie
-     */
-    abstract public function createCategorie();
-
-    /**
      * Creates PRODOTTI component
      * @return Prodotti
      */

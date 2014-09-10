@@ -23,15 +23,6 @@ class Model_AF_ListinoFactory extends Model_AF_AbstractFactory
     }
 
     /**
-     * Creates CATEGORIE component
-     * @return Categorie
-     */
-    public function createCategorie()
-    {
-        return new Model_AF_Listino_Categorie();
-    }
-
-    /**
      * Creates PRODOTTI component
      * @return Prodotti
      */
