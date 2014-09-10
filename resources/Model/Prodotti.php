@@ -71,6 +71,29 @@ class Model_Prodotti extends MyFw_DB_Base {
         return $sth->fetchAll(PDO::FETCH_OBJ);
     }
 
+    /**
+     * Elenco prodotti di un Ordine
+     * 
+     * @param int $idlistino
+     * @return array
+     */
+    function getProdottiByIdOrdine($idordine) {
+        $sql = "SELECT p.*, "
+              ." op.costo AS costo_ordine, op.offerta AS offerta_ordine, op.sconto AS sconto_ordine, op.disponibile AS disponibile_ordine, "
+              ." lp.idlistino, lp.descrizione AS descrizione_listino, lp.costo AS costo_listino, lp.note AS note_listino, lp.attivo AS attivo_listino, "
+              ." cs.descrizione AS categoria_sub, c.idcat, c.descrizione AS categoria "
+              ." FROM ordini_prodotti AS op "
+              ." JOIN listini_prodotti AS lp ON lp.idlistino=op.idlistino AND lp.idprodotto=op.idprodotto "
+              ." JOIN prodotti AS p ON lp.idprodotto=p.idprodotto"
+              ." JOIN categorie_sub AS cs ON p.idsubcat=cs.idsubcat"
+              ." JOIN categorie AS c ON cs.idcat=c.idcat "
+              ." WHERE op.idordine= :idordine"
+              ." ORDER BY c.descrizione, p.codice";
+        // echo $sql; die;
+        $sth = $this->db->prepare($sql);
+        $sth->execute(array('idordine' => $idordine));
+        return $sth->fetchAll(PDO::FETCH_OBJ);
+    }
     
     function getProdottiByIdSubCat($idsubcat) {
         

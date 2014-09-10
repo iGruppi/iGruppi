@@ -29,11 +29,14 @@ class Controller_Listini extends MyFw_Controller {
                 $mllObj = new Model_Listini_Listino();
                 $mllObj->createListino(new Model_AF_ListinoFactory());
                 // init Dati by stdClass
-                $mllObj->getDati()->initDatiByObject($stdListino);
+                $mllObj->setDati($stdListino);
                 
                 // set Categories in Listini object
                 $categorie = $cObj->getCategoriesByIdListino( $mllObj->getDati()->getIdListino() );
-                $mllObj->getCategorie()->initDatiByObject($categorie);
+                // get CATEGORIE by array 
+                $catObj = new Model_Builder_Categorie();
+                $catObj->initDatiByObject($categorie);
+                $mllObj->setCategorie($catObj);
                 
                 // check for Referente Listino
                 if( $mllObj->canManageListino() ) {
@@ -93,11 +96,6 @@ class Controller_Listini extends MyFw_Controller {
                     $mllObj->getGroups()->addGroup($group);
                     $resSave = $mllObj->getGroups()->saveToDB();
 
-                    // Save PRODUCTS
-                    /**
-                     * @todo 
-                     */
-                    
                     // REDIRECT to EDIT
                     if($resSave) {
                         $this->redirect("listini", "edit", array('idlistino' => $idlistino, 'updated' => true));
@@ -130,15 +128,21 @@ class Controller_Listini extends MyFw_Controller {
         $mllObj = new Model_Listini_Listino();
         $mllObj->createListino(new Model_AF_ListinoFactory());
         // set DATI in Listino
-        $mllObj->getDati()->initDatiByObject($listino);
+        $mllObj->setDati($listino);
         // set GROUPS in Listino
-        $mllObj->getGroups()->setMyIdGroup($this->_userSessionVal->idgroup);
-        $mllObj->getGroups()->initDatiByObject( $lObj->getGroupsByIdlistino($idlistino) );
+        $mllObj->setGroups( $lObj->getGroupsByIdlistino($idlistino) )
+               ->setMyIdGroup($this->_userSessionVal->idgroup);
         //Zend_Debug::dump($mllObj->getGroups());die;
         // add All PRODOTTI by Listino
         $objModel = new Model_Prodotti();
-        $mllObj->getProdotti()->initDatiByObject( $objModel->getProdottiByIdListino($idlistino) );
+        $prodotti = $objModel->getProdottiByIdListino($idlistino);
+        $mllObj->setProdotti( $prodotti );
         
+        // get CATEGORIE by array $prodotti
+        $catObj = new Model_Builder_Categorie();
+        $catObj->initDatiByObject($prodotti);
+        $mllObj->setCategorie($catObj);
+            
         // get elenco All Groups
         $grObj = new Model_Groups();
         $this->view->groups = $groups = $grObj->getAll();

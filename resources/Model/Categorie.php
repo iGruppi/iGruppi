@@ -50,6 +50,32 @@ class Model_Categorie extends MyFw_DB_Base {
         return $res;
     }
 
+    function getCategoriesByIdOrdine($idordine)
+    {
+        $sql = "SELECT DISTINCT c.idcat, c.descrizione "
+                . " FROM ordini_prodotti AS op "
+                . " LEFT JOIN prodotti AS p ON op.idprodotto=p.idprodotto "
+                . " LEFT JOIN categorie_sub AS cs ON p.idsubcat=cs.idsubcat "
+                . " LEFT JOIN categorie AS c ON cs.idcat=c.idcat "
+                . " WHERE op.idordine= :idordine";
+        $sth = $this->db->prepare($sql);
+        $sth->execute(array('idordine' => $idordine));
+        return $sth->fetchAll(PDO::FETCH_OBJ);
+    }
+    
+    function getCategoriesByIdListino($idlistino)
+    {
+        $sql = "SELECT DISTINCT c.idcat, c.descrizione AS categoria "
+                . " FROM listini_prodotti AS lp "
+                . " LEFT JOIN prodotti AS p ON lp.idprodotto=p.idprodotto "
+                . " LEFT JOIN categorie_sub AS cs ON p.idsubcat=cs.idsubcat "
+                . " LEFT JOIN categorie AS c ON cs.idcat=c.idcat "
+                . " WHERE lp.idlistino= :idlistino";
+        $sth = $this->db->prepare($sql);
+        $sth->execute(array('idlistino' => $idlistino));
+        return $sth->fetchAll(PDO::FETCH_OBJ);
+    }    
+    
     
     function addSubCategoria($arVal) {
         $sth = $this->db->prepare("INSERT INTO categorie_sub SET idproduttore= :idproduttore, idcat= :idcat, descrizione= :descrizione");

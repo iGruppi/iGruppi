@@ -23,7 +23,7 @@ class Model_Listini extends MyFw_DB_Base {
     
     function getListiniByIdgroup($idgroup)
     {
-        $sql = "SELECT l.*, gl.idgroup_slave, gl.idgroup_master, gl.valido_dal, gl.valido_al, p.ragsoc "
+        $sql = "SELECT l.*, p.ragsoc "
                 . " FROM listini AS l "
                 . " LEFT JOIN produttori AS p ON l.idproduttore=p.idproduttore "
                 . " LEFT JOIN listini_groups AS gl ON l.idlistino=gl.idlistino "
@@ -55,17 +55,5 @@ class Model_Listini extends MyFw_DB_Base {
         return null;        
     }
     
-    function getCategoriesByIdlistino($idlistino)
-    {
-        $sql = "SELECT DISTINCT c.idcat, c.descrizione "
-                . " FROM listini_prodotti AS lp "
-                . " LEFT JOIN prodotti AS p ON lp.idprodotto=p.idprodotto "
-                . " LEFT JOIN categorie_sub AS cs ON p.idsubcat=cs.idsubcat "
-                . " LEFT JOIN categorie AS c ON cs.idcat=c.idcat "
-                . " WHERE lp.idlistino= :idlistino";
-        $sth = $this->db->prepare($sql);
-        $sth->execute(array('idlistino' => $idlistino));
-        return $sth->fetchAll(PDO::FETCH_OBJ);
-    }
     
 }
