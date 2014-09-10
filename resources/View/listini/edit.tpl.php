@@ -1,4 +1,4 @@
-<h2>Modifica Listino <strong><?php echo $this->listino->getDati()->descrizione; ?></strong></h2>
+<h2>Modifica Listino <strong><?php echo $this->listino->getDati()->getDescrizione(); ?></strong></h2>
 <h3>Produttore: <strong><?php echo $this->listino->getDati()->getProduttoreName(); ?></strong></h3>
 
 <form id="prodform" action="<?php echo $this->form->getAction(); ?>" method="post" class="f1n120">
@@ -27,7 +27,7 @@
               <?php include $this->template('listini/edit.condivisione.tpl.php'); ?>
           </div>
           <div class="tab-pane" id="prodotti">
-              <?php echo $this->partial('listini/edit.prodotti.tpl.php', array('prodotti' => $this->listino->getProdotti())); ?>
+              <?php echo $this->partial('listini/edit.prodotti.tpl.php', array('listino' => $this->listino)); ?>
           </div>
         </div>
 

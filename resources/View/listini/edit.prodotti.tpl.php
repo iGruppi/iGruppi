@@ -1,18 +1,17 @@
-<?php if($this->prodotti->count() > 0): ?>
-    
+<?php if($this->listino->getProdotti()->count() > 0): ?>
     
     <div class="hint_50" style="margin-top: 20px; margin-bottom: 20px;">
         <div class="alert alert-info" role="alert"><strong id="chk_num_Y">0</strong> su <strong id="chk_num_ALL">0</strong> prodotti selezionati per questo Listino<br />
             <input type="checkbox" id="check_all" onchange="setAllProdotti();"/> Seleziona tutti
         </div>
     </div>
-<?php foreach ($this->prodotti->getCategorie()->getChildren() AS $cat):
+<?php foreach ($this->listino->getAllCategorie()->getChildren() AS $cat):
         foreach ($cat->getChildren() AS $subcat): ?>
     <fieldset class='border_top'>
         <legend><?php echo $cat->getDescrizione() ." : ". $subcat->getDescrizione(); ?></legend>
 <?php     // get Prodotti List in this Idsubcat
-          foreach ($subcat->getProdotti() AS $idprodotto): 
-              $pObj = $this->prodotti->getProdottoById($idprodotto);
+          foreach ($subcat->getChildren() AS $prodotto): 
+              $pObj = $this->listino->getProdotti()->getProdottoById($prodotto->getId());
               // Check if prodotto is in LISTINO
               if($pObj->isInListino()):
 ?>
@@ -40,7 +39,7 @@
 
     // set default numbers values
     var num_checked_Y = 0;
-    var num_checked_ALL = <?php echo $this->prodotti->count(); ?>;
+    var num_checked_ALL = <?php echo $this->listino->getProdotti()->count(); ?>;
     
     $(function() {
         // call checkMe for every checkbox
