@@ -12,9 +12,6 @@ class Model_AF_Ordine_Prodotti extends Model_AF_Prodotti
         $prodotto = $director->build( new Model_Builder_Prodotto_OrdineProdottoBuilder() );
         $prodotto->setDataByObject($values);
         $this->_setProdotto($prodotto);
-        
-        // call addProdotto subclass
-        parent::addProdotto($values);
     }
 
     

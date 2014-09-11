@@ -9,9 +9,9 @@ class Model_Builder_Prodotto_ListinoProdottoBuilder
     /**
      * @return void
      */
-    public function addProdotto()
+    public function addDatiProdotto()
     {
-        parent::addProdotto();
+        parent::addDatiProdotto();
     }
     
     /**
@@ -24,19 +24,14 @@ class Model_Builder_Prodotto_ListinoProdottoBuilder
     /**
      * @return void
      */
-    public function addListino(){
-        parent::addListino();
+    public function addDatiListino(){
+        parent::addDatiListino();
     }    
     
     /**
      * @return void
      */
-    public function addOrdine() { }
-
-    /**
-     * @return void
-     */
-    public function addUserOrdine() { }
+    public function addDatiOrdine() { }
     
     /**
      * @return void

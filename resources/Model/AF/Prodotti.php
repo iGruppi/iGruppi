@@ -20,11 +20,19 @@ abstract class Model_AF_Prodotti implements Model_AF_AbstractProductInterface
         {
             foreach ($listProd as $values)
             {
-                // It calls the addProdotto method of the superclass
+                // It calls the addProdotto method of the child class
                 $this->addProdotto($values);
             }
         }
     }
+    
+    /**
+     * called by the superclass for some shared steps
+     * @param stdClass $values
+     */
+    protected function addProdotto(stdClass $values) { }
+
+    
     
     /**
      * get the number of the products available
@@ -59,12 +67,6 @@ abstract class Model_AF_Prodotti implements Model_AF_AbstractProductInterface
     {
         $this->_prodotti[$prodotto->getIdProdotto()] = $prodotto;
     }
-
-    /**
-     * called by the superclass for some shared steps
-     * @param stdClass $values
-     */
-    protected function addProdotto(stdClass $values) { }
 
     /**
      * get array Products

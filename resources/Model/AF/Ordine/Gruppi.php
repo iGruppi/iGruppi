@@ -6,12 +6,12 @@ class Model_AF_Ordine_Gruppi extends Model_AF_Gruppi
 {
     
     /**
-     * @return Model_Builder_Sharing_Group_Parts_Ordine
+     * @return Model_Builder_GroupSharing_Parts_Ordine
      */
     public function buildGroup()
     {
-        $builderGroup = new Model_Builder_Sharing_Group_OrdineBuilder();
-        $director = new Model_Builder_Sharing_Group_Director();
+        $builderGroup = new Model_Builder_GroupSharing_OrdineBuilder();
+        $director = new Model_Builder_GroupSharing_Director();
         $group = $director->build($builderGroup);
         return $group;
     }

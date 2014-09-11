@@ -2,46 +2,41 @@
 /**
  * This builds PRODOTTO for ANAGRAFICA Prodotti
  */
-class Model_Builder_Prodotto_ProdottoBuilder 
+class Model_Builder_Prodotto_AnagraficaProdottoBuilder 
     extends Model_Builder_Prodotto_BuilderInterface
 {
 
     /**
      * @return void
      */
-    public function addProdotto()
+    public function addDatiProdotto()
     {
-        parent::addProdotto();
+        parent::addDatiProdotto();
     }
     
     /**
      * @return void
      */
-    public function addCategories() {
-        parent::addCategories();
+    public function addCategorie() {
+        parent::addCategorie();
     }
     
     /**
      * @return void
      */
-    public function addListino(){ }    
+    public function addDatiListino(){ }    
     
     /**
      * @return void
      */
-    public function addOrdine() { }
-
-    /**
-     * @return void
-     */
-    public function addUserOrdine() { }
+    public function addDatiOrdine() { }
 
     /**
      * @return void
      */
     public function createProdotto()
     {
-        $this->prodotto = new Model_Builder_Prodotto_Parts_Prodotto();
+        $this->prodotto = new Model_Builder_Prodotto_Parts_Anagrafica();
     }
 
 }

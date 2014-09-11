@@ -26,9 +26,6 @@ class Model_AF_Listino_Prodotti extends Model_AF_Prodotti
         $prodotto = $director->build( new Model_Builder_Prodotto_ListinoProdottoBuilder() );
         $prodotto->setDataByObject($values);
         $this->_setProdotto($prodotto);
-        
-        // call addProdotto from subclass
-        parent::addProdotto($values);
     }
 
 }

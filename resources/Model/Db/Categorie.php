@@ -52,7 +52,7 @@ class Model_Db_Categorie extends MyFw_DB_Base {
 
     function getCategoriesByIdOrdine($idordine)
     {
-        $sql = "SELECT DISTINCT c.idcat, c.descrizione "
+        $sql = "SELECT DISTINCT c.idcat, c.descrizione AS categoria "
                 . " FROM ordini_prodotti AS op "
                 . " LEFT JOIN prodotti AS p ON op.idprodotto=p.idprodotto "
                 . " LEFT JOIN categorie_sub AS cs ON p.idsubcat=cs.idsubcat "
@@ -75,7 +75,7 @@ class Model_Db_Categorie extends MyFw_DB_Base {
         $sth->execute(array('idlistino' => $idlistino));
         return $sth->fetchAll(PDO::FETCH_OBJ);
     }    
-    
+
     
     function addSubCategoria($arVal) {
         $sth = $this->db->prepare("INSERT INTO categorie_sub SET idproduttore= :idproduttore, idcat= :idcat, descrizione= :descrizione");

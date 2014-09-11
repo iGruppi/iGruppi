@@ -2,11 +2,17 @@
 /**
  * This is a PRODOTTO for ANAGRAFICA prodotti
  */
-class Model_Builder_Prodotto_Parts_Prodotto
+class Model_Builder_Prodotto_Parts_Anagrafica
     extends Model_Builder_Prodotto_Parts_Product
 
 {
-    
+    /**
+     * Anagrafica context
+     * @var string
+     */
+    protected $_context = "Anagrafica";
+
+
     /**
      * @return string
      */    
@@ -46,37 +52,13 @@ class Model_Builder_Prodotto_Parts_Prodotto
         return "&euro; / " . $this->getUdm() . $fpz;
     }
         
-    /**
-     * @return float
-     */    
-    public function getCostoSenzaIva() 
-    {
-        if($this->getAliquotaIva() > 0) {
-            $cc =  ($this->getCosto() / ($this->getAliquotaIva() / 100 + 1));
-            return round( $cc, 2, PHP_ROUND_HALF_UP);
-        } else {
-            return $this->getCosto();
-        }
-    }
     
     /**
-     * @return string
+     * @return bool
      */    
-    public function getAliquotaIva() 
+    public function hasIva() 
     {
-        if($this->hasAliquotaIva()) 
-        {
-            return $this->getIva();
-        }
-        return 0;
-    }
-    
-    /**
-     * @return string
-     */    
-    public function hasAliquotaIva() 
-    {
-        return (!is_null($this->getIva()) && $this->getIva() > 0);
+        return ($this->getIva() > 0);
     }
 
     /**

@@ -7,6 +7,12 @@ class Model_Builder_Prodotto_Parts_Ordine
 {
 
     /**
+     * Ordine context
+     * @var string
+     */
+    protected $_context = "Ordine";
+    
+    /**
      * @return bool
      */    
     public function isDisponibile() {

@@ -19,7 +19,7 @@ abstract class Model_Builder_Prodotto_BuilderInterface
     /**
      * @return void
      */
-    public function addProdotto()
+    public function addDatiProdotto()
     {
         $this->prodotto->setPart('idprodotto', new Model_Builder_Parts_Id());
         $this->prodotto->setPart('idproduttore', new Model_Builder_Parts_Id());
@@ -38,7 +38,7 @@ abstract class Model_Builder_Prodotto_BuilderInterface
     /**
      * @return void
      */
-    public function addCategories()
+    public function addCategorie()
     {
         $this->prodotto->setPart('idcat', new Model_Builder_Parts_Id());
         $this->prodotto->setPart('idsubcat', new Model_Builder_Parts_Id());
@@ -50,7 +50,7 @@ abstract class Model_Builder_Prodotto_BuilderInterface
     /**
      * @return void
      */
-    public function addListino() {
+    public function addDatiListino() {
         $this->prodotto->setPart('idlistino', new Model_Builder_Parts_Id());
         $this->prodotto->setPart('descrizione_listino', new Model_Builder_Parts_Text());
         $this->prodotto->setPart('costo_listino', new Model_Builder_Parts_Float());
@@ -61,24 +61,13 @@ abstract class Model_Builder_Prodotto_BuilderInterface
     /**
      * @return void
      */
-    public function addOrdine(){
+    public function addDatiOrdine(){
         $this->prodotto->setPart('idordine', new Model_Builder_Parts_Id());
         $this->prodotto->setPart('costo_ordine', new Model_Builder_Parts_Float());
         $this->prodotto->setPart('offerta_ordine', new Model_Builder_Parts_FlagSN());
         $this->prodotto->setPart('sconto_ordine', new Model_Builder_Parts_Int());
         $this->prodotto->setPart('disponibile_ordine', new Model_Builder_Parts_FlagSN());
     }    
-
-    /**
-     * @return void
-     */
-    public function addUserOrdine(){ 
-        $this->prodotto->setPart('iduser', new Model_Builder_Parts_Id());
-        $this->prodotto->setPart('qta', new Model_Builder_Parts_Float());
-        $this->prodotto->setPart('qta_reale', new Model_Builder_Parts_Float());
-        $this->prodotto->setPart('data_ins', new Model_Builder_Parts_Data());
-    }    
-    
 
     
     /**

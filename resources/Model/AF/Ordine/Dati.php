@@ -6,17 +6,34 @@ class Model_AF_Ordine_Dati extends Model_AF_Dati
 {
 
     
+    
+    public function getStatus()
+    {
+        return new Model_Ordini_Status($this->getValues());
+    }
+    
+    
+    
+/***************************
+ *  GET METHODS
+ */    
+    
     /**
-     * get Id Ordine
-     * @return mixed
+     * get ID ORDINE
+     * @return string
+     * @throws MyFw_Exception
      */
-    public function getIdOrdine() {
-        return $this->_fValues->idordine;
+    public function getIdOrdine()
+    {
+        if(is_null($this->getValue("idordine"))) {
+            throw new MyFw_Exception("IdOrdine is NOT set correctly!");
+        }
+        return $this->getValue("idordine");
     }
     
     
     function getCostoSpedizione() {
-        return $this->_fValues->costo_spedizione;
+        return $this->getValue("costo_spedizione");
     }
     
     function hasCostoSpedizione() {

@@ -7,12 +7,12 @@ class Model_AF_Listino_Gruppi extends Model_AF_Gruppi
     
     
     /**
-     * @return Model_Builder_Sharing_Group_Parts_Listino
+     * @return Model_Builder_GroupSharing_Parts_Listino
      */
     public function buildGroup()
     {
-        $builderGroup = new Model_Builder_Sharing_Group_ListinoBuilder();
-        $director = new Model_Builder_Sharing_Group_Director();
+        $builderGroup = new Model_Builder_GroupSharing_ListinoBuilder();
+        $director = new Model_Builder_GroupSharing_Director();
         $group = $director->build($builderGroup);
         return $group;
     }

@@ -96,7 +96,7 @@ abstract class Model_AF_Gruppi implements Model_AF_AbstractProductInterface
     }
     
     /**
-     * @return Model_Builder_Sharing_Group_Parts_Group 
+     * @return Model_Builder_GroupSharing_Parts_Group 
      *      return the group created
      */
     public function addGroup(stdClass $g)
@@ -115,7 +115,7 @@ abstract class Model_AF_Gruppi implements Model_AF_AbstractProductInterface
     
     /**
      *  @param stdClass $g is a Group object data
-     *  @return Model_Builder_Sharing_Group_Parts_Group 
+     *  @return Model_Builder_GroupSharing_Parts_Group 
      */
     private function _createGroup(stdClass $g)
     {

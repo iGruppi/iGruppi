@@ -3,8 +3,14 @@
  * This is a PRODOTTO for LISTINO
  */
 class Model_Builder_Prodotto_Parts_Listino
-    extends Model_Builder_Prodotto_Parts_Prodotto
+    extends Model_Builder_Prodotto_Parts_Anagrafica
 {
+    /**
+     * Listino context
+     * @var string
+     */
+    protected $_context = "Listino";
+    
     
     /**
      * Verifica se il prodotto è nel Listino (se NON esiste il record in listini_prodotti idlistino è NULL!)

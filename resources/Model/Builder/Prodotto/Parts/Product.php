@@ -44,10 +44,38 @@ abstract class Model_Builder_Prodotto_Parts_Product
         if( isset($this->data[$f]) ) {
             $this->data[$f]->set($v);
         } else {
-            throw new MyFw_Exception("Part '$f' NOT exists in Product: " . __CLASS__);
+            throw new MyFw_Exception("Part '$f' NOT exists in Product!");
         }
     }
 
+/* *******************************************
+ *  GET Strategy for Costo
+ */    
+    
+    /*
+    * Overloading __call
+    * This try to call a method in Costo_ContextStrategy
+    */
+    public function __call ( $method, $args )
+    {
+        // controllo esistenza metodo
+        if( method_exists( $this, $method ) )
+        {
+            call_user_func_array(array($this, $method), $args);
+        } else {
+            try {
+                // get StrategyContext
+                $sc = new Model_Prodotti_Costo_ContextStrategy($this);
+                $sc->setContext($this->_context);
+                return $sc->$method($args);
+                
+            } catch (MyFw_Exception $exc) {
+                $exc->displayError();
+            }
+        }
+    }
+    
+    
     
 /* *******************************************
  *  SET & GET for ALL properties
@@ -226,7 +254,7 @@ abstract class Model_Builder_Prodotto_Parts_Product
      */    
     public function getIva()
     {
-        return $this->data["aliquota_iva"];
+        return $this->data["aliquota_iva"]->get();
     }
     
     /**
@@ -480,77 +508,6 @@ abstract class Model_Builder_Prodotto_Parts_Product
     public function getDisponibileOrdine()
     {
         return $this->data["disponibile_ordine"]->getBool();
-    }
-
-    
-    
-    
-/* ***********************************************
- *  ORDINE-USER VALUES
- */
-    
-    /**
-     * @param mixed $id
-     */
-    public function setIdUser($id)
-    {
-        $this->data["iduser"]->set($id);
-    }
-    
-    /**
-     * @return mixed
-     */
-    public function getIdUser()
-    {
-        return $this->data["iduser"]->get();
-    }
-
-    /**
-     * @param float $qta
-     */
-    public function setQta($qta)
-    {
-        $this->data["qta"]->set($qta);
-    }
-    
-    /**
-     * @return float
-     */
-    public function getQta()
-    {
-        return $this->data["qta"]->get();
-    }
-    
-    /**
-     * @param float $qta_reale
-     */
-    public function setQtaReale($qta_reale)
-    {
-        $this->data["qta_reale"]->set($qta_reale);
-    }
-    
-    /**
-     * @return float
-     */
-    public function getQtaReale()
-    {
-        return $this->data["qta_reale"]->get();
-    }
-    
-    /**
-     * @param string $dt
-     */
-    public function setDataIns($dt)
-    {
-        $this->data["data_ins"]->set($dt);
-    }
-    
-    /**
-     * @return string (date)
-     */
-    public function getDataIns()
-    {
-        return $this->data["data_ins"]->get();
     }
     
 
