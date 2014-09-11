@@ -4,7 +4,7 @@
  * 
  * @author gullo
  */
-class Model_Produttori_Prodotti_UdM {
+class Model_Prodotti_UdM {
     
     const _CONFEZIONE = "Confezione";
     const _PEZZO      = "Pezzo";

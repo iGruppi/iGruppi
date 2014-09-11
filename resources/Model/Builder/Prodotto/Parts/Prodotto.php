@@ -20,7 +20,7 @@ class Model_Builder_Prodotto_Parts_Prodotto
      */    
     public function getDescrizionePezzatura()
     {
-        $arUdm = Model_Produttori_Prodotti_UdM::getArWithMultip();
+        $arUdm = Model_Prodotti_UdM::getArWithMultip();
         $pp = "";
         if( $this->hasPezzatura() ) {
             $pp .= round($this->getMoltiplicatore(), $arUdm[$this->getUdm()]["ndec"]) . " " . $arUdm[$this->getUdm()]["label"];
@@ -33,7 +33,7 @@ class Model_Builder_Prodotto_Parts_Prodotto
      */    
     public function hasPezzatura()
     {
-        $arUdm = Model_Produttori_Prodotti_UdM::getArWithMultip();
+        $arUdm = Model_Prodotti_UdM::getArWithMultip();
         return ( isset($arUdm[$this->getUdm()]) && $this->getMoltiplicatore() != 1 ) ? true : false;
     }
     

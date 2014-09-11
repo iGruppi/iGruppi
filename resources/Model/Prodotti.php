@@ -6,7 +6,7 @@
  * @author Davide Gullo <gullo at m4ss.net>
  * 
  */
-class Model_Produttori_Prodotti 
+class Model_Prodotti 
     extends Model_Builder_Prodotti
 {
     

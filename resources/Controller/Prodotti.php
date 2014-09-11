@@ -52,7 +52,7 @@ class Controller_Prodotti extends MyFw_Controller {
         // get All Prodotti by Produttore
         $objModel = new Model_Db_Prodotti();
         $listProd = $objModel->getProdottiByIdProduttore($this->_produttore->idproduttore);
-        $prodotti = new Model_Produttori_Prodotti();
+        $prodotti = new Model_Prodotti();
         $prodotti->addProdottiByArray($listProd);
         $this->view->prodotti = $prodotti;
 //        Zend_Debug::dump($prodotti->getCategorie()->getChild(8)->getChild(47)->getProdotti());
@@ -83,7 +83,7 @@ class Controller_Prodotti extends MyFw_Controller {
              ->setOptions($objCat->convertToSingleArray($objCat->getSubCategoriesByIdproduttore($this->_prodotto->idproduttore), "idsubcat", "descrizione"));
         
         // set array values Udm that need Multiplier
-        $this->view->arValWithMultip = json_encode( Model_Produttori_Prodotti_UdM::getArWithMultip() );
+        $this->view->arValWithMultip = json_encode( Model_Prodotti_UdM::getArWithMultip() );
         
         if($this->getRequest()->isPost()) {
             $fv = $this->getRequest()->getPost();

@@ -2,8 +2,8 @@
 /**
  * Class SubcatElement
  */
-class Model_Produttori_Prodotti_Categorie_SubcatElement 
-    extends Model_Produttori_Prodotti_Categorie_Element
+class Model_Prodotti_Categorie_SubcatElement 
+    extends Model_Prodotti_Categorie_Element
 {
     /**
      * IdSubCat ID Sub-Categoria

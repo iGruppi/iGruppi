@@ -2,7 +2,7 @@
 /**
  * Class Category Element
  */
-abstract class Model_Produttori_Prodotti_Categorie_Element
+abstract class Model_Prodotti_Categorie_Element
 {
     /**
      * Descrizione element
@@ -27,7 +27,7 @@ abstract class Model_Produttori_Prodotti_Categorie_Element
      * @param Category Element $element
      * @return void
      */
-    public function add(Model_Produttori_Prodotti_Categorie_Element $element)
+    public function add(Model_Prodotti_Categorie_Element $element)
     {
         $this->elements[] = $element;
     }
@@ -36,7 +36,7 @@ abstract class Model_Produttori_Prodotti_Categorie_Element
     /**
      * get child by id
      * @param $id int
-     * @return Model_Produttori_Prodotti_Categorie_Element
+     * @return Model_Prodotti_Categorie_Element
      */
     public function getChild($id)
     {

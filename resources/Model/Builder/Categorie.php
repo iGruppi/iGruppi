@@ -5,7 +5,7 @@
 class Model_Builder_Categorie
 {
     /**
-     * @var Model_Produttori_Prodotti_Categorie
+     * @var Model_Prodotti_Categorie
      */
     protected $_categorie = null;
 
@@ -26,7 +26,7 @@ class Model_Builder_Categorie
     
     /**
      * return the Categorie composite object
-     * @return Model_Produttori_Prodotti_Categorie
+     * @return Model_Prodotti_Categorie
      */
     public function getAll()
     {
@@ -100,7 +100,7 @@ class Model_Builder_Categorie
             if(is_null($catObj->getChild($v->idcat))) {
                 // ADD CATEGORY Element
                 $cn = isset($v->categoria) ? $v->categoria : "";
-                $catObj->add(new Model_Produttori_Prodotti_Categorie($v->idcat, $cn));
+                $catObj->add(new Model_Prodotti_Categorie($v->idcat, $cn));
             }
             return $catObj->getChild($v->idcat);
         }
@@ -110,16 +110,16 @@ class Model_Builder_Categorie
     /**
      * add SUBCAT to the Composite tree
      * @param stdClass $v
-     * @param Model_Produttori_Prodotti_Categorie_Element $cat
-     * @return mixed (null|Model_Produttori_Prodotti_Categorie_Element)
+     * @param Model_Prodotti_Categorie_Element $cat
+     * @return mixed (null|Model_Prodotti_Categorie_Element)
      */
-    private function _initSubCat(stdClass $v, Model_Produttori_Prodotti_Categorie_Element $cat)
+    private function _initSubCat(stdClass $v, Model_Prodotti_Categorie_Element $cat)
     {
         if(isset($v->idsubcat)) {
             if(is_null($cat->getChild($v->idsubcat))) {
                 // ADD SUB-CATEGORY Element
                 $scn = isset($v->categoria_sub) ? $v->categoria_sub : "";
-                $cat->add(new Model_Produttori_Prodotti_Categorie_SubcatElement($v->idsubcat, $scn));
+                $cat->add(new Model_Prodotti_Categorie_SubcatElement($v->idsubcat, $scn));
             }
             return $cat->getChild($v->idsubcat);
         }
@@ -129,16 +129,16 @@ class Model_Builder_Categorie
     /**
      * add PRODOTTO to the Composite tree
      * @param stdClass $v
-     * @param Model_Produttori_Prodotti_Categorie_Element $subcat
-     * @return mixed (null|Model_Produttori_Prodotti_Categorie_Element)
+     * @param Model_Prodotti_Categorie_Element $subcat
+     * @return mixed (null|Model_Prodotti_Categorie_Element)
      */
-    private function _initProdotto(stdClass $v, Model_Produttori_Prodotti_Categorie_Element $subcat)
+    private function _initProdotto(stdClass $v, Model_Prodotti_Categorie_Element $subcat)
     {
         if(isset($v->idprodotto)) {
             if(is_null($subcat->getChild($v->idprodotto))) {
                 // ADD SUB-CATEGORY Element
                 $scp = isset($v->descrizione) ? $v->descrizione : "";
-                $subcat->add(new Model_Produttori_Prodotti_Categorie_ProdottoElement($v->idprodotto, $scp));
+                $subcat->add(new Model_Prodotti_Categorie_ProdottoElement($v->idprodotto, $scp));
             }
             return $subcat->getChild($v->idprodotto);
         }
@@ -150,13 +150,13 @@ class Model_Builder_Categorie
     /**
      * build the composite pattern for categories
      * 
-     * @return Model_Produttori_Prodotti_Categorie
+     * @return Model_Prodotti_Categorie
      */
     private function _getCompositeCategorie()
     {
         if(is_null($this->_categorie))
         {
-            $this->_categorie = new Model_Produttori_Prodotti_Categorie(0, "Categorie");
+            $this->_categorie = new Model_Prodotti_Categorie(0, "Categorie");
         }
         return $this->_categorie;
     }

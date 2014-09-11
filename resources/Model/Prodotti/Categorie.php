@@ -2,8 +2,8 @@
 /**
  * This is the composite object
  */
-class Model_Produttori_Prodotti_Categorie 
-    extends Model_Produttori_Prodotti_Categorie_Element
+class Model_Prodotti_Categorie 
+    extends Model_Prodotti_Categorie_Element
 {
     
     /**
