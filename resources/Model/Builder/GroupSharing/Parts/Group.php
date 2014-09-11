@@ -2,7 +2,7 @@
 /**
  * Group is a the product group of my Builder, it must be extended
  */
-abstract class Model_Builder_Sharing_Group_Parts_Group
+abstract class Model_Builder_GroupSharing_Parts_Group
 {
     /**
      * @var array
@@ -125,7 +125,7 @@ abstract class Model_Builder_Sharing_Group_Parts_Group
     }
     
     /**
-     * @return Model_Builder_Sharing_Group_Parts_FlagSN
+     * @return Model_Builder_GroupSharing_Parts_FlagSN
      */    
     public function getVisibile()
     {
@@ -142,7 +142,7 @@ abstract class Model_Builder_Sharing_Group_Parts_Group
     }
     
     /**
-     * @return object Model_Builder_Sharing_Group_Parts_Validita
+     * @return object Model_Builder_GroupSharing_Parts_Validita
      */    
     public function getValidita()
     {

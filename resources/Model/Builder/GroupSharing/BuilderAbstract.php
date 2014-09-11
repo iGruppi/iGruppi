@@ -2,7 +2,7 @@
 /**
  *
  */
-abstract class Model_Builder_Sharing_Group_BuilderInterface
+abstract class Model_Builder_GroupSharing_BuilderAbstract
 {
     /**
      * @var Parts\Group

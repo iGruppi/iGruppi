@@ -2,8 +2,8 @@
 /**
  * Ordine is a group for ordini sharing environment
  */
-class Model_Builder_Sharing_Group_Parts_Ordine 
-    extends Model_Builder_Sharing_Group_Parts_Group
+class Model_Builder_GroupSharing_Parts_Ordine 
+    extends Model_Builder_GroupSharing_Parts_Group
 {
 
     /**
