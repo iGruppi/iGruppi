@@ -21,7 +21,7 @@ class Controller_Users extends MyFw_Controller {
         $iduser = $this->getParam("iduser");
         
         // check if CAN edit this Produttore
-        $uObj = new Model_Users();
+        $uObj = new Model_Db_Users();
         $user = $uObj->getUserByIdInGroup($iduser, $this->_userSessionVal->idgroup);
         if($user === false) {
             $this->redirect("gruppo", "iscritti");
@@ -38,7 +38,7 @@ class Controller_Users extends MyFw_Controller {
         $form->removeField("idgroup");
         
         // Get Elenco produttori (con REFERENTE)
-        $prObj = new Model_Produttori();
+        $prObj = new Model_Db_Produttori();
         $this->view->produttori = $prObj->getProduttoriByIdGroup($this->_userSessionVal->idgroup);
         //Zend_Debug::dump($this->view->user);
 
@@ -105,12 +105,12 @@ class Controller_Users extends MyFw_Controller {
         $layout->disableDisplay();
         
         $iduser = $this->getParam("iduser");
-        $uObj = new Model_Users();
+        $uObj = new Model_Db_Users();
         $user = $uObj->getUserByIdInGroup($iduser, $this->_userSessionVal->idgroup);
         $result = false;
         if(!is_null($user)) {
             // send email to User
-            $gObj = new Model_Groups();
+            $gObj = new Model_Db_Groups();
             $mail = new MyFw_Mail();
             $group = $gObj->getGroupById($this->_userSessionVal->idgroup);
             $mail->setSubject("Iscrizione al Gruppo ".$group->nome);

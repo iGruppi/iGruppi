@@ -5,7 +5,7 @@
  * 
  * @author gullo
  */
-class Model_Ordini extends MyFw_DB_Base {
+class Model_Db_Ordini extends MyFw_DB_Base {
 
     function __construct() {
         parent::__construct();
@@ -21,16 +21,14 @@ class Model_Ordini extends MyFw_DB_Base {
         return null;
     }
     
-    function getAllByIdProduttore($idproduttore, $idgroup, $iduser_ref) {
+    function getAllByIdUserRef($iduser_ref) {
         
         $sql = "SELECT * FROM ordini AS o"
-              ." LEFT JOIN referenti AS r ON o.idgroup=r.idgroup AND o.idproduttore=r.idproduttore"
-              ." WHERE r.idproduttore= :idproduttore"
-              ." AND r.iduser_ref= :iduser_ref"
-              ." AND r.idgroup= :idgroup"
+              ." LEFT JOIN ordini_groups AS og ON o.idordine=og.idordine"
+              ." WHERE og.iduser_ref= :iduser_ref"
               ." ORDER BY o.archiviato, o.data_fine DESC";
         $sth = $this->db->prepare($sql);
-        $sth->execute(array('idproduttore' => $idproduttore, 'idgroup' => $idgroup, 'iduser_ref' => $iduser_ref));
+        $sth->execute(array('iduser_ref' => $iduser_ref));
         if($sth->rowCount() > 0) {
             return $sth->fetchAll(PDO::FETCH_OBJ);
         }
@@ -41,20 +39,22 @@ class Model_Ordini extends MyFw_DB_Base {
         
         $arFilters = array('idgroup' => $idgroup);
         
-        $sql = "SELECT o.*, p.*, u.nome, u.cognome "
+        $sql = "SELECT o.*, og.*, u.nome AS ref_nome, u.cognome AS ref_cognome "
              ." FROM ordini AS o "
-             ." LEFT JOIN groups_produttori AS gp ON o.idgroup=gp.idgroup AND o.idproduttore=gp.idproduttore "
-             ." LEFT JOIN produttori AS p ON gp.idproduttore=p.idproduttore "
-             ." LEFT JOIN users AS u ON gp.iduser_ref=u.iduser "
-             ." WHERE gp.idgroup= :idgroup";
+             ." JOIN ordini_groups AS og ON og.idordine=o.idordine AND og.idgroup_slave= :idgroup"
+             ." LEFT JOIN users AS u ON og.iduser_ref=u.iduser "
+//             ." LEFT JOIN referenti AS r ON o.idgroup=r.idgroup AND o.idproduttore=r.idproduttore "
+//             ." LEFT JOIN produttori AS p ON r.idproduttore=p.idproduttore "
+             ." WHERE 1";
         if(is_array($filters) && count($filters) > 0) {
             foreach($filters AS $fField => $fValue) {
                 switch ($fField) {
+/*
                     case "idproduttore":
-                        $sql .= " AND gp.idproduttore= :idproduttore";
+                        $sql .= " AND r.idproduttore= :idproduttore";
                         $arFilters["idproduttore"] = $fValue;
                         break;
-
+*/
                     case "stato":
                         $sql .= Model_Ordini_Status::getSqlFilterByStato($fValue);
                         break;

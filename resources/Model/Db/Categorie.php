@@ -5,7 +5,7 @@
  * 
  * @author gullo
  */
-class Model_Categorie extends MyFw_DB_Base {
+class Model_Db_Categorie extends MyFw_DB_Base {
 
     function __construct() {
         parent::__construct();

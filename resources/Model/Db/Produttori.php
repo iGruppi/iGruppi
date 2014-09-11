@@ -1,11 +1,11 @@
 <?php
 
 /**
- * Description of Model_Produttori
+ * Description of Model_Db_Produttori
  * 
  * @author gullo
  */
-class Model_Produttori extends MyFw_DB_Base {
+class Model_Db_Produttori extends MyFw_DB_Base {
 
     function __construct() {
         parent::__construct();

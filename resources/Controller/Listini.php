@@ -19,8 +19,8 @@ class Controller_Listini extends MyFw_Controller {
     function indexAction() 
     {
         // get Elenco Listini per Gruppo
-        $lObj = new Model_Listini();
-        $cObj = new Model_Categorie();
+        $lObj = new Model_Db_Listini();
+        $cObj = new Model_Db_Categorie();
         $listiniArray = $lObj->getListiniByIdgroup($this->_userSessionVal->idgroup);
         $listini = array();
         if(!is_null($listiniArray)) {
@@ -64,7 +64,7 @@ class Controller_Listini extends MyFw_Controller {
         $form->removeField("idproduttore");
         
         // get Produttori
-        $pObj = new Model_Produttori();
+        $pObj = new Model_Db_Produttori();
         // modify inline the idproduttore field
         $form->addField('idproduttore', array(
                         'label'     => 'Produttore',
@@ -116,7 +116,7 @@ class Controller_Listini extends MyFw_Controller {
         }
         
         // init Listino DB Model to get data
-        $lObj = new Model_Listini();
+        $lObj = new Model_Db_Listini();
         $listino = $lObj->getListinoById($idlistino);
 
         // check REFERENTE, controllo per i furbi (non Referenti)
@@ -134,7 +134,7 @@ class Controller_Listini extends MyFw_Controller {
                ->setMyIdGroup($this->_userSessionVal->idgroup);
         //Zend_Debug::dump($mllObj->getGroups());die;
         // add All PRODOTTI by Listino
-        $objModel = new Model_Prodotti();
+        $objModel = new Model_Db_Prodotti();
         $prodotti = $objModel->getProdottiByIdListino($idlistino);
         $mllObj->setProdotti( $prodotti );
         
@@ -144,7 +144,7 @@ class Controller_Listini extends MyFw_Controller {
         $mllObj->setCategorie($catObj);
             
         // get elenco All Groups
-        $grObj = new Model_Groups();
+        $grObj = new Model_Db_Groups();
         $this->view->groups = $groups = $grObj->getAll();
         
         // init Listino form

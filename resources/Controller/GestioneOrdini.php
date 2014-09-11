@@ -23,7 +23,7 @@ class Controller_GestioneOrdini extends MyFw_Controller {
             // Try to GET Ordine
             $idordine = $this->getParam("idordine");
             if(!is_null($idordine)) {
-                $ordObj = new Model_Ordini();
+                $ordObj = new Model_Db_Ordini();
                 $ordine = $ordObj->getByIdOrdine($idordine);
                 if(!is_null($ordine)) {
                     $this->_ordine = $this->view->ordine = $ordine;
@@ -35,7 +35,7 @@ class Controller_GestioneOrdini extends MyFw_Controller {
         if(is_null($idproduttore)) {
             $this->redirect("index", "error", array('code' => 404));
         }
-        $produttoreObj = new Model_Produttori();
+        $produttoreObj = new Model_Db_Produttori();
         $produttore = $produttoreObj->getProduttoreById($idproduttore);
         $this->_produttore = $this->view->produttore = $produttore;
         
@@ -51,8 +51,8 @@ class Controller_GestioneOrdini extends MyFw_Controller {
     
     function indexAction() {
         
-        $ordObj = new Model_Ordini();
-        $listOrd = $ordObj->getAllByIdProduttore($this->_produttore->idproduttore, $this->_userSessionVal->idgroup, $this->_iduser);
+        $ordObj = new Model_Db_Ordini();
+        $listOrd = $ordObj->getAllByIdUserRef($this->_iduser);
         if(count($listOrd) > 0) {
             foreach($listOrd AS &$ordine) {
                 $ordine->statusObj = new Model_Ordini_Status($ordine);
@@ -82,10 +82,10 @@ class Controller_GestioneOrdini extends MyFw_Controller {
                 $idordine = $this->getDB()->makeInsert("ordini", $form->getValues());
                 
                 // Add ALL prodotti ATTIVI by Default!
-                $prodObj = new Model_Prodotti();
+                $prodObj = new Model_Db_Prodotti();
                 $prodotti = $prodObj->getProdottiByIdProduttore($this->_produttore->idproduttore, 'S');
                 if(count($prodotti) > 0) {
-                    $ordObj = new Model_Ordini();
+                    $ordObj = new Model_Db_Ordini();
                     foreach($prodotti AS $prodotto) {
                         $arVal[] = array('idprodotto' => $prodotto->idprodotto, 'costo' => $prodotto->costo);
                     }
@@ -150,7 +150,7 @@ class Controller_GestioneOrdini extends MyFw_Controller {
 
     function prodottiAction() {
         
-        $ordObj = new Model_Ordini();
+        $ordObj = new Model_Db_Ordini();
         
         // SAVE FORM
         if($this->getRequest()->isPost()) {
@@ -208,7 +208,7 @@ class Controller_GestioneOrdini extends MyFw_Controller {
     function qtaordineAction()
     {
         // GET PRODUCTS LIST with Qta Ordered
-        $ordObj = new Model_Ordini();
+        $ordObj = new Model_Db_Ordini();
         $listProdOrdered = $ordObj->getProdottiOrdinatiByIdordine($this->_ordine->idordine);
         $ordCalcObj = new Model_Ordini_Calcoli_Utenti();
         // SET ORDINE e PRODOTTI
@@ -226,7 +226,7 @@ class Controller_GestioneOrdini extends MyFw_Controller {
         $this->view->idprodotto = $idprodotto = $this->getParam("idprodotto");
         $this->view->idordine = $idordine = $this->getParam("idordine");
         // GET Prodotto ordinato
-        $mObj = new Model_Ordini();
+        $mObj = new Model_Db_Ordini();
         $prodotti = $mObj->getProdottiOrdinatiByIdordine($idordine, $iduser, $idprodotto);
         if(isset($prodotti[0])) {
             $pObj = new Model_Ordini_Prodotto($prodotti[0]);
@@ -256,7 +256,7 @@ class Controller_GestioneOrdini extends MyFw_Controller {
             $rsth = $sth->execute($fields);
             if($rsth) 
             {
-                $ordModel = new Model_Ordini();
+                $ordModel = new Model_Db_Ordini();
                 $prodotti = $ordModel->getProdottiOrdinatiByIdordine($idordine);
                 if(is_array($prodotti) && count($prodotti) > 0)
                 {
@@ -284,7 +284,7 @@ class Controller_GestioneOrdini extends MyFw_Controller {
         $this->view->idordine = $idordine = $this->getParam("idordine");
         
         // GET All products available
-        $ordObj = new Model_Ordini();
+        $ordObj = new Model_Db_Ordini();
         $listProd = $ordObj->getProdottiByIdOrdine($idordine);
         $arRes = array();
         if(is_array($listProd) && count($listProd) > 0) {
@@ -310,7 +310,7 @@ class Controller_GestioneOrdini extends MyFw_Controller {
             $iduser = $fv["iduser"];
             $idprodotto = $fv["idprodotto"];
         
-            $ordObj = new Model_Ordini();
+            $ordObj = new Model_Db_Ordini();
             $added = $ordObj->addQtaProdottoForOrdine($idordine, $iduser, $idprodotto);
             if($added) {
                 $prodotti = $ordObj->getProdottiOrdinatiByIdordine($idordine);
@@ -347,7 +347,7 @@ class Controller_GestioneOrdini extends MyFw_Controller {
         }
         
         // GET PRODUCTS LIST with Qta Ordered
-        $ordObj = new Model_Ordini();
+        $ordObj = new Model_Db_Ordini();
         $listProdOrdered = $ordObj->getProdottiOrdinatiByIdordine($this->_ordine->idordine);
         //Zend_Debug::dump( $listProdOrdered ); die;
         $this->view->tipo = $tipo;
@@ -387,7 +387,7 @@ class Controller_GestioneOrdini extends MyFw_Controller {
         $result = array('res' => false);
         if($moved) {
             // GET new ORDER data
-            $orderObj = new Model_Ordini();
+            $orderObj = new Model_Db_Ordini();
             $ordine = $orderObj->getByIdOrdine($this->_ordine->idordine);
             if($ordine) {
                 $this->view->ordine = $ordine;

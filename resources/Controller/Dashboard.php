@@ -16,7 +16,7 @@ class Controller_Dashboard extends MyFw_Controller {
     }
 
     function indexAction() {
-        $gObj = new Model_Groups();
+        $gObj = new Model_Db_Groups();
         $this->view->group = $gObj->getGroupById($this->_userSessionVal->idgroup);
     }
 

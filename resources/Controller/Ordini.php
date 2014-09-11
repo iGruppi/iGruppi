@@ -37,11 +37,11 @@ class Controller_Ordini extends MyFw_Controller {
         $this->view->statusArray = Model_Ordini_Status::getArrayStatus();
         
         // set elenco produttori
-        $prodObj = new Model_Produttori();
+        $prodObj = new Model_Db_Produttori();
         $produttori = $prodObj->getProduttoriByIdGroup($this->_userSessionVal->idgroup);
         $this->view->produttori = $produttori;
         // Create array Categorie prodotti for Produttori
-        $catObj = new Model_Categorie();
+        $catObj = new Model_Db_Categorie();
         $arCat = $catObj->getCategories_withKeyIdProduttore();
         $this->view->arCat = $arCat;
         
@@ -60,13 +60,13 @@ class Controller_Ordini extends MyFw_Controller {
         $idordine = $this->getParam("idordine");
         
         // INIT Ordine
-        $ordObj = new Model_Ordini();
+        $ordObj = new Model_Db_Ordini();
         $ordine = $ordObj->getByIdOrdine($idordine);
         $this->view->ordine = $ordine;
         $this->view->statusObj = new Model_Ordini_Status($ordine);
 
         // GET PRODUTTORE
-        $produttoreObj = new Model_Produttori();
+        $produttoreObj = new Model_Db_Produttori();
         $produttore = $produttoreObj->getProduttoreById($ordine->idproduttore);
         $this->view->produttore = $produttore;
         
@@ -88,7 +88,7 @@ class Controller_Ordini extends MyFw_Controller {
     function ordinaAction() {
         
         $idordine = $this->getParam("idordine");
-        $ordObj = new Model_Ordini();
+        $ordObj = new Model_Db_Ordini();
         
         // SAVE FORM if there is POST data
         $this->view->updated = false;
@@ -118,7 +118,7 @@ class Controller_Ordini extends MyFw_Controller {
         $this->view->statusObj = $statusObj;
         
         // GET PRODUTTORE
-        $produttoreObj = new Model_Produttori();
+        $produttoreObj = new Model_Db_Produttori();
         $produttore = $produttoreObj->getProduttoreById($ordine->idproduttore);
         $this->view->produttore = $produttore;
         
@@ -137,6 +137,8 @@ class Controller_Ordini extends MyFw_Controller {
         //Zend_Debug::dump($scoObj);
         $this->view->listProdotti = $scoObj->getListProductsCategorized();
         $this->view->listSubCat = $scoObj->getListCategories();
+        
+        
     }
 
 }

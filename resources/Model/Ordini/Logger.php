@@ -17,7 +17,7 @@ class Model_Ordini_Logger {
     
     static function LogVariazionePrezzo($idordine, $idprodotto, $pre, $new)
     {
-        $pObj = new Model_Prodotti();
+        $pObj = new Model_Db_Prodotti();
         $prod = $pObj->getProdottoById($idprodotto);
         if(!is_null($prod))
         {

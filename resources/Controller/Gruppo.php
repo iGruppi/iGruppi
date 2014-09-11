@@ -16,7 +16,7 @@ class Controller_Gruppo extends MyFw_Controller {
     }
 
     function indexAction() {
-        $gObj = new Model_Groups();
+        $gObj = new Model_Db_Groups();
         $this->view->group = $gObj->getGroupById($this->_userSessionVal->idgroup);
     }
 
@@ -24,11 +24,11 @@ class Controller_Gruppo extends MyFw_Controller {
     function iscrittiAction() {
         
         // get All Iscritti in Group
-        $uObj = new Model_Users();
+        $uObj = new Model_Db_Users();
         $users = $uObj->getUsersByIdGroup($this->_userSessionVal->idgroup);
 
         // check IDfondatore
-        $gObj = new Model_Groups();
+        $gObj = new Model_Db_Groups();
         $arFounders = $gObj->getArFoundersId($this->_userSessionVal->idgroup);
         $auth = Zend_Auth::getInstance();
         $this->view->imFondatore = in_array($auth->getIdentity()->iduser, $arFounders);

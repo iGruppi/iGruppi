@@ -49,7 +49,7 @@ class Controller_Auth extends MyFw_Controller {
                         $userSessionVal->idgroup = $row->idgroup;
                         
                         // set Referente Object in Session
-                        $uObj = new Model_Users();
+                        $uObj = new Model_Db_Users();
                         $refObj = new Model_Produttori_Referente($uObj->getGlobalRefByIduser($row->iduser), $uObj->getRefByIduserAndIdgroup($row->iduser, $row->idgroup));
                         $userSessionVal->refObject = $refObj;
                         
@@ -126,7 +126,7 @@ class Controller_Auth extends MyFw_Controller {
                             $idgroup = $fValues["idgroup"];
                             unset($fValues["idgroup"]);
 
-                            $gObj = new Model_Groups();
+                            $gObj = new Model_Db_Groups();
                             $group = $gObj->getGroupById($idgroup);
                             if($group !== false) {
 

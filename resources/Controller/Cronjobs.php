@@ -26,7 +26,7 @@ class Controller_Cronjobs extends MyFw_Controller {
     function startorderAction() {
         
         // GET any ORDER that will be Aperto TOMORROW
-        $orderObj = new Model_Ordini();
+        $orderObj = new Model_Db_Ordini();
         $orders = $orderObj->getAllByDate($this->_dateTomorrow, "data_inizio");
         if(count($orders) > 0) {
             foreach ($orders as $key => $ordine) {
@@ -40,7 +40,7 @@ class Controller_Cronjobs extends MyFw_Controller {
                 $mail->setViewParam("ordine", $ordine);
                 
                 // SET array Categorie prodotti for Produttore
-                $catObj = new Model_Categorie();
+                $catObj = new Model_Db_Categorie();
                 $arCat = $catObj->getCategories_withKeyIdProduttore();
                 if(isset($arCat[$idproduttore]) && count($arCat[$idproduttore]) > 0) {
                     $mail->setViewParam("arCat", $arCat[$idproduttore]);
@@ -56,7 +56,7 @@ class Controller_Cronjobs extends MyFw_Controller {
     
     function closeorderAction() {
         // GET any ORDER that will be Chiuso TOMORROW
-        $orderObj = new Model_Ordini();
+        $orderObj = new Model_Db_Ordini();
         $orders = $orderObj->getAllByDate($this->_dateTomorrow, "data_fine");
         if(count($orders) > 0) {
             foreach ($orders as $key => $ordine) {
@@ -85,7 +85,7 @@ class Controller_Cronjobs extends MyFw_Controller {
         if($email_ml != "") {
             $mail->addTo($email_ml);
         } else {
-            $groupObj = new Model_Users();
+            $groupObj = new Model_Db_Users();
             $ugObj = $groupObj->getUsersByIdGroup($idgroup);
             foreach($ugObj AS $ugVal) {
                 $mail->addBcc($ugVal->email);

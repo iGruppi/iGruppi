@@ -1,11 +1,11 @@
 <?php
 
 /**
- * Description of Model_Groups
+ * Description of Model_Db_Groups
  * 
  * @author gullo
  */
-class Model_Groups extends MyFw_DB_Base {
+class Model_Db_Groups extends MyFw_DB_Base {
 
     function __construct() {
         parent::__construct();

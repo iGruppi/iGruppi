@@ -17,7 +17,7 @@ class Controller_Produttori extends MyFw_Controller {
 
     function indexAction() {
         
-        $pObj = new Model_Produttori();
+        $pObj = new Model_Db_Produttori();
         $listProduttori = $pObj->getProduttoriByIdGroup($this->_userSessionVal->idgroup);        
         // add Referente object to every Produttore and ORDER them keeping isReferente on the TOP
         $listProduttoriOrdered = array();
@@ -34,7 +34,7 @@ class Controller_Produttori extends MyFw_Controller {
         $this->view->list = $listProduttoriOrdered;
         
         // Create array Categorie prodotti for Produttori
-        $catObj = new Model_Categorie();
+        $catObj = new Model_Db_Categorie();
         $arCat = $catObj->getCategories_withKeyIdProduttore();
         $this->view->arCat = $arCat;
         
@@ -78,7 +78,7 @@ class Controller_Produttori extends MyFw_Controller {
     
     function viewAction() {
         $idproduttore = $this->getParam("idproduttore");
-        $myObj = new Model_Produttori();
+        $myObj = new Model_Db_Produttori();
         $this->view->produttore = $myObj->getProduttoreById($idproduttore);
     }
     
@@ -87,7 +87,7 @@ class Controller_Produttori extends MyFw_Controller {
         $idproduttore = $this->getParam("idproduttore");
         
         // check if CAN edit this Produttore
-        $myObj = new Model_Produttori();
+        $myObj = new Model_Db_Produttori();
         $produttore = $myObj->getProduttoreById($idproduttore);
         // Un po' di controlli per i furbi...
         if($produttore === false) {
@@ -103,7 +103,7 @@ class Controller_Produttori extends MyFw_Controller {
         $form->setAction("/produttori/edit/idproduttore/$idproduttore");
         
         // Get elenco Categorie
-        $catObj = new Model_Categorie();
+        $catObj = new Model_Db_Categorie();
         $this->view->categorie = $catObj->convertToSingleArray($catObj->getCategorie(), "idcat", "descrizione");
         
         // Get POST and Validate data
@@ -169,7 +169,7 @@ class Controller_Produttori extends MyFw_Controller {
                 'idcat'         => $idcat,
                 'descrizione'   => $catName
             );
-        $catObj = new Model_Categorie();
+        $catObj = new Model_Db_Categorie();
         $idsubcat = $catObj->addSubCategoria($arVal);
         
         if(!is_null($idsubcat)) {
@@ -177,7 +177,7 @@ class Controller_Produttori extends MyFw_Controller {
             // set data in view of the new Subcat created
             $this->view->subCat = $arVal;
             // Get elenco Categorie
-            $catObj = new Model_Categorie();
+            $catObj = new Model_Db_Categorie();
             $this->view->categorie = $catObj->convertToSingleArray($catObj->getCategorie(), "idcat", "descrizione");
             // fetch View
             $myTpl = $this->view->fetch("produttori/form.cat-single.tpl.php");
@@ -195,7 +195,7 @@ class Controller_Produttori extends MyFw_Controller {
         
         $idsubcat = $this->getParam("idsubcat");
         // get Prodotti by idsubcat
-        $prodObj = new Model_Prodotti();
+        $prodObj = new Model_Db_Prodotti();
         $prodotti = $prodObj->getProdottiByIdSubCat($idsubcat);
         if(count($prodotti) > 0) {
             

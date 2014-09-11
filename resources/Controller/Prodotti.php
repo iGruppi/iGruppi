@@ -23,7 +23,7 @@ class Controller_Prodotti extends MyFw_Controller {
             // Try to GET Prodotto
             $idprodotto = $this->getParam("idprodotto");
             if(!is_null($idprodotto)) {
-                $prodObj = new Model_Prodotti();
+                $prodObj = new Model_Db_Prodotti();
                 $prodotto = $prodObj->getProdottoById($idprodotto);
                 if(!is_null($prodotto)) {
                     $this->_prodotto = $this->view->prodotto = $prodotto;
@@ -34,7 +34,7 @@ class Controller_Prodotti extends MyFw_Controller {
         if(is_null($idproduttore)) {
             $this->redirect("index", "error", array('code' => 404));
         }
-        $produttoreObj = new Model_Produttori();
+        $produttoreObj = new Model_Db_Produttori();
         $this->_produttore = $this->view->produttore = $produttoreObj->getProduttoreById($idproduttore);
         
         // Get updated if it is set
@@ -50,7 +50,7 @@ class Controller_Prodotti extends MyFw_Controller {
     function listAction() {
         
         // get All Prodotti by Produttore
-        $objModel = new Model_Prodotti();
+        $objModel = new Model_Db_Prodotti();
         $listProd = $objModel->getProdottiByIdProduttore($this->_produttore->idproduttore);
         $prodotti = new Model_Produttori_Prodotti();
         $prodotti->addProdottiByArray($listProd);
@@ -78,7 +78,7 @@ class Controller_Prodotti extends MyFw_Controller {
         $form->removeField("sconto");
         
         // set Categories
-        $objCat = new Model_Categorie();
+        $objCat = new Model_Db_Categorie();
         $form->getField("idsubcat")
              ->setOptions($objCat->convertToSingleArray($objCat->getSubCategoriesByIdproduttore($this->_prodotto->idproduttore), "idsubcat", "descrizione"));
         
@@ -126,7 +126,7 @@ class Controller_Prodotti extends MyFw_Controller {
         $form->removeField("idprodotto");
 
         // set Categories
-        $objCat = new Model_Categorie();
+        $objCat = new Model_Db_Categorie();
         $form->getField("idsubcat")
              ->setOptions($objCat->convertToSingleArray($objCat->getSubCategoriesByIdproduttore($idproduttore), "idsubcat", "descrizione"));
         

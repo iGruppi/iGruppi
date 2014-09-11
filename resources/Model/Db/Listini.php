@@ -1,11 +1,11 @@
 <?php
 
 /**
- * Description of Model_Listini
+ * Description of Model_Db_Listini
  * 
  * @author gullo
  */
-class Model_Listini extends MyFw_DB_Base {
+class Model_Db_Listini extends MyFw_DB_Base {
     
     function __construct() {
         parent::__construct();
