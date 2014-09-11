@@ -1,26 +1,20 @@
 <?php
 /**
- * This is a Concrete Factory for LISTINO
+ * This is a Concrete Factory for ANAGRAFICA
  */
-class Model_AF_ListinoFactory extends Model_AF_AbstractFactory
+class Model_AF_AnagraficaFactory extends Model_AF_AbstractFactory
 {
     /**
-     * Creates DATI component
-     * @return Dati
+     * There is NO DATI for Anagrafica
+     * @return void
      */
-    public function createDati() 
-    {
-        return new Model_AF_Listino_Dati();
-    }
+    public function createDati() { }
 
     /**
-     * Creates GRUPPI component
+     * There is NO GROUPS for Anagrafica
      * @return Gruppi
      */
-    public function createGruppi()
-    {
-        return new Model_AF_Listino_Gruppi();
-    }
+    public function createGruppi() { }
 
     /**
      * Creates PRODOTTI component
@@ -28,7 +22,7 @@ class Model_AF_ListinoFactory extends Model_AF_AbstractFactory
      */
     public function createProdotti()
     {
-        return new Model_AF_Listino_Prodotti();
+        return new Model_AF_Anagrafica_Prodotti();
     }
 
 }

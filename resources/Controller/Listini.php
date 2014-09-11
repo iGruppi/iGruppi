@@ -27,7 +27,6 @@ class Controller_Listini extends MyFw_Controller {
             foreach ($listiniArray as $stdListino) {
                 // creates Listino by Abstract Factory Model_AF_ListinoFactory
                 $mllObj = new Model_Listini_Listino();
-                $mllObj->createListino(new Model_AF_ListinoFactory());
                 // init Dati by stdClass
                 $mllObj->setDati($stdListino);
                 
@@ -81,7 +80,6 @@ class Controller_Listini extends MyFw_Controller {
             {   
                 // create NEW Listino
                 $mllObj = new Model_Listini_Listino();
-                $mllObj->createListino(new Model_AF_ListinoFactory());
                 $mllObj->getDati()->setDescrizione($form->getValue("descrizione"));
                 $mllObj->getDati()->setIdProduttore($form->getValue("idproduttore"));
                 $mllObj->getDati()->setCondivisione("PRI"); // Default is Private
@@ -126,7 +124,6 @@ class Controller_Listini extends MyFw_Controller {
         
         // Create Listino Object
         $mllObj = new Model_Listini_Listino();
-        $mllObj->createListino(new Model_AF_ListinoFactory());
         // set DATI in Listino
         $mllObj->setDati($listino);
         // set GROUPS in Listino

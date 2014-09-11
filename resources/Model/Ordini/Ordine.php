@@ -1,62 +1,53 @@
 <?php
 /**
- * Description of Calcoli
+ * This is the Factory to manage the ORDINE
  * 
  * @author gullo
  */
-class Model_Ordini_Ordine {
+class Model_Ordini_Ordine extends Model_AF_AbstractManipulator 
+{
+
+    /**
+     * Create Listino Factory
+     */
+    public function __construct() {
+        parent::create(new Model_AF_OrdineFactory());
+    }
+            
     
-    protected $_idordine;
-    protected $_ordObj;
-    protected $_arProdOriginal = array();
-    protected $_arProd = array();
     
-    function setOrdObj($o) {
-        $this->_ordObj = $o;
-        $this->_idordine = $o->idordine;
+/*  **************************************************************************
+ *  PERMISSION
+ */    
+    
+    private function isReferenteOrdine()
+    {
+        return true;
     }
     
-    function getOrdObj() {
-        return $this->_ordObj;
+    public function canManageOrdine()
+    {
+        return $this->isReferenteOrdine();
     }
     
-    function setProdotti($listProd) {
-        if(count($listProd) > 0) {
-            // set Products array original
-            $this->_arProdOriginal = $listProd;
-            // Create instance Model_Ordini_Prodotto for any Product
-            foreach ($listProd as $value) {
-                if(!isset($this->_arProd[$value->idprodotto])) {
-                    $prObj = new Model_Ordini_Prodotto($value);
-                    $prObj->setQtaReale(0);
-                    $this->_arProd[$value->idprodotto] = $prObj;
-                }
-            }
-        }
+    public function canManageCondivisione()
+    {
+        return $this->isReferenteOrdine();
     }
+
     
-    function getIdOrdine() {
-        return $this->_idordine;
-    }
+/*  **************************************************************************
+ *  SAVE CHANGES TO DB
+ */    
     
-    function getProdotti() {
-        return $this->_arProd;
-    }
-    
-    function getProdotto($idprodotto) {
-        return $this->_arProd[$idprodotto];
-    }
-    
-    function getCostoSpedizione() {
-        return $this->_ordObj->costo_spedizione;
-    }
-    
-    function hasCostoSpedizione() {
-        return ($this->getCostoSpedizione() > 0);
-    }
-    
-    function getIdgroup() {
-        return $this->_ordObj->idgroup;
+    public function save()
+    {
+        // save Dati
+        $res1 = $this->getDati()->saveToDB();
+        // save Groups
+        $res2 = $this->getGroups()->saveToDB();
+        
+        return ($res1 && $res2);
     }
     
 }

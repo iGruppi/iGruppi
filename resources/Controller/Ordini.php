@@ -35,25 +35,43 @@ class Controller_Ordini extends MyFw_Controller {
         //Zend_Debug::dump($fObj->getFilters());
         // set elenco Stati
         $this->view->statusArray = Model_Ordini_Status::getArrayStatus();
-        
+        /*
         // set elenco produttori
         $prodObj = new Model_Db_Produttori();
         $produttori = $prodObj->getProduttoriByIdGroup($this->_userSessionVal->idgroup);
         $this->view->produttori = $produttori;
+        
         // Create array Categorie prodotti for Produttori
         $catObj = new Model_Db_Categorie();
         $arCat = $catObj->getCategories_withKeyIdProduttore();
         $this->view->arCat = $arCat;
-        
-        $ordiniObj = new Model_Ordini();
+        */
+        $ordiniObj = new Model_Db_Ordini();
+        $cObj = new Model_Db_Categorie();
         $listOrd = $ordiniObj->getAllByIdgroupWithFilter($this->_userSessionVal->idgroup, $fObj->getFilters());
-        // add Status model to Ordini
+        //Zend_Debug::dump($listOrd);die;
+        // create array of Ordini
+        $ordini = array();
         if(count($listOrd) > 0) {
-            foreach($listOrd AS &$ordine) {
-                $ordine->statusObj = new Model_Ordini_Status($ordine);
+            foreach($listOrd AS $ordine) 
+            {
+                $mooObj = new Model_Ordini_Ordine();
+                // init Dati by stdClass
+                $mooObj->setDati($ordine);
+                
+                // set Categorie in Listini object
+                $categorie = $cObj->getCategoriesByIdOrdine($mooObj->getDati()->getIdOrdine());
+                $catObj = new Model_Builder_Categorie();
+                $catObj->initDatiByObject($categorie);
+                $mooObj->setCategorie($catObj);
+                
+                // add Ordine object to the array
+                $ordini[] = $mooObj;
+                
+                // Zend_Debug::dump($mooObj->getCategories());die;
             }
         }
-        $this->view->list = $listOrd;
+        $this->view->ordini = $ordini;
     }
     
     function viewdettaglioAction() {
