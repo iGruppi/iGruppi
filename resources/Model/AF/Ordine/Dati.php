@@ -5,15 +5,6 @@
 class Model_AF_Ordine_Dati extends Model_AF_Dati
 {
 
-    
-    
-    public function getStatus()
-    {
-        return new Model_Ordini_Status($this->getValues());
-    }
-    
-    
-    
 /***************************
  *  GET METHODS
  */    
@@ -29,6 +20,16 @@ class Model_AF_Ordine_Dati extends Model_AF_Dati
             throw new MyFw_Exception("IdOrdine is NOT set correctly!");
         }
         return $this->getValue("idordine");
+    }
+    
+    public function getDataFine()
+    {
+        return $this->getValue("data_fine");
+    }
+    
+    public function getDataInizio()
+    {
+        return $this->getValue("data_inizio");
     }
     
     
