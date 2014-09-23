@@ -19,7 +19,7 @@ class Model_Builder_Parts_Validita
         if( !is_null($inizio) ) {
             // add time to start correctly
             $inizio = $inizio . " 00:00:01";
-            $this->_inizio = new Zend_Date($inizio, "YYYY-MM-dd HH:mm:ss");
+            $this->_inizio = DateTime::createFromFormat("Y-m-d H:i:s", $inizio);
         } else {
             $this->_inizio = null;
         }
@@ -28,7 +28,7 @@ class Model_Builder_Parts_Validita
         if( !is_null($fine) ) {
             // add time to finish correctly
             $fine = $fine . " 23:59:59";
-            $this->_fine = new Zend_Date($fine, "YYYY-MM-dd HH:mm:ss");
+            $this->_fine = DateTime::createFromFormat("Y-m-d H:i:s", $fine);
         } else {
             $this->_fine = null;
         }
@@ -40,7 +40,7 @@ class Model_Builder_Parts_Validita
     public function getDal($format)
     {
         if($this->isSetValidita()) {
-            return $this->_inizio->toString($format);
+            return $this->_inizio->format($format);
         } else {
             return null;
         }
@@ -52,7 +52,7 @@ class Model_Builder_Parts_Validita
     public function getAl($format)
     {
         if($this->isSetValidita()) {
-            return $this->_fine->toString($format);
+            return $this->_fine->format($format);
         } else {
             return null;
         }
@@ -64,9 +64,8 @@ class Model_Builder_Parts_Validita
     public function isValido()
     {
         if($this->isSetValidita()) {
-            $now = new Zend_Date();
-            return ( $this->_inizio->getTimestamp() <= $now->getTimestamp() && 
-                     $this->_fine->getTimestamp() >= $now->getTimestamp()
+            return ( $this->_inizio->format("U") <= time() && 
+                     $this->_fine->format("U") >= time()
                    );
         } else {
             // it is always valid
@@ -87,7 +86,7 @@ class Model_Builder_Parts_Validita
      */        
     public function __toString() {
         if($this->isSetValidita()) {
-            return "Dal " . $this->_inizio->toString("dd/MM/YYYY") . " al " . $this->_fine->toString("dd/MM/YYYY");
+            return "Dal " . $this->_inizio->format("d/m/Y") . " al " . $this->_fine->format("d/m/Y");
         } else {
             return "Nessuna validita impostata (entrambi valori = NULL)";
         }

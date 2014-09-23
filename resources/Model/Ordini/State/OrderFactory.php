@@ -22,18 +22,20 @@ class Model_Ordini_State_OrderFactory
             $startObj = self::getDateObj($ordine->data_inizio);
             $endObj = self::getDateObj($ordine->data_fine);
 
-            $timestampNow = Zend_Date::now()->toString("U");
-            if( $timestampNow < $startObj->toString("U") ) {
+            // set Timestamp for now
+            $timestampNow = time();
+            
+            if( $timestampNow < $startObj->format("U") ) {
                 return new Model_Ordini_State_States_Pianificato($ordine);
                 
             } else if(
-                $timestampNow >= $startObj->toString("U") &&
-                $timestampNow <= $endObj->toString("U")
+                $timestampNow >= $startObj->format("U") &&
+                $timestampNow <= $endObj->format("U")
             ) {
                 return new Model_Ordini_State_States_Aperto($ordine);
                 
             } else if( 
-                $timestampNow > $endObj->toString("U")
+                $timestampNow > $endObj->format("U")
             ) {
                 
                 $invObj = self::getDateObj($ordine->data_inviato);
@@ -43,17 +45,17 @@ class Model_Ordini_State_OrderFactory
                 if( is_null($ordine->data_inviato)) {
                     return new Model_Ordini_State_States_Chiuso($ordine);
                 } else if(
-                    $timestampNow >= $invObj->toString("U") &&
+                    $timestampNow >= $invObj->format("U") &&
                     is_null($ordine->data_arrivato)
                 ) {
                     return new Model_Ordini_State_States_Inviato($ordine);
                 } else if(
-                    $timestampNow >= $arrObj->toString("U") &&
+                    $timestampNow >= $arrObj->format("U") &&
                     is_null($ordine->data_consegnato)
                 ) {
                     return new Model_Ordini_State_States_Arrivato($ordine);
                 } else if(
-                    $timestampNow >= $conObj->toString("U")
+                    $timestampNow >= $conObj->format("U")
                 ) {
                     return new Model_Ordini_State_States_Consegnato($ordine);
                 }
@@ -66,7 +68,7 @@ class Model_Ordini_State_OrderFactory
     
     
     private static function getDateObj($dt) {
-        return new Zend_Date($dt, "y-MM-dd HH:mm:ss");
+        return DateTime::createFromFormat("Y-m-d H:i:s", $dt);
     }
     
     

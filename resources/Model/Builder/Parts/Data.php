@@ -17,7 +17,7 @@ class Model_Builder_Parts_Data
         if( !is_null($dt) ) {
             // add time to start correctly
             $dt = $dt . " 00:00:01";
-            $this->_dt = new Zend_Date($dt, "YYYY-MM-dd HH:mm:ss");
+            $this->_dt = DateTime::createFromFormat("Y-m-d H:i:s", $dt);
         } else {
             $this->_dt = null;
         }
@@ -29,7 +29,7 @@ class Model_Builder_Parts_Data
     public function get($format)
     {
         if($this->isValid()) {
-            return $this->_dt->toString($format);
+            return $this->_dt->format($format);
         } else {
             return null;
         }
@@ -48,7 +48,7 @@ class Model_Builder_Parts_Data
      */        
     public function __toString() {
         if($this->isValid()) {
-            return "Data: " . $this->_dt->toString("dd/MM/YYYY");
+            return "Data: " . $this->_dt->format("d/m/Y");
         } else {
             return "Nessuna data impostata (valore = NULL)";
         }

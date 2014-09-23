@@ -12,10 +12,9 @@ class Controller_Cronjobs extends MyFw_Controller {
         $layout = Zend_Registry::get("layout");
         $layout->disableDisplay();
         // some usefull date
-        $today = new Zend_Date();
-        $tomorrow = $today->addDay(1);
-        $this->_dateTomorrow = $tomorrow->toString(MyFw_Form_Filters_Date::_MYFORMAT_DATE_DB);
-        
+        $today = new DateTime();
+        $tomorrow = $today->add( new DateInterval("P1D")); // add 1 day
+        $this->_dateTomorrow = $tomorrow->format(MyFw_Form_Filters_Date::_MYFORMAT_DATE_DB);
     }
     
     function everyday20Action() {
