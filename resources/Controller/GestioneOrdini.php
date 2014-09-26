@@ -52,13 +52,24 @@ class Controller_GestioneOrdini extends MyFw_Controller {
     function indexAction() {
         
         $ordObj = new Model_Db_Ordini();
+        $cObj = new Model_Db_Categorie();
         $listOrd = $ordObj->getAllByIdUserRef($this->_iduser);
+        $ordini = array();
         if(count($listOrd) > 0) {
-            foreach($listOrd AS &$ordine) {
-                $ordine->statusObj = new Model_Ordini_Status($ordine);
+            foreach($listOrd AS $ordine) {
+                $mooObj = new Model_Ordini_Ordine();
+                $mooObj->appendDati();
+                $mooObj->appendCategorie();
+                // init Dati Ordine
+                $mooObj->initDati_ByObject($ordine);
+                // set Categories in Ordine object
+                $categorie = $cObj->getCategoriesByIdOrdine( $mooObj->getIdOrdine() );
+                $mooObj->initCategorie_ByObject($categorie);
+                // add Ordine to the list
+                $ordini[] = $mooObj;
             }
         }
-        $this->view->list = $listOrd;
+        $this->view->ordini = $ordini;
     }
     
     function newAction() {

@@ -17,61 +17,54 @@ class Controller_Ordini extends MyFw_Controller {
 
     function indexAction() {
         
-        // init filters array
-        $filters = array();
-        
         // init Filters class for View
-        $fObj = new Model_Ordini_Filters($filters);
+        $fObj = new Model_Ordini_Filters();
         $fObj->setUrlBase("/ordini/index");
         
         // SET idproduttore FILTER
         $fObj->setFilterByField("idproduttore", $this->getParam("idproduttore"));
         // SET stato FILTER
         $fObj->setFilterByField("stato", $this->getParam("stato"));
-        // SET periodo FILTER
-        //$fObj->setFilterByField("periodo", $this->getParam("periodo"));
         
         $this->view->fObj = $fObj;
-        //Zend_Debug::dump($fObj->getFilters());
-        // set elenco Stati
-        $this->view->statusArray = Model_Ordini_Status::getArrayStatus();
-        /*
-        // set elenco produttori
-        $prodObj = new Model_Db_Produttori();
-        $produttori = $prodObj->getProduttoriByIdGroup($this->_userSessionVal->idgroup);
-        $this->view->produttori = $produttori;
         
-        // Create array Categorie prodotti for Produttori
-        $catObj = new Model_Db_Categorie();
-        $arCat = $catObj->getCategories_withKeyIdProduttore();
-        $this->view->arCat = $arCat;
-        */
+        // set elenco Stati
+        $this->view->statusArray = Model_Ordini_State_OrderFactory::getOrderStatesArray();
+        
+        // build list Ordini
         $ordiniObj = new Model_Db_Ordini();
-        $cObj = new Model_Db_Categorie();
         $listOrd = $ordiniObj->getAllByIdgroupWithFilter($this->_userSessionVal->idgroup, $fObj->getFilters());
         //Zend_Debug::dump($listOrd);die;
+        $cObj = new Model_Db_Categorie();
         // create array of Ordini
         $ordini = array();
         if(count($listOrd) > 0) {
             foreach($listOrd AS $ordine) 
             {
+                // BUILD Ordine object with a Chain of objects
                 $mooObj = new Model_Ordini_Ordine();
-                // init Dati by stdClass
-                $mooObj->setDati($ordine);
+                //$mooObj->enableDebug();
+                $mooObj->appendDati();
+                $mooObj->appendCategorie();
                 
-                // set Categorie in Listini object
-                $categorie = $cObj->getCategoriesByIdOrdine($mooObj->getDati()->getIdOrdine());
-                $catObj = new Model_Builder_Categorie();
-                $catObj->initDatiByObject($categorie);
-                $mooObj->setCategorie($catObj);
+                // init Dati by stdClass
+                $mooObj->initDati_ByObject($ordine);
+                // ADD StatesOrderFactory to the Chain
+                $mooObj->appendStatesOrderFactory();
+                
+                // init Categorie by IdOrdine
+                $categorie = $cObj->getCategoriesByIdOrdine($mooObj->getIdOrdine());
+                $mooObj->initCategorie_ByObject($categorie);
+                //Zend_Debug::dump($catObj);
+                
                 
                 // add Ordine object to the array
                 $ordini[] = $mooObj;
-                
-                // Zend_Debug::dump($mooObj->getCategories());die;
             }
         }
+        
         $this->view->ordini = $ordini;
+        
     }
     
     function viewdettaglioAction() {

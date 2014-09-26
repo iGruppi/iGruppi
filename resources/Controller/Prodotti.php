@@ -52,8 +52,18 @@ class Controller_Prodotti extends MyFw_Controller {
         // get All Prodotti by Produttore
         $objModel = new Model_Db_Prodotti();
         $listProd = $objModel->getProdottiByIdProduttore($this->_produttore->idproduttore);
-        $prodotti = new Model_Prodotti();
-        $prodotti->addProdottiByArray($listProd);
+        
+        // BUILD Prodotti Anagrafica object
+        $prodotti = new Model_Prodotti_Anagrafica();
+        $prodotti->appendProdotti();
+        $prodotti->appendCategorie();
+        
+        // init Prodotti by Object
+        $prodotti->initProdotti_ByObject($listProd);
+        
+        // get Categories from $listProd (array Prodotti)
+        $prodotti->initCategorie_ByObject($listProd);
+        
         $this->view->prodotti = $prodotti;
 //        Zend_Debug::dump($prodotti->getCategorie()->getChild(8)->getChild(47)->getProdotti());
     }
