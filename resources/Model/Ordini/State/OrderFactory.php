@@ -8,7 +8,21 @@ class Model_Ordini_State_OrderFactory
     {
         throw new \Exception('Can not instance the OrderFactory class!');
     }
-
+    
+    
+    public static function getOrderStatesArray()
+    {
+        return array(
+            Model_Ordini_State_States_Pianificato::STATUS_NAME,
+            Model_Ordini_State_States_Aperto::STATUS_NAME,
+            Model_Ordini_State_States_Chiuso::STATUS_NAME,
+            Model_Ordini_State_States_Inviato::STATUS_NAME,
+            Model_Ordini_State_States_Arrivato::STATUS_NAME,
+            Model_Ordini_State_States_Consegnato::STATUS_NAME,
+            Model_Ordini_State_States_Archiviato::STATUS_NAME
+        );
+    }
+    
     /**
      * @param int $id
      *
@@ -21,7 +35,7 @@ class Model_Ordini_State_OrderFactory
         if($ordine->archiviato != "S") {
             $startObj = self::getDateObj($ordine->data_inizio);
             $endObj = self::getDateObj($ordine->data_fine);
-
+            
             // set Timestamp for now
             $timestampNow = time();
             

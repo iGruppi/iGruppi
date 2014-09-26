@@ -27,7 +27,7 @@ abstract class Model_Ordini_State_OrderAbstract implements Model_Ordini_State_Or
      */
     public function getStateName()
     { 
-        return $this->_statusName;
+        return $this::STATUS_NAME;
     }            
     
     /**
