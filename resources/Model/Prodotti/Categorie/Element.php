@@ -5,83 +5,68 @@
 abstract class Model_Prodotti_Categorie_Element
 {
     /**
+     * Id
+     * @var mixed
+     */
+    protected $id;
+    
+    /**
      * Descrizione element
      * @var string
      */
     protected $descrizione;
     
     /**
-     * @var array|CategoryElement[]
+     * Elements array
+     * @var array
      */
     protected $elements;
-    
-    
-    /**
-     * renders the category code
-     * @return mixed
-     */
-    abstract public function render();
+        
     
     /**
      * add element
      * @param Category Element $element
      * @return void
      */
-    public function add(Model_Prodotti_Categorie_Element $element)
-    {
-        $this->elements[] = $element;
-    }
+    abstract public function add(Model_Prodotti_Categorie_Element $element);
     
+    /**
+     * remove an element from the tree
+     * @param $id int
+     * @return bool
+     */
+    abstract public function remove($id);
 
     /**
      * get child by id
      * @param $id int
      * @return Model_Prodotti_Categorie_Element
      */
-    public function getChild($id)
-    {
-        if(count($this->elements) > 0) {
-            foreach ($this->elements AS $value) {
-                if($value->getId() == $id) {
-                    return $value;
-                }
-            }
-        }
-        return null;
-    }
-    
+    abstract public function getChild($id);
     
     /**
-     * get array childred
-     * @return array
-     */    
-    public function getChildren() {
-        return $this->elements;
-    }
-
-    /**
-     * remove an element from the tree
-     * @param $id int
-     * @return bool
+     * create an Iterator for this composite
+     * @return Model_Prodotti_Categorie_Iterator
      */
-    public function remove($id)
+    public function createIterator()
     {
-        if(count($this->elements) > 0) {
-            foreach ($this->elements as $key => $value) {
-                if($value->getId() == $id) {
-                    unset($this->elements[$key]);
-                    return true;
-                }
-            }
+        try {
+            return new Model_Prodotti_Categorie_Iterator($this->elements);
+            
+        } catch (MyFw_Exception $e) {
+            $e->displayError();
         }
-        return false;
     }
-
+    
+    
     /**
      * return id of the element
      * @return id
      */
-    abstract public function getId();            
+    public function getId()
+    {
+        return $this->id;
+    }
     
     /**
      * return descrizione

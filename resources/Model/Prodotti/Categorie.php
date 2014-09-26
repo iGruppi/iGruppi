@@ -1,51 +1,169 @@
 <?php
 /**
- * This is the composite object
+ * This is the Client for Categorie Composite pattern
  */
 class Model_Prodotti_Categorie 
-    extends Model_Prodotti_Categorie_Element
 {
-    
     /**
-     * IdCat ID Categoria
-     * @var mixed
+     * @var Model_Prodotti_Categorie
      */
-    private $_idcat;
+    protected $_categorie = null;
 
-    public function __construct($id, $descrizione)
+    /**
+     * @param mixed (stdClass|array) $values
+     * @return void
+     */
+    public function initDatiByObject($values)
     {
-        $this->_idcat = $id;
-        $this->descrizione = $descrizione;
-        $this->elements = array();
+        if(is_object($values)) {
+            $this->_addElement($values);
+        } else if(is_array($values) && count($values) > 0) {
+            foreach ($values AS $v) {
+                $this->_addElement($v);
+            }
+        }
     }
     
     /**
-     * runs through all elements and calls render() on them, then returns the 
-     * complete array of the tree categories and subcategories
-     *
-     * @return array
+     * get Root Categorie composite object
+     * @return Model_Prodotti_Categorie
      */
-    public function render()
+    public function getRoot()
     {
-        // init array for this Category
-        $ar = array('idcat' => $this->_idcat, 'descrizione' => $this->descrizione, 'elements' => array());
-        // render sub elements
-        if(count($this->elements) > 0) {
-            foreach ($this->elements as $element) {
-                $ar['elements'][] = $element->render();
+        if(is_null($this->_categorie))
+        {
+            $this->_categorie = new Model_Prodotti_Categorie_CatElement(0, "Root");
+        }
+        return $this->_categorie;
+    }
+    
+    public function getProduttoriList()
+    {
+        $ar = array();
+        $iterator = new RecursiveIteratorIterator( 
+                            $this->getRoot()->createIterator(),
+                                RecursiveIteratorIterator::SELF_FIRST,
+                                RecursiveIteratorIterator::CATCH_GET_CHILD
+                );
+        foreach($iterator AS $child) {
+            if( $child instanceof Model_Prodotti_Categorie_ProduttoreElement) {
+                $ar[] = $child->getDescrizione();
             }
+        }
+        return array_unique($ar);
+    }
+    
+    public function getListaDescrizioniCategorie()
+    {
+        $ar = array();
+        foreach($this->getRoot()->createIterator() AS $categoria)
+        {
+            $ar[] = $categoria->getDescrizione();
         }
         return $ar;
     }
-
+    
+/*  *************************************************************
+ *  PRIVATE METHODS to BUILD Elements
+ */
     
     /**
-     * return the idsubcat
-     * @return id
+     * add Element to the Composite TREE
+     * @param stdClass $v values
      */
-    public function getId()
+    private function _addElement(stdClass $v)
     {
-        return $this->_idcat;
+        // ADD Cat
+        $catRoot = $this->getRoot();
+        $cat = $this->_initCat($v, $catRoot);
+        if(!is_null($cat)) {
+            // ADD SubCat to Cat
+            $subcat = $this->_initSubCat($v, $cat);
+            // ADD PRODUCTS & PRODUTTORE to SubCat or Cat (ONLY if they exist)
+            if(!is_null($subcat)) 
+            {
+                $this->_initProdotto($v, $subcat);
+                $this->_initProduttore($v, $subcat);
+            } else {
+                $this->_initProdotto($v, $cat);
+                $this->_initProduttore($v, $cat);
+            }
+        }
     }
     
+    /**
+     * add CAT to the Composite TREE
+     * @param stdClass $v values
+     * @return null
+     */
+    private function _initCat(stdClass $v, Model_Prodotti_Categorie_Element $cat)
+    {
+        if(isset($v->idcat)) {
+            if(is_null($cat->getChild($v->idcat))) {
+                // ADD CATEGORY Element
+                $cn = isset($v->categoria) ? $v->categoria : "";
+                $cat->add(new Model_Prodotti_Categorie_CatElement($v->idcat, $cn));
+            }
+            return $cat->getChild($v->idcat);
+        }
+        return null;
+    }
+    
+    /**
+     * add SUBCAT to the Composite tree
+     * @param stdClass $v values
+     * @param Model_Prodotti_Categorie_Element $cat
+     * @return mixed (null|Model_Prodotti_Categorie_Element)
+     */
+    private function _initSubCat(stdClass $v, Model_Prodotti_Categorie_Element $cat)
+    {
+        if(isset($v->idsubcat)) {
+            if(is_null($cat->getChild($v->idsubcat))) {
+                // ADD SUB-CATEGORY Element
+                $scn = isset($v->categoria_sub) ? $v->categoria_sub : "";
+                $cat->add(new Model_Prodotti_Categorie_SubcatElement($v->idsubcat, $scn));
+            }
+            return $cat->getChild($v->idsubcat);
+        }
+        return null;
+    }
+    
+    /**
+     * add PRODOTTO to the Composite tree
+     * @param stdClass $v values
+     * @param Model_Prodotti_Categorie_Element $subcat
+     * @return mixed (null|Model_Prodotti_Categorie_Element)
+     */
+    private function _initProdotto(stdClass $v, Model_Prodotti_Categorie_Element $subcat)
+    {
+        if(isset($v->idprodotto)) {
+            if(is_null($subcat->getChild($v->idprodotto))) {
+                // ADD SUB-CATEGORY Element
+                $scp = isset($v->descrizione_prodotto) ? $v->descrizione_prodotto : "";
+                $subcat->add(new Model_Prodotti_Categorie_ProdottoElement($v->idprodotto, $scp));
+            }
+            return $subcat->getChild($v->idprodotto);
+        }
+        return null;
+    }
+    
+    /**
+     * add PRODUTTORE to the Composite tree
+     * @param stdClass $v values
+     * @param Model_Prodotti_Categorie_Element $subcat
+     * @return mixed (null|Model_Prodotti_Categorie_Element)
+     */
+    private function _initProduttore(stdClass $v, Model_Prodotti_Categorie_Element $subcat)
+    {
+        if(isset($v->idproduttore)) {
+            if(is_null($subcat->getChild($v->idproduttore))) {
+                // ADD SUB-CATEGORY Element
+                $scp = isset($v->ragsoc_produttore) ? $v->ragsoc_produttore : "";
+                $subcat->add(new Model_Prodotti_Categorie_ProduttoreElement($v->idproduttore, $scp));
+            }
+            return $subcat->getChild($v->idproduttore);
+        }
+        return null;
+    }
+            
 }

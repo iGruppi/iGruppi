@@ -5,48 +5,54 @@
 class Model_Prodotti_Categorie_ProdottoElement 
     extends Model_Prodotti_Categorie_Element
 {
-    /**
-     * IdProdotto
-     * @var mixed
-     */
-    protected $_idprodotto;
+    
+    private $_prodotto;
     
     /**
-     * build a Prodotto element
+     * build a Produttore element
      * @param type $id
      * @param type $descrizione
      */
     public function __construct($id, $descrizione)
     {
-        $this->_idprodotto = $id;
+        $this->id = $id;
         $this->descrizione = $descrizione;
+        $this->elements = null;
     }
     
+    /**
+     * set Prodotto object
+     * @param Model_Builder_Prodotto_Parts_Product $p
+     * @return void
+     */
+    
+    public function setProdotto(Model_Builder_Prodotto_Parts_Product $p)
+    {
+        $this->_prodotto = $p;
+    }
+    
+    /**
+     * return the Model_Builder_Prodotto_Parts_Product object
+     * @return Model_Builder_Prodotto_Parts_Product
+     */
+    public function getProdotto()
+    {
+        return $this->_prodotto;
+    }
     /**
      * None of this batch of methods are used by Leaf because this element has not children
      * However in order to correctly implement the interface we need some kind of implementation
      */
-    public function add(Model_Prodotti_Categorie_Element $element) {}
-    public function remove($id) {}
-    public function getChild($id) {}
-    public function getChildren() {}
-
-    /**
-     * renders the Subcat element
-     * @return mixed|string
-     */
-    public function render()
+    public function add(Model_Prodotti_Categorie_Element $element) 
     {
-        return array('idprodotto' => $this->_idprodotto, 'descrizione' => $this->descrizione);
+        throw new MyFw_Exception('Prodotto is a leaf, does not have children');
     }
-    
-    /**
-     * return the idsubcat
-     * @return id
-     */
-    public function getId()
+    public function remove($id)
     {
-        return $this->_idprodotto;
+        throw new MyFw_Exception('Prodotto is a leaf, does not have children');
     }
-    
+    public function getChild($id)
+    {
+        throw new MyFw_Exception('Prodotto is a leaf, does not have children');
+    }
 }

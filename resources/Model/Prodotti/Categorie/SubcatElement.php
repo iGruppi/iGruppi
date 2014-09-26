@@ -1,15 +1,10 @@
 <?php
 /**
- * Class SubcatElement
+ * Class Subcat Element
  */
 class Model_Prodotti_Categorie_SubcatElement 
-    extends Model_Prodotti_Categorie_Element
+    extends Model_Prodotti_Categorie_CompositeElement
 {
-    /**
-     * IdSubCat ID Sub-Categoria
-     * @var mixed
-     */
-    protected $_idsubcat;
     
     /**
      * build a Subcat element
@@ -18,34 +13,44 @@ class Model_Prodotti_Categorie_SubcatElement
      */
     public function __construct($id, $descrizione)
     {
-        $this->_idsubcat = $id;
+        $this->id = $id;
         $this->descrizione = $descrizione;
         $this->elements = array();        
     }
     
-    /**
-     * renders the Subcat elements
-     * @return mixed|string
-     */
-    public function render()
+    
+    public function getProdotti()
     {
         $ar = array();
-        if(count($this->elements) > 0) {
-            $ar = array('idsubcat' => $this->_idsubcat, 'descrizione' => $this->descrizione, 'elements' => array());
-            foreach ($this->elements as $element) {
-                $ar['elements'][] = $element->render();
+        $iterator = $this->createIterator();
+        if($iterator->hasChildren())
+        {
+            foreach($iterator AS $ch)
+            {
+                if($ch instanceof Model_Prodotti_Categorie_ProdottoElement)
+                {
+                    $ar[] = $ch;
+                }
             }
         }
         return $ar;
     }
     
-    /**
-     * return the idsubcat
-     * @return id
-     */
-    public function getId()
+    public function getProduttori()
     {
-        return $this->_idsubcat;
+        $ar = array();
+        $iterator = $this->createIterator();
+        if($iterator->hasChildren())
+        {
+            foreach($iterator AS $ch)
+            {
+                if($ch instanceof Model_Prodotti_Categorie_ProduttoreElement)
+                {
+                    $ar[] = $ch;
+                }
+            }
+        }
+        return $ar;
     }
     
 }
