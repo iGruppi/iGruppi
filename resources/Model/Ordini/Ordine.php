@@ -4,21 +4,29 @@
  * 
  * @author gullo
  */
-class Model_Ordini_Ordine extends Model_AF_AbstractManipulator 
+class Model_Ordini_Ordine extends Model_AF_AbstractCoR 
 {
-
     /**
-     * Create Listino Factory
+     * set OrdineFactory as factory class
+     * @return void
      */
     public function __construct() {
-        parent::create(new Model_AF_OrdineFactory());
+        $this->factoryClass = new Model_AF_OrdineFactory();
     }
-            
     
+    /**
+     * Append States Pattern to the Chain
+     * @return $this Model_AF_AbstractCoR
+     */
+    public function appendStatesOrderFactory()
+    {
+        return $this->append( Model_Ordini_State_OrderFactory::getOrder( $this->getValues()) );
+    }
+
     /*
     * Overloading, it try to call methods in the State Pattern
     * __call
-    */
+   
     public function __call ( $method, $args )
     {
         // controllo esistenza metodo
@@ -33,6 +41,7 @@ class Model_Ordini_Ordine extends Model_AF_AbstractManipulator
             }
         }
     }
+    */
     
     
     
@@ -45,7 +54,6 @@ class Model_Ordini_Ordine extends Model_AF_AbstractManipulator
      */
     private function isReferenteOrdine()
     {
-        
         return true;
     }
     

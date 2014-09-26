@@ -5,15 +5,16 @@
  * 
  * @author gullo
  */
-class Model_Listini_Listino extends Model_AF_AbstractManipulator 
+class Model_Listini_Listino extends Model_AF_AbstractCoR
 {
-
     /**
-     * Create Listino by Factory method
+     * set OrdineFactory as factory class
+     * @return void
      */
     public function __construct() {
-        parent::create(new Model_AF_ListinoFactory());
+        $this->factoryClass = new Model_AF_ListinoFactory();
     }
+
             
     
 /*  **************************************************************************
@@ -23,12 +24,12 @@ class Model_Listini_Listino extends Model_AF_AbstractManipulator
     private function isReferenteProduttore()
     {
         $userSessionVal = new Zend_Session_Namespace('userSessionVal');
-        return $userSessionVal->refObject->is_Referente($this->getDati()->getIdProduttore());
+        return $userSessionVal->refObject->is_Referente($this->getIdProduttore());
     }
     
     private function isOwner()
     {
-        return ($this->getGroups()->getMyIdGroup() == $this->getGroups()->getMasterGroup()->getIdGroup());
+        return ($this->getMyIdGroup() == $this->getMasterGroup()->getIdGroup());
     }
     
     public function canManageListino()

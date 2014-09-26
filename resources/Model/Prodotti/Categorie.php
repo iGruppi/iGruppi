@@ -2,7 +2,7 @@
 /**
  * This is the Client for Categorie Composite pattern
  */
-class Model_Prodotti_Categorie 
+class Model_Prodotti_Categorie extends Model_AF_AbstractHandlerCoR
 {
     /**
      * @var Model_Prodotti_Categorie
@@ -13,7 +13,7 @@ class Model_Prodotti_Categorie
      * @param mixed (stdClass|array) $values
      * @return void
      */
-    public function initDatiByObject($values)
+    public function initCategorie_ByObject($values)
     {
         if(is_object($values)) {
             $this->_addElement($values);
@@ -62,6 +62,28 @@ class Model_Prodotti_Categorie
         }
         return $ar;
     }
+    /**
+     * @todo  
+     * It does not work here because it needs to call 'getProdottoById' method that here does not exists!
+     */
+    public function getProdottiWithCategoryArray()
+    {
+        $iterator = new RecursiveIteratorIterator( 
+                            $this->getRoot()->createIterator(),
+                                RecursiveIteratorIterator::SELF_FIRST,
+                                RecursiveIteratorIterator::CATCH_GET_CHILD
+                );
+        if($iterator->getSubIterator()->count()) {
+            foreach($iterator AS $child) {
+                if( $child instanceof Model_Prodotti_Categorie_ProdottoElement) {
+                    $child->setProdotto( $this->getCoR()->getProdottoById($child->getId()) );
+                }
+            }
+            return $iterator->getSubIterator()->getArrayCopy();
+        }
+        return array();   
+    }
+    
     
 /*  *************************************************************
  *  PRIVATE METHODS to BUILD Elements

@@ -2,7 +2,7 @@
 /**
  * This is the Abstract Product for GRUPPI
  */
-abstract class Model_AF_Gruppi implements Model_AF_AbstractProductInterface
+abstract class Model_AF_Gruppi extends Model_AF_AbstractHandlerCoR
 {
 
     /**
@@ -39,7 +39,7 @@ abstract class Model_AF_Gruppi implements Model_AF_AbstractProductInterface
      * @return void
      * @param array $groups Array groups to init the class (every group has to be a stdClass)
      */
-    public function initDatiByObject($groups)
+    public function initGruppi_ByObject($groups)
     {
         // set all groups
         if(is_array($groups) && count($groups) > 0)

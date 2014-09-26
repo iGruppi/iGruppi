@@ -2,7 +2,7 @@
 /**
  * This is the Abstract Product for DATI
  */
-abstract class Model_AF_Dati implements Model_AF_AbstractProductInterface
+abstract class Model_AF_Dati extends Model_AF_AbstractHandlerCoR
 {
     /**
      * @var stdClass
@@ -17,7 +17,7 @@ abstract class Model_AF_Dati implements Model_AF_AbstractProductInterface
     /**
      * @param mixed $values
      */
-    public function initDatiByObject($values)
+    public function initDati_ByObject($values)
     {
         $this->_dati = $values;
     }

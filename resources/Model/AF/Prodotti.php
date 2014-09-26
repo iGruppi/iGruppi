@@ -2,7 +2,7 @@
 /**
  * This is the Abstract Product for PRODOTTI
  */
-abstract class Model_AF_Prodotti implements Model_AF_AbstractProductInterface
+abstract class Model_AF_Prodotti extends Model_AF_AbstractHandlerCoR
 {
     /**
      * @var array
@@ -14,7 +14,7 @@ abstract class Model_AF_Prodotti implements Model_AF_AbstractProductInterface
      * add Products by an array of data
      * @param array $listProd
      */
-    public function initDatiByObject($listProd)
+    public function initProdotti_ByObject($listProd)
     {
         if(count($listProd) > 0)
         {

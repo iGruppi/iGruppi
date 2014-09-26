@@ -5,16 +5,15 @@
  * 
  * @author gullo
  */
-class Model_Prodotti_Anagrafica extends Model_AF_AbstractManipulator 
+class Model_Prodotti_Anagrafica extends Model_AF_AbstractCoR 
 {
-
     /**
-     * Create Listino by Factory method
+     * set AnagraficaFactory as factory class
+     * @return void
      */
     public function __construct() {
-        parent::create(new Model_AF_AnagraficaFactory());
+        $this->factoryClass = new Model_AF_AnagraficaFactory();
     }
-            
 
     
 /*  **************************************************************************
