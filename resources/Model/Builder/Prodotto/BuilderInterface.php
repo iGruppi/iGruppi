@@ -25,7 +25,7 @@ abstract class Model_Builder_Prodotto_BuilderInterface
         $this->prodotto->setPart('idproduttore', new Model_Builder_Parts_Id());
         $this->prodotto->setPart('iduser_creator', new Model_Builder_Parts_Id());
         $this->prodotto->setPart('codice', new Model_Builder_Parts_Text());
-        $this->prodotto->setPart('descrizione', new Model_Builder_Parts_Text());
+        $this->prodotto->setPart('descrizione_prodotto', new Model_Builder_Parts_Text());
         $this->prodotto->setPart('udm', new Model_Builder_Parts_Text());
         $this->prodotto->setPart('costo', new Model_Builder_Parts_Float());
         $this->prodotto->setPart('moltiplicatore', new Model_Builder_Parts_Float());

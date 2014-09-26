@@ -33,7 +33,8 @@ class Model_Db_Prodotti extends MyFw_DB_Base {
      * @return array
      */
     function getProdottiByIdProduttore($idproduttore) {
-        $sql = "SELECT p.*, cs.descrizione AS categoria_sub, c.idcat, c.descrizione AS categoria "
+        $sql = "SELECT p.*, p.descrizione AS descrizione_prodotto, "
+              ." cs.descrizione AS categoria_sub, c.idcat, c.descrizione AS categoria "
               ." FROM prodotti AS p"
               ." JOIN categorie_sub AS cs ON p.idsubcat=cs.idsubcat"
               ." JOIN categorie AS c ON cs.idcat=c.idcat "
@@ -52,7 +53,7 @@ class Model_Db_Prodotti extends MyFw_DB_Base {
      * @return array
      */
     function getProdottiByIdListino($idlistino) {
-        $sql = "SELECT p.*, "
+        $sql = "SELECT p.*, p.descrizione AS descrizione_prodotto, "
               ." lp.idlistino, lp.descrizione AS descrizione_listino, lp.costo AS costo_listino, lp.note AS note_listino, lp.attivo AS attivo_listino, "
               ." cs.descrizione AS categoria_sub, c.idcat, c.descrizione AS categoria "
               ." FROM listini AS l "

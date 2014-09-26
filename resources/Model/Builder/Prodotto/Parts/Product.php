@@ -43,9 +43,9 @@ abstract class Model_Builder_Prodotto_Parts_Product
     {
         if( isset($this->data[$f]) ) {
             $this->data[$f]->set($v);
-        } else {
+        }/* else {
             throw new MyFw_Exception("Part '$f' NOT exists in Product!");
-        }
+        }*/
     }
 
 /* *******************************************
@@ -182,7 +182,7 @@ abstract class Model_Builder_Prodotto_Parts_Product
      */
     public function setDescrizione($d)
     {
-        $this->data["descrizione"]->set($d);
+        $this->data["descrizione_prodotto"]->set($d);
     }
     
     /**
@@ -190,7 +190,7 @@ abstract class Model_Builder_Prodotto_Parts_Product
      */    
     public function getDescrizione()
     {
-        return $this->data["descrizione"]->get();
+        return $this->data["descrizione_prodotto"]->get();
     }
 
     /**
