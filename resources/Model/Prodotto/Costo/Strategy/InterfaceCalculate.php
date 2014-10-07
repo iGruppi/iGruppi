@@ -2,7 +2,7 @@
 /**
  * Strategy interface to calculate Costo
  */
-interface Model_Prodotti_Costo_Strategy_InterfaceCalculate
+interface Model_Prodotto_Costo_Strategy_InterfaceCalculate
 {
     /**
      * @return float valore calcolato

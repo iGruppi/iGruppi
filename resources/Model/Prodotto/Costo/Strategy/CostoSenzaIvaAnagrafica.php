@@ -1,6 +1,6 @@
 <?php
-class Model_Prodotti_Costo_Strategy_CostoSenzaIvaAnagrafica
-    implements Model_Prodotti_Costo_Strategy_InterfaceCalculate
+class Model_Prodotto_Costo_Strategy_CostoSenzaIvaAnagrafica
+    implements Model_Prodotto_Costo_Strategy_InterfaceCalculate
 {
     public function calculate(Model_Builder_Prodotto_Parts_Product $prodotto)
     {

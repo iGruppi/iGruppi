@@ -2,7 +2,7 @@
 /**
  * Class Category Element
  */
-abstract class Model_Prodotti_Categorie_Element
+abstract class Model_Categorie_Element
 {
     /**
      * Id
@@ -28,7 +28,7 @@ abstract class Model_Prodotti_Categorie_Element
      * @param Category Element $element
      * @return void
      */
-    abstract public function add(Model_Prodotti_Categorie_Element $element);
+    abstract public function add(Model_Categorie_Element $element);
     
     /**
      * remove an element from the tree
@@ -40,18 +40,18 @@ abstract class Model_Prodotti_Categorie_Element
     /**
      * get child by id
      * @param $id int
-     * @return Model_Prodotti_Categorie_Element
+     * @return Model_Categorie_Element
      */
     abstract public function getChild($id);
     
     /**
      * create an Iterator for this composite
-     * @return Model_Prodotti_Categorie_Iterator
+     * @return Model_Categorie_Iterator
      */
     public function createIterator()
     {
         try {
-            return new Model_Prodotti_Categorie_Iterator($this->elements);
+            return new Model_Categorie_Iterator($this->elements);
             
         } catch (MyFw_Exception $e) {
             $e->displayError();

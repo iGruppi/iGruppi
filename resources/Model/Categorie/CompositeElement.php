@@ -2,17 +2,17 @@
 /**
  * Class CompositeElement
  */
-abstract class Model_Prodotti_Categorie_CompositeElement 
-    extends Model_Prodotti_Categorie_Element
+abstract class Model_Categorie_CompositeElement 
+    extends Model_Categorie_Element
 {
 
     
     /**
      * add new element
-     * @param $element Model_Prodotti_Categorie_AbstractElement
+     * @param $element Model_Categorie_AbstractElement
      * @return void
      */
-    public function add(Model_Prodotti_Categorie_Element $element)
+    public function add(Model_Categorie_Element $element)
     {
         //$this->elements->append($element);
         $this->elements[] = $element;
@@ -40,7 +40,7 @@ abstract class Model_Prodotti_Categorie_CompositeElement
     /**
      * get child by id
      * @param $id int
-     * @return Model_Prodotti_Categorie_Element
+     * @return Model_Categorie_Element
      */
     public function getChild($id)
     {

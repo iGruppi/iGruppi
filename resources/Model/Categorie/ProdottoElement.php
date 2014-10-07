@@ -2,8 +2,8 @@
 /**
  * Class ProductElement
  */
-class Model_Prodotti_Categorie_ProdottoElement 
-    extends Model_Prodotti_Categorie_Element
+class Model_Categorie_ProdottoElement 
+    extends Model_Categorie_Element
 {
     
     private $_prodotto;
@@ -43,7 +43,7 @@ class Model_Prodotti_Categorie_ProdottoElement
      * None of this batch of methods are used by Leaf because this element has not children
      * However in order to correctly implement the interface we need some kind of implementation
      */
-    public function add(Model_Prodotti_Categorie_Element $element) 
+    public function add(Model_Categorie_Element $element) 
     {
         throw new MyFw_Exception('Prodotto is a leaf, does not have children');
     }

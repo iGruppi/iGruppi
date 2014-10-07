@@ -2,8 +2,8 @@
 /**
  * Class Cat Element
  */
-class Model_Prodotti_Categorie_CatElement 
-    extends Model_Prodotti_Categorie_CompositeElement
+class Model_Categorie_CatElement 
+    extends Model_Categorie_CompositeElement
 {
     
     /**
@@ -27,7 +27,7 @@ class Model_Prodotti_Categorie_CatElement
         {
             foreach($iterator AS $ch)
             {
-                if($ch instanceof Model_Prodotti_Categorie_SubcatElement)
+                if($ch instanceof Model_Categorie_SubcatElement)
                 {
                     $ar[] = $ch;
                 }

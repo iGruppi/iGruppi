@@ -4,7 +4,7 @@
  *
  * @author gullo
  */
-class Model_Prodotti_Categorie_Iterator extends RecursiveArrayIterator {
+class Model_Categorie_Iterator extends RecursiveArrayIterator {
     
     /**
      * Elements array

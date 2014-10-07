@@ -2,7 +2,7 @@
 /**
  * The Context where the Strategy is employed.
  */
-class Model_Prodotti_Costo_ContextStrategy
+class Model_Prodotto_Costo_ContextStrategy
 {
     /**
      *
@@ -65,7 +65,7 @@ class Model_Prodotti_Costo_ContextStrategy
     private function _getStrategyClass($method)
     {
         // create Class name in base a metodo e context
-        $className = "Model_Prodotti_Costo_Strategy_".$method . $this->_context;
+        $className = "Model_Prodotto_Costo_Strategy_".$method . $this->_context;
         // controllo se la classe esiste
         if(class_exists($className))
         {

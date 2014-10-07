@@ -1,6 +1,6 @@
 <?php
 /**
- * This is a PRODOTTO for USER-ORDINE
+ * This is __OLD__ USER-ORDINE
  */
 class Model_Builder_Prodotto_Parts_UserOrdine
     extends Model_Builder_Prodotto_Parts_Ordine

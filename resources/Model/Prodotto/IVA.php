@@ -4,7 +4,7 @@
  * 
  * @author gullo
  */
-class Model_Prodotti_IVA {
+class Model_Prodotto_IVA {
     
     private $_arIVA = array(
         '0'     => "Non voglio gestire l'IVA",
