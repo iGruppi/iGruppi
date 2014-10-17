@@ -5,7 +5,7 @@
  * 
  * @author gullo
  */
-class Model_Prodotti_Anagrafica extends Model_AF_AbstractCoR 
+class Model_AnagraficaProdotti extends Model_AF_AbstractCoR 
 {
     /**
      * set AnagraficaFactory as factory class
@@ -15,19 +15,5 @@ class Model_Prodotti_Anagrafica extends Model_AF_AbstractCoR
         $this->factoryClass = new Model_AF_AnagraficaFactory();
     }
 
-    
-/*  **************************************************************************
- *  SAVE CHANGES TO DB
- */    
-    
-    public function save()
-    {
-        // save Dati
-        $res1 = $this->getDati()->saveToDB();
-        // save Groups
-        $res2 = $this->getGroups()->saveToDB();
-        
-        return ($res1 && $res2);
-    }
     
 }
