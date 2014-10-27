@@ -11,28 +11,35 @@ class Model_Prodotto_Mediator_Mediator implements Model_Prodotto_Mediator_Mediat
     /**
      * @var Model_Prodotto_Mediator_Anagrafica
      */
-    protected $anagrafica;
+    protected $anagrafica = null;
 
     /**
      * @var Model_Prodotto_Mediator_Listino
      */
-    protected $listino;
+    protected $listino = null;
 
     /**
      * @var Model_Prodotto_Mediator_Ordine
      */
-    protected $ordine;
+    protected $ordine = null;
 
     /**
      * init the Class with all the Colleague
      */
-    public function __construct()
-    {
+    public function __construct() {
         $this->anagrafica = new Model_Prodotto_Mediator_Anagrafica($this);
         $this->listino = new Model_Prodotto_Mediator_Listino($this);
         $this->ordine = new Model_Prodotto_Mediator_Ordine($this);
     }
-    
+
+    /*
+    public function attachToColleagues(Model_Prodotto_Observer_AbstractSubject $subject)
+    {
+        $this->anagrafica->attach($subject);
+        $this->listino->attach($subject);
+        $this->ordine->attach($subject);
+    }
+     */
     
     public function initByObject($obj)
     {
@@ -58,6 +65,28 @@ class Model_Prodotto_Mediator_Mediator implements Model_Prodotto_Mediator_Mediat
         }
     }
     
+    /**
+     * Set IdProdotto for any colleagues
+     * @param mixed $id
+     */
+    public function setIdProdotto($id)
+    {
+        $this->anagrafica->setIdProdotto($id);
+        $this->listino->setIdProdotto($id);
+        $this->ordine->setIdProdotto($id);
+    }
+    
+    /**
+     * Set IdListino for Listino and Ordine colleagues
+     * @param mixed $id
+     */
+    public function setIdListino($id)
+    {
+        $this->listino->setIdListino($id);
+        $this->ordine->setIdListino($id);
+    }
+    
+    
     public function getValues()
     {
         return array_merge(
@@ -71,28 +100,15 @@ class Model_Prodotto_Mediator_Mediator implements Model_Prodotto_Mediator_Mediat
     {
         return $this->anagrafica->getValuesArray();
     }
-    
     public function getListinoValues()
     {
         return $this->listino->getValuesArray();
     }
-    
     public function getOrdineValues()
     {
         return $this->ordine->getValuesArray();
     }
     
-    
-    public function saveToDb()
-    {
-        return true;
-        
-        $changedValues = $prodotto->dumpValuesForDB();
-        Zend_Debug::dump($changedValues);die;
-        if(count($changedValues)) {
-            $prodModel = new Model_Db_Prodotti();
-            $prodModel->updateProdotto($idprodotto, $changedValues);
-        }                
-    }
+
     
 }

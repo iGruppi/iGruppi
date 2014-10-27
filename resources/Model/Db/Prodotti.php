@@ -14,14 +14,14 @@ class Model_Db_Prodotti extends MyFw_DB_Base {
 
     function getProdottoById($idprodotto) 
     {
-        $sth_app = $this->db->prepare("SELECT * FROM prodotti WHERE idprodotto= :idprodotto");
+        $sth_app = $this->db->prepare("SELECT *, descrizione AS descrizione_prodotto FROM prodotti WHERE idprodotto= :idprodotto");
         $sth_app->execute(array('idprodotto' => $idprodotto));
         return $sth_app->fetch(PDO::FETCH_OBJ);
     }
     
     function getProdottoByCodice($codice) 
     {
-        $sth_app = $this->db->prepare("SELECT * FROM prodotti WHERE codice= :codice");
+        $sth_app = $this->db->prepare("SELECT *, descrizione AS descrizione_prodotto FROM prodotti WHERE codice= :codice");
         $sth_app->execute(array('codice' => $codice));
         return $sth_app->fetch(PDO::FETCH_OBJ);
     }
@@ -33,7 +33,7 @@ class Model_Db_Prodotti extends MyFw_DB_Base {
      * @return array
      */
     function getProdottiByIdProduttore($idproduttore) {
-        $sql = "SELECT p.*, p.descrizione AS descrizione_prodotto, "
+        $sql = "SELECT p.*, "
               ." cs.descrizione AS categoria_sub, c.idcat, c.descrizione AS categoria "
               ." FROM prodotti AS p"
               ." JOIN categorie_sub AS cs ON p.idsubcat=cs.idsubcat"
@@ -53,8 +53,8 @@ class Model_Db_Prodotti extends MyFw_DB_Base {
      * @return array
      */
     function getProdottiByIdListino($idlistino) {
-        $sql = "SELECT p.*, p.descrizione AS descrizione_prodotto, "
-              ." lp.idlistino, lp.descrizione AS descrizione_listino, lp.costo AS costo_listino, lp.note AS note_listino, lp.attivo AS attivo_listino, "
+        $sql = "SELECT p.*, "
+              ." lp.idlistino, lp.descrizione_listino, lp.costo_listino, lp.note_listino, lp.attivo_listino, "
               ." cs.descrizione AS categoria_sub, c.idcat, c.descrizione AS categoria "
               ." FROM listini AS l "
               ." JOIN prodotti AS p ON l.idproduttore=p.idproduttore "
@@ -80,8 +80,8 @@ class Model_Db_Prodotti extends MyFw_DB_Base {
      */
     function getProdottiByIdOrdine($idordine) {
         $sql = "SELECT p.*, "
-              ." op.costo AS costo_ordine, op.offerta AS offerta_ordine, op.sconto AS sconto_ordine, op.disponibile AS disponibile_ordine, "
-              ." lp.idlistino, lp.descrizione AS descrizione_listino, lp.costo AS costo_listino, lp.note AS note_listino, lp.attivo AS attivo_listino, "
+              ." lp.idlistino, lp.descrizione_listino, lp.costo_listino, lp.note_listino, lp.attivo_listino, "
+              ." op.costo_ordine, op.offerta_ordine, op.sconto_ordine, op.disponibile_ordine, "
               ." cs.descrizione AS categoria_sub, c.idcat, c.descrizione AS categoria "
               ." FROM ordini_prodotti AS op "
               ." JOIN listini_prodotti AS lp ON lp.idlistino=op.idlistino AND lp.idprodotto=op.idprodotto "
@@ -98,9 +98,79 @@ class Model_Db_Prodotti extends MyFw_DB_Base {
     
     function getProdottiByIdSubCat($idsubcat) {
         
-        $sth_app = $this->db->prepare("SELECT * FROM prodotti WHERE idsubcat= :idsubcat");
+        $sth_app = $this->db->prepare("SELECT *, descrizione AS descrizione_prodotto FROM prodotti WHERE idsubcat= :idsubcat");
         $sth_app->execute(array('idsubcat' => $idsubcat));
         return $sth_app->fetchAll(PDO::FETCH_OBJ);
     }
 
+    
+    
+    
+/*****************
+ * SAVE Procedures
+ */
+    
+    private function _checkProdotti($prodotti)
+    {
+        if(is_array($prodotti)) {
+            return $prodotti;
+        } else if($prodotti instanceof Model_Prodotto_Mediator_Mediator)
+        {
+            return array(0 => $prodotti);
+        } else {
+            throw new Exception("Prodotti must be Array or Prodotto(Mediator) object");
+        }
+    }
+    
+    function updateProdotti($p)
+    {
+        $prodotti = $this->_checkProdotti($p);
+        $this->db->beginTransaction();
+        foreach ($prodotti AS $prodotto) {
+            $arValues = $prodotto->getAnagraficaValues();
+            $arValues["idprodotto"] = $prodotto->getIdProdotto();
+            $sth = $this->db->prepareUpdateQueryByParams("prodotti", "idprodotto", $arValues);
+            $res = $sth->execute($arValues);
+            if(!$res) {
+                return $this->db->rollBack();
+            }
+        }
+        return $this->db->commit();
+    }
+    
+    function updateProdottiListino($p)
+    {
+        $prodotti = $this->_checkProdotti($p);
+        $this->db->beginTransaction();
+        foreach ($prodotti AS $prodotto) {
+            $arValues = $prodotto->getListinoValues();
+            $arValues["idlistino"] = $prodotto->getIdListino();
+            $arValues["idprodotto"] = $prodotto->getIdProdotto();
+            $sth = $this->db->prepareUpdateQueryByParams("listini_prodotti", array("idlistino", "idprodotto"), $arValues);
+            $res = $sth->execute($arValues);
+            if(!$res) {
+                return $this->db->rollBack();
+            }
+        }
+        return $this->db->commit();
+    }
+    
+    function updateProdottiOrdine($p)
+    {
+        $prodotti = $this->_checkProdotti($p);
+        $this->db->beginTransaction();
+        foreach ($prodotti AS $prodotto) {
+            $arValues = $prodotto->getListinoValues();
+            $arValues["idordine"] = $prodotto->getIdOrdine();
+            $arValues["idlistino"] = $prodotto->getIdListino();
+            $arValues["idprodotto"] = $prodotto->getIdProdotto();
+            $sth = $this->db->prepareUpdateQueryByParams("ordini_prodotti", array("idordine", "idlistino", "idprodotto"), $arValues);
+            $res = $sth->execute($arValues);
+            if(!$res) {
+                return $this->db->rollBack();
+            }
+        }
+        return $this->db->commit();
+    }
+    
 }

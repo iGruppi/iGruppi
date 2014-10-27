@@ -5,15 +5,20 @@
 class Model_Prodotto_Mediator_Ordine 
     extends Model_Prodotto_Mediator_AbstractProduct
 {
-
     /**
      * Ordine context
      * @var string
      */
-    protected $_context = "Ordine";
-    
+    const _CONTEXT = "Ordine";
+
+    /**
+     * Table ordini_prodotti fields
+     * @var array
+     */
     protected $_data = array(
             'idordine',
+            'idlistino',
+            'idprodotto',        
             'costo_ordine',
             'offerta_ordine',
             'sconto_ordine',
@@ -21,26 +26,25 @@ class Model_Prodotto_Mediator_Ordine
         );
     
     
+    public function __construct(Model_Prodotto_Mediator_MediatorInterface $medium) 
+    {
+        parent::__construct($medium);
+        // attach the Anagrafica Observer
+        $this->attach( Model_Prodotto_Observer_Ordine::getInstance());
+    }    
+    
     /**
      * @return bool
      */    
     public function isDisponibile() {
         return $this->getDisponibileOrdine();
     }
- 
+
     
     
 /* ***********************************************
- *  SET & GET for ALL properties
+ *  GET properties
  */
-    
-    /**
-     * @param mixed $id
-     */
-    public function setIdOrdine($id)
-    {
-        $this->_setValue("idordine", $id);
-    }
     
     /**
      * @return mixed
@@ -51,27 +55,11 @@ class Model_Prodotto_Mediator_Ordine
     }
 
     /**
-     * @param float $c
-     */
-    public function setCostoOrdine($c)
-    {
-        $this->_setValue("costo_ordine", $c);
-    }
-    
-    /**
      * @return float
      */
     public function getCostoOrdine()
     {
         return $this->_getValue("costo_ordine");
-    }
-    
-    /**
-     * @param mixed $flag
-     */
-    public function setOffertaOrdine($flag)
-    {
-        $this->_setValue("offerta_ordine", $this->filterFlag($flag));
     }
     
     /**
@@ -83,19 +71,72 @@ class Model_Prodotto_Mediator_Ordine
     }
 
     /**
-     * @param int $c
-     */
-    public function setScontoOrdine($c)
-    {
-        $this->_setValue("sconto_ordine", $c);
-    }
-    
-    /**
      * @return int
      */
     public function getScontoOrdine()
     {
         return $this->_getValue("sconto_ordine");
+    }
+    
+    /**
+     * @return bool
+     */
+    public function getDisponibileOrdine()
+    {
+        return $this->_getValue("disponibile_ordine");
+    }    
+    
+    
+/* ***********************************************
+ *  SET properties
+ */
+    
+    /**
+     * @param mixed $id
+     */
+    public function setIdOrdine($id)
+    {
+        $this->_setValue("idordine", $id);
+    }
+    
+    /**
+     * @param mixed $id
+     */
+    public function setIdListino($id)
+    {
+        $this->_setValue("idlistino", $id);
+    }
+    
+    /**
+     * @param mixed $id
+     */
+    public function setIdProdotto($id)
+    {
+        $this->_setValue("idprodotto", $id);
+    }
+    
+    /**
+     * @param float $c
+     */
+    public function setCostoOrdine($c)
+    {
+        $this->_setValue("costo_ordine", $c);
+    }
+    
+    /**
+     * @param mixed $flag
+     */
+    public function setOffertaOrdine($flag)
+    {
+        $this->_setValue("offerta_ordine", $this->filterFlag($flag));
+    }
+    
+    /**
+     * @param int $c
+     */
+    public function setScontoOrdine($c)
+    {
+        $this->_setValue("sconto_ordine", $c);
     }
     
     /**
@@ -106,11 +147,6 @@ class Model_Prodotto_Mediator_Ordine
         $this->_setValue("disponibile_ordine", $this->filterFlag($flag));
     }
     
-    /**
-     * @return bool
-     */
-    public function getDisponibileOrdine()
-    {
-        return $this->_getValue("disponibile_ordine");
-    }    
+    
+    
 }

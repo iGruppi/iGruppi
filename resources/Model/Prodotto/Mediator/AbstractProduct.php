@@ -16,15 +16,6 @@ abstract class Model_Prodotto_Mediator_AbstractProduct
     private $mediator;
 
     /**
-     * Get mediator so any colleague can talk with the others through the Mediator
-     * @return MediatorInterface
-     */
-    protected function getMediator()
-    {
-        return $this->mediator;
-    }
-
-    /**
      * in this way, we are sure the concrete colleague knows the mediator
      * @param Model_Prodotto_Mediator_MediatorInterface $medium
      */
@@ -33,6 +24,17 @@ abstract class Model_Prodotto_Mediator_AbstractProduct
         $this->mediator = $medium;
     }    
     
+    
+    /**
+     * Get mediator so any colleague can talk with the others through the Mediator
+     * @return MediatorInterface
+     */
+    protected function getMediator()
+    {
+        return $this->mediator;
+    }
+
+
 /*************
  * OBSERVER
  */
@@ -44,10 +46,10 @@ abstract class Model_Prodotto_Mediator_AbstractProduct
     protected $observers = array();
     
     /**
-     * Accepts an observer
-     * @param Model_Prodotto_Observer_Interface $observer
+     * Accepts an Observer
+     * @param Model_Prodotto_Observer_AbstractObserver $observer
      */
-    public function attach(Model_Prodotto_Observer_Interface $observer)
+    public function attach(Model_Prodotto_Observer_AbstractObserver $observer)
     {
         $this->observers[] = $observer;
     }
@@ -57,15 +59,14 @@ abstract class Model_Prodotto_Mediator_AbstractProduct
      * It is public because I prefer that the Client can control the notification generation
      * @return void
      */
-    public function _notify()
+    public function notify()
     {
         foreach ($this->observers as $observer)
         {
-            $observer->save($this);
+            $observer->update($this->getMediator());
         }
-    }
+    }    
     
-
 /*************************
  * INIT DATA, GET and SET
  */
@@ -99,7 +100,7 @@ abstract class Model_Prodotto_Mediator_AbstractProduct
             
     
     /**
-     * Set Value in a Field and keep trace of every change
+     * Set Value in a Field and keep trace of every change calling the Observer
      * @param type $f Field name
      * @param type $v Value
      */
@@ -112,8 +113,11 @@ abstract class Model_Prodotto_Mediator_AbstractProduct
             {
                 $this->_values[$f] = $v;
                 // notify the Observers
-                // $this->_notify();
-                // $this->getMediator()->getObserver()->notify($this);
+                $this->notify();
+                // TO DEBUG VALUES...
+//                if($this->getMediator()->getIdProdotto() == 457) {
+//                    echo "$f, $v";die;
+//                }
             }
         }
     }
@@ -169,14 +173,18 @@ abstract class Model_Prodotto_Mediator_AbstractProduct
 /* *******************************************
  *  MISCELLANEOUS
  */  
-    
+    /**
+     * Filter flag to allow bool values
+     * @param mixed $flag
+     * @return string
+     */
     protected function filterFlag($flag) {
         if(is_string($flag) ) {
-            return ($flag == "S") ? true : false;
+            return ($flag == "S" || $flag == "N") ? $flag : "N";
         } elseif (is_bool($flag)) {
-            return $flag;
+            return ($flag) ? "S" : "N";
         } else {
-            return (bool)$flag;
+            return "N";
         }
     }
     

@@ -9,8 +9,7 @@ class Model_Prodotto_Mediator_Anagrafica
      * Anagrafica context
      * @var string
      */
-    protected $_context = "Anagrafica";
-    
+    const _CONTEXT = "Anagrafica";
     
     /**
      * Table prodotti fields
@@ -30,15 +29,15 @@ class Model_Prodotto_Mediator_Anagrafica
             'note',
             'attivo',
             'production'        
-        );
-    protected $_tableName = "prodotti";
+        );   
     
-    /*
-    public function __construct() {
-        $this->attach(new Model_Prodotto_Observer_Anagrafica());
-    }
-    */
 
+    public function __construct(Model_Prodotto_Mediator_MediatorInterface $medium) 
+    {
+        parent::__construct($medium);
+        // attach the Anagrafica Observer
+        $this->attach( Model_Prodotto_Observer_Anagrafica::getInstance());
+    }
     
     
     /**
@@ -89,19 +88,10 @@ class Model_Prodotto_Mediator_Anagrafica
         return ($this->getIva() > 0);
     }
 
-    
-    
-    
+        
 /* *******************************************
- *  SET & GET for ALL properties
- */    
-    /**
-     * @param mixed $id
-     */
-    public function setIdProdotto($id)
-    {
-        $this->_setValue("idprodotto", $id);
-    }
+ *  GET properties
+ */ 
     
     /**
      * @return mixed
@@ -109,14 +99,6 @@ class Model_Prodotto_Mediator_Anagrafica
     public function getIdProdotto()
     {
         return $this->_getValue("idprodotto");
-    }
-    
-    /**
-     * @param mixed $id
-     */
-    public function setIdProduttore($id)
-    {
-        $this->_setValue("idproduttore", $id);
     }
     
     /**
@@ -128,27 +110,11 @@ class Model_Prodotto_Mediator_Anagrafica
     }
 
     /**
-     * @param mixed $id
-     */
-    public function setIdCat($id)
-    {
-        $this->_setValue("idcat", $id);
-    }
-    
-    /**
      * @return mixed
      */    
     public function getIdCat()
     {
         return $this->_getValue("idcat");
-    }
-    
-    /**
-     * @param mixed $id
-     */
-    public function setIdSubcat($id)
-    {
-        $this->_setValue("idsubcat", $id);
     }
     
     /**
@@ -160,14 +126,6 @@ class Model_Prodotto_Mediator_Anagrafica
     }
 
     /**
-     * @param mixed $id
-     */
-    public function setIdUserCreator($id)
-    {
-        $this->_setValue("iduser_creator", $id);
-    }
-    
-    /**
      * @return mixed
      */    
     public function getIdUserCreator()
@@ -175,15 +133,6 @@ class Model_Prodotto_Mediator_Anagrafica
         return $this->_getValue("iduser_creator");
     }
 
-    
-    /**
-     * @param string $c
-     */
-    public function setCodice($c)
-    {
-        $this->_setValue("codice", $c);
-    }
-    
     /**
      * @return string
      */    
@@ -193,14 +142,6 @@ class Model_Prodotto_Mediator_Anagrafica
     }
 
     /**
-     * @param string $d
-     */
-    public function setDescrizione($d)
-    {
-        $this->_setValue("descrizione", $d);
-    }
-    
-    /**
      * @return string
      */    
     public function getDescrizione()
@@ -208,14 +149,6 @@ class Model_Prodotto_Mediator_Anagrafica
         return $this->_getValue("descrizione");
     }
 
-    /**
-     * @param string $udm
-     */
-    public function setUdm($udm)
-    {
-        $this->_setValue("udm", $udm);
-    }
-    
     /**
      * @return string
      */
@@ -225,27 +158,11 @@ class Model_Prodotto_Mediator_Anagrafica
     }
 
     /**
-     * @param float $c
-     */
-    public function setCosto($c)
-    {
-        $this->_setValue("costo", $c);
-    }
-    
-    /**
      * @return float
      */
     public function getCosto()
     {
         return $this->_getValue("costo");
-    }
-    
-    /**
-     * @param float $m
-     */
-    public function setMoltiplicatore($m)
-    {
-        $this->_setValue("moltiplicatore", $m);
     }
     
     /**
@@ -257,27 +174,11 @@ class Model_Prodotto_Mediator_Anagrafica
     }
     
     /**
-     * @param int $iva
-     */
-    public function setIva($iva)
-    {
-        $this->_setValue("aliquota_iva", $iva);
-    }
-    
-    /**
      * @return int
      */    
     public function getIva()
     {
         return $this->_getValue("aliquota_iva");
-    }
-    
-    /**
-     * @param string $note
-     */
-    public function setNote($note)
-    {
-        $this->_setValue("note", $note);
     }
     
     /**
@@ -289,14 +190,6 @@ class Model_Prodotto_Mediator_Anagrafica
     }
 
     /**
-     * @param mixed $flag
-     */
-    public function setAttivo($flag)
-    {
-        $this->_setValue("attivo", $this->filterFlag($flag));
-    }
-    
-    /**
      * @return bool
      */
     public function getAttivo()
@@ -304,14 +197,6 @@ class Model_Prodotto_Mediator_Anagrafica
         return $this->_getValue("attivo");
     }
 
-    /**
-     * @param mixed $flag
-     */
-    public function setProduction($flag)
-    {
-        $this->_setValue("production", $this->filterFlag($flag));
-    }
-    
     /**
      * @return bool
      */
@@ -321,14 +206,6 @@ class Model_Prodotto_Mediator_Anagrafica
     }
 
     /**
-     * @param string $c
-     */
-    public function setCategoria($c)
-    {
-        $this->_setValue("categoria", $c);
-    }
-    
-    /**
      * @return string
      */
     public function getCategoria()
@@ -337,14 +214,6 @@ class Model_Prodotto_Mediator_Anagrafica
     }
 
     /**
-     * @param string $sc
-     */
-    public function setSubcategoria($sc)
-    {
-        $this->_setValue("categoria_sub", $sc);
-    }
-    
-    /**
      * @return string
      */
     public function getSubcategoria()
@@ -352,6 +221,144 @@ class Model_Prodotto_Mediator_Anagrafica
         return $this->_getValue("categoria_sub");
     }
 
+    
+/* *******************************************
+ *  SET properties
+ */    
+
+    /**
+     * @param mixed $id
+     */
+    public function setIdProdotto($id)
+    {
+        $this->_setValue("idprodotto", $id);
+    }
+    
+    /**
+     * @param mixed $id
+     */
+    public function setIdProduttore($id)
+    {
+        $this->_setValue("idproduttore", $id);
+    }
+    
+    /**
+     * Cannot set Categoria
+     * @param string $c
+     * @return null
+    public function setIdCat($id)
+    {
+        throw new Model_Prodotto_Mediator_Exception('Cannot set IdCat!');
+    }
+     */
+    
+    /**
+     * @param mixed $id
+     */
+    public function setIdSubcat($id)
+    {
+        $this->_setValue("idsubcat", $id);
+    }
+    
+    /**
+     * @param mixed $id
+     */
+    public function setIdUserCreator($id)
+    {
+        $this->_setValue("iduser_creator", $id);
+    }
+    
+    /**
+     * @param string $c
+     */
+    public function setCodice($c)
+    {
+        $this->_setValue("codice", $c);
+    }
+    
+    /**
+     * @param string $d
+     */
+    public function setDescrizione($d)
+    {
+        $this->_setValue("descrizione", $d);
+    }
+    
+    /**
+     * @param string $udm
+     */
+    public function setUdm($udm)
+    {
+        $this->_setValue("udm", $udm);
+    }
+    
+    /**
+     * @param float $c
+     */
+    public function setCosto($c)
+    {
+        $this->_setValue("costo", $c);
+    }
+    
+    /**
+     * @param float $m
+     */
+    public function setMoltiplicatore($m)
+    {
+        $this->_setValue("moltiplicatore", $m);
+    }
+    
+    /**
+     * @param int $iva
+     */
+    public function setIva($iva)
+    {
+        $this->_setValue("aliquota_iva", $iva);
+    }
+    
+    /**
+     * @param string $note
+     */
+    public function setNote($note)
+    {
+        $this->_setValue("note", $note);
+    }
+    
+    /**
+     * @param mixed $flag
+     */
+    public function setAttivo($flag)
+    {
+        $this->_setValue("attivo", $this->filterFlag($flag));
+    }
+    
+    /**
+     * @param mixed $flag
+     */
+    public function setProduction($flag)
+    {
+        $this->_setValue("production", $this->filterFlag($flag));
+    }
+    
+    /**
+     * Cannot set Categoria
+     * @param string $c
+     * @return null
+    public function setCategoria($c)
+    {
+        throw new Model_Prodotto_Mediator_Exception('Cannot set Categoria!');
+    }
+     */
+    
+    /**
+     * Cannot set Categoria
+     * @param string $cc
+     * @return null
+    public function setSubcategoria($sc)
+    {
+        throw new Model_Prodotto_Mediator_Exception('Cannot set SubCategoria!');
+    }
+     */
     
     
 }

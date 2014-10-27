@@ -9,19 +9,27 @@ class Model_Prodotto_Mediator_Listino
      * Listino context
      * @var string
      */
-    protected $_context = "Listino";
-    
+    const _CONTEXT = "Listino";
+
     /**
      * Table listini_prodotti fields
      * @var array
      */
     protected $_data = array(
             'idlistino',
+            'idprodotto',
             'descrizione_listino',
             'costo_listino',
             'note_listino',
             'attivo_listino'
         );
+    
+    public function __construct(Model_Prodotto_Mediator_MediatorInterface $medium) 
+    {
+        parent::__construct($medium);
+        // attach the Anagrafica Observer
+        $this->attach( Model_Prodotto_Observer_Listino::getInstance());
+    }
     
     /**
      * Verifica se il prodotto è nel Listino (se NON esiste il record in listini_prodotti idlistino è NULL!)
@@ -34,16 +42,8 @@ class Model_Prodotto_Mediator_Listino
     
     
 /* ***********************************************
- *  SET & GET for ALL properties
+ *  GET properties
  */
-    
-    /**
-     * @param mixed $id
-     */
-    public function setIdListino($id)
-    {
-        $this->_setValue("idlistino", $id);
-    }
     
     /**
      * @return mixed
@@ -51,14 +51,6 @@ class Model_Prodotto_Mediator_Listino
     public function getIdListino()
     {
         return $this->_getValue("idlistino");
-    }
-    
-    /**
-     * @param string $d
-     */
-    public function setDescrizioneListino($d)
-    {
-        $this->_setValue("descrizione_listino", $d);
     }
     
     /**
@@ -70,27 +62,11 @@ class Model_Prodotto_Mediator_Listino
     }
 
     /**
-     * @param float $c
-     */
-    public function setCostoListino($c)
-    {
-        $this->_setValue("costo_listino", $c);
-    }
-    
-    /**
      * @return float
      */
     public function getCostoListino()
     {
         return $this->_getValue("costo_listino");
-    }
-    
-    /**
-     * @param string $note
-     */
-    public function setNoteListino($note)
-    {
-        $this->_setValue("note_listino", $note);
     }
     
     /**
@@ -102,14 +78,6 @@ class Model_Prodotto_Mediator_Listino
     }
 
     /**
-     * @param mixed $flag
-     */
-    public function setAttivoListino($flag)
-    {
-        $this->_setValue("attivo_listino", $this->filterFlag($flag));
-    }
-    
-    /**
      * @return bool
      */
     public function getAttivoListino()
@@ -117,5 +85,59 @@ class Model_Prodotto_Mediator_Listino
         return $this->_getValue("attivo_listino");
     }
 
+/* ***********************************************
+ *  SET properties
+ */
+
+    
+    /**
+     * @param mixed $id
+     */
+    public function setIdListino($id)
+    {
+        $this->_setValue("idlistino", $id);
+    }
+    
+    /**
+     * @param mixed $id
+     */
+    public function setIdProdotto($id)
+    {
+        $this->_setValue("idprodotto", $id);
+    }
+    
+    
+    /**
+     * @param string $d
+     */
+    public function setDescrizioneListino($d)
+    {
+        $this->_setValue("descrizione_listino", $d);
+    }
+    
+    /**
+     * @param float $c
+     */
+    public function setCostoListino($c)
+    {
+        $this->_setValue("costo_listino", $c);
+    }
+    
+    /**
+     * @param string $note
+     */
+    public function setNoteListino($note)
+    {
+        $this->_setValue("note_listino", $note);
+    }
+    
+    /**
+     * @param mixed $flag
+     */
+    public function setAttivoListino($flag)
+    {
+        $this->_setValue("attivo_listino", $this->filterFlag($flag));
+    }
+    
     
 }
