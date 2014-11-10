@@ -23,6 +23,7 @@ class Model_Acl
         $this->addResource('Prodotti');
         $this->addResource('Listini');
         $this->addResource('GestioneOrdini');
+        $this->addResource('GestioneCassa');
         
         // NEGO tutto per tutti
         $this->deny(null, null); 
@@ -42,6 +43,7 @@ class Model_Acl
         $this->allow('User', 'Prodotti');
         $this->allow('User', 'Listini');
         $this->allow('User', 'GestioneOrdini');
+        $this->allow('User', 'GestioneCassa');
         
 //        $this->allow('Free', 'utenza');
 //        $this->allow('Free', 'utenze');

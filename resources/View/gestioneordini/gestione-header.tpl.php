@@ -77,7 +77,7 @@
             <span class="sr-only">Toggle Dropdown</span>
         </button>
         <ul class="dropdown-menu" role="menu">
-            <li><a href="javascript:void(0)" onclick="jx_OrdineMoveStatus(<?php echo $this->ordine->getIdOrdine();?>, 'prev')"><span class="glyphicon glyphicon-arrow-left"></span> Riporta In Consegna</a></li>
+            <li><a href="javascript:void(0)" onclick="jx_OrdineMoveStatus(<?php echo $this->ordine->getIdOrdine();?>, 'prev')"><span class="glyphicon glyphicon-arrow-left"></span> Riporta ad Arrivato</a></li>
         </ul>
     </div>
 <?php endif; ?>

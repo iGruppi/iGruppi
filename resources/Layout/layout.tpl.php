@@ -65,6 +65,7 @@
                     <li><a href="/produttori">Produttori</a></li>
                     <li><a href="/listini">Listini</a></li>
                     <li><a href="/gestione-ordini">Gestione ordini</a></li>
+                    <li><a href="/gestione-cassa">Gestione cassa</a></li>
                   </ul>
                 </div>            
               </li>
