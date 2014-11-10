@@ -70,7 +70,10 @@ copyTable("categorie_sub", "categorie_sub", array(
     'idproduttore'  => 'idproduttore',
     'descrizione'   => 'descrizione'
 ));
-$db2->query("UPDATE prodotti SET production='S'");
+/**
+ * @todo You should set the iduser_creator = iduser referente del produttore
+ */
+$db2->query("UPDATE prodotti SET production='S', iduser_creator=0");
 
 
 /*
@@ -102,7 +105,7 @@ if($sth_p->rowCount() > 0) {
             $recpp = $sth_pp->fetchAll(PDO::FETCH_ASSOC);
             foreach( $recpp AS $fields )
             {
-                $sth_pl = $db2->prepare("INSERT INTO listini_prodotti SET idlistino= :idlistino, idprodotto= :idprodotto, descrizione= :descrizione, costo= :costo, note= :note, attivo= :attivo");
+                $sth_pl = $db2->prepare("INSERT INTO listini_prodotti SET idlistino= :idlistino, idprodotto= :idprodotto, descrizione_listino= :descrizione, costo_listino= :costo, note_listino= :note, attivo_listino= :attivo");
                 $sth_pl->execute(array('idlistino' => $idlistino, 'idprodotto' => $fields["idprodotto"], 'descrizione' => $fields["descrizione"], 'costo' => $fields["costo"], 'note' => $fields["note"], 'attivo' => $fields["attivo"]));
             }            
         }
@@ -153,7 +156,7 @@ if($sth_o->rowCount() > 0) {
                 foreach( $recs4 AS $ffp4 )
                 {
                     $db2->query("INSERT INTO `ordini_prodotti` "
-                            . "(`idordine`, `idlistino`, `idprodotto`, `costo`, `offerta`, `sconto`, `disponibile`) VALUES "
+                            . "(`idordine`, `idlistino`, `idprodotto`, `costo_ordine`, `offerta_ordine`, `sconto_ordine`, `disponibile_ordine`) VALUES "
                             . "($idordine, $idlistino, '".$ffp4["idprodotto"]."', '".$ffp4["costo"]."', '".$ffp4["offerta"]."', '".$ffp4["sconto"]."', '".$ffp4["disponibile"]."')");
                 }
             }
