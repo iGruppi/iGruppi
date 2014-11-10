@@ -41,7 +41,7 @@ class Form_Prodotti extends MyFw_Form {
             ));
         
         // UDM 
-        $udmObj = new Model_Prodotti_UdM();
+        $udmObj = new Model_Prodotto_UdM();
         $this->addField('udm', array(
                         'type'      => 'select',
                         'label'     => 'Prezzo per',
@@ -68,25 +68,13 @@ class Form_Prodotti extends MyFw_Form {
                         'note'      => '&nbsp;&euro;'
             ));
         // IVA
-        $ivaObj = new Model_Prodotti_IVA();
+        $ivaObj = new Model_Prodotto_IVA();
         $this->addField('aliquota_iva', array(
                         'type'      => 'select',
                         'label'     => 'IVA',
                         'options'   => $ivaObj->getArIVA(),
                         'required'  => true,
                         'onchange'  => 'setCostoLabel();'
-            ));
-
-        $this->addField('offerta', array(
-                        'type'      => 'select',
-                        'label'     => 'Offerta',
-                        'options'   => array('S' => 'SI', 'N' => 'NO')
-            ));
-        
-        $this->addField('sconto', array(
-                        'type'      => 'text',
-                        'label'     => 'Sconto (%)',
-                        'size'      => 10
             ));
 
         $this->addField('note', array(

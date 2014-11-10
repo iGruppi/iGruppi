@@ -12,7 +12,7 @@ abstract class Model_AF_Dati extends Model_AF_AbstractHandlerCoR
     /**
      * @var bool
      */
-    private $_isChanged = false;
+    protected $_isChanged = false;
 
     /**
      * @param mixed $values
@@ -61,14 +61,14 @@ abstract class Model_AF_Dati extends Model_AF_AbstractHandlerCoR
      * get All Values
      * @return stdClass
     */     
-    public function getValues()
+    public function getDatiValues()
     {
         return $this->_dati;
     }
     
     /**
-     * Save data to DB
+     * Save Dati to DB
      * @return bool
      */
-    abstract public function saveToDB();
+    abstract public function saveToDB_Dati();
 }

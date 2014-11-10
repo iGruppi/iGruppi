@@ -1,5 +1,5 @@
-<h2>Modifica Listino <strong><?php echo $this->listino->getDati()->getDescrizione(); ?></strong></h2>
-<h3>Produttore: <strong><?php echo $this->listino->getDati()->getProduttoreName(); ?></strong></h3>
+<h2>Modifica Listino <strong><?php echo $this->listino->getDescrizione(); ?></strong></h2>
+<h3>Produttore: <strong><?php echo $this->listino->getProduttoreName(); ?></strong></h3>
 
 <form id="prodform" action="<?php echo $this->form->getAction(); ?>" method="post" class="f1n120">
 <div class="row">
@@ -40,13 +40,15 @@
             <button type="submit" class="btn btn-success btn-mylg">SALVA</button>
         </div>
     </div>      
-    <?php if($this->listino->getProdotti()->countOutOfListino() > 0): ?>
+    <?php 
+        $outOfListino = $this->listino->countOutOfListino();
+        if($outOfListino): ?>
     <div class="row row-margin-bottom">
         <div class="col-xs-12 col-sm-12 col-md-12">
             <div class="alert alert-info alert-dismissible" role="alert">
               <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
               Attenzione!<br />
-              <a href="#prodotti" data-toggle="tab"><?php echo $this->listino->getProdotti()->countOutOfListino(); ?> nuovi Prodotti</a><br /> 
+              <a href="#prodotti" data-toggle="tab"><?php echo $outOfListino; ?> nuovi Prodotti</a><br /> 
               <small>non presenti in Listino</small>
             </div>
         </div>

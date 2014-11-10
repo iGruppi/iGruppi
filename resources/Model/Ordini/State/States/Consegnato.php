@@ -13,20 +13,20 @@ class Model_Ordini_State_States_Consegnato extends Model_Ordini_State_OrderAbstr
 
     /**
      * Returns the Next state: ARCHIVIATO
-     * @return Model_Ordini_State_OrderAbstract
+     * @return string
      */
     public function getNextState()
     {
-        return new Model_Ordini_State_States_Archiviato( $this->_ordine );
+        return Model_Ordini_State_States_Archiviato::STATUS_NAME;
     }
     
     /**
      * Returns the Next state: ARRIVATO
-     * @return Model_Ordini_State_OrderAbstract
+     * @return string
      */
     public function getPrevState()
     {
-        return new Model_Ordini_State_States_Arrivato( $this->_ordine );
+        return Model_Ordini_State_States_Arrivato::STATUS_NAME;
     }
     
     /**
@@ -46,15 +46,12 @@ class Model_Ordini_State_States_Consegnato extends Model_Ordini_State_OrderAbstr
     { 
         return true; 
     }
-
-    /**
-     * Permission states for Referente
-     * @return bool
-     */
+    // Se il Referente può modificare le Quantità ordinate dagli utenti
     public function canRef_ModificaQtaOrdinate() 
     {
         return true;
     }
+
     public function canUser_ViewDettaglio() 
     {
         return true;

@@ -76,10 +76,16 @@
               <li><a class="btn btn-primary btn-mylg" href="/auth/register"><span class="glyphicon glyphicon-user"></span> Nuovo utente</a></li>
             </ul>                
 <?php   endif; ?>
-            <div class="clearfix">&nbsp;</div>            
+            <div class="clearfix">&nbsp;</div>       
         </div>
-        
+
         <div class="content">
+<!--        
+            <ol class="breadcrumb">
+                <li><a href="#">Home</a></li>
+                <li><a href="#">Library</a></li>
+                <li class="active">Data</li>
+            </ol> -->
             <?php echo (isset($this->content) ? $this->content: ""); ?>
         </div>
       </div>

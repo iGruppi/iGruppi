@@ -10,7 +10,6 @@ class Model_Prodotto_Observer_Listino
     extends Model_Prodotto_Observer_AbstractObserver
 {
     
-    
     static protected $_instance = null;
     
     /**

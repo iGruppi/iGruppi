@@ -52,9 +52,10 @@ class Model_Db_Categorie extends MyFw_DB_Base {
 
     function getCategoriesByIdOrdine($idordine)
     {
-        $sql = "SELECT DISTINCT c.idcat, c.descrizione AS categoria "
+        $sql = "SELECT DISTINCT c.idcat, c.descrizione AS categoria, p.idproduttore, prod.ragsoc AS ragsoc_produttore "
                 . " FROM ordini_prodotti AS op "
-                . " LEFT JOIN prodotti AS p ON op.idprodotto=p.idprodotto "
+                . " JOIN prodotti AS p ON op.idprodotto=p.idprodotto "
+                . " JOIN produttori AS prod ON p.idproduttore=prod.idproduttore "
                 . " LEFT JOIN categorie_sub AS cs ON p.idsubcat=cs.idsubcat "
                 . " LEFT JOIN categorie AS c ON cs.idcat=c.idcat "
                 . " WHERE op.idordine= :idordine";

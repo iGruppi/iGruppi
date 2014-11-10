@@ -6,11 +6,11 @@
         <legend>Validità</legend>
         <label for="validita">Validità:</label>
         <select name="validita" id="validita">
-            <option value="N" <?php if(!$this->listino->getGroups()->getMyGroup()->getValidita()->isSetValidita()){ echo 'selected=""'; } ?>>Sempre</option>
-            <option value="S" <?php if($this->listino->getGroups()->getMyGroup()->getValidita()->isSetValidita()){ echo 'selected=""'; } ?>>Imposta periodo</option>
+            <option value="N" <?php if(!$this->listino->getMyGroup()->getValidita()->isSetValidita()){ echo 'selected=""'; } ?>>Sempre</option>
+            <option value="S" <?php if($this->listino->getMyGroup()->getValidita()->isSetValidita()){ echo 'selected=""'; } ?>>Imposta periodo</option>
         </select>
         <br />
-        <div id="d_validita" style="display: <?php echo ($this->listino->getGroups()->getMyGroup()->getValidita()->isSetValidita()) ? "block" : "none"; ?>;">
+        <div id="d_validita" style="display: <?php echo ($this->listino->getMyGroup()->getValidita()->isSetValidita()) ? "block" : "none"; ?>;">
             <?php echo $this->form->renderField('valido_dal'); ?>
             <?php echo $this->form->renderField('valido_al'); ?>
         </div>

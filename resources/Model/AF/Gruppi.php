@@ -192,4 +192,9 @@ abstract class Model_AF_Gruppi extends Model_AF_AbstractHandlerCoR
         $this->_groups = $newArray;
     }
     
+    /**
+     * Save Gruppi to DB
+     * @return bool
+     */
+    abstract public function saveToDB_Gruppi();
 }

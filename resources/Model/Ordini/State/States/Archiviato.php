@@ -22,11 +22,11 @@ class Model_Ordini_State_States_Archiviato extends Model_Ordini_State_OrderAbstr
     
     /**
      * Returns the Next state: CONSEGNATO
-     * @return Model_Ordini_State_OrderAbstract
+     * @return string
      */
     public function getPrevState()
     {
-        return new Model_Ordini_State_States_Consegnato( $this->_ordine );
+        return Model_Ordini_State_States_Consegnato::STATUS_NAME;
     }
     
     /**

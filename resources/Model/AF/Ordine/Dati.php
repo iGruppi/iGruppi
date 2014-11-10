@@ -44,7 +44,7 @@ class Model_AF_Ordine_Dati extends Model_AF_Dati
      * Save data to DB
      * @return bool
      */    
-    public function saveToDB() {
+    public function saveToDB_Dati() {
         if($this->isChanged()) {
             return true;
         }

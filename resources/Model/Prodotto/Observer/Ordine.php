@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Description of Listino
+ * Description of Ordine
  * 
  * @author Davide Gullo <gullo at m4ss.net>
  * 

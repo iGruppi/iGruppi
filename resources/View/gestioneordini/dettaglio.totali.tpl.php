@@ -1,7 +1,8 @@
 <div class="row">
   <div class="col-md-12">
     <h3 class="big-margin-top">Riepilogo Totale Prodotti ordinati</h3>
-<?php if(count($this->ordCalcObj->getProdotti()) > 0): ?>    
+<?php 
+    if(count($this->ordCalcObj->getProdotti()) > 0): ?>    
     <table class="table table-condensed">
         <thead>
           <tr>
@@ -21,12 +22,12 @@
                 <tr class="danger strike">
             <?php endif; ?>
                 <td><strong><?php echo $pObj->getQtaReale();?></strong></td>
-                <td><strong><?php echo $pObj->codice;?></strong></td>
+                <td><strong><?php echo $pObj->getCodice();?></strong></td>
                 <td><?php echo $pObj->getDescrizioneCosto();?></td>
-                <td><?php echo $pObj->descrizione;?></td>
+                <td><?php echo $pObj->getDescrizioneListino();?></td>
                 <td class="text-right">
-                    <?php if( $pObj->hasAliquotaIva()): ?>
-                    <strong><?php echo $this->valuta($pObj->getTotaleSenzaIva()); ?></strong> (<?php echo $pObj->getAliquotaIva(); ?>%)
+                    <?php if( $pObj->hasIva()): ?>
+                    <strong><?php echo $this->valuta($pObj->getTotaleSenzaIva()); ?></strong> (<?php echo $pObj->getIva(); ?>%)
                     <?php else: ?>
                     <span class="glyphicon glyphicon-info-sign iva_tooltip" data-toggle="tooltip" data-placement="left" title="Il campo IVA non è gestito per questo prodotto!"></span>
                     <?php endif; ?>

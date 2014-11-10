@@ -1,13 +1,13 @@
-<?php if(count($this->categorie->getChildren()) > 0): ?>
+<?php if(count($this->categorie) > 0): ?>
     <ul class="nav bs-sidenav">
         <li><a href="javascript: void(0);" onclick="$('html,body').animate({scrollTop: $('#wrap').offset().top});" class="text-right"><small>Top <span class="glyphicon glyphicon-circle-arrow-up"></span></small></a></li>
         
-    <?php foreach ($this->categorie->getChildren() AS $cat): ?>
+    <?php foreach ($this->categorie AS $cat): ?>
 
         <li>
           <a href="#cat_<?php echo $cat->getId(); ?>"><?php echo $cat->getDescrizione(); ?></a>
           <ul class="nav">
-        <?php foreach ($cat->getChildren() AS $subcat): ?>
+        <?php foreach ($cat->getSubcat() AS $subcat): ?>
             <?php 
                 $max_length = 26;
                 if(strlen($subcat->getDescrizione()) > $max_length): ?>

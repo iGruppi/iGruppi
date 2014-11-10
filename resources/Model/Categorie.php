@@ -2,10 +2,10 @@
 /**
  * This is the Client for Categorie Composite pattern
  */
-class Model_Prodotti_Categorie extends Model_AF_AbstractHandlerCoR
+class Model_Categorie extends Model_AF_AbstractHandlerCoR
 {
     /**
-     * @var Model_Prodotti_Categorie
+     * @var Model_Categorie
      */
     protected $_categorie = null;
 
@@ -26,13 +26,13 @@ class Model_Prodotti_Categorie extends Model_AF_AbstractHandlerCoR
     
     /**
      * get Root Categorie composite object
-     * @return Model_Prodotti_Categorie
+     * @return Model_Categorie
      */
     public function getRoot()
     {
         if(is_null($this->_categorie))
         {
-            $this->_categorie = new Model_Prodotti_Categorie_CatElement(0, "Root");
+            $this->_categorie = new Model_Categorie_CatElement(0, "Root");
         }
         return $this->_categorie;
     }
@@ -46,7 +46,7 @@ class Model_Prodotti_Categorie extends Model_AF_AbstractHandlerCoR
                                 RecursiveIteratorIterator::CATCH_GET_CHILD
                 );
         foreach($iterator AS $child) {
-            if( $child instanceof Model_Prodotti_Categorie_ProduttoreElement) {
+            if( $child instanceof Model_Categorie_ProduttoreElement) {
                 $ar[] = $child->getDescrizione();
             }
         }
@@ -75,7 +75,7 @@ class Model_Prodotti_Categorie extends Model_AF_AbstractHandlerCoR
                 );
         if($iterator->getSubIterator()->count()) {
             foreach($iterator AS $child) {
-                if( $child instanceof Model_Prodotti_Categorie_ProdottoElement) {
+                if( $child instanceof Model_Categorie_ProdottoElement) {
                     $child->setProdotto( $this->getCoR()->getProdottoById($child->getId()) );
                 }
             }
@@ -118,13 +118,13 @@ class Model_Prodotti_Categorie extends Model_AF_AbstractHandlerCoR
      * @param stdClass $v values
      * @return null
      */
-    private function _initCat(stdClass $v, Model_Prodotti_Categorie_Element $cat)
+    private function _initCat(stdClass $v, Model_Categorie_Element $cat)
     {
         if(isset($v->idcat)) {
             if(is_null($cat->getChild($v->idcat))) {
                 // ADD CATEGORY Element
                 $cn = isset($v->categoria) ? $v->categoria : "";
-                $cat->add(new Model_Prodotti_Categorie_CatElement($v->idcat, $cn));
+                $cat->add(new Model_Categorie_CatElement($v->idcat, $cn));
             }
             return $cat->getChild($v->idcat);
         }
@@ -134,16 +134,16 @@ class Model_Prodotti_Categorie extends Model_AF_AbstractHandlerCoR
     /**
      * add SUBCAT to the Composite tree
      * @param stdClass $v values
-     * @param Model_Prodotti_Categorie_Element $cat
-     * @return mixed (null|Model_Prodotti_Categorie_Element)
+     * @param Model_Categorie_Element $cat
+     * @return mixed (null|Model_Categorie_Element)
      */
-    private function _initSubCat(stdClass $v, Model_Prodotti_Categorie_Element $cat)
+    private function _initSubCat(stdClass $v, Model_Categorie_Element $cat)
     {
         if(isset($v->idsubcat)) {
             if(is_null($cat->getChild($v->idsubcat))) {
                 // ADD SUB-CATEGORY Element
                 $scn = isset($v->categoria_sub) ? $v->categoria_sub : "";
-                $cat->add(new Model_Prodotti_Categorie_SubcatElement($v->idsubcat, $scn));
+                $cat->add(new Model_Categorie_SubcatElement($v->idsubcat, $scn));
             }
             return $cat->getChild($v->idsubcat);
         }
@@ -153,16 +153,16 @@ class Model_Prodotti_Categorie extends Model_AF_AbstractHandlerCoR
     /**
      * add PRODOTTO to the Composite tree
      * @param stdClass $v values
-     * @param Model_Prodotti_Categorie_Element $subcat
-     * @return mixed (null|Model_Prodotti_Categorie_Element)
+     * @param Model_Categorie_Element $subcat
+     * @return mixed (null|Model_Categorie_Element)
      */
-    private function _initProdotto(stdClass $v, Model_Prodotti_Categorie_Element $subcat)
+    private function _initProdotto(stdClass $v, Model_Categorie_Element $subcat)
     {
         if(isset($v->idprodotto)) {
             if(is_null($subcat->getChild($v->idprodotto))) {
                 // ADD SUB-CATEGORY Element
                 $scp = isset($v->descrizione_prodotto) ? $v->descrizione_prodotto : "";
-                $subcat->add(new Model_Prodotti_Categorie_ProdottoElement($v->idprodotto, $scp));
+                $subcat->add(new Model_Categorie_ProdottoElement($v->idprodotto, $scp));
             }
             return $subcat->getChild($v->idprodotto);
         }
@@ -172,16 +172,16 @@ class Model_Prodotti_Categorie extends Model_AF_AbstractHandlerCoR
     /**
      * add PRODUTTORE to the Composite tree
      * @param stdClass $v values
-     * @param Model_Prodotti_Categorie_Element $subcat
-     * @return mixed (null|Model_Prodotti_Categorie_Element)
+     * @param Model_Categorie_Element $subcat
+     * @return mixed (null|Model_Categorie_Element)
      */
-    private function _initProduttore(stdClass $v, Model_Prodotti_Categorie_Element $subcat)
+    private function _initProduttore(stdClass $v, Model_Categorie_Element $subcat)
     {
         if(isset($v->idproduttore)) {
             if(is_null($subcat->getChild($v->idproduttore))) {
                 // ADD SUB-CATEGORY Element
                 $scp = isset($v->ragsoc_produttore) ? $v->ragsoc_produttore : "";
-                $subcat->add(new Model_Prodotti_Categorie_ProduttoreElement($v->idproduttore, $scp));
+                $subcat->add(new Model_Categorie_ProduttoreElement($v->idproduttore, $scp));
             }
             return $subcat->getChild($v->idproduttore);
         }

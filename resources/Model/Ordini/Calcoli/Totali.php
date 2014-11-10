@@ -1,35 +1,16 @@
 <?php
-
 /**
- * Description of Totali
+ * This class calculate TOTALI values
+ * 
  * 
  * @author gullo
  */
 class Model_Ordini_Calcoli_Totali 
-    extends Model_Ordini_Ordine {
+    extends Model_Ordini_Calcoli_AbstractCalcoli {
 
     
-/*
- *  UPDATE setProdotti
- *      Set Totale qta for Product
- */
-    
-    function setProdotti($listProd) 
-    {
-        parent::setProdotti($listProd);
-        // SET qta for ALL USERS
-        if(count($this->_arProdOriginal) > 0) 
-        {
-            foreach ($this->_arProdOriginal AS $value) 
-            {
-                $this->getProdotto($value->idprodotto)->addQtaReale($value->qta);
-            }
-        }
-    }
-    
-    
     // TOTALE ORDINE (Senza costo di spedizione)
-    function getTotale() 
+    public function getTotale() 
     {
         $t = 0;
         if(count($this->getProdotti()) > 0) 
@@ -37,19 +18,21 @@ class Model_Ordini_Calcoli_Totali
             foreach ($this->getProdotti() as $idprodotto => $objProd) 
             {
                 if($objProd->isDisponibile())
+                {
                     $t += $objProd->getTotale();
+                }
             }
         }
         return $t;
     }
     
     // TOTALE INCLUSO SPEDIZIONE
-    function getTotaleConSpedizione() 
+    public function getTotaleConSpedizione() 
     {
         return ($this->hasCostoSpedizione()) ? ($this->getTotale() + $this->getCostoSpedizione()) : $this->getTotale();
     }
     
-    function getTotaleSenzaIva() 
+    public function getTotaleSenzaIva() 
     {
         $t = 0;
         if(count($this->getProdotti()) > 0) 
@@ -57,7 +40,9 @@ class Model_Ordini_Calcoli_Totali
             foreach ($this->getProdotti() as $idprodotto => $objProd) 
             {
                 if($objProd->isDisponibile())
+                {
                     $t += $objProd->getTotaleSenzaIva();
+                }
             }
         }
         return $t;
@@ -71,20 +56,21 @@ class Model_Ordini_Calcoli_Totali
  * 
  *  Per ora, per non visualizzare decimali, lascio la sommatoria dei qta (quantità ordinata)
  */    
-    function getTotaleColli() {
+    public function getTotaleColli() {
         $c = 0;
         if(count($this->getProdotti()) > 0) {
             foreach ($this->getProdotti() as $idprodotto => $objProd) {
                 if($objProd->isDisponibile())
-                    $c += $objProd->qta;
+                {
+                    $c += $objProd->getQta();
+                }
             }
         }
         return $c;
     }
     
-    function isThereSomeProductsOrdered() {
+    public function isThereSomeProductsOrdered() {
         return (count($this->getTotale()) > 0) ? true : false;
     }
-    
     
 }

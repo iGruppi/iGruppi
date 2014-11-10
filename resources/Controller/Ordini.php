@@ -42,15 +42,14 @@ class Controller_Ordini extends MyFw_Controller {
             foreach($listOrd AS $ordine) 
             {
                 // BUILD Ordine object with a Chain of objects
-                $mooObj = new Model_Ordini_Ordine();
+                $mooObj = new Model_Ordini_Ordine( new Model_AF_OrdineFactory() );
                 //$mooObj->enableDebug();
                 $mooObj->appendDati();
                 $mooObj->appendCategorie();
+                $mooObj->appendStates( Model_Ordini_State_OrderFactory::getOrder($ordine) );
                 
                 // init Dati by stdClass
                 $mooObj->initDati_ByObject($ordine);
-                // ADD StatesOrderFactory to the Chain
-                $mooObj->appendStatesOrderFactory();
                 
                 // init Categorie by IdOrdine
                 $categorie = $cObj->getCategoriesByIdOrdine($mooObj->getIdOrdine());
@@ -144,7 +143,7 @@ class Controller_Ordini extends MyFw_Controller {
         $this->view->prodottiIduser = $cuObj->getProdottiByIduser($this->_iduser);
         
         // ORGANIZE by category and subCat
-        $scoObj = new Model_Prodotti_SubCatOrganizer($listProdOrdered);
+        $scoObj = new Model_Prodotto_SubCatOrganizer($listProdOrdered);
         //Zend_Debug::dump($scoObj);
         $this->view->listProdotti = $scoObj->getListProductsCategorized();
         $this->view->listSubCat = $scoObj->getListCategories();
@@ -152,5 +151,28 @@ class Controller_Ordini extends MyFw_Controller {
         
     }
 
+    
+    function testAction()
+    {
+        
+        Zend_Registry::get("layout")->disableDisplay();
+        
+        $sql = "SELECT cs.idsubcat, cs.descrizione AS categoria_sub, c.idcat, c.descrizione AS categoria, prod.idproduttore, prod.ragsoc AS ragsoc_produttore "
+              ."FROM categorie_sub AS cs "
+              ."LEFT JOIN categorie AS c ON cs.idcat=c.idcat "
+              ."LEFT JOIN produttori AS prod ON cs.idproduttore=prod.idproduttore "
+              ."WHERE 1";
+        $sth = $this->getDB()->prepare($sql);
+        $sth->execute();
+        // set Categorie in Listini object
+        $categorie = $sth->fetchAll(PDO::FETCH_OBJ);
+        $catObj = new Model_Categorie();
+        $catObj->initDatiByObject($categorie);
+        $list = $catObj->getProduttoriList();
+        Zend_Debug::dump( $list ); 
+        //Zend_Debug::dump( $catObj ); 
+        die;
+        
+        
+    }
 }
-?>

@@ -2,8 +2,8 @@
 /**
  * This is __OLD__ USER-ORDINE
  */
-class Model_Builder_Prodotto_Parts_UserOrdine
-    extends Model_Builder_Prodotto_Parts_Ordine
+class Model_Prodotto_Mediator_UserOrdine
+    extends Model_Prodotto_Mediator_Ordine
 {
 
     /**

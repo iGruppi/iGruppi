@@ -10,10 +10,6 @@ class Model_Ordini_Filters {
     private $_Filters = array();
     private $_urlBase = null;
     
-    function __construct($f) {
-        $this->_Filters = $f;
-    }
-    
     function setUrlBase($url) {
         $this->_urlBase = $url;
     }

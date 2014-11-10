@@ -16,16 +16,16 @@
             </thead>
             <tbody>
         <?php foreach ($user["prodotti"] AS $idprodotto => $pObj): ?>
-            <?php if($pObj->isDisponibile()): ?>
+            <?php if( $pObj->isDisponibile()): ?>
                 <tr>
             <?php else: ?>
                 <tr class="danger strike">
             <?php endif; ?>
-                    <td><strong><?php echo $pObj->getQtaReale();?></strong></td>
-                    <td><strong><?php echo $pObj->codice;?></strong></td>
+                    <td><strong><?php echo $pObj->getQtaReale_ByIduser($iduser);?></strong></td>
+                    <td><strong><?php echo $pObj->getCodice();?></strong></td>
                     <td><?php echo $pObj->getDescrizioneCosto();?></td>
-                    <td><?php echo $pObj->descrizione;?></td>
-                    <td class="text-right"><strong><?php echo $this->valuta($pObj->getTotale()); ?></strong></td>
+                    <td><?php echo $pObj->getDescrizioneListino();?></td>
+                    <td class="text-right"><strong><?php echo $this->valuta($pObj->getTotale_ByIduser($iduser)); ?></strong></td>
                 </tr>        
         <?php endforeach; ?>
         <?php if($this->ordCalcObj->hasCostoSpedizione() && $this->ordCalcObj->getTotaleByIduser($iduser)): ?>

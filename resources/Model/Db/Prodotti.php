@@ -79,13 +79,14 @@ class Model_Db_Prodotti extends MyFw_DB_Base {
      * @return array
      */
     function getProdottiByIdOrdine($idordine) {
-        $sql = "SELECT p.*, "
+        $sql = "SELECT p.*, prod.ragsoc AS ragsoc_produttore, "
               ." lp.idlistino, lp.descrizione_listino, lp.costo_listino, lp.note_listino, lp.attivo_listino, "
               ." op.costo_ordine, op.offerta_ordine, op.sconto_ordine, op.disponibile_ordine, "
               ." cs.descrizione AS categoria_sub, c.idcat, c.descrizione AS categoria "
               ." FROM ordini_prodotti AS op "
               ." JOIN listini_prodotti AS lp ON lp.idlistino=op.idlistino AND lp.idprodotto=op.idprodotto "
               ." JOIN prodotti AS p ON lp.idprodotto=p.idprodotto"
+              ." JOIN produttori AS prod ON p.idproduttore=prod.idproduttore "
               ." JOIN categorie_sub AS cs ON p.idsubcat=cs.idsubcat"
               ." JOIN categorie AS c ON cs.idcat=c.idcat "
               ." WHERE op.idordine= :idordine"
@@ -160,7 +161,7 @@ class Model_Db_Prodotti extends MyFw_DB_Base {
         $prodotti = $this->_checkProdotti($p);
         $this->db->beginTransaction();
         foreach ($prodotti AS $prodotto) {
-            $arValues = $prodotto->getListinoValues();
+            $arValues = $prodotto->getOrdineValues();
             $arValues["idordine"] = $prodotto->getIdOrdine();
             $arValues["idlistino"] = $prodotto->getIdListino();
             $arValues["idprodotto"] = $prodotto->getIdProdotto();

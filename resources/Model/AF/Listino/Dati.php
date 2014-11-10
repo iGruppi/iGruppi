@@ -103,7 +103,7 @@ class Model_AF_Listino_Dati extends Model_AF_Dati
      * Save data to DB
      * @return bool
      */    
-    public function saveToDB()
+    public function saveToDB_Dati()
     {
         if($this->isChanged()) {
             $db = Zend_Registry::get("db");
@@ -119,6 +119,8 @@ class Model_AF_Listino_Dati extends Model_AF_Dati
                 $sth = $db->prepare("UPDATE listini SET descrizione= :descrizione, condivisione= :condivisione, last_update=NOW() WHERE idlistino= :idlistino");
                 return $sth->execute(array('idlistino' => $this->getIdListino(), 'descrizione' => $this->getDescrizione(), 'condivisione' => $this->getCondivisione()));
             }
+            // RESET isChanged flag
+            $this->_isChanged = false;
         }
     }
 }

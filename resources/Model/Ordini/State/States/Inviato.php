@@ -13,20 +13,20 @@ class Model_Ordini_State_States_Inviato extends Model_Ordini_State_OrderAbstract
 
     /**
      * Returns the Next state: ARRIVATO
-     * @return Model_Ordini_State_OrderAbstract
+     * @return string
      */
     public function getNextState()
     {
-        return new Model_Ordini_State_States_Arrivato( $this->_ordine );
+        return Model_Ordini_State_States_Arrivato::STATUS_NAME;
     }
     
     /**
      * Returns the Next state: CHIUSO
-     * @return Model_Ordini_State_OrderAbstract
+     * @return string
      */
     public function getPrevState()
     {
-        return new Model_Ordini_State_States_Chiuso( $this->_ordine );
+        return Model_Ordini_State_States_Chiuso::STATUS_NAME;
     }
     
     /**

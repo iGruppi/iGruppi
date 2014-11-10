@@ -114,10 +114,6 @@ abstract class Model_Prodotto_Mediator_AbstractProduct
                 $this->_values[$f] = $v;
                 // notify the Observers
                 $this->notify();
-                // TO DEBUG VALUES...
-//                if($this->getMediator()->getIdProdotto() == 457) {
-//                    echo "$f, $v";die;
-//                }
             }
         }
     }
@@ -136,37 +132,6 @@ abstract class Model_Prodotto_Mediator_AbstractProduct
     {
         return $this->_values;
     }
-
-/* *******************************************
- *  GET Strategy for Costo
- */    
-    
-    /*
-    * Overloading __call
-    * This try to call a method in Costo_ContextStrategy
-    public function __call ( $method, $args )
-    {
-        // controllo esistenza metodo
-        if( method_exists( $this, $method ) )
-        {
-            call_user_func_array(array($this, $method), $args);
-        } else {
-            try {
-                // get StrategyContext
-                $sc = new Model_Prodotto_Costo_ContextStrategy($this);
-                $sc->setContext($this->_context);
-                return $sc->$method($args);
-                
-            } catch (MyFw_Exception $exc) {
-                $exc->displayError();
-            }
-        }
-    }
-    
-       */
- 
-
-    
     
     
     

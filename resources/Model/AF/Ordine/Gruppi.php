@@ -23,7 +23,7 @@ class Model_AF_Ordine_Gruppi extends Model_AF_Gruppi
      * @todo TO IMPLEMENT!
      * 
      */    
-    public function saveToDB()
+    public function saveToDB_Gruppi()
     {
         return false;
         /*

@@ -1,29 +1,29 @@
-<?php if($this->listino->getProdotti()->count() > 0): ?>
+<?php if($this->listino->countProdotti() > 0): ?>
     
     <div class="hint_50" style="margin-top: 20px; margin-bottom: 20px;">
         <div class="alert alert-info" role="alert"><strong id="chk_num_Y">0</strong> su <strong id="chk_num_ALL">0</strong> prodotti selezionati per questo Listino<br />
             <input type="checkbox" id="check_all" onchange="setAllProdotti();"/> Seleziona tutti
         </div>
     </div>
-<?php foreach ($this->listino->getAllCategorie()->getChildren() AS $cat):
-        foreach ($cat->getChildren() AS $subcat): ?>
+<?php foreach ($this->listino->getProdottiWithCategoryArray() AS $cat):
+        foreach ($cat->getSubcat() AS $subcat): ?>
     <fieldset class='border_top'>
         <legend><?php echo $cat->getDescrizione() ." : ". $subcat->getDescrizione(); ?></legend>
 <?php     // get Prodotti List in this Idsubcat
-          foreach ($subcat->getChildren() AS $prodotto): 
-              $pObj = $this->listino->getProdotti()->getProdottoById($prodotto->getId());
+          foreach ($subcat->getProdotti() AS $prodotto): 
+              $pObj = $prodotto->getProdotto(); 
               // Check if prodotto is in LISTINO
               if($pObj->isInListino()):
 ?>
         <p id="row_prod_<?php echo $pObj->getIdProdotto(); ?>" class="hint_50">
             <button type="button" class="btn btn-success btn-xs">Modifica</button>
-            <input type="checkbox" class="checkbox_prodotto" onchange="checkMe(this);" name="prodotti[]" value="<?php echo $pObj->getIdProdotto(); ?>" <?php echo $pObj->getAttivoListino() ? "checked=''" : ""; ?> /> 
+            <input type="checkbox" class="checkbox_prodotto" onchange="checkMe(this);" name="prodotti[]" value="<?php echo $pObj->getIdProdotto(); ?>" <?php echo $this->yesnoToBool($pObj->getAttivoListino()) ? "checked=''" : ""; ?> /> 
             <?php echo $pObj->getDescrizioneListino(); ?>
         </p>
 <?php         else: ?>
         <p class="hint_50 text-danger">
             <button type="button" class="btn btn-danger btn-xs">&nbsp;Importa</button> 
-            <input type="checkbox" disabled="" /> <?php echo $pObj->getDescrizione(); ?>
+            <input type="checkbox" disabled="" /> <?php echo $pObj->getDescrizioneAnagrafica(); ?>
         </p>
 <?php         endif; ?>
 <?php     endforeach; ?>
@@ -39,7 +39,7 @@
 
     // set default numbers values
     var num_checked_Y = 0;
-    var num_checked_ALL = <?php echo $this->listino->getProdotti()->count(); ?>;
+    var num_checked_ALL = <?php echo $this->listino->countProdotti(); ?>;
     
     $(function() {
         // call checkMe for every checkbox

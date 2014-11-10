@@ -86,7 +86,10 @@ class Model_Prodotto_Mediator_Mediator implements Model_Prodotto_Mediator_Mediat
         $this->ordine->setIdListino($id);
     }
     
-    
+    /**
+     * Return array with ALL values of the colleagues
+     * @return array
+     */
     public function getValues()
     {
         return array_merge(
@@ -109,6 +112,92 @@ class Model_Prodotto_Mediator_Mediator implements Model_Prodotto_Mediator_Mediat
         return $this->ordine->getValuesArray();
     }
     
+    
+/* ******************************
+ *  Pattern Strategy for Costo  *
+ */    
+    
+    private $_context = "Anagrafica";
+    
+    const _C_ANAGRAFICA = "Anagrafica";
+    const _C_LISTINO = "Listino";
+    const _C_ORDINE = "Ordine";
+    
+    public function setDefaultStrategyContext_Anagrafica()
+    {
+        $this->_context = $this::_C_ANAGRAFICA;
+    }
+    public function setDefaultStrategyContext_Listino()
+    {
+        $this->_context = $this::_C_LISTINO;
+    }
+    public function setDefaultStrategyContext_Ordine()
+    {
+        $this->_context = $this::_C_ORDINE;
+    }
+    
+    public function getCosto()
+    {
+        return $this->_callStrategyMethod("Costo");
+    }
+    
+    public function getDescrizioneCosto()
+    {
+        return $this->_callStrategyMethod("DescrizioneCosto");
+    }
+    
+    public function getCostoSenzaIva()
+    {
+        return $this->_callStrategyMethod("CostoSenzaIva");
+    }
+    
+    public function getTotaleIva()
+    {
+        return $this->_callStrategyMethod("TotaleIva");
+    }
+    
+    /**
+     * This try to call a method in Costo_ContextStrategy
+     * @param string $method
+     * @param mixed $args
+     * @return mixed
+     */
+    private function _callStrategyMethod( $method )
+    {
+        try {
+            // get Strategy class
+            $obj = $this->_getStrategyClass($method);
+            return $obj->calculate($this);
 
+        } catch (MyFw_Exception $exc) {
+            $exc->displayError();
+        }
+    }
+    
+    /**
+     * GET instance of Strategy Class
+     * @param type $method
+     * @return \className
+     * @throws MyFw_Exception
+     */
+    private function _getStrategyClass($method)
+    {
+        // TRY to create Class name in base a metodo e context
+        try {
+            $className = "Model_Prodotto_Costo_".$method . $this->_context;
+            return new $className();
+        } catch (Exception $ex) {
+            try {
+                // try to get DEFAULT class
+                 $className = "Model_Prodotto_Costo_".$method . "Default";
+                 return new $className();
+            } catch (Exception $ex) {
+                die("The method _getStrategyClass (". $method . " - " . $this->_context . ") NON esiste!");
+            }
+        }
+    }
+    
+    
+    
     
 }

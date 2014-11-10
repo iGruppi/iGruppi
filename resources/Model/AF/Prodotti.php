@@ -7,7 +7,7 @@ abstract class Model_AF_Prodotti extends Model_AF_AbstractHandlerCoR
     /**
      * @var array
      */
-    private $_prodotti = array();
+    protected $_prodotti = array();
     
 
     /**
@@ -21,24 +21,36 @@ abstract class Model_AF_Prodotti extends Model_AF_AbstractHandlerCoR
             foreach ($listProd as $values)
             {
                 // It calls the addProdotto method of the child class
-                $this->addProdotto($values);
+                $this->_addProdotto($values);
             }
         }
     }
-    
+
     /**
-     * called by the superclass for some shared steps
+     * add Prodotto to the list
      * @param stdClass $values
      */
-    protected function addProdotto(stdClass $values) { }
-
+    protected function _addProdotto(stdClass $values)
+    {
+        $prodotto = $this->_buildProdotto();
+        $prodotto->initByObject($values);
+//        Zend_Debug::dump($prodotto);die;
+        if($prodotto->getIdProdotto() > 0) 
+        {
+            // add prodotto to the list
+            $this->_prodotti[$prodotto->getIdProdotto()] = $prodotto;
+            
+        } else {
+            throw new MyFw_Exception("IdProdotto not exists!");
+        }
+    }
     
     
     /**
      * get the number of the products available
      * @return int
      */
-    public function count()
+    public function countProdotti()
     {
         return count($this->_prodotti);
     }
@@ -47,7 +59,7 @@ abstract class Model_AF_Prodotti extends Model_AF_AbstractHandlerCoR
      * return Prodotto in base a $idprodotto
      * 
      * @param mixed $idprodotto
-     * @return mixed (null | Model_Builder_Prodotto_Parts_Product)
+     * @return mixed (null | Model_Prodotto_Mediator_MediatorInterface)
      */
     public function getProdottoById($idprodotto)
     {
@@ -59,22 +71,33 @@ abstract class Model_AF_Prodotti extends Model_AF_AbstractHandlerCoR
     }
 
     /**
-     * used from the parent class to ADD products to the array
-     * It MUST be protected because the parent class has to instantiate the Builder before adding it
-     * @param Model_Builder_Prodotto_Parts_Product $prodotto
-     */
-    protected function _setProdotto(Model_Builder_Prodotto_Parts_Product $prodotto)
-    {
-        $this->_prodotti[$prodotto->getIdProdotto()] = $prodotto;
-    }
-
-    /**
      * get array Products
      * @return array
      */
     public function getProdotti()
     {
         return $this->_prodotti;
+    }
+    
+
+    
+    /**
+     * Save Prodotti to DB
+     * It calls the Observer Singleton for any part
+     * @return void
+     */
+    public function saveToDB_Prodotti()
+    {
+        if($this->countProdotti() > 0)
+        {
+            $prodottiModel = new Model_Db_Prodotti();
+            // Update prodotti table
+            $prodottiModel->updateProdotti(Model_Prodotto_Observer_Anagrafica::getInstance()->getUpdated());
+            // Update listini_prodotti table
+            $prodottiModel->updateProdottiListino(Model_Prodotto_Observer_Listino::getInstance()->getUpdated());
+            // Update ordini_prodotti table
+            $prodottiModel->updateProdottiOrdine(Model_Prodotto_Observer_Ordine::getInstance()->getUpdated());
+        }
     }
     
 }

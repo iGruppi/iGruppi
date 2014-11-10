@@ -4,15 +4,14 @@
  */
 class Model_AF_Ordine_Prodotti extends Model_AF_Prodotti
 {
-    
-    
-    public function addProdotto(stdClass $values)
+    /**
+     * Build the correct Prodotto for this context
+     * @return Model_Prodotto_Mediator_Mediator
+     */
+    protected function _buildProdotto()
     {
-        $director = new Model_Builder_Prodotto_Director();
-        $prodotto = $director->build( new Model_Builder_Prodotto_OrdineProdottoBuilder() );
-        $prodotto->setDataByObject($values);
-        $this->_setProdotto($prodotto);
-    }
-
-    
+        $prodotto = new Model_Prodotto_Mediator_Mediator();
+        $prodotto->setDefaultStrategyContext_Ordine();
+        return $prodotto;
+    }    
 }

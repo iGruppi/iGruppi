@@ -1,20 +1,4 @@
 /* Jx Functions */
-
-    function jx_SelProdottoOrdine(idprodotto) {
-        
-        var idSelected = $('#prod_sel_'+idprodotto);
-        if(idSelected.val() == "S") {
-            $('#img_sel_'+idprodotto).addClass('ok').removeClass('delete');
-            $('#box_'+idprodotto).addClass('box_row_dis');
-            idSelected.val("N");
-            
-        } else {
-            $('#img_sel_'+idprodotto).addClass('delete').removeClass('ok');
-            $('#box_'+idprodotto).removeClass('box_row_dis');
-            idSelected.val("S");
-        }
-        
-    }
     
     function jx_AddSubCategoria(idproduttore) {
         $('#no_subCat').hide();
@@ -73,11 +57,11 @@
 			});
     }
 
-    function jx_OrdineMoveStatus(idordine, newStatus) {
+    function jx_OrdineMoveStatus(idordine, flagMover) {
         $('#a_mso').button('loading');
         $.getJSON(
 			'/gestione-ordini/movestatus/',
-            {idordine: idordine, newStatus: newStatus},
+            {idordine: idordine, flagMover: flagMover},
 			function(data) {
                 $('#ordine_header').html(data.myTpl);
 			});

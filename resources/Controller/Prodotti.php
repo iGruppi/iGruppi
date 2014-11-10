@@ -54,7 +54,7 @@ class Controller_Prodotti extends MyFw_Controller {
         $listProd = $objModel->getProdottiByIdProduttore($this->_produttore->idproduttore);
         
         // BUILD Prodotti Anagrafica object
-        $prodotti = new Model_Prodotti_Anagrafica();
+        $prodotti = new Model_AnagraficaProdotti();
         $prodotti->appendProdotti();
         $prodotti->appendCategorie();
         
@@ -75,14 +75,18 @@ class Controller_Prodotti extends MyFw_Controller {
             $this->redirect("index", "error", array('code' => 401));
         }
         
-        $idprodotto = $this->_prodotto->idprodotto;
         if(is_null($this->_prodotto)) 
         {
             $this->redirect("prodotti", "list");
         }
-
+        
+        // Build Prodotto
+        $prodotto = new Model_Prodotto_Mediator_Mediator();
+        $prodotto->initByObject($this->_prodotto);
+        
+        // init a new form Prodotti
         $form = new Form_Prodotti();
-        $form->setAction("/prodotti/edit/idprodotto/$idprodotto");
+        $form->setAction("/prodotti/edit/idprodotto/" . $prodotto->getIdProdotto());
         // remove useless fields
         $form->removeField("offerta");
         $form->removeField("sconto");
@@ -93,18 +97,21 @@ class Controller_Prodotti extends MyFw_Controller {
              ->setOptions($objCat->convertToSingleArray($objCat->getSubCategoriesByIdproduttore($this->_prodotto->idproduttore), "idsubcat", "descrizione"));
         
         // set array values Udm that need Multiplier
-        $this->view->arValWithMultip = json_encode( Model_Prodotti_UdM::getArWithMultip() );
+        $this->view->arValWithMultip = json_encode( Model_Prodotto_UdM::getArWithMultip() );
         
         if($this->getRequest()->isPost()) {
             $fv = $this->getRequest()->getPost();
             if( $form->isValid($fv) ) {
-
-                $this->getDB()->makeUpdate("prodotti", "idprodotto", $form->getValues());
+                
+                // save Prodotto, after overwriting the fields values with form values
+                $prodotto->initByObject($fv);
+                $this->getDB()->makeUpdate("prodotti", "idprodotto", $prodotto->getAnagraficaValues());
+                
                 // REDIRECT
-                $this->redirect("prodotti", "list", array("idproduttore" => $this->_prodotto->idproduttore, "updated" => $idprodotto));
+                $this->redirect("prodotti", "list", array("idproduttore" => $this->_prodotto->idproduttore, "updated" => $prodotto->getIdProdotto()));
             }
         } else {
-            $form->setValues((array)$this->_prodotto);
+            $form->setValues($prodotto->getValues());
         }
         // Zend_Debug::dump($form); die;
         // set Form in the View
@@ -134,7 +141,7 @@ class Controller_Prodotti extends MyFw_Controller {
         $form->removeField("sconto");
         $form->removeField("note");
         $form->removeField("idprodotto");
-
+        
         // set Categories
         $objCat = new Model_Db_Categorie();
         $form->getField("idsubcat")
@@ -146,8 +153,11 @@ class Controller_Prodotti extends MyFw_Controller {
             $fv = $this->getRequest()->getPost();
             if( $form->isValid($fv) ) 
             {
+                $values = $form->getValues();
+                $values["iduser_creator"] = $this->_iduser;
                 // ADD NEW Prodotto
-                $idprodotto = $this->getDB()->makeInsert("prodotti", $form->getValues());
+                $idprodotto = $this->getDB()->makeInsert("prodotti", $values);
+
                 // REDIRECT to EDIT
                 $this->redirect("prodotti", "edit", array("idprodotto" => $idprodotto));
             }

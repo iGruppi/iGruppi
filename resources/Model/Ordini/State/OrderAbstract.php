@@ -17,7 +17,7 @@ abstract class Model_Ordini_State_OrderAbstract implements Model_Ordini_State_Or
     public function __construct(stdclass $ordine)
     {
         if (empty($ordine)) {
-            throw new \Exception('Order can not be empty!');
+            throw new Exception('Order can not be empty!');
         }
         $this->_ordine = $ordine;
     }    
@@ -47,7 +47,24 @@ abstract class Model_Ordini_State_OrderAbstract implements Model_Ordini_State_Or
     {
         return null;
     }
-
+    
+    /**
+     * @return bool Bool value of moving action to the NEXT STATE
+     */
+    public function moveToNextState()
+    {
+        $mover = new Model_Ordini_State_Mover($this->_ordine);
+        return $mover->moveToStatus($this->getNextState());
+    }
+    
+    /**
+     * @return bool Bool value of moving action to the PREV STATE
+     */
+    public function moveToPrevState()
+    {
+        $mover = new Model_Ordini_State_Mover($this->_ordine);
+        return $mover->moveToStatus($this->getPrevState());
+    }
     
     /**
      *  Verify states

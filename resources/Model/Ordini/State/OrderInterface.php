@@ -12,16 +12,26 @@ interface Model_Ordini_State_OrderInterface
 
     /**
      * Returns the Next state object
-     * @return Model_Ordini_State_OrderAbstract
+     * @return string
      */
     public function getNextState();
     
     /**
      * Returns the Next state object
-     * @return Model_Ordini_State_OrderAbstract
+     * @return string
      */
     public function getPrevState();
-
+    
+    /**
+     * @return bool Bool value of moving action to the NEXT STATE
+     */
+    public function moveToNextState();
+    
+    /**
+     * @return bool Bool value of moving action to the PREV STATE
+     */    
+    public function moveToPrevState();
+    
     /**
      *  Verify states
      * @return bool

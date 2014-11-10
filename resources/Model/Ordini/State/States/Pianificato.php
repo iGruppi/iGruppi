@@ -13,11 +13,11 @@ class Model_Ordini_State_States_Pianificato extends Model_Ordini_State_OrderAbst
 
     /**
      * Returns the Next state: APERTO
-     * @return Model_Ordini_State_OrderAbstract
+     * @return string
      */
     public function getNextState()
     {
-        return new Model_Ordini_State_States_Aperto( $this->_ordine );
+        return Model_Ordini_State_States_Aperto::STATUS_NAME;
     }
     
     /**

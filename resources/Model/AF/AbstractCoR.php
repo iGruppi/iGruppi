@@ -1,11 +1,11 @@
 <?php
 /**
- * This is the Abstract class to implement the Chain of Responsibility
+ * This is the Abstract class and it implements the Chain of Responsibility
  * to manage the Products come from AbstractFactory: 
  *  - Dati
  *  - Prodotti
  *  - Gruppi
- *  - Categorie (this is a Composite pattern in Model/Prodotti/Categorie
+ *  - Categorie (this is a Composite pattern in Model/Prodotti/Categorie)
  *  
  *  It simple tries to call a method requested in all the Chain of objects.
  *  You have to extend this class to create a specific class to manage all datas,
@@ -28,32 +28,32 @@ abstract class Model_AF_AbstractCoR
      * @param object $object one of the Abstract Factory class
      * @return Model_AF_AbstractCoR
      */
-    protected function append($object)
+    protected function append($idObj, $object)
     {
-        $this->chain[] = $object;
+        $this->chain[$idObj] = $object;
         return $this;
     }
     
     public function appendDati()
     {
-        return $this->append( $this->factoryClass->createDati()->setCor($this) );
+        return $this->append("Dati", $this->factoryClass->createDati()->setCor($this) );
     }
     
     public function appendGruppi()
     {
-        return $this->append( $this->factoryClass->createGruppi()->setCor($this) );
+        return $this->append("Gruppi", $this->factoryClass->createGruppi()->setCor($this) );
     }
 
     public function appendProdotti()
     {
-        return $this->append( $this->factoryClass->createProdotti()->setCor($this) );
+        return $this->append("Prodotti", $this->factoryClass->createProdotti()->setCor($this) );
     }
     
     public function appendCategorie()
     {
-        $categorie = new Model_Prodotti_Categorie();
+        $categorie = new Model_Categorie();
         $categorie->setCoR($this);
-        return $this->append( $categorie );
+        return $this->append("Categorie", $categorie );
     }
     
     public function __call($name, $arguments) {
@@ -78,6 +78,28 @@ abstract class Model_AF_AbstractCoR
         } catch (MyFw_Exception $exc) {
             $exc->displayError();
         }
+    }
+    
+    
+    public function saveToDB()
+    {
+        try {
+            if(count($this->chain) > 0)
+            {
+                foreach($this->chain AS $idObj => $object)
+                {
+                    $methodName = "saveToDB_" . $idObj;
+                    if(method_exists($object, $methodName))
+                    {
+                        $object->$methodName();
+                    }
+                }
+                return true;
+            }
+        } catch (MyFw_Exception $exc) {
+            $exc->displayError();
+        }
+        return false;
     }
     
     

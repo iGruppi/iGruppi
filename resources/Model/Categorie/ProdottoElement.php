@@ -22,18 +22,18 @@ class Model_Categorie_ProdottoElement
     
     /**
      * set Prodotto object
-     * @param Model_Builder_Prodotto_Parts_Product $p
+     * @param Model_Prodotto_Mediator_MediatorInterface $p
      * @return void
      */
     
-    public function setProdotto(Model_Builder_Prodotto_Parts_Product $p)
+    public function setProdotto(Model_Prodotto_Mediator_MediatorInterface $p)
     {
         $this->_prodotto = $p;
     }
     
     /**
-     * return the Model_Builder_Prodotto_Parts_Product object
-     * @return Model_Builder_Prodotto_Parts_Product
+     * return the object
+     * @return Model_Prodotto_Mediator_MediatorInterface
      */
     public function getProdotto()
     {

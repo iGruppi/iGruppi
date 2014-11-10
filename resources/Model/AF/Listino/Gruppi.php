@@ -22,7 +22,7 @@ class Model_AF_Listino_Gruppi extends Model_AF_Gruppi
      * Save data to DB
      * @return bool
      */    
-    public function saveToDB()
+    public function saveToDB_Gruppi()
     {
         $db = Zend_Registry::get("db");
         $db->beginTransaction();

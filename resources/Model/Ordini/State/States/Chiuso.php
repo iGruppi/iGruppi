@@ -13,20 +13,20 @@ class Model_Ordini_State_States_Chiuso extends Model_Ordini_State_OrderAbstract
 
     /**
      * Returns the Next state: INVIATO
-     * @return Model_Ordini_State_OrderAbstract
+     * @return string
      */
     public function getNextState()
     {
-        return new Model_Ordini_State_States_Inviato( $this->_ordine );
+        return Model_Ordini_State_States_Inviato::STATUS_NAME;
     }
     
     /**
      * Returns the Next state: APERTO
-     * @return Model_Ordini_State_OrderAbstract
+     * @return string
      */
     public function getPrevState()
     {
-        return new Model_Ordini_State_States_Aperto( $this->_ordine );
+        return Model_Ordini_State_States_Aperto::STATUS_NAME;
     }
     
     /**
@@ -47,6 +47,10 @@ class Model_Ordini_State_States_Chiuso extends Model_Ordini_State_OrderAbstract
         return true; 
     }
     public function canRef_InviaOrdine() 
+    {
+        return true;
+    }
+    public function canRef_ModificaQtaOrdinate() 
     {
         return true;
     }

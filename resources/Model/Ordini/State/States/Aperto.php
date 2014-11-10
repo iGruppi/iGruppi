@@ -13,20 +13,20 @@ class Model_Ordini_State_States_Aperto extends Model_Ordini_State_OrderAbstract
 
     /**
      * Returns the Next state: CHIUSO
-     * @return Model_Ordini_State_OrderAbstract
+     * @return string
      */
     public function getNextState()
     {
-        return new Model_Ordini_State_States_Chiuso( $this->_ordine );
+        return Model_Ordini_State_States_Chiuso::STATUS_NAME;
     }
     
     /**
      * Returns the Next state: PIANIFICATO
-     * @return Model_Ordini_State_OrderAbstract
+     * @return string
      */
     public function getPrevState()
     {
-        return new Model_Ordini_State_States_Pianificato( $this->_ordine );
+        return Model_Ordini_State_States_Pianificato::STATUS_NAME;
     }
     
     /**
@@ -45,11 +45,6 @@ class Model_Ordini_State_States_Aperto extends Model_Ordini_State_OrderAbstract
     public function canRef_ModificaProdotti() 
     { 
         return true; 
-    }
-    // Se il Referente può modificare le Quantità ordinate dagli utenti
-    public function canRef_ModificaQtaOrdinate() 
-    {
-        return true;
     }
     public function canUser_OrderProducts() 
     {

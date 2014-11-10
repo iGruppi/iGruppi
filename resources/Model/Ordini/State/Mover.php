@@ -1,38 +1,36 @@
 <?php
 /**
- * Description of Model_Ordini_Status_Mover
+ * Description of Model_Ordini_State_Mover
  * 
  * @author gullo
  */
-class Model_Ordini_Status_Mover {
+class Model_Ordini_State_Mover {
     
     private $_ordine;
     private $_db;
-    private $_dtNow;
     
     public function __construct($ordine) 
     {
         $this->_ordine = $ordine;
         $this->_db = Zend_Registry::get("db");
-        $this->_dtNow = new Zend_Date();
     }
     
     public function moveToStatus($st)
     {
         switch ($st) {
-            case Model_Ordini_Status::STATUS_CHIUSO:
+            case Model_Ordini_State_States_Chiuso::STATUS_NAME:
                 return $this->moveTo_Chiuso();
 
-            case Model_Ordini_Status::STATUS_INVIATO:
+            case Model_Ordini_State_States_Inviato::STATUS_NAME:
                 return $this->moveTo_Inviato();
 
-            case Model_Ordini_Status::STATUS_ARRIVATO:
+            case Model_Ordini_State_States_Arrivato::STATUS_NAME:
                 return $this->moveTo_Arrivato();
 
-            case Model_Ordini_Status::STATUS_CONSEGNATO:
+            case Model_Ordini_State_States_Consegnato::STATUS_NAME:
                 return $this->moveTo_Consegnato();
 
-            case Model_Ordini_Status::STATUS_ARCHIVIATO:
+            case Model_Ordini_State_States_Archiviato::STATUS_NAME:
                 return $this->moveTo_Archiviato();
         }
         return false;
@@ -46,20 +44,20 @@ class Model_Ordini_Status_Mover {
     
     private function moveTo_Inviato()
     {
-        $sth_update = $this->_db->prepare("UPDATE ordini SET data_inviato= :dtNow, data_arrivato=NULL, data_consegnato=NULL, archiviato='N' WHERE idordine= :idordine");
-        return $sth_update->execute(array('idordine' => $this->_ordine->idordine, 'dtNow' => $this->_dtNow->toString("yyyy-MM-dd HH:mm:ss")));
+        $sth_update = $this->_db->prepare("UPDATE ordini SET data_inviato=NOW(), data_arrivato=NULL, data_consegnato=NULL, archiviato='N' WHERE idordine= :idordine");
+        return $sth_update->execute(array('idordine' => $this->_ordine->idordine));
     }
     
     private function moveTo_Arrivato()
     {
-        $sth_update = $this->_db->prepare("UPDATE ordini SET data_arrivato= :dtNow, data_consegnato=NULL, archiviato='N' WHERE idordine= :idordine");
-        return $sth_update->execute(array('idordine' => $this->_ordine->idordine, 'dtNow' => $this->_dtNow->toString("yyyy-MM-dd HH:mm:ss")));
+        $sth_update = $this->_db->prepare("UPDATE ordini SET data_arrivato=NOW(), data_consegnato=NULL, archiviato='N' WHERE idordine= :idordine");
+        return $sth_update->execute(array('idordine' => $this->_ordine->idordine));
     }
     
     private function moveTo_Consegnato()
     {
-        $sth_update = $this->_db->prepare("UPDATE ordini SET data_consegnato= :dtNow, archiviato='N' WHERE idordine= :idordine");
-        return $sth_update->execute(array('idordine' => $this->_ordine->idordine, 'dtNow' => $this->_dtNow->toString("yyyy-MM-dd HH:mm:ss")));
+        $sth_update = $this->_db->prepare("UPDATE ordini SET data_consegnato=NOW(), archiviato='N' WHERE idordine= :idordine");
+        return $sth_update->execute(array('idordine' => $this->_ordine->idordine));
     }
     
     private function moveTo_Archiviato()

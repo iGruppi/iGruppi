@@ -27,15 +27,16 @@ class Controller_Listini extends MyFw_Controller {
             foreach ($listiniArray as $stdListino) {
                 // creates Listino by Abstract Factory Model_AF_ListinoFactory
                 $mllObj = new Model_Listini_Listino();
+                $mllObj->appendDati();
+                $mllObj->appendCategorie();
                 // init Dati by stdClass
-                $mllObj->setDati($stdListino);
+                $mllObj->initDati_ByObject($stdListino); 
                 
                 // set Categories in Listini object
-                $categorie = $cObj->getCategoriesByIdListino( $mllObj->getDati()->getIdListino() );
+                $categorie = $cObj->getCategoriesByIdListino( $mllObj->getIdListino() );
                 // get CATEGORIE by array 
-                $catObj = new Model_Builder_Categorie();
-                $catObj->initDatiByObject($categorie);
-                $mllObj->setCategorie($catObj);
+                $mllObj->initCategorie_ByObject($categorie);
+                //Zend_Debug::dump($mllObj->getCategorie());die;
                 
                 // check for Referente Listino
                 if( $mllObj->canManageListino() ) {
@@ -78,21 +79,26 @@ class Controller_Listini extends MyFw_Controller {
             // check if values are valid
             if( $form->isValid($fv) ) 
             {   
-                // create NEW Listino
+                // BUILD a new Listino
                 $mllObj = new Model_Listini_Listino();
-                $mllObj->getDati()->setDescrizione($form->getValue("descrizione"));
-                $mllObj->getDati()->setIdProduttore($form->getValue("idproduttore"));
-                $mllObj->getDati()->setCondivisione("PRI"); // Default is Private
-                if( $mllObj->getDati()->saveToDB() ) {
-                    $idlistino = $mllObj->getDati()->getIdListino();
+                $mllObj->appendDati();
+                $mllObj->appendGruppi();
+                
+                // set Dati
+                $mllObj->setDescrizione($form->getValue("descrizione"));
+                $mllObj->setIdProduttore($form->getValue("idproduttore"));
+                $mllObj->setCondivisione("PRI"); // Default is Private
+                if( $mllObj->saveToDB_Dati() ) 
+                {
+                    $idlistino = $mllObj->getIdListino();
                     // create a NEW group
                     $group = new stdClass();
                     $group->id = $idlistino;
                     $group->idgroup_master = $this->_userSessionVal->idgroup;
                     $group->idgroup_slave = $this->_userSessionVal->idgroup;
                     // add my group
-                    $mllObj->getGroups()->addGroup($group);
-                    $resSave = $mllObj->getGroups()->saveToDB();
+                    $mllObj->addGroup($group);
+                    $resSave = $mllObj->saveToDB_Gruppi();
 
                     // REDIRECT to EDIT
                     if($resSave) {
@@ -122,24 +128,26 @@ class Controller_Listini extends MyFw_Controller {
             $this->redirect("index", "error", array('code' => 401));
         }
         
-        // Create Listino Object
+        // Create Listino Chain objects
         $mllObj = new Model_Listini_Listino();
+        $mllObj->appendDati()
+               ->appendGruppi()
+               ->appendProdotti()
+               ->appendCategorie();
+        
         // set DATI in Listino
-        $mllObj->setDati($listino);
+        $mllObj->initDati_ByObject($listino);
         // set GROUPS in Listino
-        $mllObj->setGroups( $lObj->getGroupsByIdlistino($idlistino) )
-               ->setMyIdGroup($this->_userSessionVal->idgroup);
-        //Zend_Debug::dump($mllObj->getGroups());die;
+        $mllObj->initGruppi_ByObject( $lObj->getGroupsByIdlistino($idlistino) );
+        $mllObj->setMyIdGroup($this->_userSessionVal->idgroup);
         // add All PRODOTTI by Listino
         $objModel = new Model_Db_Prodotti();
         $prodotti = $objModel->getProdottiByIdListino($idlistino);
-        $mllObj->setProdotti( $prodotti );
-        
+        $mllObj->initProdotti_ByObject( $prodotti );
+
         // get CATEGORIE by array $prodotti
-        $catObj = new Model_Builder_Categorie();
-        $catObj->initDatiByObject($prodotti);
-        $mllObj->setCategorie($catObj);
-            
+        $mllObj->initCategorie_ByObject($prodotti);
+
         // get elenco All Groups
         $grObj = new Model_Db_Groups();
         $this->view->groups = $groups = $grObj->getAll();
@@ -157,26 +165,24 @@ class Controller_Listini extends MyFw_Controller {
                 $fv["valido_dal"] = $fv["valido_al"] = null;
             }
             // check if values are valid
-            if( $form->isValid($fv) ) 
+            if( $form->isValid($fv) )
             {   
                 // Save DATI
-                $mllObj->getDati()->setDescrizione($form->getValue("descrizione"));
-                $mllObj->getDati()->setCondivisione($form->getValue("condivisione"));
-                $mllObj->getGroups()->getMyGroup()->setValidita($form->getValue("valido_dal"), $form->getValue("valido_al"));
-                $mllObj->getGroups()->getMyGroup()->setVisibile( $form->getValue("visibile") );
+                $mllObj->setDescrizione($form->getValue("descrizione"));
+                $mllObj->setCondivisione($form->getValue("condivisione"));
+                $mllObj->getMyGroup()->setValidita($form->getValue("valido_dal"), $form->getValue("valido_al"));
+                $mllObj->getMyGroup()->setVisibile( $form->getValue("visibile") );
                 
                 // Save GROUPS
                 $groupsToShare = isset($fv["groups"]) ? $fv["groups"] : array();
-                $mllObj->getGroups()->resetGroups($form->getValue("condivisione"), $groupsToShare);
+                $mllObj->resetGroups($form->getValue("condivisione"), $groupsToShare);
                 
                 // Save PRODUCTS
-                /**
-                 * @todo 
-                 */
+                $prodListino = isset($fv["prodotti"]) ? $fv["prodotti"] : array();
+                $mllObj->setAttiviListinoByArray($prodListino);
                 
-//                Zend_Debug::dump($mllObj);die;
                 // SAVE ALL DATA CHANGED TO DB
-                $resSave = $mllObj->save();
+                $resSave = $mllObj->saveToDB();
                 
                 // REDIRECT
                 if($resSave) {
@@ -185,18 +191,17 @@ class Controller_Listini extends MyFw_Controller {
             }
         } else {
             // build array values for form
-            $form->setValues($mllObj->getDati()->getValues());
+            $form->setValues($mllObj->getDatiValues());
             // set some values in the right format
-            $form->setValue("valido_dal", $mllObj->getGroups()->getMyGroup()->getValidita()->getDal("dd/MM/YYYY"));
-            $form->setValue("valido_al", $mllObj->getGroups()->getMyGroup()->getValidita()->getAl("dd/MM/YYYY"));
-            $form->setValue("visibile", $mllObj->getGroups()->getMyGroup()->getVisibile()->getString());
+            $form->setValue("valido_dal", $mllObj->getMyGroup()->getValidita()->getDal(MyFw_Form_Filters_Date::_MYFORMAT_DATE_VIEW));
+            $form->setValue("valido_al", $mllObj->getMyGroup()->getValidita()->getAl(MyFw_Form_Filters_Date::_MYFORMAT_DATE_VIEW));
+            $form->setValue("visibile", $mllObj->getMyGroup()->getVisibile()->getString());
         }
         
         $this->view->listino = $mllObj;
         // set Form in the View
         $this->view->form = $form;
-        $this->view->updated = $this->getParam("updated");   
-        // Zend_Debug::dump($master); die;
+        $this->view->updated = $this->getParam("updated");
     }
     
     function viewAction()

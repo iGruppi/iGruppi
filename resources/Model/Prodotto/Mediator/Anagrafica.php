@@ -43,14 +43,6 @@ class Model_Prodotto_Mediator_Anagrafica
     /**
      * @return string
      */    
-    public function getDescrizioneCosto()
-    {
-        return number_format($this->getCosto(), 2, ",", ".") . " " . $this->getUdmDescrizione();
-    }
-    
-    /**
-     * @return string
-     */    
     public function getDescrizionePezzatura()
     {
         $arUdm = Model_Prodotto_UdM::getArWithMultip();
@@ -144,7 +136,7 @@ class Model_Prodotto_Mediator_Anagrafica
     /**
      * @return string
      */    
-    public function getDescrizione()
+    public function getDescrizioneAnagrafica()
     {
         return $this->_getValue("descrizione");
     }
@@ -160,7 +152,7 @@ class Model_Prodotto_Mediator_Anagrafica
     /**
      * @return float
      */
-    public function getCosto()
+    public function getCostoAnagrafica()
     {
         return $this->_getValue("costo");
     }
@@ -184,7 +176,7 @@ class Model_Prodotto_Mediator_Anagrafica
     /**
      * @return string
      */
-    public function getNote()
+    public function getNoteAnagrafica()
     {
         return $this->_getValue("note");
     }
@@ -192,7 +184,7 @@ class Model_Prodotto_Mediator_Anagrafica
     /**
      * @return bool
      */
-    public function getAttivo()
+    public function getAttivoAnagrafica()
     {
         return $this->_getValue("attivo");
     }

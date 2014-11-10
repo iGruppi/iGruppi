@@ -9,41 +9,23 @@ class Controller_GestioneOrdini extends MyFw_Controller {
     
     private $_userSessionVal;
     private $_iduser;
-    private $_produttore;
-    private $_ordine;
+    private $_idordine;
     
     function _init() {
         $auth = Zend_Auth::getInstance();
         $this->_iduser = $auth->getIdentity()->iduser;
         $this->_userSessionVal = new Zend_Session_Namespace('userSessionVal');
-        
-        // Try to GET Produttore
-        $idproduttore = $this->getParam("idproduttore");
-        if(is_null($idproduttore)) {
-            // Try to GET Ordine
+
+        // Try to GET Ordine if the user try to manage it
+        if( $this->getFrontController()->getAction() != "index" && $this->getFrontController()->getAction() != "new")
+        {
             $idordine = $this->getParam("idordine");
-            if(!is_null($idordine)) {
-                $ordObj = new Model_Db_Ordini();
-                $ordine = $ordObj->getByIdOrdine($idordine);
-                if(!is_null($ordine)) {
-                    $this->_ordine = $this->view->ordine = $ordine;
-                    $this->view->statusObj = new Model_Ordini_Status($ordine);                    
-                    $idproduttore = $ordine->idproduttore;
-                }
+            if(is_null($idordine)) {
+                $this->redirect("index", "error", array('code' => 404));
             }
+            $this->_idordine = $idordine;
         }
-        if(is_null($idproduttore)) {
-            $this->redirect("index", "error", array('code' => 404));
-        }
-        $produttoreObj = new Model_Db_Produttori();
-        $produttore = $produttoreObj->getProduttoreById($idproduttore);
-        $this->_produttore = $this->view->produttore = $produttore;
-        
-        // check REFERENTE, controllo per i furbi (non Referenti)
-        if(!$this->_userSessionVal->refObject->is_Referente($idproduttore)) {
-            $this->redirect("index", "error", array('code' => 404));
-        }
-        
+
         // Get updated if it is set
         $this->view->updated = $this->getParam("updated");        
         
@@ -57,14 +39,13 @@ class Controller_GestioneOrdini extends MyFw_Controller {
         $ordini = array();
         if(count($listOrd) > 0) {
             foreach($listOrd AS $ordine) {
-                $mooObj = new Model_Ordini_Ordine();
-                $mooObj->appendDati();
-                $mooObj->appendCategorie();
-                // init Dati Ordine
-                $mooObj->initDati_ByObject($ordine);
+                $mooObj = new Model_Ordini_Ordine( new Model_AF_OrdineFactory() );
+                $mooObj->appendDati()->initDati_ByObject($ordine);
+                $mooObj->appendStates( Model_Ordini_State_OrderFactory::getOrder($ordine) );
+                
                 // set Categories in Ordine object
                 $categorie = $cObj->getCategoriesByIdOrdine( $mooObj->getIdOrdine() );
-                $mooObj->initCategorie_ByObject($categorie);
+                $mooObj->appendCategorie()->initCategorie_ByObject($categorie);
                 // add Ordine to the list
                 $ordini[] = $mooObj;
             }
@@ -115,25 +96,60 @@ class Controller_GestioneOrdini extends MyFw_Controller {
  *  ACTIONs TO MANAGE a SINGLE ORDER
  * 
  */    
-    function dashboardAction()
+    
+    private function _buildOrdine(Model_AF_AbstractFactory $factoryClass)
     {
-        // Get Log Variazioni
-        $sth = $this->getDB()->prepare("SELECT * FROM ordini_variazioni WHERE idordine= :idordine");
-        $sth->execute(array('idordine' => $this->_ordine->idordine));
-        $this->view->logs = $sth->fetchAll(PDO::FETCH_OBJ);
-        
-        
+        $ordObj = new Model_Db_Ordini();
+        $ordine = $ordObj->getByIdOrdine($this->_idordine);
+        if(!is_null($ordine)) 
+        {
+            // build Ordine
+            $mooObj = new Model_Ordini_Ordine( $factoryClass );
+            // build & init DATI Ordine
+            $mooObj->appendDati()->initDati_ByObject($ordine);
+            // build & init STATE Ordine
+            $mooObj->appendStates( Model_Ordini_State_OrderFactory::getOrder($ordine) );
+
+            // creo elenco prodotti
+            $prodottiModel = new Model_Db_Prodotti();
+            $listProd = $prodottiModel->getProdottiByIdOrdine($this->_idordine);
+
+            // build & init CATEGORIE
+            $mooObj->appendCategorie()->initCategorie_ByObject($listProd);
+
+            // build & init PRODOTTI
+            $mooObj->appendProdotti()->initProdotti_ByObject($listProd);
+            
+            // set Ordine in the View by default
+            $this->view->ordine = $mooObj;
+            
+            return $mooObj;
+        }
+        return null;
     }
     
-    function editAction() {
+    
+    
+    function dashboardAction()
+    {
+        // build Ordine
+        $ordine = $this->_buildOrdine( new Model_AF_OrdineFactory() );
+        
+        // Get Log Variazioni
+        $sth = $this->getDB()->prepare("SELECT * FROM ordini_variazioni WHERE idordine= :idordine");
+        $sth->execute(array('idordine' => $ordine->getIdOrdine()));
+        $this->view->logs = $sth->fetchAll(PDO::FETCH_OBJ);
+    }
+    
+    function editAction() 
+    {
+        // build Ordine
+        $ordine = $this->_buildOrdine( new Model_AF_OrdineFactory() );
 
         $form = new Form_Ordini();
-        $form->setAction("/gestione-ordini/edit/idordine/".$this->_ordine->idordine);
-        $form->setValue("idgroup", $this->_userSessionVal->idgroup);
-        $form->setValue("idproduttore", $this->_produttore->idproduttore);
-        $form->setValue("idordine", $this->_ordine->idordine);
-        // remove useless fields
-        $form->removeField("archiviato");
+        $form->setAction("/gestione-ordini/edit/idordine/".$ordine->getIdOrdine());
+        $form->setValue("idordine", $ordine->getIdOrdine());
+        $form->removeField("condivisione");
 
         if($this->getRequest()->isPost()) {
             
@@ -144,50 +160,74 @@ class Controller_GestioneOrdini extends MyFw_Controller {
                 // ADD Ordine in stato NEW
                 $this->getDB()->makeUpdate("ordini", "idordine", $form->getValues() );
                 // REDIRECT
-                $this->redirect("gestione-ordini", "dashboard", array("idordine" => $this->_ordine->idordine, "updated" => true));
+                $this->redirect("gestione-ordini", "dashboard", array("idordine" => $ordine->getIdOrdine(), "updated" => true));
             }
         } else {
-            // build array values for form
-            $ordVal = clone $this->_ordine;
-            $form->setValues($ordVal);
-            $form->setValue("data_inizio", MyFw_Form_Filters_Date::filter($ordVal->data_inizio, array('date' => array( 'format' => MyFw_Form_Filters_Date::_MYFORMAT_DATETIME_VIEW))));
-            $form->setValue("data_fine", MyFw_Form_Filters_Date::filter($ordVal->data_fine, array('date' => array( 'format' => MyFw_Form_Filters_Date::_MYFORMAT_DATETIME_VIEW))));
+            $form->setValues($ordine->getDatiValues());
+            $form->setValue("data_inizio", $ordine->getDataInizio());
+            $form->setValue("data_fine", $ordine->getDataFine());
 //            Zend_Debug::dump($form->getValues());die;
         }
         
         // set Form in the View
         $this->view->form = $form;
     }
-
-    function prodottiAction() {
+    
+    function sharingAction()
+    {
+        // build Ordine
+        $ordine = $this->_buildOrdine( new Model_AF_OrdineFactory() );
+        // add Gruppi
+        $lObj = new Model_Db_Ordini();
+        $ordine->appendGruppi()->initGruppi_ByObject( $lObj->getGroupsByIdOrdine( $ordine->getIdOrdine()));
+        $ordine->setMyIdGroup($this->_userSessionVal->idgroup);
         
-        $ordObj = new Model_Db_Ordini();
+        // get elenco All Groups
+        $grObj = new Model_Db_Groups();
+        $this->view->groups = $groups = $grObj->getAll();
         
-        // SAVE FORM
-        if($this->getRequest()->isPost()) {
-            
+        // init Listino form
+        $form = new Form_Ordini();
+        $form->setAction("/getsione-ordini/sharing/idordine/" . $ordine->getIdOrdine());
+        $this->view->form = $form;
+    }
+    
+    function prodottiAction() 
+    {
+        // build Ordine
+        $ordine = $this->_buildOrdine( new Model_AF_OrdineFactory() );
+        
+        /* SAVE FORM
+        if($this->getRequest()->isPost()) 
+        {
             // get Post and check if is valid
             $fv = $this->getRequest()->getPost();
             
             $prodotti = isset($fv["prodotti"]) ? $fv["prodotti"] : array();
+            
+//            Model_Prodotto_Observer_Debugger::enable();
+            
             if(count($prodotti) > 0) {
                 // UPDATE products
-                foreach ($prodotti as $idprodotto => &$val) {
-                    $val["idprodotto"] = $idprodotto;
+                foreach ($prodotti as $idprodotto => $val) {
+//                    $val["idprodotto"] = $idprodotto;
                     
-                    // LOG VARIAZIONE PREZZO PRODOTTO
+                    // VARIAZIONE PREZZO PRODOTTO
                     if($val["costo"] != $val["co"] )
                     {
-                        Model_Ordini_Logger::LogVariazionePrezzo($this->_ordine->idordine, $idprodotto, $val["co"], $val["costo"]);
+//                        Model_Ordini_Logger::LogVariazionePrezzo($ordine->getIdOrdine(), $idprodotto, $val["co"], $val["costo"]);
+                        $ordine->getProdottoById($idprodotto)->setCostoOrdine($val["co"]);
                     }
-                    // remove "co" field
-                    unset($val["co"]);
+                    // set Disponibilità
+                    $ordine->getProdottoById($idprodotto)->setDisponibileOrdine($val["disponibile"]);
                 }
-                $updated = $ordObj->updateProdottiForOrdine($this->_ordine->idordine, $prodotti);
+                $updated = $ordine->saveToDB();
+//                $ordObj = new Model_Db_Ordini();
+//                $updated = $ordObj->updateProdottiForOrdine($ordine, $prodotti);
                 if($updated)
                 {
                     // REDIRECT
-                    $this->redirect("gestione-ordini", "prodotti", array("idordine" => $this->_ordine->idordine, "updated" => true));
+                    //$this->redirect("gestione-ordini", "prodotti", array("idordine" => $ordine->getIdOrdine(), "updated" => true));
                 }
             }
         }
@@ -195,52 +235,84 @@ class Controller_GestioneOrdini extends MyFw_Controller {
         // Check for UPDATED flag
         if($this->view->updated)
         {
-            $this->view->updated_msg = "La lista dei prodotti per quest'ordine è stata aggiornata con <strong>successo</strong>!";
+            $this->view->updated_msg = "La lista dei prodotti di quest'ordine è stata aggiornata con <strong>successo</strong>!";
         }
-
-        // creo elenco prodotti (aggiornato dopo eventuale POST)
-        $listProd = $ordObj->getProdottiByIdOrdine($this->_ordine->idordine);
-        $listProdObj = array();
-        if(count($listProd) > 0)
-        {
-            foreach ($listProd as $value)
-            {
-                $listProdObj[$value->idprodotto] = new Model_Ordini_Prodotto($value);
-            }
-        }
-        $this->view->lpObjs = $listProdObj;
+         * 
+         */
+    }
+    
+    function editprodottoAction()
+    {
+        // build Ordine
+        $ordine = $this->_buildOrdine( new Model_AF_OrdineFactory() );
         
-        // Categorie/SubCat array organizer
-        $scoObj = new Model_Prodotti_SubCatOrganizer($listProd);
-        $this->view->listProdotti = $scoObj->getListProductsCategorized();
-        $this->view->listSubCat = $scoObj->getListCategories();
+        // get param IdProdotto and check it if exists!
+        $idprodotto = $this->getParam("idprodotto");
+        
+        // get Prodotto Ordine valeus from DB
+        $prodotto = $ordine->getProdottoById($idprodotto);
+        if(is_null($prodotto))
+        {
+            $this->redirect("gestione-ordini", "prodotti", array("idordine" => $ordine->getIdOrdine()));
+        }
+        
+        $form = new Form_OrdiniProdotti();
+        $form->setAction("/gestione-ordini/editprodotto/idordine/".$ordine->getIdOrdine()."/idprodotto/".$idprodotto);
+        $form->setValue("idordine", $ordine->getIdOrdine());
+        $form->setValue("idlistino", $prodotto->getIdListino());
+        $form->setValue("idprodotto", $idprodotto);
+
+        if($this->getRequest()->isPost()) {
+            
+            // get Post and check if is valid
+            $fv = $this->getRequest()->getPost();
+            if( $form->isValid($fv) ) 
+            {    
+                // ADD Ordine in stato NEW
+                $this->getDB()->makeUpdate("ordini_prodotti", array("idordine","idlistino","idprodotto"), $form->getValues() );
+                // REDIRECT
+                $this->redirect("gestione-ordini", "prodotti", array("idordine" => $ordine->getIdOrdine(), "updated" => true));
+            }
+        } else {
+            $form->setValues($prodotto->getOrdineValues());
+        }
+        
+        // pass prodotto to the View (after modifing it)
+        $this->view->prodotto = $prodotto;
+        
+        // set Form in the View
+        $this->view->form = $form;
     }
     
     function qtaordineAction()
     {
+        // build Ordine
+        $ordine = $this->_buildOrdine( new Model_AF_UserOrdineFactory() );
+        
         // GET PRODUCTS LIST with Qta Ordered
         $ordObj = new Model_Db_Ordini();
-        $listProdOrdered = $ordObj->getProdottiOrdinatiByIdordine($this->_ordine->idordine);
+        $listProdOrdered = $ordObj->getProdottiOrdinatiByIdordine($ordine->getIdOrdine());
         $ordCalcObj = new Model_Ordini_Calcoli_Utenti();
         // SET ORDINE e PRODOTTI
-        $ordCalcObj->setOrdObj($this->_ordine);
-        $ordCalcObj->setProdotti($listProdOrdered);
+        $ordCalcObj->setOrdine($ordine);
+        $ordCalcObj->setProdottiOrdinati($listProdOrdered);
         $this->view->ordCalcObj = $ordCalcObj;
-        $this->view->users = $ordCalcObj->getElencoUtenti();
     }
     
     function getformqtaAction() 
     {
+        // build Ordine
+        $ordine = $this->_buildOrdine( new Model_AF_UserOrdineFactory() );
+        
         $layout = Zend_Registry::get("layout");
         $layout->disableDisplay();
         $this->view->iduser = $iduser = $this->getParam("iduser");
         $this->view->idprodotto = $idprodotto = $this->getParam("idprodotto");
         $this->view->idordine = $idordine = $this->getParam("idordine");
         // GET Prodotto ordinato
-        $mObj = new Model_Db_Ordini();
-        $prodotti = $mObj->getProdottiOrdinatiByIdordine($idordine, $iduser, $idprodotto);
-        if(isset($prodotti[0])) {
-            $pObj = new Model_Ordini_Prodotto($prodotti[0]);
+        $pObj = $ordine->getProdottoById($idprodotto);
+        if(!is_null($pObj)) 
+        {
             $this->view->pObj = $pObj;
             echo json_encode(array('res' => true, 'myTpl' => $this->view->fetch('gestioneordini/qtaordine-row.form.tpl.php')));
         } else {
@@ -252,6 +324,9 @@ class Controller_GestioneOrdini extends MyFw_Controller {
     {
         $layout = Zend_Registry::get("layout");
         $layout->disableDisplay();
+        
+        // build Ordine
+        $ordine = $this->_buildOrdine( new Model_AF_UserOrdineFactory() );
         
         if($this->getRequest()->isPost()) {
             // get Post values
@@ -272,7 +347,7 @@ class Controller_GestioneOrdini extends MyFw_Controller {
                 if(is_array($prodotti) && count($prodotti) > 0)
                 {
                     $ordCalcObj = new Model_Ordini_Calcoli_Utenti();
-                    $ordCalcObj->setOrdObj($this->_ordine);
+                    $ordCalcObj->setOrdObj($ordine);
                     $ordCalcObj->setProdotti($prodotti);
                     $prodObj = $ordCalcObj->getProdottiByIduser($iduser);
                     $newTotale = 0;
@@ -288,20 +363,24 @@ class Controller_GestioneOrdini extends MyFw_Controller {
         echo json_encode(array('res' => false));
     }
     
-    function newprodformAction() {
+    function newprodformAction() 
+    {
         $layout = Zend_Registry::get("layout");
         $layout->disableDisplay();
+
+        // build Ordine
+        $ordine = $this->_buildOrdine( new Model_AF_UserOrdineFactory() );
+                
         $this->view->iduser = $iduser = $this->getParam("iduser");
         $this->view->idordine = $idordine = $this->getParam("idordine");
         
         // GET All products available
-        $ordObj = new Model_Db_Ordini();
-        $listProd = $ordObj->getProdottiByIdOrdine($idordine);
+        $listProd = $ordine->getProdotti();
         $arRes = array();
         if(is_array($listProd) && count($listProd) > 0) {
             foreach($listProd AS $prodotto) 
             {
-                $arRes[] = array('id' => $prodotto->idprodotto, 'label' => $prodotto->descrizione, 'category' => $prodotto->categoria_sub);
+                $arRes[] = array('id' => $prodotto->getIdProdotto(), 'label' => $prodotto->getDescrizioneListino(), 'category' => $prodotto->getSubcategoria());
             }
         }
         $this->view->arRes = json_encode($arRes);
@@ -313,6 +392,9 @@ class Controller_GestioneOrdini extends MyFw_Controller {
     function newprodsaveAction() {
         $layout = Zend_Registry::get("layout");
         $layout->disableDisplay();
+        
+        // build Ordine
+        $ordine = $this->_buildOrdine( new Model_AF_OrdineFactory() );
         
         if($this->getRequest()->isPost()) {
             // get Post values
@@ -327,7 +409,7 @@ class Controller_GestioneOrdini extends MyFw_Controller {
                 $prodotti = $ordObj->getProdottiOrdinatiByIdordine($idordine);
                 if(is_array($prodotti) && count($prodotti) > 0) {
                     $ordCalcObj = new Model_Ordini_Calcoli_Utenti();
-                    $ordCalcObj->setOrdObj($this->_ordine);
+                    $ordCalcObj->setOrdObj($ordine);
                     $ordCalcObj->setProdotti($prodotti);
                     $prodObj = $ordCalcObj->getProdottiByIduser($iduser);
                     if( isset($prodObj[$idprodotto]) ) {
@@ -348,7 +430,10 @@ class Controller_GestioneOrdini extends MyFw_Controller {
         echo json_encode(array('res' => false));
     }
     
-    function dettaglioAction() {
+    function dettaglioAction() 
+    {
+        // build Ordine
+        $ordine = $this->_buildOrdine( new Model_AF_UserOrdineFactory() );
         
         // get View by Tipo
         $tipo = $this->getParam("tipo");
@@ -359,7 +444,7 @@ class Controller_GestioneOrdini extends MyFw_Controller {
         
         // GET PRODUCTS LIST with Qta Ordered
         $ordObj = new Model_Db_Ordini();
-        $listProdOrdered = $ordObj->getProdottiOrdinatiByIdordine($this->_ordine->idordine);
+        $listProdOrdered = $ordObj->getProdottiOrdinatiByIdordine($ordine->getIdOrdine());
         //Zend_Debug::dump( $listProdOrdered ); die;
         $this->view->tipo = $tipo;
         switch ($tipo) 
@@ -377,8 +462,8 @@ class Controller_GestioneOrdini extends MyFw_Controller {
                 break;
         }
         // SET ORDINE e PRODOTTI
-        $ordCalcObj->setOrdObj($this->_ordine);
-        $ordCalcObj->setProdotti($listProdOrdered);
+        $ordCalcObj->setOrdine($ordine);
+        $ordCalcObj->setProdottiOrdinati($listProdOrdered);
         $this->view->ordCalcObj = $ordCalcObj;
     }
     
@@ -391,20 +476,32 @@ class Controller_GestioneOrdini extends MyFw_Controller {
         $layout = Zend_Registry::get("layout");
         $layout->disableDisplay();
         
+        // build Ordine
+        $ordine = $this->_buildOrdine( new Model_AF_UserOrdineFactory() );
+        
         // MOVE order to the newStatus
-        $newStatus = $this->getParam("newStatus");        
-        $moverStatusObj = new Model_Ordini_Status_Mover($this->_ordine);
-        $moved = $moverStatusObj->moveToStatus($newStatus);
-        $result = array('res' => false);
-        if($moved) {
+        $flagMover = $this->getParam("flagMover");
+        if($flagMover == "next") 
+        {
+            $res = $ordine->moveToNextState();
+        } else {
+            $res = $ordine->moveToPrevState();
+        }
+        $result = array('res' => $res);
+        if($res) {
             // GET new ORDER data
             $orderObj = new Model_Db_Ordini();
-            $ordine = $orderObj->getByIdOrdine($this->_ordine->idordine);
+            $ordine = $orderObj->getByIdOrdine($ordine->getIdOrdine());
             if($ordine) {
-                $this->view->ordine = $ordine;
-//                Zend_Debug::dump($this->view->ordine);
-                $this->view->statusObj = new Model_Ordini_Status($ordine);
-//                Zend_Debug::dump($this->view->statusObj);die;
+                // init Dati Ordine
+                // build Ordine
+                $mooObj = new Model_Ordini_Ordine( new Model_AF_OrdineFactory() );
+                $mooObj->appendDati();
+                $mooObj->appendCategorie();
+                $mooObj->appendStates( Model_Ordini_State_OrderFactory::getOrder($ordine) );
+                // init Dati Ordine
+                $mooObj->initDati_ByObject($ordine);
+                $this->view->ordine = $mooObj;
                 $myTpl = $this->view->fetch("gestioneordini/gestione-header.tpl.php");
                 $result = array('res' => true, 'myTpl' => $myTpl);
             }

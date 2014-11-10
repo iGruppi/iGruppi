@@ -50,7 +50,7 @@ class Model_Produttori_Referente {
     
     function canEditProdotti($idproduttore)
     {
-        return $this->is_Referente($idproduttore);
+        return $this->is_GlobalReferente($idproduttore);
     }
     
     function canAddProdotti($idproduttore)

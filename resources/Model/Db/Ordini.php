@@ -56,7 +56,7 @@ class Model_Db_Ordini extends MyFw_DB_Base {
                         break;
 */
                     case "stato":
-                        $sql .= Model_Ordini_Status::getSqlFilterByStato($fValue);
+                        $sql .= $this->getSqlFilterByStato($fValue);
                         break;
 /*                    
                     case "periodo":
@@ -69,6 +69,7 @@ class Model_Db_Ordini extends MyFw_DB_Base {
             }
         }
         $sql .= " ORDER BY o.archiviato, o.data_fine DESC";
+//        echo $sql; die;
         $sth = $this->db->prepare($sql);
 //        Zend_Debug::dump($sth);die;
         $sth->execute($arFilters);
@@ -89,30 +90,34 @@ class Model_Db_Ordini extends MyFw_DB_Base {
     }
     
     
+    function getGroupsByIdOrdine($idordine)
+    {
+        $sql = "SELECT og.*, og.idordine AS id, g_slave.nome AS group_nome, u_slave.iduser AS ref_iduser, u_slave.nome AS ref_nome, u_slave.cognome AS ref_cognome "
+                . " FROM ordini_groups AS og "
+            // JOIN SLAVES
+                . " JOIN groups AS g_slave ON og.idgroup_slave=g_slave.idgroup "
+                . " LEFT JOIN referenti AS ref_slave ON g_slave.idgroup=ref_slave.idgroup "
+                . " LEFT JOIN users AS u_slave ON ref_slave.iduser_ref=u_slave.iduser "
+                . " WHERE og.idordine= :idordine "
+                . " GROUP BY og.idgroup_master, og.idgroup_slave";
+        $sth = $this->db->prepare($sql);
+        $sth->execute(array('idordine' => $idordine));
+        if($sth->rowCount() > 0) {
+            return $sth->fetchAll(PDO::FETCH_OBJ);
+        }
+        return null;        
+    }
+    
+    
 /****************************************************************************************
  *  QUERY x PRODOTTI, CALCOLI e DETTAGLI ORDINE
  * 
  */    
     
-    function getProdottiByIdOrdine($idordine) {
-        // get elenco prodotti disponibile per quest'ordine
-        $sqlp = "SELECT p.*, op.costo AS costo_op, op.sconto, op.offerta, op.disponibile, cs.descrizione AS categoria_sub, c.idcat, c.descrizione AS categoria "
-              ." FROM ordini_prodotti AS op "
-              ." JOIN prodotti AS p ON op.idprodotto=p.idprodotto "
-              ." JOIN categorie_sub AS cs ON p.idsubcat=cs.idsubcat "
-              ." JOIN categorie AS c ON cs.idcat=c.idcat "
-              ." WHERE op.idordine= :idordine"
-              ." ORDER BY c.descrizione, p.codice";
-        $sthp = $this->db->prepare($sqlp);
-        $sthp->execute(array('idordine' => $idordine));        
-        //Zend_Debug::dump($sthp->fetchAll(PDO::FETCH_OBJ));die;
-        return $sthp->fetchAll(PDO::FETCH_OBJ);
-    }    
-    
     function addProdottiToOrdine($idordine, $arVal) {
         $this->db->beginTransaction();
         // prepare SQL INSERT
-        $sth_insert = $this->db->prepare("INSERT INTO ordini_prodotti SET idprodotto= :idprodotto, idordine= :idordine, costo= :costo");
+        $sth_insert = $this->db->prepare("INSERT INTO ordini_prodotti SET idprodotto= :idprodotto, idordine= :idordine, costo_ordine= :costo_ordine");
         foreach($arVal AS &$prodVal) {
             $prodVal["idordine"] = $idordine;
             $res = $sth_insert->execute($prodVal);
@@ -124,12 +129,13 @@ class Model_Db_Ordini extends MyFw_DB_Base {
         return $this->db->commit();
     }
     
-    function updateProdottiForOrdine($idordine, $arVal) {
+    function updateProdottiForOrdine(Model_Ordini_Ordine $ordine, array $arVal) {
         $this->db->beginTransaction();
         // prepare SQL UPDATE
-        $sth_update = $this->db->prepare("UPDATE ordini_prodotti SET costo= :costo, disponibile= :disponibile WHERE idprodotto= :idprodotto AND idordine= :idordine");
+        $sth_update = $this->db->prepare("UPDATE ordini_prodotti SET costo_ordine= :costo_ordine, disponibile_ordine= :disponibile_ordine WHERE idordine= :idordine AND idlistino= :idlistino AND idprodotto= :idprodotto");
         foreach($arVal AS &$prodVal) {
-            $prodVal["idordine"] = $idordine;
+            $prodVal["idordine"] = $ordine->getIdOrdine();
+            $prodVal["idlistino"] = $ordine->getIdListino();
             $res = $sth_update->execute($prodVal);
             if(!$res) {
                 $this->db->rollBack();
@@ -186,35 +192,54 @@ class Model_Db_Ordini extends MyFw_DB_Base {
         return false;
     }
     
-    function getProdottiOrdinatiByIdordine($idordine, $iduser=false, $idprodotto=false) 
+    function getProdottiOrdinatiByIdordine($idordine) 
     {
-        // init array to execute
-        $arExecute = array('idordine' => $idordine);
-        $sqlp = "SELECT p.*, op.costo AS costo_op, op.sconto, op.offerta, op.disponibile, "
-              ." cs.descrizione AS categoria_sub, cs.idsubcat, c.descrizione AS categoria, c.idcat, "
-              ." u.nome, u.cognome, u.email, oup.qta, oup.qta_reale, oup.iduser "
-              ." FROM ordini_prodotti AS op"
-              ." LEFT OUTER JOIN ordini_user_prodotti AS oup ON op.idprodotto=oup.idprodotto AND op.idordine=oup.idordine"
-              ." LEFT OUTER JOIN users AS u ON oup.iduser=u.iduser"
-              ." JOIN prodotti AS p ON op.idprodotto=p.idprodotto "
-              ." JOIN categorie_sub AS cs ON p.idsubcat=cs.idsubcat "
-              ." JOIN categorie AS c ON cs.idcat=c.idcat "
-              ." WHERE op.idordine= :idordine";
-        if($iduser !== false)
-        {
-            $sqlp .= " AND oup.iduser= :iduser";
-            $arExecute["iduser"] = $iduser;
-        }
-        if($idprodotto !== false)
-        {
-            $sqlp .= " AND oup.idprodotto= :idprodotto";
-            $arExecute["idprodotto"] = $idprodotto;
-        }
-        $sqlp .= " ORDER BY p.codice";
+        $sqlp = "SELECT * FROM ordini_user_prodotti WHERE idordine= :idordine";
         $sthp = $this->db->prepare($sqlp);
-        $sthp->execute($arExecute);
+        $sthp->execute(array('idordine' => $idordine));
         $prodotti = $sthp->fetchAll(PDO::FETCH_OBJ);
         return $prodotti;
+    }
+    
+    
+    
+    /**
+     *  SQL FILTERS for STATO
+     *  Logica per filtrare lo Stato di un ordine
+     */
+    private function getSqlFilterByStato($stato) {
+        switch ($stato)
+        {
+            case Model_Ordini_State_States_Pianificato::STATUS_NAME:
+                $sql = " AND NOW() < o.data_inizio AND o.archiviato='N'";
+                break;
+
+            case Model_Ordini_State_States_Aperto::STATUS_NAME:
+                $sql = " AND NOW() >= o.data_inizio AND NOW() <= o.data_fine AND o.archiviato='N'";
+                break;
+            
+            case Model_Ordini_State_States_Chiuso::STATUS_NAME:
+                $sql = " AND NOW() > o.data_fine AND ( NOW() <= o.data_inviato OR o.data_inviato IS NULL) AND o.archiviato='N'";
+                break;
+
+            case Model_Ordini_State_States_Inviato::STATUS_NAME:
+                $sql = " AND NOW() > o.data_inviato AND ( NOW() <= o.data_arrivato OR o.data_arrivato IS NULL) AND o.archiviato='N'";
+                break;
+
+            case Model_Ordini_State_States_Arrivato::STATUS_NAME:
+                $sql = " AND NOW() > o.data_arrivato AND ( NOW() <= o.data_consegnato OR o.data_consegnato IS NULL) AND o.archiviato='N'";
+                break;
+
+            case Model_Ordini_State_States_Consegnato::STATUS_NAME:
+                $sql = " AND NOW() > o.data_consegnato AND o.archiviato='N'";
+                break;
+
+            case Model_Ordini_State_States_Archiviato::STATUS_NAME:
+                $sql = " AND o.archiviato='S' ";
+                break;
+
+        }
+        return $sql; 
     }
     
     

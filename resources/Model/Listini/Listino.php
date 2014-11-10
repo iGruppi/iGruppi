@@ -41,20 +41,25 @@ class Model_Listini_Listino extends Model_AF_AbstractCoR
     {
         return $this->isOwner();
     }
-
     
-/*  **************************************************************************
- *  SAVE CHANGES TO DB
- */    
     
-    public function save()
+    
+    public function setAttiviListinoByArray(array $arIds)
     {
-        // save Dati
-        $res1 = $this->getDati()->saveToDB();
-        // save Groups
-        $res2 = $this->getGroups()->saveToDB();
-        
-        return ($res1 && $res2);
+        if($this->countProdotti() > 0) {
+            foreach ($this->getProdotti() AS $idprodotto => $prodotto) {
+                if(in_array($idprodotto, $arIds)) {
+                    // DISPONIBILE!
+                    $prodotto->setAttivoListino(true);
+                } else {
+                    // NON disponibile!
+                    $prodotto->setAttivoListino(false);
+                }
+            }
+        }
     }
+    
+    
+    
     
 }

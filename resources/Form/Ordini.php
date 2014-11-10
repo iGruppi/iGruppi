@@ -19,7 +19,9 @@ class Form_Ordini extends MyFw_Form {
                     'required'  => true,
                     'readonly'  => true,
                     'placeholder' => 'Seleziona data...',
-                    'filters'   => array('date' => array( 'format' => MyFw_Form_Filters_Date::_MYFORMAT_DATETIME_DB) )
+                    'filters'   => array('date' => array(
+                                            'format'    => MyFw_Form_Filters_Date::_MYFORMAT_DATETIME_DB)
+                                        )
         ));
         $this->addField('data_fine', array(
                     'label'     => 'Data chiusura',
@@ -27,12 +29,9 @@ class Form_Ordini extends MyFw_Form {
                     'required'  => true,
                     'readonly'  => true,
                     'placeholder' => 'Seleziona data...',
-                    'filters'   => array('date' => array( 'format' => MyFw_Form_Filters_Date::_MYFORMAT_DATETIME_DB) )            
-        ));
-        $this->addField('archiviato', array(
-                    'label'     => 'Archiviato',
-                    'type'      => 'select',
-                    'options'   => array('S'=>'SI','N'=>'NO')
+                    'filters'   => array('date' => array(
+                                            'format'    => MyFw_Form_Filters_Date::_MYFORMAT_DATETIME_DB)
+                                        )
         ));
         $this->addField('costo_spedizione', array(
                     'label'     => 'Costo spedizione',
@@ -46,11 +45,17 @@ class Form_Ordini extends MyFw_Form {
                     'rows'      => 10,
                     'cols'      => 60,
         ));
+        
+        $this->addField('condivisione', array(
+                        'label'     => 'Condivisione',
+                        'type'      => 'select',
+                        'options'   => array('PUB'=>'Pubblico','SHA'=>'Condiviso','PRI'=>'Privato')
+            ));
+        
+        
 
     # HIDDEN FIELDS
         $this->addField('idordine', array( 'type' => 'hidden' ));
-        $this->addField('idgroup', array( 'type' => 'hidden' ));
-        $this->addField('idproduttore', array( 'type' => 'hidden' ));
         
     }
     

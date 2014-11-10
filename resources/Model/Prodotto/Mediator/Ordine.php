@@ -37,7 +37,7 @@ class Model_Prodotto_Mediator_Ordine
      * @return bool
      */    
     public function isDisponibile() {
-        return $this->getDisponibileOrdine();
+        return ($this->getDisponibileOrdine() == "S") ? true : false;
     }
 
     

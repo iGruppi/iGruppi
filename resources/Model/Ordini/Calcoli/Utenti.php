@@ -6,7 +6,7 @@
  * @author gullo
  */
 class Model_Ordini_Calcoli_Utenti 
-    extends Model_Ordini_Ordine {
+    extends Model_Ordini_Calcoli_AbstractCalcoli {
     
     private $_arProdUtenti = null;
     private $spedObj = null;
@@ -27,7 +27,9 @@ class Model_Ordini_Calcoli_Utenti
         if(!is_null($arProd) && count($arProd) > 0) {
             foreach ($arProd as $idprodotto => $objProd) {
                 if($objProd->isDisponibile())
-                    $t += $objProd->getTotale();
+                {
+                    $t += $objProd->getTotale_ByIduser($iduser);
+                }
             }
         }
         return $t;
@@ -78,29 +80,35 @@ class Model_Ordini_Calcoli_Utenti
  * Private Misc, init settings
  */
 
-    private function _getArProdottiUtenti() {
-        if(is_null($this->_arProdUtenti)) 
+    private function _getArProdottiUtenti() 
+    {
+        if(is_null($this->_arProdUtenti))
         {
-            if(count($this->_arProdOriginal) > 0) 
+            // get ELENCO users del Gruppo
+            $usersValues = $this->_getArUsersValues();
+            // start to smazzulate prodotti...
+            if(count($this->getProdotti()) > 0) 
             {
-                // Create instance Model_Ordini_Prodotto for any Product
-                foreach ($this->_arProdOriginal as $value) 
+                foreach ($this->getProdotti() as $prodotto) 
                 {
-                    $iduser = $value->iduser;
-                    if( !is_null($iduser) ) 
+                    $users = $prodotto->getUsers();
+                    if(count($users) > 0)
                     {
-                        if(!isset($this->_arProdUtenti[$iduser])) 
+                        foreach($users AS $iduser)
                         {
-                            $this->_arProdUtenti[$iduser] = array(
-                                'nome'    => $value->nome,
-                                'cognome' => $value->cognome,
-                                'email'   => $value->email
-                            );
-                        }
-                        // set Products
-                        $idprodotto = $value->idprodotto;
-                        if(!isset($this->_arProdUtenti[$idprodotto])) {
-                            $this->_arProdUtenti[$iduser]["prodotti"][$idprodotto] = new Model_Ordini_Prodotto($value);
+                            if(!isset($this->_arProdUtenti[$iduser])) 
+                            {
+                                $this->_arProdUtenti[$iduser] = array(
+                                    'nome'    => $usersValues[$iduser]->nome,
+                                    'cognome' => $usersValues[$iduser]->cognome,
+                                    'email'   => $usersValues[$iduser]->email
+                                );
+                            }
+                            // set Products
+                            $idprodotto = $prodotto->getIdProdotto();
+                            if(!isset($this->_arProdUtenti[$idprodotto])) {
+                                $this->_arProdUtenti[$iduser]["prodotti"][$idprodotto] = $prodotto;
+                            }
                         }
                     }
                 }
@@ -109,6 +117,5 @@ class Model_Ordini_Calcoli_Utenti
 //        Zend_Debug::dump($this->_arProdUtenti);die;
         return $this->_arProdUtenti;
     }    
-    
     
 }

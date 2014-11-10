@@ -11,23 +11,26 @@
 <?php endif; ?>
 
       
-<?php if($this->prodotti->count() > 0): 
-    foreach ($this->prodotti->getCategorie()->getChildren() AS $cat): ?>
+<?php 
+$categorie = $this->prodotti->getProdottiWithCategoryArray();
+if(count($categorie) > 0): 
+    foreach ($categorie AS $cat): 
+?>
     <span id="cat_<?php echo $cat->getId(); ?>" style="visibility: hidden;"><?php echo $cat->getDescrizione(); ?></span>
-<?php foreach ($cat->getChildren() AS $subcat):
+<?php foreach ($cat->getSubcat() AS $subcat):
         // create Sub Cat Title
         echo $this->partial('prodotti/subcat-title.tpl.php', array('cat' => $cat, 'subcat' => $subcat));
         // get Prodotti List in this Subcat
-        foreach ($subcat->getProdotti() AS $idprodotto): 
-        $pObj = $this->prodotti->getProdottoById($idprodotto);
+        foreach ($subcat->getProdotti() AS $prodotto): 
+            $pObj = $prodotto->getProdotto(); 
 ?>
       <div class="row row-myig" id="prod_<?php echo $pObj->getIdProdotto();?>">
         <div class="col-md-10">
-            <h3 class="no-margin"><?php echo $pObj->getDescrizione();?></h3>
+            <h3 class="no-margin"><?php echo $pObj->getDescrizioneAnagrafica();?></h3>
             <p>
                 Codice: <strong><?php echo $pObj->getCodice(); ?></strong><br />
             <?php echo $this->partial('prodotti/price-box.tpl.php', array('prodotto' => $pObj)); ?>
-            <?php if(!$pObj->getAttivo()): ?>
+            <?php if(!$pObj->getAttivoAnagrafica()): ?>
                 <strong class="alert_red">Disabilitato</strong> (Non viene inserito quando crei un nuovo ordine)
             <?php endif; ?>
             </p>
@@ -53,7 +56,7 @@
       <br />
       <br />
 <?php endif; ?>
-      <?php echo $this->partial('prodotti/subcat-navigation.tpl.php', array('categorie' => $this->prodotti->getCategorie())); ?>
+      <?php echo $this->partial('prodotti/subcat-navigation.tpl.php', array('categorie' => $categorie )); ?>
     </div>
   </div>
 </div>

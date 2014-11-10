@@ -1,4 +1,4 @@
-<h2>Gestione Ordini per <strong><?php echo $this->produttore->ragsoc; ?></strong></h2>
+<h2>Gestione Ordini</h2>
 
 <div class="row">
   <div class="col-md-8">
@@ -10,9 +10,9 @@
     </div>
 <?php endif; ?>
       
-<?php if(count($this->list) > 0): ?>
-    <?php foreach ($this->list as $key => $ordine): ?>
-      <div id="ordine_<?php echo $ordine->idordine;?>">
+<?php if(count($this->ordini) > 0): ?>
+    <?php foreach ($this->ordini as $key => $ordine): ?>
+      <div id="ordine_<?php echo $ordine->getIdOrdine();?>">
       <?php echo $this->partial('gestioneordini/index-ordine.tpl.php', array('ordine' => $ordine)); ?>
       </div>
     <?php endforeach; ?>
@@ -22,6 +22,6 @@
   </div>
   <div class="col-md-1">&nbsp;</div>
   <div class="col-md-3">
-      <a class="btn btn-default btn-mylg" href="/gestione-ordini/new/idproduttore/<?php echo $this->produttore->idproduttore;?>"><span class="glyphicon glyphicon-plus"></span> Nuovo ordine</a>
+      <a class="btn btn-default btn-mylg" href="/gestione-ordini/new"><span class="glyphicon glyphicon-plus"></span> Nuovo ordine</a>
   </div>    
 </div>

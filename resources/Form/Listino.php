@@ -16,7 +16,7 @@ class Form_Listino extends MyFw_Form {
         
         $this->addField('descrizione', array(
                         'label'     => 'Descrizione',
-                        'size'      => 50,
+                        'size'      => 45,
                         'maxlength' => 100,
                         'required'  => true
             ));

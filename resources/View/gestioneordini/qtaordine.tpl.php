@@ -3,11 +3,18 @@
 </div>
 
 <div class="row">
-<?php if($this->statusObj->canRef_ModificaQtaOrdinate()): ?>
+<?php if($this->ordine->canRef_ModificaQtaOrdinate()): ?>
     <div class="col-md-8">
     <h3 class="big-margin-top">Quantità ordinate per utente</h3>
-    <?php if($this->ordCalcObj->getProdottiUtenti() > 0): ?>
-        <?php foreach ($this->ordCalcObj->getProdottiUtenti() AS $iduser => $user): ?>
+    <?php if($this->ordCalcObj->getProdottiUtenti() > 0): 
+            $users = array();
+            foreach ($this->ordCalcObj->getProdottiUtenti() AS $iduser => $user): 
+                // create array of Users
+                if(!in_array($iduser, $users))
+                {
+                    $users[] = $iduser;
+                }
+            ?>
             <h3 id="user_<?php echo $iduser; ?>" class="big-margin-top"><strong><?php echo $user["nome"] . " " . $user["cognome"]; ?></strong></h3>
             <table class="table table-condensed">
                 <thead>
@@ -20,7 +27,7 @@
                 </thead>
                 <tbody>
             <?php foreach ($user["prodotti"] AS $idprodotto => $pObj):
-                    echo $this->partial('gestioneordini/qtaordine-row.tpl.php', array('pObj' => $pObj, 'idordine' => $this->ordCalcObj->getIdOrdine(), 'iduser' => $iduser, 'idprodotto' => $idprodotto));
+                    echo $this->partial('gestioneordini/qtaordine-row.tpl.php', array('pObj' => $pObj, 'idordine' => $this->ordine->getIdOrdine(), 'iduser' => $iduser, 'idprodotto' => $idprodotto));
                   endforeach; ?>
                     <tr id="tr_last_<?php echo $iduser; ?>" style="display: none;"><td colspan="4"></td></tr>
             <?php if($this->ordCalcObj->hasCostoSpedizione() && $this->ordCalcObj->getTotaleByIduser($iduser)): ?>
@@ -37,7 +44,7 @@
                     </tr>
                     <tr>
                         <td colspan="4" id="td_add_<?php echo $iduser; ?>">
-                            <a href="javascript:void(0);" onclick="jx_ReferenteAddNewProd(<?php echo $iduser; ?>,<?php echo $this->ordCalcObj->getIdOrdine(); ?>)" class="btn btn-success"><span class="glyphicon glyphicon-plus"></span> Aggiungi</a>
+                            <a href="javascript:void(0);" onclick="jx_ReferenteAddNewProd(<?php echo $iduser; ?>,<?php echo $this->ordine->getIdOrdine(); ?>)" class="btn btn-success"><span class="glyphicon glyphicon-plus"></span> Aggiungi</a>
                             <div id="div_add_<?php echo $iduser; ?>" style="padding: 5px; display: none;"></div>
                         </td>
                     </tr>
@@ -51,13 +58,15 @@
     </div>
     <div class="col-md-4 col-right">
         <div class="bs-sidebar" data-spy="affix" data-offset-top="176" data-offset-bottom="150" role="complementary">
-    <?php if(count($this->users) > 0): ?>
+    <?php if(count($users) > 0): ?>
         <ul class="nav bs-sidenav">
             <li><a href="javascript: void(0);" onclick="$('html,body').animate({scrollTop: $('#wrap').offset().top});" class="text-right"><small>Top <span class="glyphicon glyphicon-circle-arrow-up"></span></small></a></li>
 
-        <?php foreach ($this->users as $iduser => $userVal): ?>
+        <?php foreach ($users as $iduser): 
+                $userVal = $this->ordCalcObj->getDatiUtenteById($iduser);
+            ?>
             <li>
-              <a class="restricted" href="#user_<?php echo $iduser; ?>"><?php echo $userVal["nome"] . " " . $userVal["cognome"]; ?></a>
+              <a class="restricted" href="#user_<?php echo $iduser; ?>"><?php echo $userVal->nome . " " . $userVal->cognome; ?></a>
             </li>    
         <?php endforeach; ?>
         </ul>
@@ -85,7 +94,7 @@
 <?php else: ?>
     <div class="col-md-8">
     <h3 class="big-margin-top">Quantità ordinate per utente</h3>
-        <p>Non è possibile modificare le quantità ordinate perchè l'ordine è in stato: <span class="<?php echo $this->statusObj->getStatusCSSClass(); ?>"><?php echo $this->statusObj->getStatus(); ?></span></p>
+        <p>Non è possibile modificare le quantità ordinate perchè l'ordine è in stato: <span class="<?php echo $this->ordine->getStatusCSSClass(); ?>"><?php echo $this->ordine->getStateName(); ?></span></p>
     </div>
 <?php endif; ?>
 </div>

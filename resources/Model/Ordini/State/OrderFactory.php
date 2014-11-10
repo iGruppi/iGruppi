@@ -6,7 +6,7 @@ class Model_Ordini_State_OrderFactory
 {
     private function __construct()
     {
-        throw new \Exception('Can not instance the OrderFactory class!');
+        throw new Exception('Can not instance the OrderFactory class!');
     }
     
     
