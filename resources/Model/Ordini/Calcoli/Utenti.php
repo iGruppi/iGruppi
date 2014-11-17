@@ -99,7 +99,7 @@ class Model_Ordini_Calcoli_Utenti
                         }
                         // set Products
                         $idprodotto = $value->idprodotto;
-                        if(!isset($this->_arProdUtenti[$idprodotto])) {
+                        if(!isset($this->_arProdUtenti[$iduser]["prodotti"][$idprodotto])) {
                             $this->_arProdUtenti[$iduser]["prodotti"][$idprodotto] = new Model_Ordini_Prodotto($value);
                         }
                     }
