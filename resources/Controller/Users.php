@@ -10,6 +10,11 @@ class Controller_Users extends MyFw_Controller {
         $auth = Zend_Auth::getInstance();
         $this->_iduser = $auth->getIdentity()->iduser;
         $this->_userSessionVal = new Zend_Session_Namespace('userSessionVal');
+        
+        // Check Permission to modify User
+        if(!$this->_userSessionVal->aclUserObject->canModifyUser()) {
+            $this->redirect("gruppo", "iscritti");
+        }
     }
 
     

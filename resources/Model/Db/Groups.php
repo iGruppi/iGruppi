@@ -38,16 +38,5 @@ class Model_Db_Groups extends MyFw_DB_Base {
         }
         return null;
     }
-    
-    function getArFoundersId($idgroup) {
-        $founders = array();
-        $ugObj = $this->getGroupFoundersById($idgroup);
-        if(count($ugObj) > 0) {
-            foreach($ugObj AS $ugVal) {
-                $founders[] = $ugVal["iduser"];
-            }
-        }
-        return $founders;
-    }
      
 }

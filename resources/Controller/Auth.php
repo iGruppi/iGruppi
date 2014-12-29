@@ -53,6 +53,10 @@ class Controller_Auth extends MyFw_Controller {
                         $refObj = new Model_Produttori_Referente($uObj->getGlobalRefByIduser($row->iduser), $uObj->getRefByIduserAndIdgroup($row->iduser, $row->idgroup));
                         $userSessionVal->refObject = $refObj;
                         
+                        // set ACL User in session
+                        $aclUserObj = new Model_AclUser($row->fondatore, $row->contabile);
+                        $userSessionVal->aclUserObject = $aclUserObj;
+                        
                         // redirect HTTP_REFERER if it comes from a different URI
                         if(strpos($_SERVER["HTTP_REFERER"], "auth/login") === false)
                         {
