@@ -5,28 +5,31 @@
             <input type="checkbox" id="check_all" onchange="setAllProdotti();"/> Seleziona tutti
         </div>
     </div>
-<?php foreach ($this->listino->getProdottiWithCategoryArray() AS $cat):
+<?php 
+    $availableProducts = 0;
+    foreach ($this->listino->getProdottiWithCategoryArray() AS $cat):
         foreach ($cat->getSubcat() AS $subcat): ?>
     <fieldset class='border_top'>
         <legend><?php echo $cat->getDescrizione() ." : ". $subcat->getDescrizione(); ?></legend>
+        <dl class="hint_50">
 <?php     // get Prodotti List in this Idsubcat
           foreach ($subcat->getProdotti() AS $prodotto): 
               $pObj = $prodotto->getProdotto(); 
               // Check if prodotto is in LISTINO
               if($pObj->isInListino()):
+                  $availableProducts++;
 ?>
-        <p id="row_prod_<?php echo $pObj->getIdProdotto(); ?>" class="hint_50">
-            <button type="button" class="btn btn-success btn-xs">Modifica</button>
-            <input type="checkbox" class="checkbox_prodotto" onchange="checkMe(this);" name="prodotti[]" value="<?php echo $pObj->getIdProdotto(); ?>" <?php echo $this->yesnoToBool($pObj->getAttivoListino()) ? "checked=''" : ""; ?> /> 
-            <?php echo $pObj->getDescrizioneListino(); ?>
-        </p>
-<?php         else: ?>
-        <p class="hint_50 text-danger">
-            <button type="button" class="btn btn-danger btn-xs">&nbsp;Importa</button> 
-            <input type="checkbox" disabled="" /> <?php echo $pObj->getDescrizioneAnagrafica(); ?>
-        </p>
+            <dt><input type="checkbox" id="chk_prod_<?php echo $pObj->getIdProdotto(); ?>" class="checkbox_prodotto" onchange="checkMe(<?php echo $pObj->getIdProdotto(); ?>);" name="prodotti[<?php echo $pObj->getIdProdotto(); ?>][attivo]" value="S" <?php echo $this->yesnoToBool($pObj->getAttivoListino()) ? "checked=''" : ""; ?> /> <?php echo $pObj->getDescrizioneListino(); ?></dt>
+            <dd>
+                <input type="input" class="is_Number" required size="5" name="prodotti[<?php echo $pObj->getIdProdotto(); ?>][costo]" value="<?php echo $pObj->getCosto(); ?>" onkeyup="this.formatNumber()" /> <?php echo $pObj->getUdmDescrizione();?>
+            <?php if($pObj->hasPezzatura()): ?>
+                <small>Taglio/Pezzatura: <strong><?php echo $pObj->getDescrizionePezzatura(); ?></strong></small>
+            <?php endif; ?>
+                </td>
+            </dd>                    
 <?php         endif; ?>
 <?php     endforeach; ?>
+        </dl>        
     </fieldset>
 <?php   endforeach; ?>
 <?php endforeach; ?>
@@ -39,7 +42,7 @@
 
     // set default numbers values
     var num_checked_Y = 0;
-    var num_checked_ALL = <?php echo $this->listino->countProdotti(); ?>;
+    var num_checked_ALL = <?php echo $availableProducts; ?>;
     
     $(function() {
         // call checkMe for every checkbox
@@ -60,14 +63,15 @@
         resetCheckNumbers();
     }
     
-    function checkMe_ChangeClass(chk)
+    function checkMe_ChangeClass(idprodotto)
     {
-        $('#row_prod_' + $(chk).val()).toggleClass('text-muted', !$(chk).is(':checked'));
+        $('#row_prod_' + idprodotto).toggleClass('danger', !$('#chk_prod_' + idprodotto).is(':checked'));
     }
     
-    function checkMe(chk)
+    function checkMe(idprodotto)
     {
-        checkMe_ChangeClass(chk);
+        var chk = '#chk_prod_' + idprodotto;
+        checkMe_ChangeClass(idprodotto);
         if($(chk).is(':checked')) {
             num_checked_Y++;
         } else {

@@ -3,7 +3,7 @@
 
 <form id="prodform" action="<?php echo $this->form->getAction(); ?>" method="post" class="f1n120">
 <div class="row">
-  <div class="col-md-8">
+  <div class="col-md-9">
 
 <?php if($this->updated): ?>
     <div class="alert alert-success alert-dismissable">
@@ -17,8 +17,12 @@
           <li class="active"><a href="#dati" data-toggle="tab">Dati listino</a></li>
           <li><a href="#sharing" data-toggle="tab">Condivisione</a></li>
           <li><a href="#prodotti" data-toggle="tab">Prodotti</a></li>
+    <?php 
+        $outOfListino = $this->listino->countOutOfListino();
+        if($outOfListino): ?>
+          <li><a href="#new-prodotti" data-toggle="tab">Nuovi Prodotti <span class="badge"><?php echo $outOfListino; ?></span></a></li>
         </ul>
-
+    <?php endif; ?>
         <div class="tab-content">
           <div class="tab-pane active" id="dati">
               <?php include $this->template('listini/edit.dati.tpl.php'); ?>
@@ -29,31 +33,18 @@
           <div class="tab-pane" id="prodotti">
               <?php echo $this->partial('listini/edit.prodotti.tpl.php', array('listino' => $this->listino)); ?>
           </div>
+    <?php if($outOfListino): ?>
+          <div class="tab-pane" id="new-prodotti">
+              <?php echo $this->partial('listini/edit.new-prodotti.tpl.php', array('listino' => $this->listino)); ?>
+          </div>
+    <?php endif; ?>
         </div>
 
         <?php echo $this->form->renderField('idproduttore'); ?>
         <?php echo $this->form->renderField('idlistino'); ?>
   </div>
-  <div class="col-md-3 col-md-offset-1">
-    <div class="row row-margin-bottom">
-        <div class="col-xs-12 col-sm-12 col-md-12">
-            <button type="submit" class="btn btn-success btn-mylg">SALVA</button>
-        </div>
-    </div>      
-    <?php 
-        $outOfListino = $this->listino->countOutOfListino();
-        if($outOfListino): ?>
-    <div class="row row-margin-bottom">
-        <div class="col-xs-12 col-sm-12 col-md-12">
-            <div class="alert alert-info alert-dismissible" role="alert">
-              <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-              Attenzione!<br />
-              <a href="#prodotti" data-toggle="tab"><?php echo $outOfListino; ?> nuovi Prodotti</a><br /> 
-              <small>non presenti in Listino</small>
-            </div>
-        </div>
-    </div>      
-    <?php endif; ?>
+  <div class="col-md-2 col-md-offset-1">
+    <button type="submit" class="btn btn-success btn-mylg">SALVA</button>
   </div>
 </div>
 </form>

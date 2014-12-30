@@ -112,42 +112,50 @@ class Controller_Ordini extends MyFw_Controller {
         
         // INIT Ordine
         $ordine = $ordObj->getByIdOrdine($idordine);
-        
         // Validate ORDINE for this GROUP
-        if(is_null($ordine) || $ordine->idgroup != $this->_userSessionVal->idgroup) 
+        /**
+         *  @todo
+         * Qui mancano sicuramente i controlli per verificare se può o meno aprire quest'ordine!
+         */
+        if(is_null($ordine)) 
         {
             $this->redirect("ordini");
         }
-        $this->view->ordine = $ordine;
-        // Check ORDINE Status (can Order Products?)
-        $statusObj = new Model_Ordini_Status($ordine);
-        if(!$statusObj->canUser_OrderProducts()) 
-        {
-            $this->redirect("ordini");
-        }
-        $this->view->statusObj = $statusObj;
         
-        // GET PRODUTTORE
-        $produttoreObj = new Model_Db_Produttori();
-        $produttore = $produttoreObj->getProduttoreById($ordine->idproduttore);
-        $this->view->produttore = $produttore;
+        // build Ordine
+        $mooObj = new Model_Ordini_Ordine( new Model_AF_UserOrdineFactory() );
+        // build & init DATI Ordine
+        $mooObj->appendDati()->initDati_ByObject($ordine);
+        // build & init STATE Ordine
+        $mooObj->appendStates( Model_Ordini_State_OrderFactory::getOrder($ordine) );
+
+        // creo elenco prodotti
+        $prodottiModel = new Model_Db_Prodotti();
+        $listProd = $prodottiModel->getProdottiByIdOrdine($idordine);
+
+        // build & init CATEGORIE
+        $mooObj->appendCategorie()->initCategorie_ByObject($listProd);
+
+        // build & init PRODOTTI
+        $mooObj->appendProdotti()->initProdotti_ByObject($listProd);
+
+        // set Ordine in the View by default
+        $this->view->ordine = $mooObj;
+        
+        // Check ORDINE Status (can Order Products?)
+        if(!$mooObj->canUser_OrderProducts()) 
+        {
+            $this->redirect("ordini");
+        }
         
         // GET PRODUCTS LIST with Qta Ordered
-        $listProdOrdered = $ordObj->getProdottiOrdinatiByIdordine($idordine);
-        
-        // init Calcoli Utente class
-        $cuObj = new Model_Ordini_Calcoli_Utenti();
-        $cuObj->setOrdObj($ordine);
-        $cuObj->setProdotti($listProdOrdered);
-        $this->view->cuObj = $cuObj;
-        $this->view->prodottiIduser = $cuObj->getProdottiByIduser($this->_iduser);
-        
-        // ORGANIZE by category and subCat
-        $scoObj = new Model_Prodotto_SubCatOrganizer($listProdOrdered);
-        //Zend_Debug::dump($scoObj);
-        $this->view->listProdotti = $scoObj->getListProductsCategorized();
-        $this->view->listSubCat = $scoObj->getListCategories();
-        
+        $listProdOrdered = $ordObj->getProdottiOrdinatiByIdordine($mooObj->getIdOrdine());
+
+        // SET ORDINE e PRODOTTI
+        $ordCalcObj = new Model_Ordini_Calcoli_Utenti();
+        $ordCalcObj->setOrdine($mooObj);
+        $ordCalcObj->setProdottiOrdinati($listProdOrdered);
+        $this->view->ordCalcObj = $ordCalcObj;
         
     }
 
