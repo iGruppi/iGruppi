@@ -138,4 +138,12 @@ class Model_Prodotti_Prodotto {
         }
     }
     
+    public function __set($property, $value) {
+        if( isset($this->_arVal->$property)) {
+            $this->_arVal->$property = $value;
+        } else {
+            throw new Exception("Impossibile leggere la proprieta: $property");
+        }
+    }
+    
 }

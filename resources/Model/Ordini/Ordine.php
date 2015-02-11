@@ -29,6 +29,7 @@ class Model_Ordini_Ordine {
                 if(!isset($this->_arProd[$value->idprodotto])) {
                     $prObj = new Model_Ordini_Prodotto($value);
                     $prObj->setQtaReale(0);
+                    $prObj->setQtaOrdinata(0);
                     $this->_arProd[$value->idprodotto] = $prObj;
                 }
             }

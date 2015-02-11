@@ -66,6 +66,18 @@ class Model_Ordini_Prodotto
         return ((int)$this->qta > 0) ? (int)$this->qta : 0;
     }
     
+    function setQtaOrdinata($qta) {
+        $this->qta = (int)$qta;
+    }
+    
+    function addQtaOrdinata($qta) {
+        if($this->getQtaOrdinata() > 0) {
+            $this->qta += (int)$qta;
+        } else {
+            $this->setQtaOrdinata($qta);
+        }
+    }
+    
 /************************************************************
  * Products ORDINATI methods
  */

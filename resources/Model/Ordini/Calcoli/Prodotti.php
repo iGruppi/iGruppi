@@ -50,12 +50,14 @@ class Model_Ordini_Calcoli_Prodotti
                         $this->_arProdProdotti[$idprodotto]["prodotto"] = new Model_Ordini_Prodotto($value);
                     } else {
                         // update Totale Prodotto
-                        $this->_arProdProdotti[$idprodotto]["prodotto"]->addQtaReale($value->qta);
+                        $this->_arProdProdotti[$idprodotto]["prodotto"]->addQtaReale($value->qta_reale);
+                        $this->_arProdProdotti[$idprodotto]["prodotto"]->addQtaOrdinata($value->qta);
                     }
                     $this->_arProdProdotti[$idprodotto]["utenti"][$value->iduser] = array( 
                         'nome'    => $value->nome, 
                         'cognome' => $value->cognome,
                         'qta'     => $value->qta,
+                        'qta_reale'=> $value->qta_reale
                     );
                 }
             }

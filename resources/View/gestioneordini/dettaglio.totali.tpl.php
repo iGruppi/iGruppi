@@ -5,7 +5,7 @@
     <table class="table table-condensed">
         <thead>
           <tr>
-            <th>Quantità</th>
+            <th>Qta/QtaReale</th>
             <th>Codice</th>
             <th>Prezzo unitario</th>
             <th>Descrizione</th>
@@ -15,12 +15,13 @@
         </thead>
         <tbody>
     <?php foreach ($this->ordCalcObj->getProdotti() as $idprodotto => $pObj): ?>
+       <?php if($pObj->getQtaReale() > 0): ?>
             <?php if($pObj->isDisponibile()): ?>
                 <tr>
             <?php else: ?>
                 <tr class="danger strike">
             <?php endif; ?>
-                <td><strong><?php echo $pObj->getQtaReale();?></strong></td>
+                <td><strong><?php echo $pObj->getQtaOrdinata();?> / <?php echo $pObj->getQtaReale();?></strong></td>
                 <td><strong><?php echo $pObj->codice;?></strong></td>
                 <td><?php echo $pObj->getDescrizionePrezzo();?></td>
                 <td><?php echo $pObj->descrizione;?></td>
@@ -33,6 +34,7 @@
                 </td>
                 <td class="text-right"><strong><?php echo $this->valuta($pObj->getTotale()); ?></strong></td>
             </tr>
+        <?php endif; ?>
     <?php endforeach; ?>
         
         </tbody>

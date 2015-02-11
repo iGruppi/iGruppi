@@ -7,7 +7,7 @@
         <table class="table table-condensed">
             <thead>
               <tr>
-                <th>Quantità</th>
+                <th>Qta/QtaReale</th>
                 <th>Codice</th>
                 <th>Prezzo unitario</th>
                 <th>Descrizione</th>
@@ -21,7 +21,7 @@
             <?php else: ?>
                 <tr class="danger strike">
             <?php endif; ?>
-                    <td><strong><?php echo $pObj->getQtaReale();?></strong></td>
+                    <td><strong><?php echo $pObj->getQtaOrdinata();?> / <?php echo $pObj->getQtaReale();?></strong></td>
                     <td><strong><?php echo $pObj->codice;?></strong></td>
                     <td><?php echo $pObj->getDescrizionePrezzo();?></td>
                     <td><?php echo $pObj->descrizione;?></td>
