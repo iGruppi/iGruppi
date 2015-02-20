@@ -3,7 +3,7 @@
 
 <form id="prodform" action="<?php echo $this->form->getAction(); ?>" method="post" class="f1n120">
 <div class="row">
-  <div class="col-md-9">
+  <div class="col-md-12">
 
 <?php if($this->updated): ?>
     <div class="alert alert-success alert-dismissable">
@@ -11,8 +11,8 @@
       Listino aggiornato con <strong>successo</strong>!
     </div>
 <?php endif; ?>
-
-
+        <button type="submit" class="btn btn-success btn-mylg">SALVA</button>
+      
         <ul class="nav nav-tabs" id="myTab">
           <li class="active"><a href="#dati" data-toggle="tab">Dati listino</a></li>
           <li><a href="#sharing" data-toggle="tab">Condivisione</a></li>
@@ -21,8 +21,9 @@
         $outOfListino = $this->listino->countOutOfListino();
         if($outOfListino): ?>
           <li><a href="#new-prodotti" data-toggle="tab">Nuovi Prodotti <span class="badge"><?php echo $outOfListino; ?></span></a></li>
-        </ul>
     <?php endif; ?>
+        </ul>
+      
         <div class="tab-content">
           <div class="tab-pane active" id="dati">
               <?php include $this->template('listini/edit.dati.tpl.php'); ?>
@@ -42,9 +43,6 @@
 
         <?php echo $this->form->renderField('idproduttore'); ?>
         <?php echo $this->form->renderField('idlistino'); ?>
-  </div>
-  <div class="col-md-2 col-md-offset-1">
-    <button type="submit" class="btn btn-success btn-mylg">SALVA</button>
   </div>
 </div>
 </form>

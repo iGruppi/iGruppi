@@ -20,6 +20,10 @@
     <link rel="stylesheet" href="/datetimepicker/jquery.datetimepicker.css" type="text/css" />
     <!-- Moment -->
     <script type="text/javascript" language="JavaScript" src="/moment/moment.js"></script>
+    <!-- handsontable -->
+    <script src="/handsontable/handsontable.full.js"></script>
+    <script src="/handsontable/de-de.js"></script>
+    <link rel="stylesheet" media="screen" href="/handsontable/handsontable.full.css">
     
     <!-- Personalized CSS and JS -->
     <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css" />
