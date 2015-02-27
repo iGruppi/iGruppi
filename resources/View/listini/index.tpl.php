@@ -1,6 +1,6 @@
 <h2>Listini</h2>
 
-<div class="row">
+<div class="row" id="listini">
   <div class="col-md-8">
       
 <?php if(count($this->listini) > 0): ?>
@@ -11,7 +11,9 @@
             <h3 class="no-margin <?php echo ($lObj->canManageListino()) ? "green" : "text-dark"; ?>"><?php echo $lObj->getDescrizione();?></h3>
         </div>
         <div class="col-md-8">
-            <p>Produttore: <strong><?php echo $lObj->getProduttoreName(); ?></strong></p>
+            <p>Produttore: <strong><?php echo $lObj->getProduttoreName(); ?></strong><br />
+                Creato da <a href="mailto: <?php echo $lObj->getReferente_Email(); ?>"><?php echo $lObj->getReferente_Nome(); ?></a> (<?php echo $lObj->getMasterGroup()->getGroupName(); ?>)
+            </p>
             <h4><span class="text-muted">Prodotti:</span> <?php 
                 $categorie = $lObj->getListaDescrizioniCategorie();
                 echo $this->arrayToString($categorie); 
@@ -31,7 +33,23 @@
 <?php endif; ?>
       
   </div>
-  <div class="col-md-3 col-md-offset-1">
-      <a class="btn btn-default btn-mylg" href="/listini/add"><span class="glyphicon glyphicon-plus"></span> Nuovo listino</a>
+  <div class="col-md-3 col-md-offset-1 leftbar">
+        <a class="btn btn-default btn-mylg" href="/listini/add"><span class="glyphicon glyphicon-plus"></span> Nuovo listino</a>
+        <div class="panel-group" id="accordion">
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h4 class="panel-title">
+                <a class="accordion-toggle" data-toggle="collapse" href="#collapseOne"><span class="glyphicon glyphicon-filter"></span> Filtra listini</a>
+              </h4>
+            </div>
+            <div id="collapseOne" class="panel-collapse collapse in">
+              <div class="panel-body">
+                <a <?php if($this->filter == "PRI"){ echo 'class="selected"'; } ?> href="/listini/index/filter/PRI">Listini privati</a>
+                <a <?php if($this->filter == "SHA"){ echo 'class="selected"'; } ?> href="/listini/index/filter/SHA">Listini condivisi</a>
+                <a <?php if($this->filter == "PUB"){ echo 'class="selected"'; } ?> href="/listini/index/filter/PUB">Listini pubblici</a>
+              </div>
+            </div>
+          </div>
+        </div>
   </div>
 </div>

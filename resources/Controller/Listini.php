@@ -18,17 +18,25 @@ class Controller_Listini extends MyFw_Controller {
 
     function indexAction() 
     {
+        $filter = $this->getParam("filter");
+        if(is_null($filter)) 
+        {
+            $filter = "PRI"; // DEFAULT value
+        }
+        $this->view->filter = $filter;
+        
         // get Elenco Listini per Gruppo
         $lObj = new Model_Db_Listini();
         $cObj = new Model_Db_Categorie();
-        $listiniArray = $lObj->getListiniByIdgroup($this->_userSessionVal->idgroup);
+        $listiniArray = $lObj->getListiniByIdgroup($this->_userSessionVal->idgroup, $filter);
         $listini = array();
         if(!is_null($listiniArray)) {
             foreach ($listiniArray as $stdListino) {
                 // creates Listino by Abstract Factory Model_AF_ListinoFactory
                 $mllObj = new Model_Listini_Listino();
-                $mllObj->appendDati();
-                $mllObj->appendCategorie();
+                $mllObj->appendDati()
+                       ->appendGruppi()              
+                       ->appendCategorie();
                 // init Dati by stdClass
                 $mllObj->initDati_ByObject($stdListino); 
                 
@@ -36,7 +44,10 @@ class Controller_Listini extends MyFw_Controller {
                 $categorie = $cObj->getCategoriesByIdListino( $mllObj->getIdListino() );
                 // get CATEGORIE by array 
                 $mllObj->initCategorie_ByObject($categorie);
-                //Zend_Debug::dump($mllObj->getCategorie());die;
+                
+                // set GROUPS in Listino
+                $mllObj->initGruppi_ByObject( $lObj->getGroupsByIdlistino( $mllObj->getIdListino() ) );
+                $mllObj->setMyIdGroup($this->_userSessionVal->idgroup);
                 
                 // check for Referente Listino
                 if( $mllObj->canManageListino() ) {
@@ -48,7 +59,7 @@ class Controller_Listini extends MyFw_Controller {
         }
         
         $this->view->listini = $listini;
-        //Zend_Debug::dump($listini);
+        //Zend_Debug::dump($listini);die;
     }
     
     function addAction()
@@ -176,10 +187,6 @@ class Controller_Listini extends MyFw_Controller {
                 // Save GROUPS
                 $groupsToShare = isset($fv["groups"]) ? $fv["groups"] : array();
                 $mllObj->resetGroups($form->getValue("condivisione"), $groupsToShare);
-                
-                // Save PRODUCTS
-                $prodListino = isset($fv["prodotti"]) ? $fv["prodotti"] : array();
-                $mllObj->setAttiviListinoByArray($prodListino);
                 
                 // SAVE ALL DATA CHANGED TO DB
                 $resSave = $mllObj->saveToDB();

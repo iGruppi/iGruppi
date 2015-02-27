@@ -22,6 +22,11 @@ abstract class Model_AF_Gruppi extends Model_AF_AbstractHandlerCoR
         $this->_mygroup = $idgroup;
     }
     
+    /**
+     * Return My ID Group
+     * @return int
+     * @throws MyFw_Exception
+     */
     public function getMyIdGroup()
     {
         if( is_null($this->_mygroup) ) {
@@ -30,6 +35,10 @@ abstract class Model_AF_Gruppi extends Model_AF_AbstractHandlerCoR
         return $this->_mygroup;
     }
     
+    /**
+     * Return MY Group object
+     * @return null|Model_Builder_GroupSharing_Parts_Group
+     */    
     public function getMyGroup()
     {
         return $this->getGroupByIdGroup($this->getMyIdGroup());
@@ -56,7 +65,8 @@ abstract class Model_AF_Gruppi extends Model_AF_AbstractHandlerCoR
 
 
     /**
-     * @return null
+     * Return the Master Group
+     * @return null|Model_Builder_GroupSharing_Parts_Group
      * @throws MyFw_Exception
      */
     public function getMasterGroup()
@@ -68,6 +78,11 @@ abstract class Model_AF_Gruppi extends Model_AF_AbstractHandlerCoR
         return $this->getGroupByIdGroup($this->_idgroup_master);
     }
     
+    /**
+     * Return a Group object by idgroup
+     * @param type $idgroup
+     * @return null|Model_Builder_GroupSharing_Parts_Group
+     */
     public function getGroupByIdGroup($idgroup)
     {
         if( isset($this->_groups[$idgroup])) {
@@ -76,6 +91,10 @@ abstract class Model_AF_Gruppi extends Model_AF_AbstractHandlerCoR
         return null;
     }
     
+    /**
+     * Return the array of all groups
+     * @return array
+     */
     protected function getAllGroups()
     {
         return $this->_groups;

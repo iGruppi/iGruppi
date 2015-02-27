@@ -1,17 +1,22 @@
-<h2>Modifica Listino <strong><?php echo $this->listino->getDescrizione(); ?></strong></h2>
-<h3>Produttore: <strong><?php echo $this->listino->getProduttoreName(); ?></strong></h3>
+<form id="edit_listino_form" action="<?php echo $this->form->getAction(); ?>" method="post" class="f1n120">
 
-<form id="prodform" action="<?php echo $this->form->getAction(); ?>" method="post" class="f1n120">
-<div class="row">
-  <div class="col-md-12">
+    <div class="pull-right">
+        <button type="submit" class="btn btn-success btn-mylg">SALVA</button>
+    </div>
+
+
+    <h2 class="titolo">Modifica Listino <strong><?php echo $this->listino->getDescrizione(); ?></strong></h2>
+    <h3 class="subtitolo">Produttore: <strong><?php echo $this->listino->getProduttoreName(); ?></strong></h3>
+
+    <div class="row">
+      <div class="col-md-12">
 
 <?php if($this->updated): ?>
-    <div class="alert alert-success alert-dismissable">
-      <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-      Listino aggiornato con <strong>successo</strong>!
-    </div>
+        <div class="alert alert-success alert-dismissable">
+          <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+          Listino aggiornato con <strong>successo</strong>!
+        </div>
 <?php endif; ?>
-        <button type="submit" class="btn btn-success btn-mylg">SALVA</button>
       
         <ul class="nav nav-tabs" id="myTab">
           <li class="active"><a href="#dati" data-toggle="tab">Dati listino</a></li>

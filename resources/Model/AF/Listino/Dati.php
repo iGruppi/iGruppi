@@ -59,6 +59,25 @@ class Model_AF_Listino_Dati extends Model_AF_Dati
         return $this->getValue("condivisione");
     }
     
+    /**
+     * Return NOME/COGNOME Referente produttore
+     * @return string
+     */
+    public function getReferente_Nome()
+    {
+        return $this->getValue("nome")." ".$this->getValue("cognome");
+    }
+    
+    /**
+     * Return EMAIL Referente produttore
+     * @return string
+     */
+    public function getReferente_Email()
+    {
+        return $this->getValue("email");
+    }
+    
+    
 /***************************
  *  SET METHODS
  */    

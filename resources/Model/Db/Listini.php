@@ -21,16 +21,35 @@ class Model_Db_Listini extends MyFw_DB_Base {
         return $sth->fetch(PDO::FETCH_OBJ);
     }
     
-    function getListiniByIdgroup($idgroup)
+    function getListiniByIdgroup($idgroup, $condivisione = null)
     {
-        $sql = "SELECT l.*, p.ragsoc "
+        $sql = "SELECT l.*, p.ragsoc, u.iduser, u.nome, u.cognome, u.email "
                 . " FROM listini AS l "
-                . " LEFT JOIN produttori AS p ON l.idproduttore=p.idproduttore "
-                . " LEFT JOIN listini_groups AS gl ON l.idlistino=gl.idlistino "
-                . " WHERE l.condivisione='PUB' " // Tutti i gruppi vedono i Listini pubblici
-                . " OR gl.idgroup_slave= :idgroup";
+                . " JOIN produttori AS p ON l.idproduttore=p.idproduttore "
+                . " JOIN listini_groups AS lg ON l.idlistino=lg.idlistino "
+                . " JOIN referenti AS ref ON ref.idproduttore=l.idproduttore AND ref.idgroup= lg.idgroup_master"
+                . " JOIN users AS u ON ref.iduser_ref=u.iduser"
+                . " WHERE 1 ";
+        $params = array();
+        if(!is_null($condivisione))
+        {
+            switch ($condivisione) {
+                case "PUB":
+                    $sql .= " AND l.condivisione='PUB' ";
+                    break;
+                case "SHA":
+                    $sql .= " AND l.condivisione='SHA' AND lg.idgroup_slave= :idgroup";
+                    $params = array('idgroup' => $idgroup);
+                    break;
+                default:
+                case "PRI":
+                    $sql .= " AND l.condivisione='PRI' AND lg.idgroup_slave= :idgroup";
+                    $params = array('idgroup' => $idgroup);
+                    break;
+            }
+        }
         $sth = $this->db->prepare($sql);
-        $sth->execute(array('idgroup' => $idgroup));
+        $sth->execute($params);
         if($sth->rowCount() > 0) {
             return $sth->fetchAll(PDO::FETCH_OBJ);
         }

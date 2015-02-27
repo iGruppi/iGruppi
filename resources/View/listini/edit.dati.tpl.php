@@ -1,7 +1,10 @@
     <fieldset>
-        <?php echo $this->form->renderField('descrizione'); ?>
+        <?php if($this->listino->canEditName()): ?>
+            <?php echo $this->form->renderField('descrizione'); ?>        
+        <?php endif; ?>
         <?php echo $this->form->renderField('visibile'); ?>
     </fieldset>        
+    <?php if($this->listino->canSetValidita()): ?>
     <fieldset id="fs_validita" class="border_top">
         <legend>Validità</legend>
         <label for="validita">Validità:</label>
@@ -15,4 +18,4 @@
             <?php echo $this->form->renderField('valido_al'); ?>
         </div>
     </fieldset>        
-
+    <?php endif; ?>

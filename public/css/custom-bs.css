@@ -140,6 +140,17 @@ h1 strong, h2 strong, h3 strong, h4 strong, h5 strong, h6 strong {color: #090; f
 .totale h2 { margin-top: 10px; }
 .totale h4 { margin-bottom: 15px; }
 
+
+/* LISTINI */
+#listini .leftbar .btn { margin-bottom: 20px; display: block; text-align: left; }
+#listini .panel-body a.selected { color: #666; border: 1px solid #eee; }
+#listini .panel-body a.selected:hover { color: #999; background-color: #fff; }
+
+
+#edit_listino_form h2.titolo { margin-bottom: 0; }
+#edit_listino_form h3.subtitolo { margin-top: 0; margin-bottom: 30px; }
+
+
 /*
  * Side navigation ORDINI
  * Scrollspy and affixed enhanced navigation to highlight sections and secondary sections
@@ -311,8 +322,10 @@ h1 strong, h2 strong, h3 strong, h4 strong, h5 strong, h6 strong {color: #090; f
  * Some specific styles to optimize Handsontable grids.
  */
 
-#grid-prodotti { font-size: 14px; }
-
+#grid-prodotti { font-size: 14px; margin-top: 20px; }
+.handsontable .currentRow {
+  background-color: #BCF1BE;
+}
 
 
 /*

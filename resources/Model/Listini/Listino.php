@@ -21,17 +21,6 @@ class Model_Listini_Listino extends Model_AF_AbstractCoR
  *  PERMISSION
  */    
     
-    private function isReferenteProduttore()
-    {
-        $userSessionVal = new Zend_Session_Namespace('userSessionVal');
-        return $userSessionVal->refObject->is_Referente($this->getIdProduttore());
-    }
-    
-    private function isOwner()
-    {
-        return ($this->getMyIdGroup() == $this->getMasterGroup()->getIdGroup());
-    }
-    
     public function canManageListino()
     {
         return $this->isReferenteProduttore();
@@ -42,24 +31,37 @@ class Model_Listini_Listino extends Model_AF_AbstractCoR
         return $this->isOwner();
     }
     
-    
-    
-    public function setAttiviListinoByArray(array $arIds)
+    public function canEditName()
     {
-        if($this->countProdotti() > 0) {
-            foreach ($this->getProdotti() AS $idprodotto => $prodotto) {
-                if(in_array($idprodotto, $arIds)) {
-                    // DISPONIBILE!
-                    $prodotto->setAttivoListino(true);
-                } else {
-                    // NON disponibile!
-                    $prodotto->setAttivoListino(false);
-                }
-            }
-        }
+        return $this->isOwner();   
+    }
+    
+    public function canSetValidita()
+    {
+        return $this->isOwner();   
+    }
+    
+    public function canUpdatePrezzi()
+    {
+        return $this->isOwner();
     }
     
     
+    
+/*  **************************************************************************
+ *  MISC
+ *****************************************************************************/    
+
+    private function isReferenteProduttore()
+    {
+        $userSessionVal = new Zend_Session_Namespace('userSessionVal');
+        return $userSessionVal->refObject->is_Referente($this->getIdProduttore());
+    }
+    
+    private function isOwner()
+    {
+        return ($this->getMyIdGroup() == $this->getMasterGroup()->getIdGroup());
+    }
     
     
 }

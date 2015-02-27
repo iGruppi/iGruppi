@@ -1,10 +1,11 @@
 <?php if($this->listino->countProdotti() > 0): ?>
     
-    <div class="hint_50" style="margin-top: 20px; margin-bottom: 20px;">
-        <div class="alert alert-info" role="alert"><strong id="chk_num_Y">0</strong> su <strong id="chk_num_ALL">0</strong> prodotti selezionati per questo Listino<br />
-            <input type="checkbox" id="check_all" onchange="setAllProdotti();"/> Seleziona tutti
+    <div class="row">
+        <div class="col-md-6">
+           ......
         </div>
     </div>
+
     <div id="grid-prodotti" class="handsontable"></div>
         
 <?php 
@@ -24,9 +25,10 @@
                     $availableProducts++;
                     $arProductsGrid[] = array(
                         'idproduct'     => $pObj->getIdProdotto(),
+                        'codice'        => $pObj->getCodice(),
                         'subcat'        => $subcat->getDescrizione(),
                         'prezzo'        => $pObj->getCosto(),
-                        'udm'           => $pObj->getUdm() .($pObj->hasPezzatura() ? "Taglio/Pezzatura:" . $pObj->getDescrizionePezzatura() : ""),
+                        'udm'           => $pObj->getUdm() .($pObj->hasPezzatura() ? "<br /><small>(Minimo " . $pObj->getDescrizionePezzatura() . ")</small>" : ""),
                         'descrizione'   => $pObj->getDescrizioneListino()
                     );
                 }
@@ -49,35 +51,57 @@ $(document).ready(function () {
       data: <?php echo json_encode($arProductsGrid); ?>,
       manualColumnMove: true,
       manualColumnResize: true,
-      colHeaders: ['ID', 'Categoria', 'Prezzo', 'Udm', 'Descrizione'],
-      colWidths: [40, 300, 70, 110, 400],
+      colHeaders: ['Codice', 'Descrizione', 'Prezzo', 'Udm', 'Categoria'],
+      colWidths: [80, 380, 70, 120, 280],
       columnSorting: true,
+      currentRowClassName: 'currentRow',
       columns: [
         {
-          data: 'idproduct',
-          readOnly: true
-        },
-        {
-          data: 'subcat',
-          readOnly: true
-        },
-        {
-          data: 'prezzo',
-          type: 'numeric',
-          format: '0,0.00 $',
-          language: 'de'
-        },
-        {
-          data: 'udm',
+          data: 'codice',
           readOnly: true
         },
         {
           data: 'descrizione',
           readOnly: true
+        },
+        {
+          data: 'prezzo',
+          <?php echo (!$this->listino->canUpdatePrezzi() ? "readOnly: true," : ""); ?>
+          type: 'numeric',
+          format: '0,0.00 $',
+          language: 'de' // TODO: usare IT
+        },
+        {
+          data: 'udm',
+          renderer: "html",
+          readOnly: true
+        },
+        {
+          data: 'subcat',
+          readOnly: true
         }
       ]
+      <?php if($this->listino->canUpdatePrezzi()): ?>
+      ,afterChange: function (changes, source) {
+          if (source === 'edit') {
+            for(var i = changes.length - 1; i >= 0; i--)
+            {
+                console.log(changes);
+                var row = changes[i][0];
+                var old_value = changes[i][2];
+                var new_value = changes[i][3];
+                var codice = hot1.getSourceDataAtRow(row);
+                var idproduct = codice.idproduct;
+                console.log(idproduct);  
+            }
+          }
+      }
+      <?php endif; ?>
+              
     });
-
+    
+    console.log(hot1.getSettings());
+    
 });
     
 </script>
