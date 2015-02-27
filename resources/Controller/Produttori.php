@@ -40,7 +40,7 @@ class Controller_Produttori extends MyFw_Controller {
         
     }
 
-    
+/*    
     function addAction() {
         
         $form = new Form_Produttori();
@@ -75,7 +75,7 @@ class Controller_Produttori extends MyFw_Controller {
         // set Form in the View
         $this->view->form = $form;
     }
-    
+*/    
     function viewAction() {
         $idproduttore = $this->getParam("idproduttore");
         $myObj = new Model_Db_Produttori();
