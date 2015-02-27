@@ -134,11 +134,6 @@ class Controller_Listini extends MyFw_Controller {
         $lObj = new Model_Db_Listini();
         $listino = $lObj->getListinoById($idlistino);
 
-        // check REFERENTE, controllo per i furbi (non Referenti)
-        if(!$this->_userSessionVal->refObject->canEditProdotti($listino->idproduttore)) {
-            $this->redirect("index", "error", array('code' => 401));
-        }
-        
         // Create Listino Chain objects
         $mllObj = new Model_Listini_Listino();
         $mllObj->appendDati()
@@ -148,6 +143,12 @@ class Controller_Listini extends MyFw_Controller {
         
         // set DATI in Listino
         $mllObj->initDati_ByObject($listino);
+        
+        // check REFERENTE, controllo per i furbi (non Referenti)
+        if(!$mllObj->canManageListino()) {
+            $this->redirect("index", "error", array('code' => 401));
+        }
+        
         // set GROUPS in Listino
         $mllObj->initGruppi_ByObject( $lObj->getGroupsByIdlistino($idlistino) );
         $mllObj->setMyIdGroup($this->_userSessionVal->idgroup);
