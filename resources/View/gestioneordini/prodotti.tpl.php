@@ -2,59 +2,132 @@
     <?php include $this->template('gestioneordini/gestione-header.tpl.php'); ?>
 </div>
 
-<form id="prod_ordini_form" class="ordini" action="/gestione-ordini/prodotti/idordine/<?php echo $this->ordine->getIdOrdine();?>" method="post">
-    
-<div class="row">
-  <div class="col-md-8">
-    <h3>Prodotti inseriti in quest'ordine:</h3>
-
+    <div class="row">
+        <div class="col-md-8">
+            <h3>Prodotti inseriti in quest'ordine:</h3>
+        </div>
+        <div class="col-md-4 col-right">
+            <a class="btn btn-default btn-mylg" href="/gestione-ordini/addprodotto/idordine/<?php echo $this->ordine->getIdOrdine();?>"><span class="glyphicon glyphicon-plus"></span> Aggiungi prodotto</a>
+        </div>    
+    </div>
+    <div class="row">
+        <div class="col-md-12">
     <?php 
+    $arProductsGrid = array();
     $categorie = $this->ordine->getProdottiWithCategoryArray();
     if(count($categorie) > 0): 
-        foreach ($categorie AS $cat): ?>
-    <span id="cat_<?php echo $cat->getId(); ?>" style="visibility: hidden;"><?php echo $cat->getDescrizione(); ?></span>
-<?php       foreach ($cat->getSubcat() AS $subcat): 
-            echo $this->partial('prodotti/subcat-title.tpl.php', array('cat' => $cat, 'subcat' => $subcat));
-
-                foreach ($subcat->getProdotti() AS $prodotto): 
+        foreach ($categorie AS $cat): 
+            foreach ($cat->getSubcat() AS $subcat):
+                foreach ($subcat->getProdotti() AS $prodotto):
                     $pObj = $prodotto->getProdotto(); 
-                    $idprodotto = $pObj->getIdProdotto();
-?>
-            <div class="row row-myig<?php echo $pObj->isDisponibile() ? "" : " box_row_dis" ; ?>" id="box_<?php echo $idprodotto;?>">
-                <div class="col-md-9">
-                    <h3 class="no-margin"><?php echo $pObj->getDescrizioneListino();?></h3>
-                    <p>
-                        Codice: <strong><?php echo $pObj->getCodice(); ?></strong><br />
-                        <?php echo $this->partial('prodotti/price-box.tpl.php', array('prodotto' => $pObj)); ?>
-                    </p>
-                </div>
-                <div class="col-md-3">
-            <?php if($this->canRef_ModificaProdotti()): ?>                    
-                    <a class="btn btn-success" href="/gestione-ordini/editprodotto/idordine/<?php echo $this->ordine->getIdOrdine();?>/idprodotto/<?php echo $pObj->getIdProdotto();?>">Modifica</a>
-            <?php endif; ?>                    
-                </div>
-            </div>
-              <?php endforeach; ?>
-            <?php endforeach; ?>
-          <?php endforeach; ?>
-        <div class="row bs-footer">
-            <div class="col-md-12">&nbsp;</div>
+                    $arProductsGrid[] = array(
+                        'idprodotto'     => $pObj->getIdProdotto(),
+                        'idlistino'     => $pObj->getIdListino(),
+                        'codice'        => $pObj->getCodice(),
+                        'subcat'        => $subcat->getDescrizione(),
+                        'costo_ordine'        => $pObj->getCostoOrdine(),
+                        'udm'           => $pObj->getUdm() .($pObj->hasPezzatura() ? "<br /><small>(Minimo " . $pObj->getDescrizionePezzatura() . ")</small>" : ""),
+                        'offerta_ordine'       => $pObj->getOffertaOrdine(),
+                        'sconto_ordine'        => $pObj->getScontoOrdine(),
+                        'descrizione'   => $pObj->getDescrizioneListino(),
+                        'disponibile_ordine'   => $pObj->isDisponibile()
+                    );
+                endforeach;
+            endforeach;
+        endforeach; 
+        //Zend_Debug::dump($arProductsGrid);
+        ?>
+            <div id="grid-prodotti" class="handsontable"></div>
+<?php else: ?>
+            <h3>Nessun prodotto inserito</h3>        
+<?php endif; ?>
         </div>
-            
-    <?php else: ?>
-        <h3>Nessun prodotto inserito in questo ordine!</h3>
-    <?php endif; ?>
+    </div>
 
-  </div>
-  <div class="col-md-4 col-right">
-      <div class="bs-sidebar" data-spy="affix" data-offset-top="176" role="complementary">
-          <a class="btn btn-default btn-mylg" href="/gestione-ordini/addprodotto/idordine/<?php echo $this->ordine->getIdOrdine();?>"><span class="glyphicon glyphicon-plus"></span> Aggiungi prodotto</a>
-          <br><br>
-          <?php echo $this->partial('prodotti/subcat-navigation.tpl.php', array('categorie' => $categorie)); ?>
-      </div>
-  </div>    
-</div>
-</form>
 <script>    
-    $('.tip_info_prod').tooltip('hide');
+$(document).ready(function () {
+  // store my idordine
+  var idordine = <?php echo $this->ordine->getIdOrdine(); ?>;
+  // init Container for Handsontable
+  var container1 = document.getElementById('grid-prodotti');
+  var hot1 = new Handsontable(container1, {
+      data: <?php echo json_encode($arProductsGrid); ?>,
+      manualColumnMove: true,
+      manualColumnResize: true,
+      colHeaders: ['Disp.', 'Codice', 'Descrizione', 'Prezzo', 'Udm', 'Offerta', 'Sconto', 'Categoria'],
+      colWidths: [50, 80, 380, 70, 120, 70, 70, 280],
+      columnSorting: true,
+      currentRowClassName: 'currentRow',
+      columns: [
+        {
+          data: 'disponibile_ordine',
+          type: 'checkbox'
+        },
+        {
+          data: 'codice',
+          readOnly: true
+        },
+        {
+          data: 'descrizione',
+          readOnly: true
+        },
+        {
+          data: 'costo_ordine',
+          type: 'numeric',
+          format: '0,0.00 $',
+          language: 'de' // TODO: usare IT
+        },
+        {
+          data: 'udm',
+          renderer: "html",
+          readOnly: true
+        },
+        {
+          data: 'offerta_ordine',
+          type: 'checkbox'
+        },
+        {
+          data: 'sconto_ordine',
+          type: 'numeric',
+          format: '0,0.00 %',
+          language: 'de'
+        },
+        {
+          data: 'subcat',
+          readOnly: true
+        }
+      ],
+      afterChange: function (changes, source) {
+          if (source === 'edit') {
+            for(var i = changes.length - 1; i >= 0; i--)
+            {
+                var field = changes[i][1];
+                var old_value = changes[i][2];
+                var new_value = changes[i][3];
+                if(old_value !== new_value)
+                {   
+                    var rowSourceData = hot1.getSourceDataAtRow(changes[i][0]);
+                    var idprodotto = rowSourceData.idprodotto;
+                    var idlistino = rowSourceData.idlistino;
+                    $.getJSON(
+                        '/gestione-ordini/updateprodotto/',
+                        {idordine: idordine, idprodotto: idprodotto, idlistino: idlistino, field: field, value: new_value},
+                        function(data) {
+                            if(data.res)
+                            {
+                                console.log('SAVED!');
+                            } else {
+                                console.log('ERROR!');
+                            }
+                        });
+                }
+            }
+          }
+      }
+              
+    });
+    
+//    console.log(hot1.getSettings());
+    
+});
 </script>

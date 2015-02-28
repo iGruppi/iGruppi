@@ -59,7 +59,7 @@ class Model_Prodotto_Mediator_Ordine
      */
     public function getCostoOrdine()
     {
-        return $this->_getValue("costo_ordine");
+        return (float)$this->_getValue("costo_ordine");
     }
     
     /**
@@ -67,7 +67,7 @@ class Model_Prodotto_Mediator_Ordine
      */
     public function getOffertaOrdine()
     {
-        return $this->_getValue("offerta_ordine");
+        return ($this->_getValue("offerta_ordine") == "S") ? true : false;
     }
 
     /**
@@ -75,7 +75,7 @@ class Model_Prodotto_Mediator_Ordine
      */
     public function getScontoOrdine()
     {
-        return $this->_getValue("sconto_ordine");
+        return (int)$this->_getValue("sconto_ordine");
     }
     
     /**
@@ -83,7 +83,7 @@ class Model_Prodotto_Mediator_Ordine
      */
     public function getDisponibileOrdine()
     {
-        return $this->_getValue("disponibile_ordine");
+        return ($this->_getValue("disponibile_ordine") == "S") ? true : false;
     }    
     
     

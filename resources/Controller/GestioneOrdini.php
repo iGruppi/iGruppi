@@ -196,53 +196,12 @@ class Controller_GestioneOrdini extends MyFw_Controller {
     {
         // build Ordine
         $ordine = $this->_buildOrdine( new Model_AF_OrdineFactory() );
-        
-        /* SAVE FORM
-        if($this->getRequest()->isPost()) 
-        {
-            // get Post and check if is valid
-            $fv = $this->getRequest()->getPost();
-            
-            $prodotti = isset($fv["prodotti"]) ? $fv["prodotti"] : array();
-            
-//            Model_Prodotto_Observer_Debugger::enable();
-            
-            if(count($prodotti) > 0) {
-                // UPDATE products
-                foreach ($prodotti as $idprodotto => $val) {
-//                    $val["idprodotto"] = $idprodotto;
-                    
-                    // VARIAZIONE PREZZO PRODOTTO
-                    if($val["costo"] != $val["co"] )
-                    {
-//                        Model_Ordini_Logger::LogVariazionePrezzo($ordine->getIdOrdine(), $idprodotto, $val["co"], $val["costo"]);
-                        $ordine->getProdottoById($idprodotto)->setCostoOrdine($val["co"]);
-                    }
-                    // set Disponibilità
-                    $ordine->getProdottoById($idprodotto)->setDisponibileOrdine($val["disponibile"]);
-                }
-                $updated = $ordine->saveToDB();
-//                $ordObj = new Model_Db_Ordini();
-//                $updated = $ordObj->updateProdottiForOrdine($ordine, $prodotti);
-                if($updated)
-                {
-                    // REDIRECT
-                    //$this->redirect("gestione-ordini", "prodotti", array("idordine" => $ordine->getIdOrdine(), "updated" => true));
-                }
-            }
-        }
-        
-        // Check for UPDATED flag
-        if($this->view->updated)
-        {
-            $this->view->updated_msg = "La lista dei prodotti di quest'ordine è stata aggiornata con <strong>successo</strong>!";
-        }
-         * 
-         */
     }
     
-    function editprodottoAction()
+    function updateprodottoAction()
     {
+        Zend_Registry::get("layout")->disableDisplay();
+        
         // build Ordine
         $ordine = $this->_buildOrdine( new Model_AF_OrdineFactory() );
         
@@ -253,35 +212,26 @@ class Controller_GestioneOrdini extends MyFw_Controller {
         $prodotto = $ordine->getProdottoById($idprodotto);
         if(is_null($prodotto))
         {
-            $this->redirect("gestione-ordini", "prodotti", array("idordine" => $ordine->getIdOrdine()));
+            $result = array('res' => false);
         }
         
-        $form = new Form_OrdiniProdotti();
-        $form->setAction("/gestione-ordini/editprodotto/idordine/".$ordine->getIdOrdine()."/idprodotto/".$idprodotto);
-        $form->setValue("idordine", $ordine->getIdOrdine());
-        $form->setValue("idlistino", $prodotto->getIdListino());
-        $form->setValue("idprodotto", $idprodotto);
-
-        if($this->getRequest()->isPost()) {
-            
-            // get Post and check if is valid
-            $fv = $this->getRequest()->getPost();
-            if( $form->isValid($fv) ) 
-            {    
-                // ADD Ordine in stato NEW
-                $this->getDB()->makeUpdate("ordini_prodotti", array("idordine","idlistino","idprodotto"), $form->getValues() );
-                // REDIRECT
-                $this->redirect("gestione-ordini", "prodotti", array("idordine" => $ordine->getIdOrdine(), "updated" => true));
-            }
-        } else {
-            $form->setValues($prodotto->getOrdineValues());
+        // build data
+        $arValues = array(
+            'idordine'  => $ordine->getIdOrdine(),
+            'idlistino' => $this->getParam("idlistino"),
+            'idprodotto' => $idprodotto,
+            $this->getParam("field") => $this->getParam("value")
+        );
+        
+        // UPDATE Ordine in stato NEW
+        $res = $this->getDB()->makeUpdate("ordini_prodotti", array("idordine","idlistino","idprodotto"), $arValues );
+        if($res) {
+            $result = array('res' => true);
+            // LOG VARIAZIONE DATO - DA SISTEMARE: dà errore -> SQLSTATE[23000]: Integrity constraint violation: 1452 Cannot add or update a child row: a foreign key constraint fails
+//            Model_Ordini_Logger::LogByField($this->getParam("field"), $arValues);
         }
         
-        // pass prodotto to the View (after modifing it)
-        $this->view->prodotto = $prodotto;
-        
-        // set Form in the View
-        $this->view->form = $form;
+        echo json_encode($result);
     }
     
     function qtaordineAction()

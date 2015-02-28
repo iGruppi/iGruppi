@@ -2,11 +2,14 @@
     
     <div class="row">
         <div class="col-md-6">
-           ......
+            <h3>Prodotti inseriti in questo listino:</h3>
         </div>
     </div>
-
-    <div id="grid-prodotti" class="handsontable"></div>
+    <div class="row">
+        <div class="col-md-6">
+            <div id="grid-prodotti" class="handsontable"></div>
+        </div>
+    </div>
         
 <?php 
     $availableProducts = 0;
