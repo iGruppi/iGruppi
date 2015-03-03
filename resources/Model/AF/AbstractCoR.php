@@ -80,29 +80,6 @@ abstract class Model_AF_AbstractCoR
         }
     }
     
-    
-    public function saveToDB()
-    {
-        try {
-            if(count($this->chain) > 0)
-            {
-                foreach($this->chain AS $idObj => $object)
-                {
-                    $methodName = "saveToDB_" . $idObj;
-                    if(method_exists($object, $methodName))
-                    {
-                        $object->$methodName();
-                    }
-                }
-                return true;
-            }
-        } catch (MyFw_Exception $exc) {
-            $exc->displayError();
-        }
-        return false;
-    }
-    
-    
     public function enableDebug()
     {
         $this->_debug = true;

@@ -190,10 +190,11 @@ class Controller_Listini extends MyFw_Controller {
                 $mllObj->resetGroups($form->getValue("condivisione"), $groupsToShare);
                 
                 // SAVE ALL DATA CHANGED TO DB
-                $resSave = $mllObj->saveToDB();
+                $resSaveDati = $mllObj->saveToDB_Dati();
+                $resSaveGruppi = $mllObj->saveToDB_Gruppi();
                 
                 // REDIRECT
-                if($resSave) {
+                if($resSaveDati && $resSaveGruppi) {
                     $this->redirect("listini", "edit", array('idlistino' => $idlistino, 'updated' => true));
                 }
             }

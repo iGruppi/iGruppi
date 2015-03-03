@@ -34,38 +34,6 @@ abstract class Model_Prodotto_Mediator_AbstractProduct
         return $this->mediator;
     }
 
-
-/*************
- * OBSERVER
- */
-    
-    /**
-     * This array stores all the observers attached
-     * @var array
-     */
-    protected $observers = array();
-    
-    /**
-     * Accepts an Observer
-     * @param Model_Prodotto_Observer_AbstractObserver $observer
-     */
-    public function attach(Model_Prodotto_Observer_AbstractObserver $observer)
-    {
-        $this->observers[] = $observer;
-    }
-    
-    /**
-     * Notify the Observers
-     * It is public because I prefer that the Client can control the notification generation
-     * @return void
-     */
-    public function notify()
-    {
-        foreach ($this->observers as $observer)
-        {
-            $observer->update($this->getMediator());
-        }
-    }    
     
 /*************************
  * INIT DATA, GET and SET
@@ -113,7 +81,7 @@ abstract class Model_Prodotto_Mediator_AbstractProduct
             {
                 $this->_values[$f] = $v;
                 // notify the Observers
-                $this->notify();
+                // $this->notify();
             }
         }
     }

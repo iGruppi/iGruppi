@@ -27,8 +27,6 @@ class Model_Prodotto_Mediator_Listino
     public function __construct(Model_Prodotto_Mediator_MediatorInterface $medium) 
     {
         parent::__construct($medium);
-        // attach the Anagrafica Observer
-        $this->attach( Model_Prodotto_Observer_Listino::getInstance());
     }
     
     /**

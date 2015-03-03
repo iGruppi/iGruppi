@@ -83,7 +83,7 @@ abstract class Model_AF_Prodotti extends Model_AF_AbstractHandlerCoR
     
     /**
      * Save Prodotti to DB
-     * It calls the Observer Singleton for any part
+     * It calls the UPDATE for any part: Anagrafica, Listino, Ordine
      * @return void
      */
     public function saveToDB_Prodotti()
@@ -92,11 +92,11 @@ abstract class Model_AF_Prodotti extends Model_AF_AbstractHandlerCoR
         {
             $prodottiModel = new Model_Db_Prodotti();
             // Update prodotti table
-            $prodottiModel->updateProdotti(Model_Prodotto_Observer_Anagrafica::getInstance()->getUpdated());
+            $prodottiModel->updateProdotti();
             // Update listini_prodotti table
-            $prodottiModel->updateProdottiListino(Model_Prodotto_Observer_Listino::getInstance()->getUpdated());
+            $prodottiModel->updateProdottiListino();
             // Update ordini_prodotti table
-            $prodottiModel->updateProdottiOrdine(Model_Prodotto_Observer_Ordine::getInstance()->getUpdated());
+            $prodottiModel->updateProdottiOrdine();
         }
     }
     

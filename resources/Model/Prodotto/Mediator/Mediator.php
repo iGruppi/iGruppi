@@ -32,15 +32,6 @@ class Model_Prodotto_Mediator_Mediator implements Model_Prodotto_Mediator_Mediat
         $this->ordine = new Model_Prodotto_Mediator_Ordine($this);
     }
 
-    /*
-    public function attachToColleagues(Model_Prodotto_Observer_AbstractSubject $subject)
-    {
-        $this->anagrafica->attach($subject);
-        $this->listino->attach($subject);
-        $this->ordine->attach($subject);
-    }
-     */
-    
     public function initByObject($obj)
     {
         $this->anagrafica->initValuesByObject($obj);
