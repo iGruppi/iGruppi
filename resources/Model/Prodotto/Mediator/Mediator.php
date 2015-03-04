@@ -7,41 +7,47 @@
  */
 class Model_Prodotto_Mediator_Mediator implements Model_Prodotto_Mediator_MediatorInterface
 {
-
+    
+    /**
+     * List of the colleagues managed in this Mediator
+     * @var array
+     */
+    private $colleagues = array('Anagrafica', 'Listino', 'Ordine');
+    
     /**
      * @var Model_Prodotto_Mediator_Anagrafica
      */
-    protected $anagrafica = null;
+    protected $Anagrafica = null;
 
     /**
      * @var Model_Prodotto_Mediator_Listino
      */
-    protected $listino = null;
+    protected $Listino = null;
 
     /**
      * @var Model_Prodotto_Mediator_Ordine
      */
-    protected $ordine = null;
+    protected $Ordine = null;
 
     /**
      * init the Class with all the Colleague
      */
     public function __construct() {
-        $this->anagrafica = new Model_Prodotto_Mediator_Anagrafica($this);
-        $this->listino = new Model_Prodotto_Mediator_Listino($this);
-        $this->ordine = new Model_Prodotto_Mediator_Ordine($this);
+        $this->Anagrafica = new Model_Prodotto_Mediator_Anagrafica($this);
+        $this->Listino = new Model_Prodotto_Mediator_Listino($this);
+        $this->Ordine = new Model_Prodotto_Mediator_Ordine($this);
     }
 
     public function initByObject($obj)
     {
-        $this->anagrafica->initValuesByObject($obj);
-        $this->listino->initValuesByObject($obj);
-        $this->ordine->initValuesByObject($obj);
+        $this->Anagrafica->initValuesByObject($obj);
+        $this->Listino->initValuesByObject($obj);
+        $this->Ordine->initValuesByObject($obj);
     }
     
     public function __call($name, $arguments) {
         try {
-            foreach(array('anagrafica', 'listino', 'ordine') AS $colleague)
+            foreach($this->colleagues AS $colleague)
             {
                 if(method_exists($this->$colleague, $name)) {
                     return call_user_func_array(array($this->$colleague, $name), $arguments);
@@ -62,9 +68,9 @@ class Model_Prodotto_Mediator_Mediator implements Model_Prodotto_Mediator_Mediat
      */
     public function setIdProdotto($id)
     {
-        $this->anagrafica->setIdProdotto($id);
-        $this->listino->setIdProdotto($id);
-        $this->ordine->setIdProdotto($id);
+        $this->Anagrafica->setIdProdotto($id);
+        $this->Listino->setIdProdotto($id);
+        $this->Ordine->setIdProdotto($id);
     }
     
     /**
@@ -73,8 +79,8 @@ class Model_Prodotto_Mediator_Mediator implements Model_Prodotto_Mediator_Mediat
      */
     public function setIdListino($id)
     {
-        $this->listino->setIdListino($id);
-        $this->ordine->setIdListino($id);
+        $this->Listino->setIdListino($id);
+        $this->Ordine->setIdListino($id);
     }
     
     /**
@@ -92,15 +98,38 @@ class Model_Prodotto_Mediator_Mediator implements Model_Prodotto_Mediator_Mediat
     
     public function getAnagraficaValues()
     {
-        return $this->anagrafica->getValuesArray();
+        return $this->Anagrafica->getValuesArray();
     }
     public function getListinoValues()
     {
-        return $this->listino->getValuesArray();
+        return $this->Listino->getValuesArray();
     }
     public function getOrdineValues()
     {
-        return $this->ordine->getValuesArray();
+        return $this->Ordine->getValuesArray();
+    }
+    
+/* ******************************
+ *  Persist data
+ */    
+    
+    public function saveToDB_Prodotto()
+    {
+        try {
+            $prodottiModel = new Model_Db_Prodotti();
+            foreach($this->colleagues AS $colleague)
+            {
+                // check if something is changed
+                if($this->$colleague->isChanged())
+                {
+                    $prodottiModel->updateProdotti($colleague, $this);
+                }
+            }
+            return true;
+            
+        } catch (Model_Prodotto_Mediator_Exception $ex) {
+            $ex->displayError();
+        }        
     }
     
     
@@ -108,23 +137,24 @@ class Model_Prodotto_Mediator_Mediator implements Model_Prodotto_Mediator_Mediat
  *  Pattern Strategy for Costo  *
  */    
     
+    /**
+     * The default context if you do not set anyone
+     * @var string
+     */
     private $_context = "Anagrafica";
     
-    const _C_ANAGRAFICA = "Anagrafica";
-    const _C_LISTINO = "Listino";
-    const _C_ORDINE = "Ordine";
     
     public function setDefaultStrategyContext_Anagrafica()
     {
-        $this->_context = $this::_C_ANAGRAFICA;
+        $this->_context = "Anagrafica";
     }
     public function setDefaultStrategyContext_Listino()
     {
-        $this->_context = $this::_C_LISTINO;
+        $this->_context = "Listino";
     }
     public function setDefaultStrategyContext_Ordine()
     {
-        $this->_context = $this::_C_ORDINE;
+        $this->_context = "Ordine";
     }
     
     public function getCosto()

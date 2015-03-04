@@ -6,12 +6,6 @@ class Model_Prodotto_Mediator_Anagrafica
     extends Model_Prodotto_Mediator_AbstractProduct
 {
     /**
-     * Anagrafica context
-     * @var string
-     */
-    const _CONTEXT = "Anagrafica";
-    
-    /**
      * Table prodotti fields
      * @var array
      */

@@ -6,12 +6,6 @@ class Model_Prodotto_Mediator_Listino
     extends Model_Prodotto_Mediator_AbstractProduct
 {
     /**
-     * Listino context
-     * @var string
-     */
-    const _CONTEXT = "Listino";
-
-    /**
      * Table listini_prodotti fields
      * @var array
      */

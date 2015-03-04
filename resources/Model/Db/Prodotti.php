@@ -82,7 +82,8 @@ class Model_Db_Prodotti extends MyFw_DB_Base {
         $sql = "SELECT p.*, prod.ragsoc AS ragsoc_produttore, "
               ." lp.idlistino, lp.descrizione_listino, lp.costo_listino, lp.note_listino, lp.attivo_listino, "
               ." op.costo_ordine, op.offerta_ordine, op.sconto_ordine, op.disponibile_ordine, "
-              ." cs.descrizione AS categoria_sub, c.idcat, c.descrizione AS categoria "
+              ." cs.descrizione AS categoria_sub, c.idcat, c.descrizione AS categoria, "
+              ." op.idordine "
               ." FROM ordini_prodotti AS op "
               ." JOIN listini_prodotti AS lp ON lp.idlistino=op.idlistino AND lp.idprodotto=op.idprodotto "
               ." JOIN prodotti AS p ON lp.idprodotto=p.idprodotto"
@@ -115,7 +116,7 @@ class Model_Db_Prodotti extends MyFw_DB_Base {
     {
         if(is_array($prodotti)) {
             return $prodotti;
-        } else if($prodotti instanceof Model_Prodotto_Mediator_Mediator)
+        } else if($prodotti instanceof Model_Prodotto_Mediator_MediatorInterface)
         {
             return array(0 => $prodotti);
         } else {
@@ -123,9 +124,19 @@ class Model_Db_Prodotti extends MyFw_DB_Base {
         }
     }
     
-    function updateProdotti($p)
+    public function updateProdotti($type, $p)
     {
         $prodotti = $this->_checkProdotti($p);
+        switch ($type) {
+            case "Anagrafica": return $this->updateProdottiAnagrafica($prodotti);
+            case "Listino": return $this->updateProdottiListino($prodotti);
+            case "Ordine": return $this->updateProdottiOrdine($prodotti);
+        }
+        throw new Exception("Type Prodotti '$type' does NOT EXISTS!");
+    }
+    
+    private function updateProdottiAnagrafica($prodotti)
+    {
         $this->db->beginTransaction();
         foreach ($prodotti AS $prodotto) {
             $arValues = $prodotto->getAnagraficaValues();
@@ -139,9 +150,8 @@ class Model_Db_Prodotti extends MyFw_DB_Base {
         return $this->db->commit();
     }
     
-    function updateProdottiListino($p)
+    private function updateProdottiListino($prodotti)
     {
-        $prodotti = $this->_checkProdotti($p);
         $this->db->beginTransaction();
         foreach ($prodotti AS $prodotto) {
             $arValues = $prodotto->getListinoValues();
@@ -156,9 +166,8 @@ class Model_Db_Prodotti extends MyFw_DB_Base {
         return $this->db->commit();
     }
     
-    function updateProdottiOrdine($p)
+    private function updateProdottiOrdine($prodotti)
     {
-        $prodotti = $this->_checkProdotti($p);
         $this->db->beginTransaction();
         foreach ($prodotti AS $prodotto) {
             $arValues = $prodotto->getOrdineValues();

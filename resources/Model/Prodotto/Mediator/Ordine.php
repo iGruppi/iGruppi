@@ -6,12 +6,6 @@ class Model_Prodotto_Mediator_Ordine
     extends Model_Prodotto_Mediator_AbstractProduct
 {
     /**
-     * Ordine context
-     * @var string
-     */
-    const _CONTEXT = "Ordine";
-
-    /**
      * Table ordini_prodotti fields
      * @var array
      */

@@ -90,13 +90,10 @@ abstract class Model_AF_Prodotti extends Model_AF_AbstractHandlerCoR
     {
         if($this->countProdotti() > 0)
         {
-            $prodottiModel = new Model_Db_Prodotti();
-            // Update prodotti table
-            $prodottiModel->updateProdotti();
-            // Update listini_prodotti table
-            $prodottiModel->updateProdottiListino();
-            // Update ordini_prodotti table
-            $prodottiModel->updateProdottiOrdine();
+            foreach($this->getProdotti() AS $prodotto)
+            {
+                $prodotto->saveToDB_Prodotto();
+            }
         }
     }
     

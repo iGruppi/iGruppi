@@ -42,6 +42,12 @@ abstract class Model_Prodotto_Mediator_AbstractProduct
     protected $_values = array();
     
     /**
+     * Keep trace if some value changes
+     * @var bool
+     */
+    protected $_isChanged = false;
+    
+    /**
      * Init the Product object by stdClass or Array (only the fields available in data)
      * @param (stdClass|array) $obj
      * @return void
@@ -80,8 +86,8 @@ abstract class Model_Prodotto_Mediator_AbstractProduct
             if( !isset($this->_values[$f]) || $v != $this->_values[$f] )
             {
                 $this->_values[$f] = $v;
-                // notify the Observers
-                // $this->notify();
+                // SET the value is changed
+                $this->_isChanged = true;
             }
         }
     }
@@ -101,7 +107,14 @@ abstract class Model_Prodotto_Mediator_AbstractProduct
         return $this->_values;
     }
     
-    
+    /**
+     * Return TRUE if almost one value is changed
+     * @return bool
+     */
+    public function isChanged()
+    {
+        return $this->_isChanged;
+    }
     
 /* *******************************************
  *  MISCELLANEOUS

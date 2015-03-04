@@ -7,7 +7,7 @@
             <h3>Prodotti inseriti in quest'ordine:</h3>
         </div>
         <div class="col-md-4 col-right">
-            <a class="btn btn-default btn-mylg" href="/gestione-ordini/addprodotto/idordine/<?php echo $this->ordine->getIdOrdine();?>"><span class="glyphicon glyphicon-plus"></span> Aggiungi prodotto</a>
+<!--            <a class="btn btn-default btn-mylg" href="/gestione-ordini/addprodotto/idordine/<?php echo $this->ordine->getIdOrdine();?>"><span class="glyphicon glyphicon-plus"></span> Aggiungi prodotto</a> -->
         </div>    
     </div>
     <div class="row">

@@ -214,20 +214,29 @@ class Controller_GestioneOrdini extends MyFw_Controller {
         {
             $result = array('res' => false);
         }
-        
-        // build data
-        $arValues = array(
-            'idordine'  => $ordine->getIdOrdine(),
-            'idlistino' => $this->getParam("idlistino"),
-            'idprodotto' => $idprodotto,
-            $this->getParam("field") => $this->getParam("value")
-        );
-        
-        // UPDATE Ordine in stato NEW
-        $res = $this->getDB()->makeUpdate("ordini_prodotti", array("idordine","idlistino","idprodotto"), $arValues );
+
+        $field = $this->getParam("field");
+        $value = $this->getParam("value");
+        switch ($field) {
+            case "disponibile_ordine":
+                $prodotto->setDisponibileOrdine($value);
+                break;
+            case "costo_ordine":
+                $prodotto->setCostoOrdine($value);
+                break;
+            case "offerta_ordine":
+                $prodotto->setOffertaOrdine($value);
+                break;
+            case "sconto_ordine":
+                $prodotto->setScontoOrdine($value);
+                break;
+        }
+
+        $res = $prodotto->saveToDB_Prodotto();
         if($res) {
             $result = array('res' => true);
-            // LOG VARIAZIONE DATO - DA SISTEMARE: dà errore -> SQLSTATE[23000]: Integrity constraint violation: 1452 Cannot add or update a child row: a foreign key constraint fails
+            // LOG VARIAZIONE DATO 
+            //--> DA SISTEMARE: dà errore -> SQLSTATE[23000]: Integrity constraint violation: 1452 Cannot add or update a child row: a foreign key constraint fails
 //            Model_Ordini_Logger::LogByField($this->getParam("field"), $arValues);
         }
         
