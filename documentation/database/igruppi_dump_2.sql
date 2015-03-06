@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Mar 05, 2015 at 05:45 PM
+-- Generation Time: Mar 06, 2015 at 05:05 PM
 -- Server version: 5.6.20
 -- PHP Version: 5.5.15
 
@@ -36,7 +36,7 @@ CREATE TABLE IF NOT EXISTS `cassa` (
   PRIMARY KEY (`idmovimento`),
   KEY `fk_cassa_users1_idx` (`iduser`),
   KEY `fk_cassa_ordini1_idx` (`idordine`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -49,7 +49,7 @@ CREATE TABLE IF NOT EXISTS `categorie` (
   `descrizione` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
   `aliquota_iva` tinyint(4) NOT NULL,
   PRIMARY KEY (`idcat`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=11 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -65,7 +65,7 @@ CREATE TABLE IF NOT EXISTS `categorie_sub` (
   PRIMARY KEY (`idsubcat`),
   KEY `fk_categorie_sub_categorie1_idx` (`idcat`),
   KEY `fk_categorie_sub_produttori1_idx` (`idproduttore`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=100 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -81,7 +81,7 @@ CREATE TABLE IF NOT EXISTS `groups` (
   `data_creazione` date NOT NULL,
   `email_ml` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`idgroup`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=4 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -98,7 +98,7 @@ CREATE TABLE IF NOT EXISTS `listini` (
   `last_update` datetime NOT NULL,
   PRIMARY KEY (`idlistino`),
   KEY `fk_listini_produttori1_idx` (`idproduttore`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=13 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -151,10 +151,9 @@ CREATE TABLE IF NOT EXISTS `ordini` (
   `data_arrivato` datetime DEFAULT NULL,
   `data_consegnato` datetime DEFAULT NULL,
   `archiviato` enum('N','S') COLLATE utf8_unicode_ci NOT NULL DEFAULT 'N',
-  `costo_spedizione` decimal(8,2) NOT NULL,
   `condivisione` enum('PUB','PRI','SHA') COLLATE utf8_unicode_ci NOT NULL DEFAULT 'PRI',
   PRIMARY KEY (`idordine`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=19 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -168,6 +167,7 @@ CREATE TABLE IF NOT EXISTS `ordini_groups` (
   `idgroup_slave` int(10) unsigned NOT NULL,
   `iduser_ref` int(10) unsigned DEFAULT NULL,
   `visibile` enum('S','N') COLLATE utf8_unicode_ci NOT NULL DEFAULT 'S',
+  `costo_spedizione` decimal(8,2) NOT NULL DEFAULT '0.00',
   `note_consegna` text COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`idordine`,`idgroup_master`,`idgroup_slave`),
   KEY `fk_groups_ordini_ordini1_idx` (`idordine`),
@@ -244,7 +244,7 @@ CREATE TABLE IF NOT EXISTS `ordini_variazioni` (
   PRIMARY KEY (`idov`),
   KEY `fk_ordini_variazioni_ordini1_idx` (`idordine`),
   KEY `fk_ordini_variazioni_ordini_user1_idx` (`iduser`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -270,7 +270,7 @@ CREATE TABLE IF NOT EXISTS `prodotti` (
   KEY `fk_prodotti_produttori1_idx` (`idproduttore`),
   KEY `fk_prodotti_sub_categorie1_idx` (`idsubcat`),
   KEY `fk_prodotti_users1_idx` (`iduser_creator`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1056 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -289,7 +289,7 @@ CREATE TABLE IF NOT EXISTS `produttori` (
   `note` varchar(2048) COLLATE utf8_unicode_ci NOT NULL,
   `production` enum('S','N') COLLATE utf8_unicode_ci NOT NULL DEFAULT 'N',
   PRIMARY KEY (`idproduttore`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=13 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -336,7 +336,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   `role` enum('User','Admin') COLLATE utf8_unicode_ci NOT NULL DEFAULT 'User',
   PRIMARY KEY (`iduser`),
   KEY `INDEX_email` (`email`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=33 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
 
