@@ -63,11 +63,13 @@ class Model_Ordini_Ordine extends Model_AF_AbstractCoR
      */
     public function canManageOrdine()
     {
-        if($this->getMyGroup()->isSetUserRef())
-        {        
+        if($this->isAdminForOrdine()) {
+            return true;
+        } else if($this->getMyGroup()->isSetUserRef())
+        {
             return $this->isReferenteOrdine();
         } else {
-            return $this->isAdminForOrdine();
+            return false;
         }
     }
     

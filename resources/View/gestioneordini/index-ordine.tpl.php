@@ -7,8 +7,16 @@
                     $categorie = $this->ordine->getListaDescrizioniCategorie();
                     echo $this->arrayToString($categorie); 
                     ?></h5>
+                <h5><span class="text-muted">Referente ordine:</span> 
+                    <?php if(!$this->ordine->getMyGroup()->isSetUserRef()): ?>
+                        <b class="text-danger">Nessun referente ordine assegnato!</b>
+                    <?php else: ?>
+                        <?php echo $this->ordine->getMyGroup()->getRefNome(); ?>
+                    <?php endif; ?>
+                            
+                </h5>
 
-                <h4 class="ordine <?php echo $this->ordine->getStatusCSSClass(); ?>"><?php echo $this->ordine->getStateName(); ?></h4>
+                <h4 class="ordine <?php echo $this->ordine->getStatusCSSClass(); ?>"><?php echo $this->ordine->getStateName(); ?> </h4>
             </div>
           </div>
           <div class="row">
@@ -19,7 +27,9 @@
                 </p>
             </div>
             <div class="col-md-4">
+      <?php if($this->ordine->canManageOrdine()): ?>
                 <a role="button" id="gest_ordine_<?php echo $this->ordine->getIdOrdine();?>" class="btn btn-success" href="/gestione-ordini/dashboard/idordine/<?php echo $this->ordine->getIdOrdine(); ?>"><span class="glyphicon glyphicon-pencil"></span> Gestisci Ordine</a>
+      <?php endif; ?>
             </div>
           </div>
       </div>
