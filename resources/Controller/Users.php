@@ -45,7 +45,6 @@ class Controller_Users extends MyFw_Controller {
         // Get Elenco produttori (con REFERENTE)
         $prObj = new Model_Db_Produttori();
         $this->view->produttori = $prObj->getProduttoriByIdGroup($this->_userSessionVal->idgroup);
-        //Zend_Debug::dump($this->view->user);
 
         if($this->getRequest()->isPost()) {
             $fv = $this->getRequest()->getPost();

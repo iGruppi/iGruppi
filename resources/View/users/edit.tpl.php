@@ -40,7 +40,7 @@
                     $arRef = array();
                     foreach($this->produttori AS $produttore): 
                     // Check for Referente attuale
-                    if( $produttore->iduser_ref == $this->user->iduser ) {
+                    if( $produttore->ref_int_iduser == $this->user->iduser ) {
                         $arRef[] = $produttore;
                     } else {
               ?>
