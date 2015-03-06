@@ -74,5 +74,25 @@ class Model_Db_Listini extends MyFw_DB_Base {
         return null;        
     }
     
+    function getListiniAvailableToCreateOrder($idgroup, $iduser)
+    {
+        $sql = "SELECT l.* , p.ragsoc
+                FROM listini_groups AS lg
+                JOIN listini AS l ON lg.idlistino = l.idlistino
+                JOIN produttori AS p ON l.idproduttore=p.idproduttore
+                LEFT JOIN referenti AS ref ON l.idproduttore = ref.idproduttore AND lg.idgroup_slave = ref.idgroup
+                JOIN users AS u ON ref.iduser_ref=u.iduser
+                WHERE ref.iduser_ref = :iduser AND 
+                (
+                    l.condivisione =  'PUB'
+                OR ( lg.idgroup_slave = :idgroup AND lg.visibile =  'S' )
+                )";
+        $sth = $this->db->prepare($sql);
+        $sth->execute(array('idgroup' => $idgroup, 'iduser' => $iduser));
+        if($sth->rowCount() > 0) {
+            return $sth->fetchAll(PDO::FETCH_OBJ);
+        }
+        return null;        
+    }
     
 }

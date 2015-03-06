@@ -42,13 +42,17 @@ class Controller_GestioneOrdini extends MyFw_Controller {
         
         $ordObj = new Model_Db_Ordini();
         $cObj = new Model_Db_Categorie();
-        $listOrd = $ordObj->getAllByIdUserRef($this->_iduser, $filter);
+        $listOrd = $ordObj->getOrdiniByIdIdgroup($this->_userSessionVal->idgroup, $filter);
         $ordini = array();
         if(count($listOrd) > 0) {
             foreach($listOrd AS $ordine) {
                 $mooObj = new Model_Ordini_Ordine( new Model_AF_OrdineFactory() );
                 $mooObj->appendDati()->initDati_ByObject($ordine);
                 $mooObj->appendStates( Model_Ordini_State_OrderFactory::getOrder($ordine) );
+                
+                // build & init Gruppi
+                $mooObj->appendGruppi()->initGruppi_ByObject( $ordObj->getGroupsByIdOrdine( $mooObj->getIdOrdine()) );
+                $mooObj->setMyIdGroup($this->_userSessionVal->idgroup);
                 
                 // set Categories in Ordine object
                 $categorie = $cObj->getCategoriesByIdOrdine( $mooObj->getIdOrdine() );
@@ -63,12 +67,13 @@ class Controller_GestioneOrdini extends MyFw_Controller {
     function newAction() {
         
         $form = new Form_Ordini();
-        $form->setAction("/gestione-ordini/new/idproduttore/".$this->_produttore->idproduttore);
-        $form->setValue("idgroup", $this->_userSessionVal->idgroup);
-        $form->setValue("idproduttore", $this->_produttore->idproduttore);
+        $form->setAction("/gestione-ordini/new");
         // remove useless fields
+        $form->removeField("visibile");
         $form->removeField("costo_spedizione");
-        $form->removeField("archiviato");
+        $form->removeField("note_consegna");
+        $form->removeField("condivisione");
+        $form->removeField("iduser_ref");
         $form->removeField("idordine");
         
         if($this->getRequest()->isPost()) {
@@ -97,6 +102,38 @@ class Controller_GestioneOrdini extends MyFw_Controller {
         
         // set Form in the View
         $this->view->form = $form;
+        
+        
+        // Get Listini to create ordine
+        $lObj = new Model_Db_Listini();
+        $cObj = new Model_Db_Categorie();
+        $listiniArray = $lObj->getListiniAvailableToCreateOrder($this->_userSessionVal->idgroup, $this->_iduser);
+        $listini = array();
+        if(!is_null($listiniArray)) {
+            foreach ($listiniArray as $stdListino) {
+                // creates Listino by Abstract Factory Model_AF_ListinoFactory
+                $mllObj = new Model_Listini_Listino();
+                $mllObj->appendDati()
+                       ->appendGruppi()              
+                       ->appendCategorie();
+                // init Dati by stdClass
+                $mllObj->initDati_ByObject($stdListino); 
+                
+                // set Categories in Listini object
+                $categorie = $cObj->getCategoriesByIdListino( $mllObj->getIdListino() );
+                // get CATEGORIE by array 
+                $mllObj->initCategorie_ByObject($categorie);
+                
+                // set GROUPS in Listino
+                $mllObj->initGruppi_ByObject( $lObj->getGroupsByIdlistino( $mllObj->getIdListino() ) );
+                $mllObj->setMyIdGroup($this->_userSessionVal->idgroup);
+                
+                // add Listino to array
+                array_push($listini, $mllObj);
+            }
+        }
+        $this->view->listini = $listini;
+        
     }
     
 /******************

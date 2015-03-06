@@ -1,6 +1,6 @@
 <h2>Listini</h2>
 
-<div class="row" id="listini">
+<div class="row" id="listwithsidebar">
   <div class="col-md-8">
       
 <?php if(count($this->listini) > 0): ?>

@@ -141,10 +141,10 @@ h1 strong, h2 strong, h3 strong, h4 strong, h5 strong, h6 strong {color: #090; f
 .totale h4 { margin-bottom: 15px; }
 
 
-/* LISTINI */
-#listini .leftbar .btn { margin-bottom: 20px; display: block; text-align: left; }
-#listini .panel-body a.selected { color: #666; border: 1px solid #eee; }
-#listini .panel-body a.selected:hover { color: #999; background-color: #fff; }
+/* LISt WITH A SIDEBAR */
+#listwithsidebar .leftbar .btn { margin-bottom: 20px; display: block; text-align: left; }
+#listwithsidebar .panel-body a.selected { color: #666; border: 1px solid #eee; }
+#listwithsidebar .panel-body a.selected:hover { color: #999; background-color: #fff; }
 
 
 #edit_listino_form h2.titolo { margin-bottom: 0; }
