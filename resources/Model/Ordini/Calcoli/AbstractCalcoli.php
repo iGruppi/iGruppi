@@ -93,7 +93,7 @@ abstract class Model_Ordini_Calcoli_AbstractCalcoli {
             // get ELENCO users del Gruppo
             $this->_userSessionVal = new Zend_Session_Namespace('userSessionVal');
             $userModel = new Model_Db_Users();
-            $users = $userModel->getUsersByIdGroup($this->_userSessionVal->idgroup);
+            $users = $userModel->getUsersByIdGroup($this->_userSessionVal->idgroup, true);
             foreach($users AS $user)
             {
                 $this->_arUsers[$user->iduser] = $user;

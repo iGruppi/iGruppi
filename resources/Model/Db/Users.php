@@ -18,13 +18,16 @@ class Model_Db_Users extends MyFw_DB_Base {
         return $sth_app->fetch(PDO::FETCH_OBJ);
     }
     
-    function getUsersByIdGroup($idgroup) {
+    function getUsersByIdGroup($idgroup, $attivi=null) {
         // get All Iscritti in Group
         $sql = "SELECT u.*, ug.attivo "
               ." FROM users_group AS ug"
               ." LEFT JOIN users AS u ON ug.iduser=u.iduser"
-              ." WHERE ug.idgroup= :idgroup"
-              ." ORDER BY u.cognome";
+              ." WHERE ug.idgroup= :idgroup";
+        if(is_bool($attivi)) {
+            $sql .= ($attivi) ? " AND ug.attivo = 'S'" : " AND ug.attivo = 'N'";
+        }
+        $sql .= " ORDER BY u.cognome";
         //echo $sql; die;
         $sth = $this->db->prepare($sql);
         $sth->execute(array('idgroup' => $idgroup));

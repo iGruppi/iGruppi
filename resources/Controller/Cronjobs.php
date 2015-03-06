@@ -85,7 +85,7 @@ class Controller_Cronjobs extends MyFw_Controller {
             $mail->addTo($email_ml);
         } else {
             $groupObj = new Model_Db_Users();
-            $ugObj = $groupObj->getUsersByIdGroup($idgroup);
+            $ugObj = $groupObj->getUsersByIdGroup($idgroup, true);
             foreach($ugObj AS $ugVal) {
                 $mail->addBcc($ugVal->email);
             }
