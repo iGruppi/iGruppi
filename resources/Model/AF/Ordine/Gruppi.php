@@ -4,6 +4,7 @@
  */
 class Model_AF_Ordine_Gruppi extends Model_AF_Gruppi
 {
+ 
     
     /**
      * @return Model_Builder_GroupSharing_Parts_Ordine
@@ -16,20 +17,16 @@ class Model_AF_Ordine_Gruppi extends Model_AF_Gruppi
         return $group;
     }
 
+    
     /**
      * Save data to DB
      * @return bool
-     * 
-     * @todo TO IMPLEMENT!
-     * 
      */    
     public function saveToDB_Gruppi()
     {
-        return false;
-        /*
         $db = Zend_Registry::get("db");
         $db->beginTransaction();
-        // UPDATE listini_groups table
+        // REMOVE alla groups from ordini_groups
         $idgroup_master = $this->getMasterGroup()->getIdGroup();
         $idordine = $this->getMasterGroup()->getId();
         $resd = $db->query("DELETE FROM ordini_groups WHERE idordine='$idordine' AND idgroup_master='$idgroup_master'");
@@ -37,8 +34,8 @@ class Model_AF_Ordine_Gruppi extends Model_AF_Gruppi
             $db->rollBack();
             return false;
         }
-        // prepare SQL INSERT
-        $sth_insert = $db->prepare("INSERT INTO ordini_groups SET idordine= :idordine, idgroup_master= :idgroup_master, idgroup_slave= :idgroup_slave, iduser_ref= :iduser_ref, note_consegna= :note_consegna, visibile= :visibile");
+        // INSERT groups
+        $sth_insert = $db->prepare("INSERT INTO ordini_groups SET idordine= :idordine, idgroup_master= :idgroup_master, idgroup_slave= :idgroup_slave, iduser_ref= :iduser_ref, note_consegna= :note_consegna, visibile= :visibile, costo_spedizione= :costo_spedizione");
         foreach($this->getAllGroups() AS $group) {
             $res = $sth_insert->execute($group->dumpValuesForDB());
             if(!$res) {
@@ -47,8 +44,6 @@ class Model_AF_Ordine_Gruppi extends Model_AF_Gruppi
             }
         }
         return $db->commit();
-         * 
-         */
     }
 
 }

@@ -68,6 +68,13 @@ abstract class Model_Builder_GroupSharing_BuilderAbstract
     /**
      * @return void
      */
+    public function addCostoSpedizione(){ 
+        $this->group->setPart('costo_spedizione', new Model_Builder_Parts_Float());        
+    }
+    
+    /**
+     * @return void
+     */
     public function addNoteConsegna(){ 
         $this->group->setPart('note_consegna', new Model_Builder_Parts_Text());        
     }

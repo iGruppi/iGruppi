@@ -22,31 +22,126 @@ class Model_AF_Ordine_Dati extends Model_AF_Dati
         return $this->getValue("idordine");
     }
     
-    public function getDataFine()
+    /**
+     * Return DataInizio formatted by format
+     * @return string
+     */
+    public function getDataInizio($format=null)
     {
-        return $this->getValue("data_fine");
+        if(is_null($format))
+        {
+            return $this->getValue("data_inizio");
+        } else {
+            $dt = DateTime::createFromFormat("Y-m-d H:i:s", $this->getValue("data_inizio"));
+            return $dt->format($format);
+        }
     }
     
-    public function getDataInizio()
+    /**
+     * Return DataFine formatted by format
+     * @return string
+     */
+    public function getDataFine($format=null)
     {
-        return $this->getValue("data_inizio");
+        if(is_null($format))
+        {
+            return $this->getValue("data_fine");
+        } else {
+            $dt = DateTime::createFromFormat("Y-m-d H:i:s", $this->getValue("data_fine"));
+            return $dt->format($format);
+        } 
     }
     
-    
-    function getCostoSpedizione() {
+    /**
+     * Return Costo di Spedizione
+     * @return float
+     */
+    public function getCostoSpedizione() {
         return $this->getValue("costo_spedizione");
     }
     
-    function hasCostoSpedizione() {
+    /**
+     * Return TRUE if Costo di Spedizione > 0
+     * @return bool
+     */
+    public function hasCostoSpedizione() {
         return ($this->getCostoSpedizione() > 0);
     }    
+    
+    /**
+     * Return Condivisione
+     * @return string
+     */
+    public function getCondivisione() {
+        return $this->getValue("condivisione");
+    }
+    
+    
+    
+    
+/***************************
+ *  GET METHODS
+ */    
+    
+    /**
+     * Set DataInizio, DateTime format
+     * @param DateTime $v
+     */
+    public function setDataInizio($v)
+    {
+        $this->setValue("data_inizio", $v);
+    }
+
+    /**
+     * Set DataFine, DateTime format
+     * @param DateTime $v
+     */
+    public function setDataFine($v)
+    {
+        $this->setValue("data_fine", $v);
+    }
+
+    /**
+     * Set Costo Spedizione
+     * @param float $v
+     */
+    public function setCostoSpedizione($v)
+    {
+        $this->setValue("costo_spedizione", $v);
+    }
+    
+    /**
+     * Set Condivisione
+     * @param string $v
+     */
+    public function setCondivisione($v)
+    {
+        $this->setValue("condivisione", $v);
+    }
+    
+    
     /**
      * Save data to DB
      * @return bool
      */    
-    public function saveToDB_Dati() {
+    public function saveToDB_Dati() 
+    {
         if($this->isChanged()) {
-            return true;
+            $db = Zend_Registry::get("db");
+            // check for INSERT or UPDATE
+            if(is_null($this->getValue("idordine")) ) {
+                // INSERT, idordine does not exists
+                $sth = $db->prepare("INSERT INTO ordini SET data_inizio= :data_inizio, data_fine= :data_fine, costo_spedizione= :costo_spedizione, condivisione= :condivisione");
+                $res = $sth->execute(array('data_inizio' => $this->getDataInizio(), 'data_fine' => $this->getDataFine(), 'costo_spedizione' => $this->getCostoSpedizione(), 'condivisione' => $this->getCondivisione()));
+                $this->setIdListino( $db->lastInsertId() );
+                return $res;
+            } else {
+                // UPDATE ordini by idordine
+                $sth = $db->prepare("UPDATE ordini SET data_inizio= :data_inizio, data_fine= :data_fine, costo_spedizione= :costo_spedizione, condivisione= :condivisione WHERE idordine= :idordine");
+                return $sth->execute(array('idordine' => $this->getIdOrdine(), 'data_inizio' => $this->getDataInizio(), 'data_fine' => $this->getDataFine(), 'costo_spedizione' => $this->getCostoSpedizione(), 'condivisione' => $this->getCondivisione()));
+            }
+            // RESET isChanged flag
+            $this->_isChanged = false;
         }
     }
 }

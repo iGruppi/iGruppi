@@ -149,12 +149,13 @@ abstract class Model_AF_Gruppi extends Model_AF_AbstractHandlerCoR
         $group->setIdGroup($g->idgroup_slave);
         // Check and set Default values for ALL the others fields
         $group->setGroupName(   (isset($g->group_nome) ? $g->group_nome : "") );
-        $group->setRefIdUser(   (isset($g->ref_iduser) ? $g->ref_iduser : 0) );
+        $group->setRefIdUser(   (isset($g->ref_iduser) ? $g->ref_iduser : null) );
         $group->setRefNome(     (isset($g->ref_nome) ? $g->ref_nome : ""), (isset($g->ref_cognome) ? $g->ref_cognome : "") );
         $group->setVisibile(    (isset($g->visibile) ? $g->visibile : "N") );
         $group->setValidita(    (isset($g->valido_dal) ? $g->valido_dal : null), (isset($g->valido_al) ? $g->valido_al : null) );
         $group->setNoteConsegna((isset($g->note_consegna) ? $g->note_consegna : "") );
-        
+        $group->setCostoSpedizione((isset($g->costo_spedizione) ? $g->costo_spedizione : 0) );
+
         // set idmaster_group (it should be the same for all the slaves groups!)
         $this->_idgroup_master = $g->idgroup_master;
         

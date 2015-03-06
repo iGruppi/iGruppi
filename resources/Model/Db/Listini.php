@@ -60,7 +60,7 @@ class Model_Db_Listini extends MyFw_DB_Base {
     {
         $sql = "SELECT gl.*, gl.idlistino AS id, g_slave.nome AS group_nome, u_slave.iduser AS ref_iduser, u_slave.nome AS ref_nome, u_slave.cognome AS ref_cognome "
                 . " FROM listini_groups AS gl "
-            // JOIN SLAVES
+            // JOIN SLAVES and REFERENTI
                 . " JOIN groups AS g_slave ON gl.idgroup_slave=g_slave.idgroup "
                 . " LEFT JOIN referenti AS ref_slave ON g_slave.idgroup=ref_slave.idgroup "
                 . " LEFT JOIN users AS u_slave ON ref_slave.iduser_ref=u_slave.iduser "

@@ -33,9 +33,16 @@ class Controller_GestioneOrdini extends MyFw_Controller {
     
     function indexAction() {
         
+        $filter = $this->getParam("filter");
+        if(is_null($filter)) 
+        {
+            $filter = "PRI"; // DEFAULT value
+        }
+        $this->view->filter = $filter;
+        
         $ordObj = new Model_Db_Ordini();
         $cObj = new Model_Db_Categorie();
-        $listOrd = $ordObj->getAllByIdUserRef($this->_iduser);
+        $listOrd = $ordObj->getAllByIdUserRef($this->_iduser, $filter);
         $ordini = array();
         if(count($listOrd) > 0) {
             foreach($listOrd AS $ordine) {
@@ -110,6 +117,11 @@ class Controller_GestioneOrdini extends MyFw_Controller {
             // build & init STATE Ordine
             $mooObj->appendStates( Model_Ordini_State_OrderFactory::getOrder($ordine) );
 
+            // build & init Gruppi
+//            Zend_Debug::dump($ordObj->getGroupsByIdOrdine( $mooObj->getIdOrdine()));die;
+            $mooObj->appendGruppi()->initGruppi_ByObject( $ordObj->getGroupsByIdOrdine( $mooObj->getIdOrdine()) );
+            $mooObj->setMyIdGroup($this->_userSessionVal->idgroup);
+            
             // creo elenco prodotti
             $prodottiModel = new Model_Db_Prodotti();
             $listProd = $prodottiModel->getProdottiByIdOrdine($this->_idordine);
@@ -136,7 +148,7 @@ class Controller_GestioneOrdini extends MyFw_Controller {
         $ordine = $this->_buildOrdine( new Model_AF_OrdineFactory() );
         
         // Get Log Variazioni
-        $sth = $this->getDB()->prepare("SELECT * FROM ordini_variazioni WHERE idordine= :idordine");
+        $sth = $this->getDB()->prepare("SELECT * FROM ordini_variazioni WHERE idordine= :idordine ORDER BY data DESC");
         $sth->execute(array('idordine' => $ordine->getIdOrdine()));
         $this->view->logs = $sth->fetchAll(PDO::FETCH_OBJ);
     }
@@ -145,50 +157,79 @@ class Controller_GestioneOrdini extends MyFw_Controller {
     {
         // build Ordine
         $ordine = $this->_buildOrdine( new Model_AF_OrdineFactory() );
-
+        
         $form = new Form_Ordini();
         $form->setAction("/gestione-ordini/edit/idordine/".$ordine->getIdOrdine());
         $form->setValue("idordine", $ordine->getIdOrdine());
-        $form->removeField("condivisione");
+        
+        /**
+         * TODO: Disabilita campo Condivisione se l'ordine è già avviato!
+         * 
+            $form->getField("condivisione")->setAttribute("disabled", true);
+         * 
+         */
+        if(!$ordine->canManageDate())
+        {
+            $form->removeField("data_inizio");
+            $form->removeField("data_fine");
+        }
+        if(!$ordine->canManageUsersRef()) {
+            $form->removeField("iduser_ref");
+        }
+        
 
+        // get elenco All Groups to fill checkboxes in the view (Condivisione)
+        $grObj = new Model_Db_Groups();
+        $this->view->groups = $groups = $grObj->getAll();
+        
         if($this->getRequest()->isPost()) {
             
             // get Post and check if is valid
             $fv = $this->getRequest()->getPost();
             if( $form->isValid($fv) ) 
             {    
-                // ADD Ordine in stato NEW
-                $this->getDB()->makeUpdate("ordini", "idordine", $form->getValues() );
-                // REDIRECT
-                $this->redirect("gestione-ordini", "dashboard", array("idordine" => $ordine->getIdOrdine(), "updated" => true));
+                if($ordine->canManageDate()) {
+                    $ordine->setDataInizio($form->getValue("data_inizio"));
+                    $ordine->setDataFine($form->getValue("data_fine"));
+                }
+                if($ordine->canManageCondivisione()) {
+                    $ordine->setCondivisione($form->getValue("condivisione"));
+                    // Save GROUPS
+                    $groupsToShare = isset($fv["groups"]) ? $fv["groups"] : array();
+                    $ordine->resetGroups($form->getValue("condivisione"), $groupsToShare);                
+                }
+                if($ordine->canManageUsersRef()) {
+                    $ordine->getMyGroup()->setRefIdUser($form->getValue("iduser_ref"));
+                }
+                // Every group can set this data personalized
+                $ordine->getMyGroup()->setCostoSpedizione($form->getValue("costo_spedizione"));
+                $ordine->getMyGroup()->setNoteConsegna($form->getValue("note_consegna"));
+                $ordine->getMyGroup()->setVisibile($form->getValue("visibile"));
+                
+                // SAVE ALL DATA CHANGED TO DB & REDIRECT
+                $resSaveGruppi = $ordine->saveToDB_Gruppi();
+                $resSaveDati = $ordine->saveToDB_Dati();
+                if($resSaveDati && $resSaveGruppi) {
+                    $this->redirect("gestione-ordini", "dashboard", array("idordine" => $ordine->getIdOrdine(), "updated" => true));
+                }
             }
         } else {
             $form->setValues($ordine->getDatiValues());
-            $form->setValue("data_inizio", $ordine->getDataInizio());
-            $form->setValue("data_fine", $ordine->getDataFine());
-//            Zend_Debug::dump($form->getValues());die;
+            // Set this data only if CAN MANAGE DATE
+            if($ordine->canManageDate()) {
+                $form->setValue("data_inizio", $ordine->getDataInizio(MyFw_Form_Filters_Date::_MYFORMAT_DATETIME_VIEW));
+                $form->setValue("data_fine", $ordine->getDataFine(MyFw_Form_Filters_Date::_MYFORMAT_DATETIME_VIEW));
+            }
+            // Set this data only if CAN MANAGE USER-REF
+            if($ordine->canManageUsersRef()) {
+                $form->setValue("iduser_ref", $ordine->getMyGroup()->getRefIdUser());
+            }
+            $form->setValue("costo_spedizione", $ordine->getMyGroup()->getCostoSpedizione());
+            $form->setValue("note_consegna", $ordine->getMyGroup()->getNoteConsegna());
+            $form->setValue("visibile", $ordine->getMyGroup()->getVisibile()->getString());
         }
         
         // set Form in the View
-        $this->view->form = $form;
-    }
-    
-    function sharingAction()
-    {
-        // build Ordine
-        $ordine = $this->_buildOrdine( new Model_AF_OrdineFactory() );
-        // add Gruppi
-        $lObj = new Model_Db_Ordini();
-        $ordine->appendGruppi()->initGruppi_ByObject( $lObj->getGroupsByIdOrdine( $ordine->getIdOrdine()));
-        $ordine->setMyIdGroup($this->_userSessionVal->idgroup);
-        
-        // get elenco All Groups
-        $grObj = new Model_Db_Groups();
-        $this->view->groups = $groups = $grObj->getAll();
-        
-        // init Listino form
-        $form = new Form_Ordini();
-        $form->setAction("/getsione-ordini/sharing/idordine/" . $ordine->getIdOrdine());
         $this->view->form = $form;
     }
     
@@ -208,36 +249,34 @@ class Controller_GestioneOrdini extends MyFw_Controller {
         // get param IdProdotto and check it if exists!
         $idprodotto = $this->getParam("idprodotto");
         
+        $result = array('res' => false);
+        
         // get Prodotto Ordine valeus from DB
         $prodotto = $ordine->getProdottoById($idprodotto);
-        if(is_null($prodotto))
+        if(!is_null($prodotto))
         {
-            $result = array('res' => false);
-        }
-
-        $field = $this->getParam("field");
-        $value = $this->getParam("value");
-        switch ($field) {
-            case "disponibile_ordine":
-                $prodotto->setDisponibileOrdine($value);
-                break;
-            case "costo_ordine":
-                $prodotto->setCostoOrdine($value);
-                break;
-            case "offerta_ordine":
-                $prodotto->setOffertaOrdine($value);
-                break;
-            case "sconto_ordine":
-                $prodotto->setScontoOrdine($value);
-                break;
-        }
-
-        $res = $prodotto->saveToDB_Prodotto();
-        if($res) {
-            $result = array('res' => true);
-            // LOG VARIAZIONE DATO 
-            //--> DA SISTEMARE: dà errore -> SQLSTATE[23000]: Integrity constraint violation: 1452 Cannot add or update a child row: a foreign key constraint fails
-//            Model_Ordini_Logger::LogByField($this->getParam("field"), $arValues);
+            $field = $this->getParam("field");
+            $value = $this->getParam("value");
+            switch ($field) {
+                case "disponibile_ordine":
+                    $prodotto->setDisponibileOrdine($value);
+                    break;
+                case "costo_ordine":
+                    $prodotto->setCostoOrdine($value);
+                    break;
+                case "offerta_ordine":
+                    $prodotto->setOffertaOrdine($value);
+                    break;
+                case "sconto_ordine":
+                    $prodotto->setScontoOrdine($value);
+                    break;
+            }
+            $res = $prodotto->saveToDB_Prodotto();
+            if($res) {
+                $result = array('res' => true);
+                // LOG VARIAZIONE DATO 
+                Model_Ordini_Logger::LogVariazioneProdottoByField($ordine, $prodotto, $this->getParam("field"));
+            }
         }
         
         echo json_encode($result);

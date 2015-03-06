@@ -26,7 +26,7 @@ class Model_AF_Listino_Gruppi extends Model_AF_Gruppi
     {
         $db = Zend_Registry::get("db");
         $db->beginTransaction();
-        // UPDATE listini_groups table
+        // REMOVE alla groups from listini_groups
         $idgroup_master = $this->getMasterGroup()->getIdGroup();
         $idlistino = $this->getMasterGroup()->getId();
         $resd = $db->query("DELETE FROM listini_groups WHERE idlistino='$idlistino' AND idgroup_master='$idgroup_master'");

@@ -6,11 +6,6 @@ class Model_Builder_GroupSharing_Parts_Listino
     extends Model_Builder_GroupSharing_Parts_Group
 {
     
-    /**
-     * This field does not exists in LISTINO
-     */
-    public function setNoteConsegna($note) {}
-    public function getNoteConsegna() {}
 
     /**
      * @return array

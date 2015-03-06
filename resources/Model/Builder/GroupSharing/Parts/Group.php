@@ -1,6 +1,6 @@
 <?php
 /**
- * Group is a the product group of my Builder, it must be extended
+ * This is the product GROUP of my Builder, it must be extended
  */
 abstract class Model_Builder_GroupSharing_Parts_Group
 {
@@ -149,6 +149,23 @@ abstract class Model_Builder_GroupSharing_Parts_Group
         return $this->data["validita"];
     }
 
+
+    /**
+     * @param float $cs
+     */
+    public function setCostoSpedizione($cs)
+    {
+        $this->data["costo_spedizione"]->set($cs);
+    }
+    
+    /**
+     * @return float
+     */    
+    public function getCostoSpedizione()
+    {
+        return $this->data["costo_spedizione"]->get();
+    }
+    
     /**
      * @param string $note
      */

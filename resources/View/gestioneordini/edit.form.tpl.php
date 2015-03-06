@@ -2,10 +2,33 @@
 
     <fieldset class="border_top">
         <legend>Validità ordine</legend>
+        <?php echo $this->form->renderField('visibile'); ?>
+    <?php if($this->ordine->canManageDate()): ?>
         <?php echo $this->form->renderField('data_inizio'); ?>
         <?php echo $this->form->renderField('data_fine'); ?>
+    <?php endif; ?>
     </fieldset>
 
+    <fieldset class="border_top">
+        <legend>Condivisione</legend>
+    <?php if($this->ordine->canManageCondivisione()): ?>
+        <?php echo $this->form->renderField('condivisione'); ?>
+        <div id="d_sharing" class="hint" style="display: block;">
+        <?php foreach ($this->groups as $group):
+                if($this->ordine->getMasterGroup()->getIdGroup() != $group->idgroup): ?>
+            <p><input type="checkbox" name="groups[]" value="<?php echo $group->idgroup; ?>" 
+               <?php if($this->ordine->issetGroup($group->idgroup)) { echo "checked='checked'"; } ?> /> <b><?php echo $group->nome; ?></b></p>
+        <?php   endif; 
+              endforeach; ?>
+        </div>
+    <?php else: ?>
+        <p class="hint">Condiviso dal gruppo <strong><?php echo $this->ordine->getMasterGroup()->getGroupName(); ?></strong></p>
+        <?php if($this->ordine->canManageUsersRef()): ?>
+            <?php echo $this->form->renderField('iduser_ref'); ?>
+        <?php endif; ?>
+    <?php endif; ?>
+    </fieldset>
+    
     <fieldset class="border_top">
         <legend>Costi extra</legend>
         <?php echo $this->form->renderField('costo_spedizione'); ?>
@@ -21,6 +44,11 @@
 </form>
 <script>
     $(function() {
+        
+        // Run always to init
+        setCondivisione();
+        $('#condivisione').change(setCondivisione);
+        
         $('#data_inizio').datetimepicker({
             lang:   'it',
             i18n:   { it:{ months:mesi, dayOfWeek:giorni} },
@@ -48,5 +76,16 @@
                 }
               }
         });
+        
+        function setCondivisione()
+        {
+            if($('#condivisione').val() === "SHA")
+            {
+                $('#d_sharing').show();
+            } else {
+                $('#d_sharing').hide();
+            }        
+        }
+        
     });
 </script>

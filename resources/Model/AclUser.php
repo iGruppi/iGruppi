@@ -43,6 +43,13 @@ class Model_AclUser
         return $this->_isFounder();
     }
     
-    
+    /**
+     * Can manage Ordini
+     * @return bool
+     */
+    public function canManageOrdini()
+    {
+        return $this->_isFounder();
+    }
 
 }

@@ -20,7 +20,7 @@ class Model_Db_Users extends MyFw_DB_Base {
     
     function getUsersByIdGroup($idgroup, $attivi=null) {
         // get All Iscritti in Group
-        $sql = "SELECT u.*, ug.attivo "
+        $sql = "SELECT u.*, ug.attivo, CONCAT(u.nome, ' ', u.cognome) AS nominativo "
               ." FROM users_group AS ug"
               ." LEFT JOIN users AS u ON ug.iduser=u.iduser"
               ." WHERE ug.idgroup= :idgroup";

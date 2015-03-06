@@ -27,23 +27,74 @@ class Model_Ordini_Ordine extends Model_AF_AbstractCoR
 /*  **************************************************************************
  *  PERMISSION
  */    
+    
     /**
-     * 
-     * @todo
+     * Return TRUE if this group is the Master Group
+     * @return bool
+     */
+    private function isOwner()
+    {
+        return ($this->getMyIdGroup() == $this->getMasterGroup()->getIdGroup());
+    }
+    
+    /**
+     * Return TRUE if iduser session is Referente ordine
+     * @return bool
      */
     private function isReferenteOrdine()
     {
-        return true;
+        $iduser = Zend_Auth::getInstance()->getIdentity()->iduser;
+        return ($iduser == $this->getMyGroup()->getRefIdUser());
     }
     
+    /**
+     * Return TRUE if iduser session is Admin and can manage Ordini
+     * @return bool
+     */
+    private function isAdminForOrdine()
+    {
+        $userSessionVal = new Zend_Session_Namespace('userSessionVal');
+        return $userSessionVal->aclUserObject->canManageOrdini();
+    }
+    
+    /**
+     * Return TRUE if iduser can manage ORDINE
+     * @return bool
+     */
     public function canManageOrdine()
     {
-        return $this->isReferenteOrdine();
+        if($this->getMyGroup()->isSetUserRef())
+        {        
+            return $this->isReferenteOrdine();
+        } else {
+            return $this->isAdminForOrdine();
+        }
     }
     
+    /**
+     * Return TRUE if iduser can manage CONDIVISIONE ORDINE
+     * @return bool
+     */
     public function canManageCondivisione()
     {
-        return $this->isReferenteOrdine();
+        return ($this->isOwner() && $this->isReferenteOrdine());
     }
     
+    /**
+     * Return TRUE if iduser can manage DATE ORDINE
+     * @return bool
+     */
+    public function canManageDate()
+    {
+        return ($this->isOwner() && $this->isReferenteOrdine());
+    }
+    
+    /**
+     * Return TRUE if can manage UsersRef for this group
+     * @return bool
+     */
+    public function canManageUsersRef()
+    {
+        return $this->isAdminForOrdine();
+    }
 }

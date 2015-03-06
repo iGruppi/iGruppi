@@ -5,58 +5,57 @@
  * 
  * @author gullo
  */
-class Model_Ordini_Logger {
+class Model_Ordini_Logger 
+{
     
-    static function LogToDB($idordine, $descrizione) 
+    
+    static function LogVariazioneProdottoByField(Model_Ordini_Ordine $ordine, Model_Prodotto_Mediator_Mediator $prodotto, $field)
+    {
+        switch ($field) {
+            case "costo_ordine":
+                return self::LogVariazionePrezzo($ordine, $prodotto);
+            
+            case "disponibile_ordine":
+                return self::LogVariazioneDisponibile($ordine, $prodotto);
+
+            default:
+                return;
+        }
+    }
+    
+    static private function LogVariazionePrezzo(Model_Ordini_Ordine $ordine, Model_Prodotto_Mediator_Mediator $prodotto)
+    {
+        if(!is_null($prodotto))
+        {
+            $descProdotto = $prodotto->getDescrizioneListino();
+            $prezzo = $prodotto->getCostoOrdine();
+            $txt = "Il prezzo del prodotto <b>$descProdotto</b> è stato modificato: <b>$prezzo &euro;</b>";
+            return self::LogToDB($ordine->getIdOrdine(), $txt);
+        }
+    }
+    
+    static private function LogVariazioneDisponibile(Model_Ordini_Ordine $ordine, Model_Prodotto_Mediator_Mediator $prodotto)
+    {
+        if(!is_null($prodotto))
+        {
+            $descProdotto = $prodotto->getDescrizioneListino();
+            $disponibile = $prodotto->getDisponibileOrdine();
+            if($disponibile == "S") 
+            {
+                $txt = "Il prodotto <b>$descProdotto</b> è stato reso disponibile!</b>";
+            } else {
+                $txt = "Il prodotto <b>$descProdotto</b> è stato reso <b>NON</b> disponibile!</b>";                
+            }
+            return self::LogToDB($ordine->getIdOrdine(), $txt);
+        }
+    }
+    
+    static private function LogToDB($idordine, $descrizione) 
     {
         $db = Zend_Registry::get("db");
         $sth = $db->prepare("INSERT INTO ordini_variazioni SET idordine= :idordine, data=NOW(), descrizione= :descrizione");
         return $sth->execute(array('idordine' => $idordine, 'descrizione' => $descrizione));
     }
     
-    
-    static function LogByField($field, array $data)
-    {
-        switch ($field) {
-            case "costo_ordine":
-                self::LogVariazionePrezzo($data["idordine"], $data["idprodotto"], $data["costo_ordine"], $data["costo_ordine"]);
-                break;
-            
-            case "disponibile_ordine":
-                self::LogVariazioneDisponibile($data["idordine"], $data["idprodotto"], $data["disponibile_ordine"]);
-                break;
-            default:
-                
-                break;
-        }
-    }
-    
-    static function LogVariazionePrezzo($idordine, $idprodotto, $pre, $new)
-    {
-        $pObj = new Model_Db_Prodotti();
-        $prod = $pObj->getProdottoById($idprodotto);
-        if(!is_null($prod))
-        {
-            $descProdotto = $prod->descrizione;
-            $txt = "Il prezzo del prodotto <b>$descProdotto</b> è stato modificato, da $pre &euro; a <b>$new &euro;</b>";
-            self::LogToDB($idordine, $txt);
-        }
-    }
-    
-    static function LogVariazioneDisponibile($idordine, $idprodotto, $disponibile)
-    {
-        $pObj = new Model_Db_Prodotti();
-        $prod = $pObj->getProdottoById($idprodotto);
-        if(!is_null($prod))
-        {
-            $descProdotto = $prod->descrizione;
-            if($disponibile) {
-                $txt = "Il prodotto <b>$descProdotto</b> è stato reso disponibile!</b>";
-            } else {
-                $txt = "Il prodotto <b>$descProdotto</b> è stato reso <b>NON</b> disponibile!</b>";                
-            }
-            self::LogToDB($idordine, $txt);
-        }
-    }
     
 }

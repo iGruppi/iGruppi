@@ -6,11 +6,11 @@ class Model_Builder_GroupSharing_Parts_Ordine
     extends Model_Builder_GroupSharing_Parts_Group
 {
 
-    /**
-     * This field does not exists in ORDINE
-     */
-    public function setValidita($dal, $al) {}
-    public function getValidita() {}
+    
+    public function isSetUserRef()
+    {
+        return !is_null($this->getRefIdUser()); 
+    }
     
     /**
      * @return array
@@ -18,12 +18,13 @@ class Model_Builder_GroupSharing_Parts_Ordine
     public function dumpValuesForDB()
     {
         $ar = array(
-            'idordine'         => $this->getId(),
+            'idordine'          => $this->getId(),
             'idgroup_master'    => $this->getIdGroupMaster(),
             'idgroup_slave'     => $this->getIdGroup(),
             'iduser_ref'        => $this->getRefIdUser(),
             'visibile'          => $this->getVisibile()->getString(),
-            'note_consegna'     => $this->getNoteConsegna()
+            'note_consegna'     => $this->getNoteConsegna(),
+            'costo_spedizione'  => $this->getCostoSpedizione()
         );
         return $ar;
     }

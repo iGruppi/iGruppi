@@ -94,10 +94,9 @@ class Model_Db_Ordini extends MyFw_DB_Base {
     {
         $sql = "SELECT og.*, og.idordine AS id, g_slave.nome AS group_nome, u_slave.iduser AS ref_iduser, u_slave.nome AS ref_nome, u_slave.cognome AS ref_cognome "
                 . " FROM ordini_groups AS og "
-            // JOIN SLAVES
+            // JOIN SLAVES and related iduser_ref
                 . " JOIN groups AS g_slave ON og.idgroup_slave=g_slave.idgroup "
-                . " LEFT JOIN referenti AS ref_slave ON g_slave.idgroup=ref_slave.idgroup "
-                . " LEFT JOIN users AS u_slave ON ref_slave.iduser_ref=u_slave.iduser "
+                . " LEFT JOIN users AS u_slave ON og.iduser_ref=u_slave.iduser "
                 . " WHERE og.idordine= :idordine "
                 . " GROUP BY og.idgroup_master, og.idgroup_slave";
         $sth = $this->db->prepare($sql);
