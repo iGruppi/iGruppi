@@ -13,7 +13,12 @@ abstract class Model_AF_Dati extends Model_AF_AbstractHandlerCoR
      * @var bool
      */
     protected $_isChanged = false;
-
+    
+    
+    public function __construct() {
+        $this->_dati = new stdClass();
+    }
+    
     /**
      * @param mixed $values
      */

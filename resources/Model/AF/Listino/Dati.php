@@ -84,7 +84,7 @@ class Model_AF_Listino_Dati extends Model_AF_Dati
 
     /**
      * set ID LISTINO
-     * @param mixed $v idlistino
+     * @param int $v idlistino
      */
     public function setIdListino($v)
     {

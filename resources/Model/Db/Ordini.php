@@ -127,42 +127,43 @@ class Model_Db_Ordini extends MyFw_DB_Base {
     }
     
     
-/****************************************************************************************
- *  QUERY x PRODOTTI, CALCOLI e DETTAGLI ORDINE
- * 
- */    
-    
-    function addProdottiToOrdine($idordine, $arVal) {
-        $this->db->beginTransaction();
-        // prepare SQL INSERT
-        $sth_insert = $this->db->prepare("INSERT INTO ordini_prodotti SET idprodotto= :idprodotto, idordine= :idordine, costo_ordine= :costo_ordine");
-        foreach($arVal AS &$prodVal) {
-            $prodVal["idordine"] = $idordine;
-            $res = $sth_insert->execute($prodVal);
-            if(!$res) {
-                $this->db->rollBack();
-                return false;
+    /**
+     * Insert all products of $listini array in the new Ordine
+     * @param int $idordine
+     * @param array $listini
+     */
+    public function createOrdiniByListini($idordine, array $listini)
+    {
+        if(count($listini) > 0)
+        {
+            $this->db->beginTransaction();
+            foreach ($listini AS $idlistino)
+            {
+                $sth = $this->db->prepare("INSERT INTO ordini_prodotti (idordine, idlistino, idprodotto, costo_ordine) "
+                                         ."    SELECT :idordine, idlistino, idprodotto, costo_listino "
+                                         . "   FROM listini_prodotti "
+                                         ."    WHERE idlistino= :idlistino AND attivo_listino='S'");
+                $res = $sth->execute(array('idordine' => $idordine, 'idlistino' => $idlistino));
+                if(!$res) {
+                    $this->db->rollBack();
+                    return false;
+                }
             }
+            return $this->db->commit();
         }
-        return $this->db->commit();
+        return false;
     }
     
-    function updateProdottiForOrdine(Model_Ordini_Ordine $ordine, array $arVal) {
-        $this->db->beginTransaction();
-        // prepare SQL UPDATE
-        $sth_update = $this->db->prepare("UPDATE ordini_prodotti SET costo_ordine= :costo_ordine, disponibile_ordine= :disponibile_ordine WHERE idordine= :idordine AND idlistino= :idlistino AND idprodotto= :idprodotto");
-        foreach($arVal AS &$prodVal) {
-            $prodVal["idordine"] = $ordine->getIdOrdine();
-            $prodVal["idlistino"] = $ordine->getIdListino();
-            $res = $sth_update->execute($prodVal);
-            if(!$res) {
-                $this->db->rollBack();
-                return false;
-            }
-        }
-        return $this->db->commit();
-    }
+
     
+
+    /**
+     * SET QTA and QTA_REALE for ORDINE by iduser
+     * @param int $idordine
+     * @param int $iduser
+     * @param int $arQta
+     * @return boolean return true if the queries does not get errors
+     */
     function setQtaProdottiForOrdine($idordine, $iduser, $arQta) {
         $this->db->beginTransaction();
         if(count($arQta) > 0) {
@@ -191,6 +192,14 @@ class Model_Db_Ordini extends MyFw_DB_Base {
         return $this->db->commit();
     }
     
+    
+    /**
+     * ADD QTA (and set QTA_REALE) for ORDINE by iduser
+     * @param int $idordine
+     * @param int $iduser
+     * @param int $idprodotto
+     * @return boolean return true if the queries does not get errors
+     */
     function addQtaProdottoForOrdine($idordine, $iduser, $idprodotto) 
     {
         $sth = $this->db->prepare("SELECT * FROM ordini_user_prodotti WHERE iduser= :iduser AND idordine= :idordine AND idprodotto= :idprodotto");
@@ -210,6 +219,12 @@ class Model_Db_Ordini extends MyFw_DB_Base {
         return false;
     }
     
+    
+    /**
+     * GET all prodotti ordered by idordine
+     * @param int $idordine
+     * @return array the results set
+     */
     function getProdottiOrdinatiByIdordine($idordine) 
     {
         $sqlp = "SELECT * FROM ordini_user_prodotti WHERE idordine= :idordine";
@@ -218,6 +233,8 @@ class Model_Db_Ordini extends MyFw_DB_Base {
         $prodotti = $sthp->fetchAll(PDO::FETCH_OBJ);
         return $prodotti;
     }
+    
+    
     
     
     

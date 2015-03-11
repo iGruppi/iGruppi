@@ -68,6 +68,15 @@ class Model_AF_Ordine_Dati extends Model_AF_Dati
  */    
     
     /**
+     * set ID ORDINE
+     * @param int $v idordine
+     */
+    public function setIdOrdine($v)
+    {
+        $this->setValue("idordine", $v);
+    }    
+    
+    /**
      * Set DataInizio, DateTime format
      * @param DateTime $v
      */
