@@ -7,7 +7,7 @@
     </div>
     <div class="row">
         <div class="col-md-6">
-            <div id="grid-prodotti" class="handsontable"></div>
+            <div id="grid-prodotti" class="handsontable myhandsontable"></div>
         </div>
     </div>
         
@@ -47,10 +47,7 @@
 
 $(document).ready(function () {
   
-  var container1 = document.getElementById('grid-prodotti'),
-    hot1;
-  
-  hot1 = new Handsontable(container1, {
+  $('#grid-prodotti').handsontable({
       data: <?php echo json_encode($arProductsGrid); ?>,
       manualColumnMove: true,
       manualColumnResize: true,
@@ -93,18 +90,14 @@ $(document).ready(function () {
                 var row = changes[i][0];
                 var old_value = changes[i][2];
                 var new_value = changes[i][3];
-                var codice = hot1.getSourceDataAtRow(row);
+                var codice = this.getSourceDataAtRow(row);
                 var idproduct = codice.idproduct;
                 console.log(idproduct);  
             }
           }
       }
       <?php endif; ?>
-              
     });
-    
-    console.log(hot1.getSettings());
-    
 });
     
 </script>

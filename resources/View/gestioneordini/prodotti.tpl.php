@@ -37,7 +37,7 @@
         endforeach; 
         //Zend_Debug::dump($arProductsGrid);
         ?>
-            <div id="grid-prodotti" class="handsontable"></div>
+            <div id="grid-prodotti" class="handsontable myhandsontable"></div>
 <?php else: ?>
             <h3>Nessun prodotto inserito</h3>        
 <?php endif; ?>
@@ -49,8 +49,7 @@ $(document).ready(function () {
   // store my idordine
   var idordine = <?php echo $this->ordine->getIdOrdine(); ?>;
   // init Container for Handsontable
-  var container1 = document.getElementById('grid-prodotti');
-  var hot1 = new Handsontable(container1, {
+  $('#grid-prodotti').handsontable({
       data: <?php echo json_encode($arProductsGrid); ?>,
       manualColumnMove: true,
       manualColumnResize: true,
@@ -106,7 +105,7 @@ $(document).ready(function () {
                 var new_value = changes[i][3];
                 if(old_value !== new_value)
                 {   
-                    var rowSourceData = hot1.getSourceDataAtRow(changes[i][0]);
+                    var rowSourceData = this.getSourceDataAtRow(changes[i][0]);
                     var idprodotto = rowSourceData.idprodotto;
                     var idlistino = rowSourceData.idlistino;
                     $.getJSON(
@@ -126,8 +125,5 @@ $(document).ready(function () {
       }
               
     });
-    
-//    console.log(hot1.getSettings());
-    
 });
 </script>
