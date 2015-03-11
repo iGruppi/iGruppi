@@ -6,7 +6,7 @@
  * 
  */
 class Model_Prodotto_UserOrdine_QtaDecorator
-    implements Model_Prodotto_UserOrdine_DecoratorInterface
+    implements Model_Prodotto_UserOrdine_QtaDecoratorInterface
 {
     /**
      * Store the Prodotto_Mediator object
@@ -78,44 +78,6 @@ class Model_Prodotto_UserOrdine_QtaDecorator
         return $users;
     }
     
-
-/********************
- * PER USER METHODS *
- */
-    
-    public function getQtaReale_ByIduser($iduser)
-    {
-        if(isset($this->_arQta[$iduser])) 
-        {
-            return $this->_arQta[$iduser]["qta_reale"];
-        }
-        return 0;
-    }
-    
-    public function getQta_ByIduser($iduser)
-    {
-        if(isset($this->_arQta[$iduser])) 
-        {
-            return $this->_arQta[$iduser]["qta"];
-        }
-        return 0;
-    }
-    
-    /**
-     * @return float
-     */    
-    public function getTotale_ByIduser($iduser) 
-    {
-        return $this->getCostoOrdine() * $this->getQtaReale_ByIduser($iduser);
-    }
-    
-    /**
-     * @return float
-     */    
-    public function getTotaleSenzaIva_ByIduser($iduser) 
-    {
-        return $this->getCostoSenzaIva() * $this->getQtaReale_ByIduser($iduser);
-    }    
     
 /******************
  * TOTALI METHODS *
@@ -162,5 +124,45 @@ class Model_Prodotto_UserOrdine_QtaDecorator
     {
         return $this->getCostoSenzaIva() * $this->getQtaReale();
     }    
+
+    
+/********************
+ * PER USER METHODS *
+ */
+    
+    public function getQtaReale_ByIduser($iduser)
+    {
+        if(isset($this->_arQta[$iduser])) 
+        {
+            return $this->_arQta[$iduser]["qta_reale"];
+        }
+        return 0;
+    }
+    
+    public function getQta_ByIduser($iduser)
+    {
+        if(isset($this->_arQta[$iduser])) 
+        {
+            return $this->_arQta[$iduser]["qta"];
+        }
+        return 0;
+    }
+    
+    /**
+     * @return float
+     */    
+    public function getTotale_ByIduser($iduser) 
+    {
+        return $this->getCostoOrdine() * $this->getQtaReale_ByIduser($iduser);
+    }
+    
+    /**
+     * @return float
+     */    
+    public function getTotaleSenzaIva_ByIduser($iduser) 
+    {
+        return $this->getCostoSenzaIva() * $this->getQtaReale_ByIduser($iduser);
+    }    
+    
     
 }
