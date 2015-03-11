@@ -19,7 +19,7 @@ class Model_Builder_GroupSharing_Director
         $builder->addRef();
         $builder->addValidita();
         $builder->addVisibile();
-        $builder->addCostoSpedizione();
+        $builder->addExtra();
         $builder->addNoteConsegna();
 
         return $builder->getGroup();

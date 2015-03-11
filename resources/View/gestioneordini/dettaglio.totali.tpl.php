@@ -43,10 +43,12 @@
         <div class="sub_menu">
             <h3 class="totale">Totale colli: <strong><?php echo $this->ordCalcObj->getTotaleColli(); ?></strong></h3>
             <h3 class="totale">Totale ordine (senza IVA): <strong><?php echo $this->valuta($this->ordCalcObj->getTotaleSenzaIva()); ?></strong></h3>
-    <?php if($this->ordCalcObj->hasCostoSpedizione()): ?>
-            <h3 class="totale">Spese di spedizione: <strong><?php echo $this->valuta($this->ordCalcObj->getCostoSpedizione()); ?></strong></h3>
+    <?php if($this->ordCalcObj->getSpeseExtra()->has()): ?>
+        <?php foreach ($this->ordCalcObj->getSpeseExtra()->get() AS $extra): ?>
+            <h4 class="totale"><?php echo $extra->getDescrizione(); ?> : <strong><?php echo $this->valuta($extra->getCosto()); ?></strong></h4>
+        <?php endforeach; ?>
     <?php endif; ?>            
-            <h3 class="totale">Totale ordine: <strong><?php echo $this->valuta($this->ordCalcObj->getTotaleConSpedizione()); ?></strong></h3>
+            <h3 class="totale">Totale ordine: <strong><?php echo $this->valuta($this->ordCalcObj->getTotaleConExtra()); ?></strong></h3>
         </div>                    
         <div class="my_clear" style="clear:both;">&nbsp;</div>
     </div>

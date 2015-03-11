@@ -1,6 +1,21 @@
 <h2>Ordine del <strong><?php echo $this->date($this->ordine->getDataInizio(), '%d %B %Y');?></strong></h2>
 <h3>Produttori <strong><?php echo $this->arrayToString( $this->ordine->getProduttoriList() ); ?></strong></h3>
 
+<?php if($this->updated): ?>
+<div class="row">
+  <div class="col-md-8">
+        <div class="alert alert-success alert-dismissable">
+          <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+    <?php if(isset($this->updated_msg) && $this->updated_msg != ""): ?>
+          <?php echo $this->updated_msg; ?>
+    <?php else: ?>
+          L'ordine è stato <strong>aggiornato con successo</strong>!
+    <?php endif; ?>          
+        </div>
+  </div>
+</div>
+<?php endif; ?>
+
 <div class="row">
   <div class="col-md-12">
     <h4 class="ordine <?php echo $this->ordine->getStatusCSSClass(); ?>"><?php echo $this->ordine->getStateName(); ?></h3>
@@ -27,6 +42,7 @@
         </a>
         <ul class="dropdown-menu" role="menu">
           <li><a href="/gestione-ordini/edit/idordine/<?php echo $this->ordine->getIdOrdine();?>">Dati ordine</a></li>
+          <li><a href="/gestione-ordini/speseextra/idordine/<?php echo $this->ordine->getIdOrdine();?>">Spese extra</a></li>
           <li><a href="/gestione-ordini/prodotti/idordine/<?php echo $this->ordine->getIdOrdine();?>">Prodotti</a></li>
           <li><a href="/gestione-ordini/qtaordine/idordine/<?php echo $this->ordine->getIdOrdine(); ?>">Quantità ordinate</a></li>
         </ul>
@@ -89,18 +105,3 @@
 <?php endif; ?>
   </div>   
 </div>
-
-<?php if($this->updated): ?>
-<div class="row">
-  <div class="col-md-8">
-        <div class="alert alert-success alert-dismissable">
-          <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-    <?php if(isset($this->updated_msg) && $this->updated_msg != ""): ?>
-          <?php echo $this->updated_msg; ?>
-    <?php else: ?>
-          L'ordine è stato <strong>aggiornato con successo</strong>!
-    <?php endif; ?>          
-        </div>
-  </div>
-</div>
-<?php endif; ?>

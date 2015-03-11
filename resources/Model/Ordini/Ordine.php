@@ -23,6 +23,15 @@ class Model_Ordini_Ordine extends Model_AF_AbstractCoR
         return $this->append("States", $sof );
     }
 
+    /**
+     * Direct access to Extra Spese fot MyGroup
+     * @return Model_Ordini_Extra_Spese
+     */
+    public function getSpeseExtra()
+    {
+        return $this->getMyGroup()->getExtra();
+    }
+    
     
 /*  **************************************************************************
  *  PERMISSION

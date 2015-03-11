@@ -154,7 +154,7 @@ abstract class Model_AF_Gruppi extends Model_AF_AbstractHandlerCoR
         $group->setVisibile(    (isset($g->visibile) ? $g->visibile : "N") );
         $group->setValidita(    (isset($g->valido_dal) ? $g->valido_dal : null), (isset($g->valido_al) ? $g->valido_al : null) );
         $group->setNoteConsegna((isset($g->note_consegna) ? $g->note_consegna : "") );
-        $group->setCostoSpedizione((isset($g->costo_spedizione) ? $g->costo_spedizione : 0) );
+        $group->setExtra(       (isset($g->extra) ? $g->extra : ""));
 
         // set idmaster_group (it should be the same for all the slaves groups!)
         $this->_idgroup_master = $g->idgroup_master;

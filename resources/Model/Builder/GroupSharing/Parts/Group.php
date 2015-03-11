@@ -149,21 +149,20 @@ abstract class Model_Builder_GroupSharing_Parts_Group
         return $this->data["validita"];
     }
 
-
     /**
-     * @param float $cs
+     * @param string $e
      */
-    public function setCostoSpedizione($cs)
+    public function setExtra($e)
     {
-        $this->data["costo_spedizione"]->set($cs);
+        $this->data["extra"]->set($e);
     }
     
     /**
-     * @return float
+     * @return Model_Ordini_Extra_Spese
      */    
-    public function getCostoSpedizione()
+    public function getExtra()
     {
-        return $this->data["costo_spedizione"]->get();
+        return $this->data["extra"];
     }
     
     /**

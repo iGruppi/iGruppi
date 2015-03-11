@@ -24,7 +24,7 @@ class Model_Builder_GroupSharing_Parts_Ordine
             'iduser_ref'        => $this->getRefIdUser(),
             'visibile'          => $this->getVisibile()->getString(),
             'note_consegna'     => $this->getNoteConsegna(),
-            'costo_spedizione'  => $this->getCostoSpedizione()
+            'extra'             => $this->getExtra()->getSerializedArray()
         );
         return $ar;
     }

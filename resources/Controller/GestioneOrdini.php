@@ -70,7 +70,6 @@ class Controller_GestioneOrdini extends MyFw_Controller {
         $form->setAction("/gestione-ordini/new");
         // remove useless fields
         $form->removeField("visibile");
-        $form->removeField("costo_spedizione");
         $form->removeField("note_consegna");
         $form->removeField("condivisione");
         $form->removeField("iduser_ref");
@@ -82,21 +81,39 @@ class Controller_GestioneOrdini extends MyFw_Controller {
             $fv = $this->getRequest()->getPost();
             if( $form->isValid($fv) ) 
             {                
-                // SAVE to DB
-                $idordine = $this->getDB()->makeInsert("ordini", $form->getValues());
+                // BUILD a new Listino
+                $mooObj = new Model_Ordini_Ordine( new Model_AF_OrdineFactory() );
+                $mooObj->appendDati();
+                $mooObj->appendGruppi();
                 
-                // Add ALL prodotti ATTIVI by Default!
-                $prodObj = new Model_Db_Prodotti();
-                $prodotti = $prodObj->getProdottiByIdProduttore($this->_produttore->idproduttore, 'S');
-                if(count($prodotti) > 0) {
-                    $ordObj = new Model_Db_Ordini();
-                    foreach($prodotti AS $prodotto) {
-                        $arVal[] = array('idprodotto' => $prodotto->idprodotto, 'costo' => $prodotto->costo);
-                    }
-                    $ordObj->addProdottiToOrdine($idordine, $arVal);
-                }
+                // SAVE ORDINE to DB
+                $mooObj->setDataInizio($form->getValue("data_inizio"));
+                $mooObj->setDataFine($form->getValue("data_fine"));
+                $mooObj->setCondivisione("PRI"); // Default is Private
                 
+                if( $mooObj->saveToDB_Dati() ) 
+                {
+                    $idordine = $mooObj->getIdOrdine();
+                    // create a NEW group
+                    $group = new stdClass();
+                    $group->id = $idordine;
+                    $group->idgroup_master = $this->_userSessionVal->idgroup;
+                    $group->idgroup_slave = $this->_userSessionVal->idgroup;
+                    $group->ref_iduser = $this->_iduser;
+                    // add my group
+                    $mooObj->addGroup($group);
+                    $resSave = $mooObj->saveToDB_Gruppi();                
+                    if($resSave)
+                    {
+                        $listini = $fv["listini"];
+                        // Add the products of the selected LISTINI to ORDINI
+                        $ordineObj = new Model_Db_Ordini();
+                        $res = $ordineObj->createOrdiniByListini($idordine, $listini);
+                        if($res) {
                 $this->redirect("gestione-ordini", "dashboard", array("idordine" => $idordine, "updated" => true));
+            }
+        }
+                }
             }
         }
         
@@ -239,7 +256,6 @@ class Controller_GestioneOrdini extends MyFw_Controller {
                     $ordine->getMyGroup()->setRefIdUser($form->getValue("iduser_ref"));
                 }
                 // Every group can set this data personalized
-                $ordine->getMyGroup()->setCostoSpedizione($form->getValue("costo_spedizione"));
                 $ordine->getMyGroup()->setNoteConsegna($form->getValue("note_consegna"));
                 $ordine->getMyGroup()->setVisibile($form->getValue("visibile"));
                 
@@ -261,7 +277,6 @@ class Controller_GestioneOrdini extends MyFw_Controller {
             if($ordine->canManageUsersRef()) {
                 $form->setValue("iduser_ref", $ordine->getMyGroup()->getRefIdUser());
             }
-            $form->setValue("costo_spedizione", $ordine->getMyGroup()->getCostoSpedizione());
             $form->setValue("note_consegna", $ordine->getMyGroup()->getNoteConsegna());
             $form->setValue("visibile", $ordine->getMyGroup()->getVisibile()->getString());
         }
@@ -270,10 +285,43 @@ class Controller_GestioneOrdini extends MyFw_Controller {
         $this->view->form = $form;
     }
     
-    function prodottiAction() 
+    function speseextraAction() 
     {
         // build Ordine
         $ordine = $this->_buildOrdine( new Model_AF_OrdineFactory() );
+        
+        if($this->getRequest()->isPost()) {
+            // get Post and check if is valid
+            $fv = $this->getRequest()->getPost();
+            if(isset($fv["extra"]) && is_array($fv["extra"]))
+            {
+                if(count($fv["extra"]) > 0) 
+                {
+                    $ordine->getSpeseExtra()->resetSpese();
+                    foreach($fv["extra"] AS $extraVal)
+                    {
+                        $ordine->getSpeseExtra()->addSpesa(
+                                    new Model_Ordini_Extra_Spesa(
+                                            $extraVal["descrizione"], 
+                                            $extraVal["costo"], 
+                                            $extraVal["tipo"]
+                                        )
+                            );
+                    }
+                    // save to db
+                    $ordine->saveToDB_Gruppi();
+                }
+            }
+        }
+        $this->view->ordine = $ordine;
+    }
+    
+    
+    
+    function prodottiAction() 
+    {
+        // build Ordine
+        $this->_buildOrdine( new Model_AF_OrdineFactory() );
     }
     
     function updateprodottoAction()
@@ -424,7 +472,8 @@ class Controller_GestioneOrdini extends MyFw_Controller {
 
     }
     
-    function newprodsaveAction() {
+    function newprodsaveAction() 
+    {
         $layout = Zend_Registry::get("layout");
         $layout->disableDisplay();
         

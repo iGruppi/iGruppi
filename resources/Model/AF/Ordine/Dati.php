@@ -53,22 +53,6 @@ class Model_AF_Ordine_Dati extends Model_AF_Dati
     }
     
     /**
-     * Return Costo di Spedizione
-     * @return float
-     */
-    public function getCostoSpedizione() {
-        return $this->getValue("costo_spedizione");
-    }
-    
-    /**
-     * Return TRUE if Costo di Spedizione > 0
-     * @return bool
-     */
-    public function hasCostoSpedizione() {
-        return ($this->getCostoSpedizione() > 0);
-    }    
-    
-    /**
      * Return Condivisione
      * @return string
      */
@@ -102,15 +86,6 @@ class Model_AF_Ordine_Dati extends Model_AF_Dati
     }
 
     /**
-     * Set Costo Spedizione
-     * @param float $v
-     */
-    public function setCostoSpedizione($v)
-    {
-        $this->setValue("costo_spedizione", $v);
-    }
-    
-    /**
      * Set Condivisione
      * @param string $v
      */
@@ -131,14 +106,14 @@ class Model_AF_Ordine_Dati extends Model_AF_Dati
             // check for INSERT or UPDATE
             if(is_null($this->getValue("idordine")) ) {
                 // INSERT, idordine does not exists
-                $sth = $db->prepare("INSERT INTO ordini SET data_inizio= :data_inizio, data_fine= :data_fine, costo_spedizione= :costo_spedizione, condivisione= :condivisione");
-                $res = $sth->execute(array('data_inizio' => $this->getDataInizio(), 'data_fine' => $this->getDataFine(), 'costo_spedizione' => $this->getCostoSpedizione(), 'condivisione' => $this->getCondivisione()));
-                $this->setIdListino( $db->lastInsertId() );
+                $sth = $db->prepare("INSERT INTO ordini SET data_inizio= :data_inizio, data_fine= :data_fine, condivisione= :condivisione");
+                $res = $sth->execute(array('data_inizio' => $this->getDataInizio(), 'data_fine' => $this->getDataFine(), 'condivisione' => $this->getCondivisione()));
+                $this->setIdOrdine( $db->lastInsertId() );
                 return $res;
             } else {
                 // UPDATE ordini by idordine
-                $sth = $db->prepare("UPDATE ordini SET data_inizio= :data_inizio, data_fine= :data_fine, costo_spedizione= :costo_spedizione, condivisione= :condivisione WHERE idordine= :idordine");
-                return $sth->execute(array('idordine' => $this->getIdOrdine(), 'data_inizio' => $this->getDataInizio(), 'data_fine' => $this->getDataFine(), 'costo_spedizione' => $this->getCostoSpedizione(), 'condivisione' => $this->getCondivisione()));
+                $sth = $db->prepare("UPDATE ordini SET data_inizio= :data_inizio, data_fine= :data_fine, condivisione= :condivisione WHERE idordine= :idordine");
+                return $sth->execute(array('idordine' => $this->getIdOrdine(), 'data_inizio' => $this->getDataInizio(), 'data_fine' => $this->getDataFine(), 'condivisione' => $this->getCondivisione()));
             }
             // RESET isChanged flag
             $this->_isChanged = false;
