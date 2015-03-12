@@ -2,7 +2,6 @@
 /**
  * This class calculate TOTALI values
  * 
- * 
  * @author gullo
  */
 class Model_Ordini_Calcoli_Totali 
@@ -27,9 +26,19 @@ class Model_Ordini_Calcoli_Totali
     }
     
     // TOTALE INCLUSO SPEDIZIONE
-    public function getTotaleConSpedizione() 
+    public function getTotaleConExtra() 
     {
-        return ($this->hasCostoSpedizione()) ? ($this->getTotale() + $this->getCostoSpedizione()) : $this->getTotale();
+        if($this->getSpeseExtra()->has()) 
+        {
+            $totaleExtra = 0;
+            foreach($this->getSpeseExtra()->get() AS $extra)
+            {
+                $totaleExtra += $extra->getTotaleGruppo();
+            }
+            return ($this->getTotale() + $totaleExtra);
+        } else {
+            return $this->getTotale();
+        }
     }
     
     public function getTotaleSenzaIva() 

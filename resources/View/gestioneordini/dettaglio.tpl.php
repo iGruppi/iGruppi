@@ -12,10 +12,6 @@
             echo $this->partial('gestioneordini/dettaglio.utenti.tpl.php', array('ordCalcObj' => $this->ordCalcObj));
             break;
         
-        case "prodotti":
-            echo $this->partial('gestioneordini/dettaglio.prodotti.tpl.php', array('ordCalcObj' => $this->ordCalcObj));
-            break;
-        
         default:
         break;
     } 

@@ -3,7 +3,7 @@
  * Description of generic Spesa
  * @author gullo
  */
-class Model_Ordini_Extra_Spesa implements Model_Ordini_Extra_Interface 
+abstract class Model_Ordini_Extra_Spesa implements Model_Ordini_Extra_Interface 
 {
     /**
      * Descrizione spesa extra
@@ -18,11 +18,10 @@ class Model_Ordini_Extra_Spesa implements Model_Ordini_Extra_Interface
     private $_costo;
     
     /**
-     * Tipo di Ripartizione della spesa extra
+     * Tipo Spesa Extra
      * @var string
      */
     private $_tipo;
-        
     
     /**
      * Init values by serialized Array
@@ -64,9 +63,6 @@ class Model_Ordini_Extra_Spesa implements Model_Ordini_Extra_Interface
     {
         return $this->_tipo;
     }
-    
-
-    
     
     
     

@@ -28,18 +28,20 @@
                     <td class="text-right"><strong><?php echo $this->valuta($pObj->getTotale_ByIduser($iduser)); ?></strong></td>
                 </tr>        
         <?php endforeach; ?>
-        <?php if($this->ordCalcObj->hasCostoSpedizione() && $this->ordCalcObj->getTotaleByIduser($iduser)): ?>
+        <?php if($this->ordCalcObj->getSpeseExtra()->has() && $this->ordCalcObj->getTotaleByIduser($iduser)): ?>
+            <?php foreach ($this->ordCalcObj->getSpeseExtra()->get() AS $extra): ?>
                 <tr class="warning">
                     <td colspan="3">&nbsp;</td>
-                    <td><b>Spese di spedizione</b></td>
-                    <td class="text-right"><strong><?php echo $this->valuta($this->ordCalcObj->getSpedizione()->getCostoSpedizioneRipartitoByIduser($iduser)); ?></strong></td>
+                    <td><b><?php echo $extra->getDescrizione(); ?></b></td>
+                    <td class="text-right"><strong><?php echo $this->valuta($extra->getParzialeByIduser($this->ordCalcObj, $iduser)); ?></strong></td>
                 </tr>
+            <?php endforeach; ?>
         <?php endif; ?>
             </tbody>
         </table>        
         
         <div class="sub_menu">
-            <h3 class="totale">Totale utente: <strong><?php echo $this->valuta($this->ordCalcObj->getTotaleConSpedizioneByIduser($iduser)) ?></strong></h3>
+            <h3 class="totale">Totale utente: <strong><?php echo $this->valuta($this->ordCalcObj->getTotaleConExtraByIduser($iduser)) ?></strong></h3>
         </div>                    
         <div class="my_clear" style="clear:both;">&nbsp;</div>
     <?php endforeach; ?>

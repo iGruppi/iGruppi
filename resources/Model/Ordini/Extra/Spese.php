@@ -12,13 +12,17 @@ class Model_Ordini_Extra_Spese {
      */
     private $_spese;
     
+    /**
+     * SET spese by Serialized Array (it should come from DB value)
+     * @param string $str
+     */
     public function set($str) {
         $spese = unserialize($str);
         if(is_array($spese) && count($spese) > 0)
         {
             foreach($spese AS $spesa)
             {
-                $this->addSpesa(new Model_Ordini_Extra_Spesa($spesa[0], $spesa[1], $spesa[2]));
+                $this->addSpesa($spesa[0], $spesa[1], $spesa[2]);
             }
         } else {
             $this->resetSpese();
@@ -43,9 +47,6 @@ class Model_Ordini_Extra_Spese {
         return (bool)count($this->_spese);
     }
     
-    
-    
-
     /**
      * Return array serialized of ALL spese extra
      * @return string
@@ -63,13 +64,21 @@ class Model_Ordini_Extra_Spese {
         return serialize($s);
     }
     
-    
-    
-    public function addSpesa(Model_Ordini_Extra_Spesa $spesa)
+    /**
+     * ADD Spesa by SpesaFactory
+     * @param string $descrizione
+     * @param float $costo
+     * @param string $tipo
+     */
+    public function addSpesa($descrizione, $costo, $tipo)
     {
-        $this->_spese[] = $spesa;
+        $this->_spese[] = Model_Ordini_Extra_SpesaFactory::Create($descrizione, $costo, $tipo);
     }
     
+    /**
+     * Reset the _spese array
+     * @return void
+     */
     public function resetSpese()
     {
         $this->_spese = array();

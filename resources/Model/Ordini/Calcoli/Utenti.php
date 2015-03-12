@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Description of Utenti
  * 
@@ -9,7 +8,6 @@ class Model_Ordini_Calcoli_Utenti
     extends Model_Ordini_Calcoli_AbstractCalcoli {
     
     private $_arProdUtenti = null;
-    private $spedObj = null;
     
     function getProdottiUtenti()
     {
@@ -35,6 +33,23 @@ class Model_Ordini_Calcoli_Utenti
         return $t;
     }
     
+    // TOTALE INCLUSO SPEDIZIONE
+    public function getTotaleConExtraByIduser($iduser) 
+    {
+        if($this->getSpeseExtra()->has()) 
+        {
+            $totaleExtra = 0;
+            foreach($this->getSpeseExtra()->get() AS $extra)
+            {
+                $totaleExtra += $extra->getParzialeByIduser($this, $iduser);
+            }
+            return ($this->getTotaleByIduser($iduser) + $totaleExtra);
+        } else {
+            return $this->getTotaleByIduser($iduser);
+        }
+    }
+    
+    
     function getElencoUtenti()
     {
         $prodotti = $this->getProdottiUtenti();
@@ -57,25 +72,7 @@ class Model_Ordini_Calcoli_Utenti
         return (count($this->getProdottiUtenti()) > 0) ? true : false;
     }
     
-    
-    
-/************************************************************
- * SPEDIZIONI
- */
 
-    function getSpedizione() 
-    {
-        if(is_null($this->spedObj))
-        {
-            $this->spedObj = new Model_Ordini_Calcoli_CostoSpedizione($this);
-        }
-        return $this->spedObj;
-    }
-    
-    function getTotaleConSpedizioneByIduser($iduser) {
-        return ($this->getTotaleByIduser($iduser) + $this->getSpedizione()->getCostoSpedizioneRipartitoByIduser($iduser));
-    }
-    
 /************************************************************
  * Private Misc, init settings
  */
@@ -114,7 +111,7 @@ class Model_Ordini_Calcoli_Utenti
                 }
             }
         }
-//        Zend_Debug::dump($this->_arProdUtenti);die;
+        //Zend_Debug::dump($this->_arProdUtenti);die;
         return $this->_arProdUtenti;
     }    
     

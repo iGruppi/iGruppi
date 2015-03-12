@@ -1,12 +1,13 @@
 <?php
-
 /**
- * Description of AbstractCalcoli
+ * Description of AbstractCalcoli, it is a DECORATOR of Model_Ordini_Ordine
  * 
  * @author Davide Gullo <gullo at m4ss.net>
  * 
  */
-abstract class Model_Ordini_Calcoli_AbstractCalcoli {
+abstract class Model_Ordini_Calcoli_AbstractCalcoli
+    implements Model_Ordini_Calcoli_CalcoliDecoratorInterface 
+{
 
     /**
      * The Model_Ordini_Ordine object
@@ -15,27 +16,37 @@ abstract class Model_Ordini_Calcoli_AbstractCalcoli {
     protected $_ordine;
     
     /**
-     * Prodotti ordered by any user for an order (comes from ordini_user_prodotti table)
-     * @var array
-     */
-    protected $_prodotti;
-    
-    /**
      * it's the array of all the group members
      * @var (null|array)
      */
-    protected $_arUsers = null;
-
+    protected $_arUsers = null;    
     
     /**
-     * Set Model_Ordini_Ordine object
+     * It CAN ONLY decorate the Model_Ordini_Ordine
      * @param Model_Ordini_Ordine $ordine
      */
-    public function setOrdine(Model_Ordini_Ordine $ordine) {
+    public function __construct(Model_Ordini_Ordine $ordine) {
         $this->_ordine = $ordine;
     }
     
-    public function setProdottiOrdinati($prodotti)
+    /**
+     * Route all other method calls directly to Model_Ordini_Ordine
+     * @param type $method
+     * @param type $args
+     * @return mixed
+     */
+    public function __call($method, $args)
+    {
+        // you could also add method_exists check here
+        return call_user_func_array(array($this->_ordine, $method), $args);
+    }
+    
+    
+    /**
+     * Set Prodotti Ordinati by every Iduser
+     * @param array $prodotti
+     */
+    public function setProdottiOrdinati(array $prodotti)
     {
         if(count($prodotti) > 0)
         {
@@ -48,21 +59,10 @@ abstract class Model_Ordini_Calcoli_AbstractCalcoli {
         }
     }
     
-    public function getProdotti()
-    {
-        return $this->_ordine->getProdotti();
-    }
-    
-    public function hasCostoSpedizione()
-    {
-        return $this->_ordine->hasCostoSpedizione();
-    }
-    
-    public function getCostoSpedizione()
-    {
-        return $this->_ordine->getCostoSpedizione();
-    }
-    
+
+/***********************************************
+ *  USER METHODS
+ */
     
     /**
      * Return data (from users table) of user by iduser
@@ -74,11 +74,9 @@ abstract class Model_Ordini_Calcoli_AbstractCalcoli {
         $arUsers = $this->_getArUsersValues();
         if(count($arUsers) > 0)
         {
-            foreach ($arUsers as $key => $value) {
-                if($value->iduser == $iduser)
-                {
-                    return $value;
-                }
+            if(isset($this->_arUsers[$iduser]))
+            {
+                return $this->_arUsers[$iduser];
             }
         }
         return null;

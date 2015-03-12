@@ -54,7 +54,6 @@
         <ul class="dropdown-menu" role="menu">
           <li><a href="/gestione-ordini/dettaglio/idordine/<?php echo $this->ordine->getIdOrdine(); ?>/tipo/totali">Totale ordinato</a></li>
           <li><a href="/gestione-ordini/dettaglio/idordine/<?php echo $this->ordine->getIdOrdine(); ?>/tipo/utenti">Parziali per utente</a></li>
-          <li><a href="/gestione-ordini/dettaglio/idordine/<?php echo $this->ordine->getIdOrdine(); ?>/tipo/prodotti">Parziali per prodotto</a></li>
         </ul>
     </div>
 <?php if( $this->ordine->is_Chiuso()): ?>

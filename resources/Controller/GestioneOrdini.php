@@ -80,7 +80,7 @@ class Controller_GestioneOrdini extends MyFw_Controller {
             // get Post and check if is valid
             $fv = $this->getRequest()->getPost();
             if( $form->isValid($fv) ) 
-            {                
+            {       
                 // BUILD a new Listino
                 $mooObj = new Model_Ordini_Ordine( new Model_AF_OrdineFactory() );
                 $mooObj->appendDati();
@@ -110,9 +110,9 @@ class Controller_GestioneOrdini extends MyFw_Controller {
                         $ordineObj = new Model_Db_Ordini();
                         $res = $ordineObj->createOrdiniByListini($idordine, $listini);
                         if($res) {
-                $this->redirect("gestione-ordini", "dashboard", array("idordine" => $idordine, "updated" => true));
-            }
-        }
+                            $this->redirect("gestione-ordini", "dashboard", array("idordine" => $idordine, "updated" => true));
+                        }
+                    }
                 }
             }
         }
@@ -300,13 +300,7 @@ class Controller_GestioneOrdini extends MyFw_Controller {
                     $ordine->getSpeseExtra()->resetSpese();
                     foreach($fv["extra"] AS $extraVal)
                     {
-                        $ordine->getSpeseExtra()->addSpesa(
-                                    new Model_Ordini_Extra_Spesa(
-                                            $extraVal["descrizione"], 
-                                            $extraVal["costo"], 
-                                            $extraVal["tipo"]
-                                        )
-                            );
+                        $ordine->getSpeseExtra()->addSpesa($extraVal["descrizione"], $extraVal["costo"], $extraVal["tipo"]);
                     }
                     // save to db
                     $ordine->saveToDB_Gruppi();
@@ -373,11 +367,10 @@ class Controller_GestioneOrdini extends MyFw_Controller {
         $ordine = $this->_buildOrdine( new Model_AF_UserOrdineFactory() );
         
         // GET PRODUCTS LIST with Qta Ordered
+        $ordCalcObj = new Model_Ordini_Calcoli_Utenti($ordine);
+        // SET PRODOTTI ORDINATI
         $ordObj = new Model_Db_Ordini();
         $listProdOrdered = $ordObj->getProdottiOrdinatiByIdordine($ordine->getIdOrdine());
-        $ordCalcObj = new Model_Ordini_Calcoli_Utenti();
-        // SET ORDINE e PRODOTTI
-        $ordCalcObj->setOrdine($ordine);
         $ordCalcObj->setProdottiOrdinati($listProdOrdered);
         $this->view->ordCalcObj = $ordCalcObj;
     }
@@ -527,26 +520,20 @@ class Controller_GestioneOrdini extends MyFw_Controller {
         }
         
         // GET PRODUCTS LIST with Qta Ordered
-        $ordObj = new Model_Db_Ordini();
-        $listProdOrdered = $ordObj->getProdottiOrdinatiByIdordine($ordine->getIdOrdine());
-        //Zend_Debug::dump( $listProdOrdered ); die;
         $this->view->tipo = $tipo;
         switch ($tipo) 
         {
             case "totali":
-                $ordCalcObj = new Model_Ordini_Calcoli_Totali();
+                $ordCalcObj = new Model_Ordini_Calcoli_Totali($ordine);
                 break;
 
             case "utenti":
-                $ordCalcObj = new Model_Ordini_Calcoli_Utenti();
-                break;
-
-            case "prodotti":
-                $ordCalcObj = new Model_Ordini_Calcoli_Prodotti();
+                $ordCalcObj = new Model_Ordini_Calcoli_Utenti($ordine);
                 break;
         }
-        // SET ORDINE e PRODOTTI
-        $ordCalcObj->setOrdine($ordine);
+        // SET PRODOTTI ORDINATI
+        $ordObj = new Model_Db_Ordini();
+        $listProdOrdered = $ordObj->getProdottiOrdinatiByIdordine($ordine->getIdOrdine());
         $ordCalcObj->setProdottiOrdinati($listProdOrdered);
         $this->view->ordCalcObj = $ordCalcObj;
     }
