@@ -38,5 +38,17 @@ class Model_Db_Cassa extends MyFw_DB_Base {
         return $sth->execute($movimento);
     }
     
+    function getMovimentiByIduser($iduser)
+    {
+        $sql = "SELECT c.*, o.data_inizio "
+              ." FROM cassa AS c "
+              ." LEFT JOIN ordini AS o ON c.idordine=o.idordine"
+              ." WHERE iduser= :iduser"
+              ." ORDER BY c.data DESC"
+              ." LIMIT 0,10";
+        $sth = $this->db->prepare($sql);
+        $sth->execute(array('iduser' => $iduser));
+        return $sth->fetchAll(PDO::FETCH_ASSOC);        
+    }
     
 }

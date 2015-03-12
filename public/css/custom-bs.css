@@ -239,7 +239,7 @@ h1 strong, h2 strong, h3 strong, h4 strong, h5 strong, h6 strong {color: #090; f
 .row-myig { margin-top: 40px; padding-bottom: 8px; border-bottom: 20px solid #fbfbfb; }
 .row-myig-thin { margin-top: 20px; padding-top: 10px; padding-bottom: 4px; border-bottom: 1px solid #fbfbfb; }
 .row-myig-thin:hover { background-color: #fbfbfb; }
-.dashboard-right { margin-top: 30px; border-left: 1px solid #eee; }
+.dashboard-right { margin-top: 10px; }
 .row-margin-bottom { margin-bottom: 15px; }
 
 /*------------------ Buttons and more.... */

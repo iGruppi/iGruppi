@@ -25,11 +25,11 @@ class Controller_GestioneCassa extends MyFw_Controller {
         $limit = is_null($this->getParam("limit")) ? 20 : $this->getParam("limit");
         
         $cassaModel = new Model_Db_Cassa();
-        $movs = $cassaModel->getUltimiMovimenti($start, $limit);
+        $movRecs = $cassaModel->getUltimiMovimenti($start, $limit);
         $movimenti = array();
-        if(count($movs) > 0)
+        if(count($movRecs) > 0)
         {
-            foreach ($movs as $movimento) {
+            foreach ($movRecs as $movimento) {
                 $movimenti[] = new Model_Cassa_Movimento($movimento);
             }
         }
