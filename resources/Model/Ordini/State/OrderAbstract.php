@@ -107,5 +107,11 @@ abstract class Model_Ordini_State_OrderAbstract implements Model_Ordini_State_Or
     // Se l'utente può visualizzare il Dettaglio di un ordine
     public function canUser_ViewDettaglio() { return false; }
     
+    /**
+     * Permission states for Contabile
+     * @return bool
+     */
+    // Se il Contabile può archiviare un ordine
+    public function canContabile_ArchiviaOrdine() { return false; }
     
 }

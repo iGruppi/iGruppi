@@ -1,6 +1,6 @@
 <h2>Gestione Cassa</h2>
 <div class="row">
-  <div class="col-md-8">
+  <div class="col-md-9">
     <table class="table table-condensed">
         <thead>
           <tr>
@@ -9,36 +9,34 @@
             <th>Data</th>
             <th class="text-right">Importo</th>
             <th>Descrizione</th>
+            <th>&nbsp;</th>
           </tr>
         </thead>
         <tbody>
-            <tr class="danger">
-                <td><i>237</i></td>
-                <td><strong>Davide Gullo</strong></td>
-                <td>05/11/14 17:32</td>
-                <td class="text-right">- 14,52 &euro;</td>
-                <td><a href="#">Ordine IRIS del 23/10/2014</a></td>
+<?php foreach($this->movimenti AS $movimento): ?>            
+            <tr class="<?php echo($movimento->getImporto() > 0) ? "success" : "danger"; ?>">
+                <td><i><?php echo $movimento->getId(); ?></i></td>
+                <td><strong><?php echo $movimento->getUser(); ?></strong></td>
+                <td><?php echo $this->date($movimento->getData(), '%d/%m/%Y %H:%M'); ?></td>
+                <td class="text-right"><?php echo $this->valuta($movimento->getImporto()); ?></td>
+                <td>
+                    <?php if($movimento->isRelatedToOrdine()): ?>
+                    <a href="#"><?php echo $movimento->getDescrizione(); ?></a><br />
+                    Data Ordine: <?php echo $this->date($movimento->getDataOrdine(), '%d/%m/%Y'); ?>
+                    <?php else: ?>
+                        <?php echo $movimento->getDescrizione(); ?>
+                    <?php endif; ?>
+                </td>
+                <td><?php if(!$movimento->isRelatedToOrdine()): ?><a class="btn btn-default btn-xs" href="/gestione-cassa/edit/idmovimento/<?php echo $movimento->getId(); ?>" role="button">Modifica</a><?php endif; ?></td>
             </tr>        
-            <tr class="danger">
-                <td><i>236</i></td>
-                <td><strong>Claudio Falduto</strong></td>
-                <td>05/11/14 17:32</td>
-                <td class="text-right">- 37,15 &euro;</td>
-                <td><a href="#">Ordine IRIS del 23/10/2014</a></td>
-            </tr>        
-            <tr class="success">
-                <td><i>235</i></td>
-                <td><strong>Menozzi Stefano</strong></td>
-                <td>26/10/14 19:54</td>
-                <td class="text-right">+ 100,00 &euro;</td>
-                <td>Bonifico</td>
-            </tr>        
+<?php endforeach; ?>
         </tbody>
     </table>
   </div>
-  <div class="col-md-4 col-right">
-      <a class="btn btn-default btn-mylg" href="#"><span class="glyphicon glyphicon-plus"></span> Aggiungi movimento</a>
-      
+  <div class="col-md-3 col-right">
+      <a class="btn btn-default btn-mylg" href="/gestione-cassa/add"><span class="glyphicon glyphicon-plus"></span> Aggiungi movimento</a>
+      <br /><br />
+      <a class="btn btn-default btn-mylg" href="/gestione-cassa/ordertoclose"><span class="glyphicon glyphicon-list-alt"></span> Ordini da chiudere</a>
   </div>
 </div>
       

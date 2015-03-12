@@ -8,8 +8,8 @@ class Model_AclUser
     
     function __construct($isFounder, $isContabile)
     {
-        $this->_isFounder = $isFounder;
-        $this->_isContabile = $isContabile;
+        $this->_isFounder = ($isFounder == "S") ? true : false;
+        $this->_isContabile = ($isContabile == "S") ? true : false;
     }
     
     /**
@@ -50,6 +50,11 @@ class Model_AclUser
     public function canManageOrdini()
     {
         return $this->_isFounder();
+    }
+    
+    public function canManageCassa()
+    {
+        return $this->_isContabile();
     }
 
 }

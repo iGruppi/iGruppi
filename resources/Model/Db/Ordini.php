@@ -109,6 +109,24 @@ class Model_Db_Ordini extends MyFw_DB_Base {
     }
     
     
+    function getOrdiniToClose($idgroup)
+    {
+        $sql = "SELECT * FROM ordini AS o"
+              ." LEFT JOIN ordini_groups AS og ON o.idordine=og.idordine"
+              ." WHERE data_consegnato IS NOT NULL "
+              ." AND ("
+                . " o.condivisione='PUB' OR og.idgroup_slave= :idgroup"
+                . ")"
+              ." ORDER BY o.data_consegnato DESC";
+        $sth = $this->db->prepare($sql);
+        $sth->execute(array('idgroup' => $idgroup));
+        if($sth->rowCount() > 0) {
+            return $sth->fetchAll(PDO::FETCH_OBJ);
+        }
+        return null;
+
+    }
+    
     function getGroupsByIdOrdine($idordine)
     {
         $sql = "SELECT og.*, og.idordine AS id, g_slave.nome AS group_nome, u_slave.iduser AS ref_iduser, u_slave.nome AS ref_nome, u_slave.cognome AS ref_cognome "

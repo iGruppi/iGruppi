@@ -56,5 +56,11 @@ class Model_Ordini_State_States_Consegnato extends Model_Ordini_State_OrderAbstr
     {
         return true;
     }
+    
+    
+    public function canContabile_ArchiviaOrdine() 
+    {
+        return true;
+    }
 
 }

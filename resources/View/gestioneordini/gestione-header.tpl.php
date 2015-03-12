@@ -85,7 +85,7 @@
 <?php endif; ?>
 <?php if( $this->ordine->is_Consegnato()): ?>
     <div class="btn-group">
-        <a id="a_mso" class="btn btn-success" role="button" href="javascript:void(0)" onclick="jx_OrdineMoveStatus(<?php echo $this->ordine->getIdOrdine();?>, 'next')"><span class="glyphicon glyphicon-arrow-right"></span> Archivia</a>
+        <a id="a_mso" class="btn btn-success" role="button" disabled="disabled" href="#"><span class="glyphicon glyphicon-arrow-unchecked"></span> In attesa di Archiviazione</a>
         <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown">
             <span class="caret"></span>
             <span class="sr-only">Toggle Dropdown</span>
@@ -96,7 +96,8 @@
     </div>
 <?php endif; ?>
 <?php if( $this->ordine->is_Archiviato()): ?>
-    <a id="a_mso" class="btn btn-warning" role="button" href="javascript:void(0)" onclick="jx_OrdineMoveStatus(<?php echo $this->ordine->getIdOrdine();?>, 'prev')"><span class="glyphicon glyphicon-arrow-left"></span> Riporta a Consegnato</a>
+    
+    <button id="a_mso" class="btn btn-default" role="button" href="#" disabled="disabled"><span class="glyphicon glyphicon-check"></span> Archiviato</button>
 <?php endif; ?>
 
 <?php if( $this->ordine->canRef_InviaOrdine()): ?>
