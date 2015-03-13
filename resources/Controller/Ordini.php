@@ -123,16 +123,20 @@ class Controller_Ordini extends MyFw_Controller {
         }
         
         // build Ordine
-        $mooObj = new Model_Ordini_Ordine( new Model_AF_UserOrdineFactory() );
+        $mooObj = new Model_Ordini_Ordine( new Model_AF_OrdineFactory() );
         // build & init DATI Ordine
         $mooObj->appendDati()->initDati_ByObject($ordine);
         // build & init STATE Ordine
         $mooObj->appendStates( Model_Ordini_State_OrderFactory::getOrder($ordine) );
 
+        // build & init Gruppi
+        $mooObj->appendGruppi()->initGruppi_ByObject( $ordObj->getGroupsByIdOrdine( $mooObj->getIdOrdine()) );
+        $mooObj->setMyIdGroup($this->_userSessionVal->idgroup);
+        
         // creo elenco prodotti
         $prodottiModel = new Model_Db_Prodotti();
         $listProd = $prodottiModel->getProdottiByIdOrdine($idordine);
-
+        
         // build & init CATEGORIE
         $mooObj->appendCategorie()->initCategorie_ByObject($listProd);
 
@@ -152,8 +156,7 @@ class Controller_Ordini extends MyFw_Controller {
         $listProdOrdered = $ordObj->getProdottiOrdinatiByIdordine($mooObj->getIdOrdine());
 
         // SET ORDINE e PRODOTTI
-        $ordCalcObj = new Model_Ordini_Calcoli_Utenti();
-        $ordCalcObj->setOrdine($mooObj);
+        $ordCalcObj = new Model_Ordini_Calcoli_Utenti($mooObj);
         $ordCalcObj->setProdottiOrdinati($listProdOrdered);
         $this->view->ordCalcObj = $ordCalcObj;
         

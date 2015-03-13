@@ -16,26 +16,28 @@
     </p>
 <?php endif; ?>
 
-<?php echo $this->partial('ordini/box-note.tpl.php', array('ordine' => $this->ordine, 'produttore' => $this->produttore)); ?>
-    
+<?php echo $this->partial('ordini/box-note.tpl.php', array('ordine' => $this->ordine)); ?>
+
 <?php 
-    if(count($this->listProdotti) > 0):
-    foreach ($this->listProdotti as $idcat => $cat): ?>
-    <span id="cat_<?php echo $idcat; ?>" style="visibility: hidden;"><?php echo $this->listSubCat[$idcat]["categoria"]; ?></span>
-<?php foreach ($cat as $idsubcat => $prodotti): ?>
-        <?php include $this->template('prodotti/subcat-title.tpl.php'); ?>
-<?php   foreach ($prodotti as $idprodotto): 
-            // GET Prodotto object from cuObj (Model_Ordini_Calcoli_Utenti)
-            $prodotto = $this->cuObj->getProdotto($idprodotto);
+     $categorie = $this->ordine->getProdottiWithCategoryArray();
+     if(count($categorie) > 0): 
+        foreach ($categorie AS $cat): ?>
+    <span id="cat_<?php echo $cat->getId(); ?>" style="visibility: hidden;"><?php echo $cat->getDescrizione(); ?></span>
+<?php       foreach ($cat->getSubcat() AS $subcat): 
+            echo $this->partial('prodotti/subcat-title.tpl.php', array('cat' => $cat, 'subcat' => $subcat));
+                foreach ($subcat->getProdotti() AS $prodObj):
+                    $prodotto = $prodObj->getProdotto(); 
+                    $idprodotto = $prodotto->getIdProdotto();
+                 //Zend_Debug::dump($pObj);die;
     ?>
         
       <div class="row row-myig<?php if(!$prodotto->isDisponibile()) { echo " box_row_dis"; } ; ?>">
         <div class="col-md-9">
             <h3 class="no-margin"><?php echo $prodotto->getDescrizioneListino();?></h3>
             <p>
-                Categoria: <strong><?php echo $prodotto->categoria_sub; ?></strong><br />
+                Categoria: <strong><?php echo $prodotto->getSubCategoria(); ?></strong><br />
                 <?php echo $this->partial('prodotti/price-box.tpl.php', array('prodotto' => $prodotto)); ?>
-        <?php if($prodotto->note != ""): ?>
+        <?php if($prodotto->getNoteListino() != ""): ?>
                 <a href="javascript:void(0)" class="note" data-toggle="popover" title="" data-content="<?php echo $prodotto->getNoteListino(); ?>">Visualizza note</a>
         <?php endif; ?>
             </p>
@@ -48,7 +50,7 @@
 <script>
     // Start these procedures always
 	$(document).ready(function(){
-        Trolley.initByParams(<?php echo $idprodotto;?>, <?php echo $prodotto->getCostoListino();?>, <?php echo $prodotto->moltiplicatore; ?>, <?php echo $qta_ordinata;?>);
+        Trolley.initByParams(<?php echo $idprodotto;?>, <?php echo $prodotto->getCostoListino();?>, <?php echo $prodotto->getMoltiplicatore(); ?>, <?php echo $qta_ordinata;?>);
         Trolley_rebuildPartial(<?php echo $idprodotto;?>);
     });
 </script>
@@ -75,7 +77,7 @@
     
   </div>
   <div class="col-md-4 col-right">
-<?php if(count($this->listProdotti) > 0): ?>      
+<?php if(count($categorie) > 0): ?>      
     <div class="bs-sidebar" data-spy="affix" data-offset-top="76" role="complementary">
         <div class="totale">
             <h4>Totale: <strong id="totale">Loading...</strong></h4>
