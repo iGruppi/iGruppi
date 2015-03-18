@@ -34,7 +34,7 @@
           <div class="tab-pane" id="referente">
             <fieldset>
               <label for="iduser_ref">Produttore:</label>
-              <select name="iduser_ref" id="iduser_ref" onchange="$('#btn_add_referente').show()">
+              <select name="iduser_ref" id="iduser_ref" onchange="$('#btn_referente').show()">
                   <option value="0" selected="">Seleziona...</option>
               <?php 
                     $arRef = array();
@@ -44,13 +44,16 @@
                         $arRef[] = $produttore;
                     } else {
               ?>
-                  <option value="<?php echo $produttore->idproduttore; ?>"><?php echo $produttore->ragsoc; ?></option>
+                  <option value="<?php echo $produttore->idproduttore; ?>"><?php echo $produttore->ragsoc; ?> (<?php echo $produttore->ref_int_nome . " " . $produttore->ref_int_cognome; ?>)</option>
               <?php 
                     }
                     endforeach; 
               ?>
-              </select>
-              <a id="btn_add_referente" class="btn btn-primary btn-sm btn-inform" style="display: none;" href="javascript:void(0)" onclick="jx_AddReferenteUser(<?php echo $this->user->iduser; ?>)"><span class="glyphicon glyphicon-briefcase"></span> Imposta Referente</a>
+              </select><br />
+              <div id="btn_referente" style="display: none; margin-left: 200px;">
+                <a class="btn btn-danger btn-sm btn-inform" href="javascript:void(0)" onclick="jx_AddSetReferenteUser(<?php echo $this->user->iduser; ?>, 'set')"><span class="glyphicon glyphicon-random"></span> Sostituisci Referente</a>
+                <a class="btn btn-primary btn-sm btn-inform" href="javascript:void(0)" onclick="jx_AddSetReferenteUser(<?php echo $this->user->iduser; ?>, 'add')"><span class="glyphicon glyphicon-plus"></span> Aggiungi Referente</a>
+              </div>
             </fieldset>
             <fieldset class="border_top">
               <div id="list_user_ref" class="hint">

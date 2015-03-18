@@ -31,17 +31,17 @@
 			});
     }
     
-    function jx_AddReferenteUser(iduser) {
+    function jx_AddSetReferenteUser(iduser, flag) {
         $('#no_user_ref').hide();
         var idproduttore = $('#iduser_ref').find(":selected").val();
         $.getJSON(
-			'/users/addref/',
-            {iduser: iduser, idproduttore: idproduttore},
-			function(data) {
+            '/users/addref/',
+            {iduser: iduser, idproduttore: idproduttore, flag: flag},
+            function(data) {
                 if(data) {
                     $('#list_user_ref').append('<h4>'+$('#iduser_ref').find(":selected").text()+'</h4>');
                 }
-			});
+            });
     }
 
     function jx_EnableUser(iduser) {

@@ -87,20 +87,15 @@ class Controller_Users extends MyFw_Controller {
         
         $idproduttore = $this->getParam("idproduttore");
         $iduser = $this->getParam("iduser");
-        
-        $sth = $this->getDB()->prepare("SELECT * FROM referenti WHERE idproduttore= :idproduttore AND idgroup= :idgroup");
-        $arVal = array('idproduttore' => $idproduttore, 'idgroup' => $this->_userSessionVal->idgroup);
-        $sth->execute($arVal);
-        if($sth->rowCount() > 0) {
+        $flag = $this->getParam("flag");
+        $arVal = array('idproduttore' => $idproduttore, 'idgroup' => $this->_userSessionVal->idgroup, 'iduser_ref' => $iduser);
+        if($flag == "set") {
             // UPDATE
-            $sth_update = $this->getDB()->prepare("UPDATE referenti SET iduser_ref= :iduser_ref WHERE idproduttore= :idproduttore AND idgroup= :idgroup");
-            $arVal["iduser_ref"] = $iduser;
-            $result = $sth_update->execute($arVal);
+            $sth = $this->getDB()->prepare("UPDATE referenti SET iduser_ref= :iduser_ref WHERE idproduttore= :idproduttore AND idgroup= :idgroup");
         } else {
-            // Non dovrebbe mai capitare: un produttore ha SEMPRE un referente!
-            $result = false;
+            $sth = $this->getDB()->prepare("INSERT INTO referenti SET iduser_ref= :iduser_ref, idproduttore= :idproduttore, idgroup= :idgroup");
         }
-
+        $result = $sth->execute($arVal);
         echo json_encode($result);
     }
     
