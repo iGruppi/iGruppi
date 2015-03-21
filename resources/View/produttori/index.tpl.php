@@ -12,7 +12,7 @@
         </div>
         <div class="col-md-8">
             <p>
-                Referente <i>generale</i><strong class="text-danger">[?]</strong>: <a href="mailto: <?php echo $produttore->ref_ext_email; ?>"><?php echo $produttore->ref_ext_nome . " " . $produttore->ref_ext_cognome; ?></a><br />
+                Gestore Produttore: <a href="mailto: <?php echo $produttore->ref_ext_email; ?>"><?php echo $produttore->ref_ext_nome . " " . $produttore->ref_ext_cognome; ?></a><br />
                 Referente interno: <a href="mailto: <?php echo $produttore->ref_int_email; ?>"><?php echo $produttore->ref_int_nome . " " . $produttore->ref_int_cognome; ?></a>
             </p>
         <?php if( isset($this->arCat[$produttore->idproduttore]) ): ?>
