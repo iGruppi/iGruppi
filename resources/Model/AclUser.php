@@ -52,9 +52,22 @@ class Model_AclUser
         return $this->_isFounder();
     }
     
+    /**
+     * Only the Tesoriere can manage CASSA
+     * @return bool
+     */
     public function canManageCassa()
     {
         return $this->_isContabile();
     }
-
+    
+    /**
+     * Only the Tesoriere can close the ORDER
+     * @return bool
+     */
+    public function canCloseOrder()
+    {
+        return $this->_isContabile();
+    }
+    
 }

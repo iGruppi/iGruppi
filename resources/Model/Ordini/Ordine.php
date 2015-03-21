@@ -108,4 +108,14 @@ class Model_Ordini_Ordine extends Model_AF_AbstractCoR
     {
         return $this->isAdminForOrdine();
     }
+    
+    /**
+     * Return TRUE if it is Tesoriere and can close that ORDER
+     * @return bool
+     */
+    public function canCloseOrder()
+    {
+        $userSessionVal = new Zend_Session_Namespace('userSessionVal');
+        return ($userSessionVal->aclUserObject->canCloseOrder() && $this->canContabile_ArchiviaOrdine());
+    }
 }

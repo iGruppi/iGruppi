@@ -113,11 +113,11 @@ class Model_Db_Ordini extends MyFw_DB_Base {
     {
         $sql = "SELECT * FROM ordini AS o"
               ." LEFT JOIN ordini_groups AS og ON o.idordine=og.idordine"
-              ." WHERE data_consegnato IS NOT NULL "
+              ." WHERE o.data_consegnato IS NOT NULL "
               ." AND ("
                 . " o.condivisione='PUB' OR og.idgroup_slave= :idgroup"
                 . ")"
-              ." ORDER BY o.data_consegnato DESC";
+              ." ORDER BY o.archiviato, o.data_consegnato DESC";
         $sth = $this->db->prepare($sql);
         $sth->execute(array('idgroup' => $idgroup));
         if($sth->rowCount() > 0) {

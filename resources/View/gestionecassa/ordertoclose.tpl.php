@@ -35,7 +35,11 @@
                   </p>
               </div>
               <div class="col-md-4">
+        <?php if($ordine->canCloseOrder()): ?>
                   <a id="a_mso" class="btn btn-success" role="button" href="/gestione-cassa/viewdettaglio/idordine/<?php echo $ordine->getIdOrdine();?>"><span class="glyphicon glyphicon-ok"></span> Archivia</a>
+        <?php else: ?>
+                  <a id="a_mso" class="btn btn-default" role="button" href="/gestione-cassa/viewdettaglio/idordine/<?php echo $ordine->getIdOrdine();?>"><span class="glyphicon glyphicon-th-list"></span> Visualizza dettaglio</a>
+        <?php endif; ?>
               </div>
             </div>
         </div>

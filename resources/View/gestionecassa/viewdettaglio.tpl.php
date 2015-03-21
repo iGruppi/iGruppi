@@ -34,7 +34,9 @@
   </div>
   <div class="col-md-1">&nbsp;</div>
   <div class="col-md-3">
+<?php if($this->ordCalcObj->canCloseOrder()): ?>      
     <a class="btn btn-success" role="button" href="/gestione-cassa/archivia/idordine/<?php echo $this->ordCalcObj->getIdOrdine();?>"><span class="glyphicon glyphicon-ok"></span> Archivia</a>
+<?php endif; ?>    
   </div>
 </div>
         
