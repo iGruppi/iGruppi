@@ -16,7 +16,7 @@ class Form_Cassa extends MyFw_Form {
         
         $this->addField('descrizione', array(
                         'label'     => 'Descrizione',
-                        'size'      => 45,
+                        'size'      => 60,
                         'maxlength' => 100,
                         'required'  => true
             ));
@@ -36,6 +36,7 @@ class Form_Cassa extends MyFw_Form {
                         'label'     => 'Importo',
                         'size'      => 15,
                         'maxlength' => 10,
+                        'class'     => 'is_Number',            
                         'required'  => true
             ));
 
@@ -43,7 +44,7 @@ class Form_Cassa extends MyFw_Form {
         $objU = new Model_Db_Users();
         $userSessionVal = new Zend_Session_Namespace('userSessionVal');
         $arVal = $objU->convertToSingleArray($objU->getUsersByIdGroup($userSessionVal->idgroup, true), "iduser", "nominativo");
-        $arVal[0] = 'Seleziona...';
+        $arVal[null] = 'Seleziona...';
         $this->addField('iduser', array(
                         'label'     => 'Utente',
                         'type'      => 'select',
