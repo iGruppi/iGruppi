@@ -34,22 +34,31 @@
           <div class="tab-pane" id="referente">
             <fieldset>
               <label for="iduser_ref">Produttore:</label>
-              <select name="iduser_ref" id="iduser_ref" onchange="$('#btn_referente').show()">
+              <select name="iduser_ref" id="iduser_ref">
                   <option value="0" selected="">Seleziona...</option>
               <?php 
                     $arRef = array();
+                    $arReferenti = array();
                     foreach($this->produttori AS $produttore): 
                     // Check for Referente attuale
-                    if( $produttore->ref_int_iduser == $this->user->iduser ) {
+                    if( $produttore->isReferenteInterno($this->user->iduser) ) {
                         $arRef[] = $produttore;
                     } else {
+                        // create array Referenti Interni per Produttore
+                        $countRef = 0;
+                        if($produttore->hasReferentiInterni())
+                        {
+                            $arReferenti[$produttore->idproduttore] = $produttore->getReferentiInterni();
+                            $countRef = count($produttore->getReferentiInterni());
+                        }
               ?>
-                  <option value="<?php echo $produttore->idproduttore; ?>"><?php echo $produttore->ragsoc; ?> (<?php echo $produttore->ref_int_nome . " " . $produttore->ref_int_cognome; ?>)</option>
+                  <option value="<?php echo $produttore->idproduttore; ?>"><?php echo $produttore->ragsoc; ?> (<?php echo $countRef . " referente/i"; ?>)</option>
               <?php 
                     }
                     endforeach; 
               ?>
               </select><br />
+              <div id="refs" style="display: none; margin: 0 0 20px 200px;">Referenti: <b></b></div>
               <div id="btn_referente" style="display: none; margin-left: 200px;">
                 <a class="btn btn-danger btn-sm btn-inform" href="javascript:void(0)" onclick="jx_AddSetReferenteUser(<?php echo $this->user->iduser; ?>, 'set')"><span class="glyphicon glyphicon-random"></span> Sostituisci Referente</a>
                 <a class="btn btn-primary btn-sm btn-inform" href="javascript:void(0)" onclick="jx_AddSetReferenteUser(<?php echo $this->user->iduser; ?>, 'add')"><span class="glyphicon glyphicon-plus"></span> Aggiungi Referente</a>
@@ -73,3 +82,28 @@
         <?php echo $this->form->renderField('iduser'); ?>
         <button type="submit" id="submit" class="btn btn-success btn-mylg">SALVA</button>
 </form>
+
+<script>
+    $(function() {
+        var referenti = <?php echo json_encode($arReferenti); ?>;
+        
+        $('#iduser_ref').on('change', function () {
+                $('#btn_referente').show();
+                var idproduttore = $('#iduser_ref').val();
+                if (idproduttore in referenti)
+                {
+                    var refs = referenti[idproduttore];
+                    var reftext = new Array();
+                    for(i in refs)
+                    {
+                        reftext.push( refs[i].ref_nome + " " + refs[i].ref_cognome );
+                    }
+                    $('#refs > b').html(reftext.join(', '));
+                    $('#refs').show();
+                } else {
+                    $('#refs').hide();
+                }
+        });
+        
+    });
+</script>

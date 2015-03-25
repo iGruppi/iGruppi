@@ -13,7 +13,14 @@
         <div class="col-md-8">
             <p>
                 Gestore Produttore: <a href="mailto: <?php echo $produttore->ref_ext_email; ?>"><?php echo $produttore->ref_ext_nome . " " . $produttore->ref_ext_cognome; ?></a><br />
-                Referente interno: <a href="mailto: <?php echo $produttore->ref_int_email; ?>"><?php echo $produttore->ref_int_nome . " " . $produttore->ref_int_cognome; ?></a>
+                Referente interno: 
+             <?php if($produttore->hasReferentiInterni()):?>
+                <?php foreach ($produttore->getReferentiInterni() AS $iduser => $referente): ?>
+                    <a href="mailto: <?php echo $referente->ref_email; ?>"><?php echo $referente->ref_nome . " " . $referente->ref_cognome; ?></a>,
+                <?php endforeach; ?>
+             <?php else: ?>
+                    <b class="text-danger">Nessuno</b>
+             <?php endif; ?>
             </p>
         <?php if( isset($this->arCat[$produttore->idproduttore]) ): ?>
             <h4><span class="text-muted">Prodotti:</span> <?php echo implode(", ", $this->arCat[$produttore->idproduttore]); ?></h4>

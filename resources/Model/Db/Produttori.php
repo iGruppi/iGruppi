@@ -31,18 +31,36 @@ class Model_Db_Produttori extends MyFw_DB_Base {
         return $sth_app->fetch(PDO::FETCH_OBJ);
     }
 
-    function getProduttoriByIdGroup($idgroup) {
-        $sql = "SELECT p.*, r.iduser_ref AS ref_int_iduser, u.nome AS ref_int_nome, u.cognome AS ref_int_cognome, u.email AS ref_int_email,"
+    function getProduttori() 
+    {
+        $sql = "SELECT p.*, "
               ." upr.iduser AS ref_ext_iduser, upr.nome AS ref_ext_nome, upr.cognome AS ref_ext_cognome, upr.email AS ref_ext_email "
               ." FROM produttori AS p"
-              ." LEFT OUTER JOIN referenti AS r ON p.idproduttore=r.idproduttore AND r.idgroup= :idgroup"
-              ." LEFT OUTER JOIN users AS u ON r.iduser_ref=u.iduser"
               ." LEFT OUTER JOIN users_produttori AS up ON p.idproduttore=up.idproduttore"
               ." LEFT OUTER JOIN users AS upr ON upr.iduser=up.iduser"
               ." ORDER BY p.ragsoc";
         $sth_app = $this->db->prepare($sql);
-        $sth_app->execute(array('idgroup' => $idgroup));
+        $sth_app->execute();
         return $sth_app->fetchAll(PDO::FETCH_OBJ);        
     }
-
+    
+    function getReferentiInterniByIdgroup_withKeyIdProduttore($idgroup)
+    {
+        $sql = "SELECT r.*, u.nome AS ref_nome, u.cognome AS ref_cognome, u.email AS ref_email"
+              ." FROM referenti AS r"
+              ." LEFT OUTER JOIN users AS u ON r.iduser_ref=u.iduser"
+              ." WHERE r.idgroup= :idgroup"
+              ." ORDER BY r.idproduttore";
+        $sth = $this->db->prepare($sql);
+        $sth->execute(array('idgroup' => $idgroup));
+        $refs = $sth->fetchAll(PDO::FETCH_OBJ);
+        $res = array();
+        if(count($refs) > 0) {
+            foreach($refs AS $ref) {
+                $res[$ref->idproduttore][$ref->iduser_ref] = $ref;
+            }
+        }
+        return $res;
+         
+    }
 }

@@ -44,7 +44,16 @@ class Controller_Users extends MyFw_Controller {
         
         // Get Elenco produttori (con REFERENTE)
         $prObj = new Model_Db_Produttori();
-        $this->view->produttori = $prObj->getProduttoriByIdGroup($this->_userSessionVal->idgroup);
+        $referenti = $prObj->getReferentiInterniByIdgroup_withKeyIdProduttore($this->_userSessionVal->idgroup);
+        foreach($prObj->getProduttori() AS $prod) 
+        {
+            // create Produttore
+            $produttore = new Model_Produttori_Produttore();
+            $produttore->initByArrayValues($prod);
+            $refs = isset($referenti[$prod->idproduttore]) ? $referenti[$prod->idproduttore] : array();
+            $produttore->setReferentiInterni($refs);
+            $this->view->produttori[] = $produttore;
+        }
 
         if($this->getRequest()->isPost()) {
             $fv = $this->getRequest()->getPost();

@@ -15,14 +15,21 @@ class Controller_Produttori extends MyFw_Controller {
         $this->view->userSessionVal = $this->_userSessionVal = new Zend_Session_Namespace('userSessionVal');
     }
 
-    function indexAction() {
-        
+    function indexAction() 
+    {    
         $pObj = new Model_Db_Produttori();
-        $listProduttori = $pObj->getProduttoriByIdGroup($this->_userSessionVal->idgroup);        
+        $listProduttori = $pObj->getProduttori();
+        $referenti = $pObj->getReferentiInterniByIdgroup_withKeyIdProduttore($this->_userSessionVal->idgroup);
         // add Referente object to every Produttore and ORDER them keeping isReferente on the TOP
         $listProduttoriOrdered = array();
         if(count($listProduttori) > 0) {
-            foreach($listProduttori AS &$produttore) {
+            foreach($listProduttori AS $prod) 
+            {
+                // create Produttore
+                $produttore = new Model_Produttori_Produttore();
+                $produttore->initByArrayValues($prod);
+                $refs = isset($referenti[$prod->idproduttore]) ? $referenti[$prod->idproduttore] : array();
+                $produttore->setReferentiInterni($refs);
                 // check for Referente
                 if( $this->_userSessionVal->refObject->is_Referente($produttore->idproduttore) ) {
                     array_unshift($listProduttoriOrdered, $produttore);
