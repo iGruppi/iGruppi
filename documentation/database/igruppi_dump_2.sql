@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Mar 06, 2015 at 05:05 PM
+-- Generation Time: Mar 27, 2015 at 01:38 PM
 -- Server version: 5.6.20
 -- PHP Version: 5.5.15
 
@@ -36,7 +36,7 @@ CREATE TABLE IF NOT EXISTS `cassa` (
   PRIMARY KEY (`idmovimento`),
   KEY `fk_cassa_users1_idx` (`iduser`),
   KEY `fk_cassa_ordini1_idx` (`idordine`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -77,7 +77,7 @@ CREATE TABLE IF NOT EXISTS `groups` (
   `idgroup` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `nome` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
   `descrizione` text COLLATE utf8_unicode_ci NOT NULL,
-  `provincia` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
+  `provincia` char(2) COLLATE utf8_unicode_ci NOT NULL,
   `data_creazione` date NOT NULL,
   `email_ml` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`idgroup`)
@@ -145,6 +145,7 @@ CREATE TABLE IF NOT EXISTS `listini_prodotti` (
 
 CREATE TABLE IF NOT EXISTS `ordini` (
   `idordine` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `iduser_ref` int(10) unsigned NOT NULL,
   `data_inizio` datetime NOT NULL,
   `data_fine` datetime NOT NULL,
   `data_inviato` datetime DEFAULT NULL,
@@ -152,7 +153,8 @@ CREATE TABLE IF NOT EXISTS `ordini` (
   `data_consegnato` datetime DEFAULT NULL,
   `archiviato` enum('N','S') COLLATE utf8_unicode_ci NOT NULL DEFAULT 'N',
   `condivisione` enum('PUB','PRI','SHA') COLLATE utf8_unicode_ci NOT NULL DEFAULT 'PRI',
-  PRIMARY KEY (`idordine`)
+  PRIMARY KEY (`idordine`),
+  KEY `fk_ordini_users1` (`iduser_ref`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
@@ -167,7 +169,7 @@ CREATE TABLE IF NOT EXISTS `ordini_groups` (
   `idgroup_slave` int(10) unsigned NOT NULL,
   `iduser_ref` int(10) unsigned DEFAULT NULL,
   `visibile` enum('S','N') COLLATE utf8_unicode_ci NOT NULL DEFAULT 'S',
-  `costo_spedizione` decimal(8,2) NOT NULL DEFAULT '0.00',
+  `extra` varchar(512) COLLATE utf8_unicode_ci NOT NULL DEFAULT '0',
   `note_consegna` text COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`idordine`,`idgroup_master`,`idgroup_slave`),
   KEY `fk_groups_ordini_ordini1_idx` (`idordine`),
@@ -283,7 +285,7 @@ CREATE TABLE IF NOT EXISTS `produttori` (
   `ragsoc` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `indirizzo` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
   `comune` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
-  `provincia` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
+  `provincia` char(2) COLLATE utf8_unicode_ci NOT NULL,
   `telefono` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
   `email` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
   `note` varchar(2048) COLLATE utf8_unicode_ci NOT NULL,
@@ -298,8 +300,9 @@ CREATE TABLE IF NOT EXISTS `produttori` (
 --
 
 CREATE TABLE IF NOT EXISTS `province` (
-  `provincia` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
+  `provincia` char(2) COLLATE utf8_unicode_ci NOT NULL,
   `idregione` tinyint(4) NOT NULL,
+  `provdesc` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`provincia`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
@@ -332,7 +335,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   `password` varchar(12) COLLATE utf8_unicode_ci NOT NULL,
   `num_members` tinyint(4) NOT NULL,
   `comune` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
-  `provincia` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
+  `provincia` char(2) COLLATE utf8_unicode_ci NOT NULL,
   `role` enum('User','Admin') COLLATE utf8_unicode_ci NOT NULL DEFAULT 'User',
   PRIMARY KEY (`iduser`),
   KEY `INDEX_email` (`email`)
@@ -408,6 +411,12 @@ ALTER TABLE `listini_groups`
 ALTER TABLE `listini_prodotti`
   ADD CONSTRAINT `fk_prodotti_listini_listini1` FOREIGN KEY (`idlistino`) REFERENCES `listini` (`idlistino`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   ADD CONSTRAINT `fk_prodotti_listini_prodotti1` FOREIGN KEY (`idprodotto`) REFERENCES `prodotti` (`idprodotto`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+--
+-- Constraints for table `ordini`
+--
+ALTER TABLE `ordini`
+  ADD CONSTRAINT `fk_ordini_users1` FOREIGN KEY (`iduser_ref`) REFERENCES `users` (`iduser`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Constraints for table `ordini_groups`
