@@ -1,7 +1,14 @@
+    <h3 class="text-dark"><?php 
+        $categorie = $this->ordine->getListaDescrizioniCategorie();
+        echo $this->arrayToString($categorie); 
+    ?></h3>
 <div class="row">
   <div class="col-md-8">
+<?php if( count($categorie) > 0 ): ?>
+    <h5><span class="text-muted">Produttori: </span> <?php echo $this->arrayToString( $this->ordine->getProduttoriList() ); ?></h5>
+<?php endif; ?>
+    <h5>Ordine <strong class="<?php echo $this->ordine->getStatusCSSClass(); ?>"><?php echo $this->ordine->getStateName(); ?></strong></h5>
     
-    <h3>Ordine <strong class="<?php echo $this->ordine->getStatusCSSClass(); ?>"><?php echo $this->ordine->getStateName(); ?></strong></h3>
 <?php if($this->ordine->is_Aperto()): ?>
     <p>
         Chiusura prevista il <strong><?php echo $this->date($this->ordine->getDataFine(), '%d/%m/%Y');?></strong> alle <?php echo $this->date($this->ordine->getDataFine(), '%H:%M');?></strong>
