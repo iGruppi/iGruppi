@@ -72,26 +72,42 @@ class Controller_Ordini extends MyFw_Controller {
         // INIT Ordine
         $ordObj = new Model_Db_Ordini();
         $ordine = $ordObj->getByIdOrdine($idordine);
-        $this->view->ordine = $ordine;
-        $this->view->statusObj = new Model_Ordini_Status($ordine);
+        
+        // build Ordine
+        $mooObj = new Model_Ordini_Ordine( new Model_AF_UserOrdineFactory() );
+        // build & init DATI Ordine
+        $mooObj->appendDati()->initDati_ByObject($ordine);
+        // build & init STATE Ordine
+        $mooObj->appendStates( Model_Ordini_State_OrderFactory::getOrder($ordine) );
 
-        // GET PRODUTTORE
-        $produttoreObj = new Model_Db_Produttori();
-        $produttore = $produttoreObj->getProduttoreById($ordine->idproduttore);
-        $this->view->produttore = $produttore;
+        // build & init Gruppi
+        $mooObj->appendGruppi()->initGruppi_ByObject( $ordObj->getGroupsByIdOrdine( $mooObj->getIdOrdine()) );
+        $mooObj->setMyIdGroup($this->_userSessionVal->idgroup);
+        
+        // creo elenco prodotti
+        $prodottiModel = new Model_Db_Prodotti();
+        $listProd = $prodottiModel->getProdottiByIdOrdine($idordine);
+        
+        // build & init CATEGORIE
+        $mooObj->appendCategorie()->initCategorie_ByObject($listProd);
+
+        // build & init PRODOTTI
+        $mooObj->appendProdotti()->initProdotti_ByObject($listProd);
+
+        // set Ordine in the View by default
+        $this->view->ordine = $mooObj;
         
         // GET PRODUCTS LIST with Qta Ordered
-        $listProdOrdered = $ordObj->getProdottiOrdinatiByIdordine($idordine);
-        // init Calcoli Utente class
-        $cuObj = new Model_Ordini_Calcoli_Utenti();
-        $cuObj->setOrdObj($ordine);
-        $cuObj->setProdotti($listProdOrdered);
-        $this->view->listaProdotti = $cuObj->getProdottiByIduser($this->_iduser);
-        // Costo di SPEDIZIONE
-        $this->view->costo_spedizione = $cuObj->getSpedizione()->getCostoSpedizioneRipartitoByIduser($this->_iduser);
-        $this->view->totale_ordine = $cuObj->getTotaleByIduser($this->_iduser);
-        $this->view->totale_con_spedizione = $cuObj->getTotaleConSpedizioneByIduser($this->_iduser);
+        $listProdOrdered = $ordObj->getProdottiOrdinatiByIdordine($mooObj->getIdOrdine());
+
+        // SET ORDINE e PRODOTTI
+        $ordCalcObj = new Model_Ordini_Calcoli_Utenti($mooObj);
+        $ordCalcObj->setProdottiOrdinati($listProdOrdered);
+        $this->view->ordCalcObj = $ordCalcObj;
 //        Zend_Debug::dump($this->view->listaProdotti);die;
+        
+        // Set my iduser to View
+        $this->view->iduser = $this->_iduser;
     }
 
     
