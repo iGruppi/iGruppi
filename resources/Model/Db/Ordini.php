@@ -178,36 +178,48 @@ class Model_Db_Ordini extends MyFw_DB_Base {
     /**
      * SET QTA and QTA_REALE for ORDINE by iduser
      * @param int $idordine
+     * @param int $idlistino
+     * @param int $idprodotto
      * @param int $iduser
-     * @param int $arQta
-     * @return boolean return true if the queries does not get errors
+     * @param int $qta
+     * @return boolean return true if the queries does not return errors
      */
-    function setQtaProdottiForOrdine($idordine, $iduser, $arQta) {
-        $this->db->beginTransaction();
-        if(count($arQta) > 0) {
+    function setQtaProdottoForOrdine($idordine, $idlistino, $idprodotto, $iduser, $qta) 
+    {
+        // Check for record in ordini_users
+        $ordini_users_fields = array('idordine' => $idordine, 'iduser' => $iduser);
+        $sthou = $this->db->prepare("SELECT * FROM ordini_users WHERE idordine= :idordine AND iduser= :iduser");
+        $sthou->execute($ordini_users_fields);
+        $resou = true;
+        if($sthou->rowCount() == 0) {
+            $sthou_insert = $this->db->prepare("INSERT INTO ordini_users SET idordine= :idordine, iduser= :iduser");
+            $resou = $sthou_insert->execute($ordini_users_fields);
+        }
+        // Prepare to insert products
+        if($resou) 
+        {
+            $this->db->beginTransaction();
             // delete all records in ordini_user_prodotti
-            $resd = $this->db->query("DELETE FROM ordini_user_prodotti WHERE iduser='$iduser' AND idordine='$idordine'");
+            $resd = $this->db->query("DELETE FROM ordini_user_prodotti WHERE iduser='$iduser' AND idordine='$idordine' AND idprodotto= '$idprodotto' AND idlistino = '$idlistino'");
             if(!$resd) {
                 $this->db->rollBack();
                 return false;
             }
-            // prepare SQL INSERT
-            $sth = $this->db->prepare("INSERT INTO ordini_user_prodotti "
-                    ."SET iduser= :iduser, idprodotto= :idprodotto, idordine= :idordine, qta= :qta, "
-                    ."qta_reale= ((SELECT moltiplicatore FROM prodotti WHERE idprodotto= :idprodotto) * :qta), data_ins=NOW()");
-            foreach ($arQta as $idprodotto => $qta) {
-                if( $qta > 0) {
-                    // insert product selected
-                    $fields = array('iduser' => $iduser, 'idprodotto' => $idprodotto, 'idordine' => $idordine, 'qta' => $qta);
-                    $res = $sth->execute($fields);
-                    if(!$res) {
-                        $this->db->rollBack();
-                        return false;
-                    }
+            if($qta > 0) {
+                // prepare SQL INSERT
+                $sth = $this->db->prepare("INSERT INTO ordini_user_prodotti "
+                        ."SET iduser= :iduser, idprodotto= :idprodotto, idlistino = :idlistino, idordine= :idordine, qta= :qta, "
+                        ."qta_reale= ((SELECT moltiplicatore FROM prodotti WHERE idprodotto= :idprodotto) * :qta), data_ins=NOW()");
+                $fields = array('iduser' => $iduser, 'idprodotto' => $idprodotto, 'idlistino' => $idlistino, 'idordine' => $idordine, 'qta' => $qta);
+                $res = $sth->execute($fields);
+                if(!$res) {
+                    $this->db->rollBack();
+                    return false;
                 }
             }
+            return $this->db->commit();
         }
-        return $this->db->commit();
+        return false;
     }
     
     

@@ -6,7 +6,7 @@
  * 
  */
 class Model_Prodotto_UserOrdine_QtaDecorator
-    implements Model_Prodotto_UserOrdine_QtaDecoratorInterface
+    implements Model_Prodotto_UserOrdine_QtaDecoratorInterface, Model_Prodotto_Mediator_MediatorInterface
 {
     /**
      * Store the Prodotto_Mediator object

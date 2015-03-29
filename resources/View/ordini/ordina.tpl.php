@@ -1,13 +1,5 @@
-<form id="prod_ordini_form" class="ordini" action="/ordini/ordina/idordine/<?php echo $this->ordine->getIdOrdine();?>" method="post">
-
 <div class="row">
   <div class="col-md-8">
-<?php if($this->updated): ?>
-    <div class="alert alert-success alert-dismissable">
-      <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-      La lista dei prodotti ordinati è stata aggiornata con <strong>successo</strong>!
-    </div>
-<?php endif; ?>
     
     <h3>Ordine <strong class="<?php echo $this->ordine->getStatusCSSClass(); ?>"><?php echo $this->ordine->getStateName(); ?></strong> il <?php echo $this->date($this->ordine->getDataInizio(), '%d/%m/%Y');?> alle <?php echo $this->date($this->ordine->getDataInizio(), '%H:%M');?></h3>
 <?php if($this->ordine->is_Aperto()): ?>
@@ -28,7 +20,7 @@
                 foreach ($subcat->getProdotti() AS $prodObj):
                     $prodotto = $prodObj->getProdotto(); 
                     $idprodotto = $prodotto->getIdProdotto();
-                 //Zend_Debug::dump($pObj);die;
+                 //Zend_Debug::dump($prodotto);die;
     ?>
         
       <div class="row row-myig<?php if(!$prodotto->isDisponibile()) { echo " box_row_dis"; } ; ?>">
@@ -45,17 +37,17 @@
         <div class="col-md-3">
             <div class="sub_menu">
             <?php if($prodotto->isDisponibile()):
-                    $qta_ordinata = isset($this->prodottiIduser[$idprodotto]) ? $this->prodottiIduser[$idprodotto]->getQta() : 0;
+                    $qta_ordinata = $prodotto->getQta_ByIduser($this->iduser);
                 ?>
 <script>
     // Start these procedures always
 	$(document).ready(function(){
-        Trolley.initByParams(<?php echo $idprodotto;?>, <?php echo $prodotto->getCostoListino();?>, <?php echo $prodotto->getMoltiplicatore(); ?>, <?php echo $qta_ordinata;?>);
+        Trolley.initByParams(<?php echo $idprodotto;?>, <?php echo $prodotto->getIdListino(); ?>, <?php echo $prodotto->getCostoListino();?>, <?php echo $prodotto->getMoltiplicatore(); ?>, <?php echo $qta_ordinata;?>);
         Trolley_rebuildPartial(<?php echo $idprodotto;?>);
     });
 </script>
                 <a class="menu_icon" href="javascript:void(0)" onclick="Trolley_setQtaProdotto(<?php echo $idprodotto;?>, '+')">+</a>
-                <input readonly class="prod_qta" type="text" id="prod_qta_<?php echo $idprodotto;?>" name="prod_qta[<?php echo $idprodotto;?>]" value="<?php echo $qta_ordinata;?>" />
+                <input readonly class="prod_qta" type="text" id="prod_qta_<?php echo $idprodotto;?>" value="<?php echo $qta_ordinata;?>" />
                 <a class="menu_icon" href="javascript:void(0)" onclick="Trolley_setQtaProdotto(<?php echo $idprodotto;?>, '-')">-</a>
                 <div class="sub_totale" id="subtotale_<?php echo $idprodotto;?>">...</div>
             <?php else: ?>
@@ -81,19 +73,21 @@
     <div class="bs-sidebar" data-spy="affix" data-offset-top="76" role="complementary">
         <div class="totale">
             <h4>Totale: <strong id="totale">Loading...</strong></h4>
-            <button type="submit" id="submit" class="btn btn-success btn-mylg"><span class="glyphicon glyphicon-<?php echo($this->updated) ? "saved" : "save"; ?>"></span> SALVA ORDINE</button>
+            <button id="auto_saver" class="btn btn-default" disabled="disabled"><span class="glyphicon glyphicon-ok"></span> Salvataggio automatico</button>
         </div>
         <?php echo $this->partial('prodotti/subcat-navigation.tpl.php', array('categorie' => $categorie)); ?>
     </div>
 <?php endif; ?>
   </div>
 </div>
-</form>
 
 <script>
     // Start these procedures always
 	$(document).ready(function(){
         
+        // SET idordine
+        Trolley.idordine = <?php echo $this->ordine->getIdOrdine();?>;
+        // Rebuils Totale after loading page
         Trolley_rebuildTotal();
         
         //enable POPUP

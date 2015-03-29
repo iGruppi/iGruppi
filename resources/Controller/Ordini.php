@@ -99,17 +99,6 @@ class Controller_Ordini extends MyFw_Controller {
         
         $idordine = $this->getParam("idordine");
         $ordObj = new Model_Db_Ordini();
-        
-        // SAVE FORM if there is POST data
-        $this->view->updated = false;
-        if($this->getRequest()->isPost()) 
-        {
-            // get Post and check if is valid
-            $fv = $this->getRequest()->getPost();
-            $prod_qta = isset($fv["prod_qta"]) ? $fv["prod_qta"] : array();
-            $this->view->updated = $ordObj->setQtaProdottiForOrdine($idordine, $this->_iduser, $prod_qta);
-        }
-        
         // INIT Ordine
         $ordine = $ordObj->getByIdOrdine($idordine);
         // Validate ORDINE for this GROUP
@@ -123,7 +112,7 @@ class Controller_Ordini extends MyFw_Controller {
         }
         
         // build Ordine
-        $mooObj = new Model_Ordini_Ordine( new Model_AF_OrdineFactory() );
+        $mooObj = new Model_Ordini_Ordine( new Model_AF_UserOrdineFactory() );
         // build & init DATI Ordine
         $mooObj->appendDati()->initDati_ByObject($ordine);
         // build & init STATE Ordine
@@ -160,30 +149,25 @@ class Controller_Ordini extends MyFw_Controller {
         $ordCalcObj->setProdottiOrdinati($listProdOrdered);
         $this->view->ordCalcObj = $ordCalcObj;
         
+        // Set my iduser to View
+        $this->view->iduser = $this->_iduser;
     }
 
     
-    function testAction()
+    function updateorderAction()
     {
-        
         Zend_Registry::get("layout")->disableDisplay();
         
-        $sql = "SELECT cs.idsubcat, cs.descrizione AS categoria_sub, c.idcat, c.descrizione AS categoria, prod.idproduttore, prod.ragsoc AS ragsoc_produttore "
-              ."FROM categorie_sub AS cs "
-              ."LEFT JOIN categorie AS c ON cs.idcat=c.idcat "
-              ."LEFT JOIN produttori AS prod ON cs.idproduttore=prod.idproduttore "
-              ."WHERE 1";
-        $sth = $this->getDB()->prepare($sql);
-        $sth->execute();
-        // set Categorie in Listini object
-        $categorie = $sth->fetchAll(PDO::FETCH_OBJ);
-        $catObj = new Model_Categorie();
-        $catObj->initDatiByObject($categorie);
-        $list = $catObj->getProduttoriList();
-        Zend_Debug::dump( $list ); 
-        //Zend_Debug::dump( $catObj ); 
-        die;
+        // get values
+        $idordine = $this->getParam("idordine");
+        $idprodotto = $this->getParam("idprodotto");
+        $idlistino = $this->getParam("idlistino");
+        $qta = $this->getParam("qta");
         
-        
+        // UPDATE qta for this Prodotto
+        $ordObj = new Model_Db_Ordini();
+        $result = $ordObj->setQtaProdottoForOrdine($idordine, $idlistino, $idprodotto, $this->_iduser, $qta);
+        //Zend_Debug::dump($result);
+        echo json_encode($result);
     }
 }
