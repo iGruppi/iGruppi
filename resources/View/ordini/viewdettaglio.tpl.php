@@ -9,11 +9,13 @@
 <?php endif; ?>
     <h5>Ordine <strong class="<?php echo $this->ordine->getStatusCSSClass(); ?>"><?php echo $this->ordine->getStateName(); ?></strong></h5>
     
-<?php if($this->ordine->is_Aperto()): ?>
     <p>
+<?php if($this->ordine->is_Aperto()): ?>
         Chiusura prevista il <strong><?php echo $this->date($this->ordine->getDataFine(), '%d/%m/%Y');?></strong> alle <?php echo $this->date($this->ordine->getDataFine(), '%H:%M');?></strong>
-    </p>
+<?php else: ?>
+        Ordine del <strong><?php echo $this->date($this->ordine->getDataInizio(), '%d/%m/%Y');?></strong>
 <?php endif; ?>
+    </p>
     
 <?php echo $this->partial('ordini/box-note.tpl.php', array('ordine' => $this->ordine)); ?>
 
