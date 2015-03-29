@@ -21,7 +21,9 @@
 <?php endif; ?>
   </div>
   <div class="col-md-3 col-md-offset-1 leftbar">
+<?php if($this->refObject->canOpenNewOrdine()): ?>
         <a class="btn btn-default btn-mylg" href="/gestione-ordini/new"><span class="glyphicon glyphicon-plus"></span> Nuovo ordine</a>
+<?php endif; ?>        
         <div class="panel-group" id="accordion">
           <div class="panel panel-default">
             <div class="panel-heading">

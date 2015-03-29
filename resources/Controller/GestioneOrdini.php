@@ -62,6 +62,8 @@ class Controller_GestioneOrdini extends MyFw_Controller {
             }
         }
         $this->view->ordini = $ordini;
+        // set Referenti Object in View
+        $this->view->refObject = $this->_userSessionVal->refObject;
     }
     
     function newAction() {

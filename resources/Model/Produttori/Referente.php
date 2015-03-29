@@ -58,4 +58,8 @@ class Model_Produttori_Referente {
         return $this->is_GlobalReferente($idproduttore);
     }
     
+    function canOpenNewOrdine()
+    {
+        return count($this->_ref);
+    }
 }
