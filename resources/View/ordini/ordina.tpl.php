@@ -42,7 +42,7 @@
 <script>
     // Start these procedures always
 	$(document).ready(function(){
-        Trolley.initByParams(<?php echo $idprodotto;?>, <?php echo $prodotto->getIdListino(); ?>, <?php echo $prodotto->getCostoListino();?>, <?php echo $prodotto->getMoltiplicatore(); ?>, <?php echo $qta_ordinata;?>);
+        Trolley.initByParams(<?php echo $idprodotto;?>, <?php echo $prodotto->getIdListino(); ?>, <?php echo $prodotto->getCostoOrdine();?>, <?php echo $prodotto->getMoltiplicatore(); ?>, <?php echo $qta_ordinata;?>);
         Trolley_rebuildPartial(<?php echo $idprodotto;?>);
     });
 </script>

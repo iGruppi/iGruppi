@@ -46,7 +46,7 @@
     <?php endforeach; ?>
 
 <?php else: ?>
-    <h3>Nessun prodotto ordinato o disponibile!</h3>
+    <h3>Nessun prodotto ordinato.</h3>
 <?php endif; ?>
   </div>
   <div class="col-md-4 col-right">
