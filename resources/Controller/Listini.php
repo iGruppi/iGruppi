@@ -95,6 +95,9 @@ class Controller_Listini extends MyFw_Controller {
                 $mllObj->appendDati();
                 $mllObj->appendGruppi();
                 
+                // Get Idproduttore from FORM values
+                $idproduttore = $form->getValue("idproduttore");
+                
                 // set Dati
                 $mllObj->setDescrizione($form->getValue("descrizione"));
                 $mllObj->setIdProduttore($form->getValue("idproduttore"));
@@ -110,9 +113,13 @@ class Controller_Listini extends MyFw_Controller {
                     // add my group
                     $mllObj->addGroup($group);
                     $resSave = $mllObj->saveToDB_Gruppi();
-
-                    // REDIRECT to EDIT
+                    
                     if($resSave) {
+                        // ADD ALL prodotti to LISTINO
+                        $lModel = new Model_Db_Listini();
+                        $lModel->addProdottiToListinoByIdProduttore($idlistino, $idproduttore);
+
+                        // REDIRECT to EDIT
                         $this->redirect("listini", "edit", array('idlistino' => $idlistino, 'updated' => true));
                     }
                 }
