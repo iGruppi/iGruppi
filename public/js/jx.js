@@ -47,24 +47,25 @@
     function jx_EnableUser(iduser) {
         $('#disabled_button_'+iduser).button('loading');
         $.getJSON(
-			'/users/enable/',
+            '/users/enable/',
             {iduser: iduser},
-			function(data) {
+            function(data) {
                 if(data) {
                     $('#disabled_'+iduser).remove();
                     $('#disabled_button_'+iduser).remove();
                 }
-			});
+            });
     }
 
     function jx_OrdineMoveStatus(idordine, flagMover) {
         $('#a_mso').button('loading');
         $.getJSON(
-			'/gestione-ordini/movestatus/',
+            '/gestione-ordini/movestatus/',
             {idordine: idordine, flagMover: flagMover},
-			function(data) {
-                $('#ordine_header').html(data.myTpl);
-			});
+            function(data) {
+                $('#ordine_header_status').html(data.myTpl_status);
+                $('#ordine_header_menu').html(data.myTpl_menu);
+            });
     }
     
     function jx_ReferenteModifyQta(iduser, idprodotto, idordine)

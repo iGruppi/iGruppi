@@ -5,6 +5,15 @@
 abstract class Model_Ordini_State_OrderAbstract implements Model_Ordini_State_OrderInterface
 {
     
+    protected $_statiWithDate = array(
+        1 => 'Aperto',
+        2 => 'Chiuso',
+        3 => 'Inviato',
+        4 => 'Arrivato',
+        5 => 'Consegnato',
+    );
+    
+    
     /**
      * @var array
      */
@@ -28,8 +37,27 @@ abstract class Model_Ordini_State_OrderAbstract implements Model_Ordini_State_Or
     public function getStateName()
     { 
         return $this::STATUS_NAME;
-    }            
+    }
     
+    /**
+     * Return the Array of ALL Previouses Stati
+     * @return array
+     */
+    public function getArrayPrevStati()
+    {
+        $ar = array();
+        $index = array_search($this::STATUS_NAME, $this->_statiWithDate);
+        while($index) {
+            // get STATUS_FIELD_DATA constant for any status
+            $cName = "Model_Ordini_State_States_" . $this->_statiWithDate[$index];
+            $sfd = $cName::STATUS_FIELD_DATA;
+            $ar[$this->_statiWithDate[$index]] = $this->_ordine->$sfd;
+            $index = $index - 1;
+        }
+        return array_reverse($ar);
+    }
+
+
     /**
      * Returns the Next state object
      * @return (null|Model_Ordini_State_OrderAbstract)

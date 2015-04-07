@@ -575,8 +575,9 @@ class Controller_GestioneOrdini extends MyFw_Controller {
                 // init Dati Ordine
                 $mooObj->initDati_ByObject($ordine);
                 $this->view->ordine = $mooObj;
-                $myTpl = $this->view->fetch("gestioneordini/gestione-header.tpl.php");
-                $result = array('res' => true, 'myTpl' => $myTpl);
+                $myTpl_status = $this->view->fetch("gestioneordini/header-status-details.tpl.php");
+                $myTpl_menu = $this->view->fetch("gestioneordini/header-menu.tpl.php");
+                $result = array('res' => true, 'myTpl_status' => $myTpl_status, 'myTpl_menu' => $myTpl_menu );
             }
         }
         echo json_encode($result);

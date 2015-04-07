@@ -8,6 +8,7 @@ class Model_Ordini_State_States_Chiuso extends Model_Ordini_State_OrderAbstract
      * Status name
      */
     const STATUS_NAME = "Chiuso";
+    const STATUS_FIELD_DATA = "data_fine";
     protected $_className = "Chiuso";
     
 

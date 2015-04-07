@@ -8,6 +8,7 @@ class Model_Ordini_State_States_Inviato extends Model_Ordini_State_OrderAbstract
      * Status name
      */
     const STATUS_NAME = "Inviato";
+    const STATUS_FIELD_DATA = "data_inviato";
     protected $_className = "Inviato";
     
 

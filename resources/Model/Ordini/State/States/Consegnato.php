@@ -8,6 +8,7 @@ class Model_Ordini_State_States_Consegnato extends Model_Ordini_State_OrderAbstr
      * Status name
      */
     const STATUS_NAME = "Consegnato";
+    const STATUS_FIELD_DATA = "data_consegnato";
     protected $_className = "Consegnato";
     
 

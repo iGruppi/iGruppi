@@ -8,6 +8,7 @@ class Model_Ordini_State_States_Archiviato extends Model_Ordini_State_OrderAbstr
      * Status name
      */
     const STATUS_NAME = "Archiviato";
+    const STATUS_FIELD_DATA = null;    
     protected $_className = "Archiviato";
     
 

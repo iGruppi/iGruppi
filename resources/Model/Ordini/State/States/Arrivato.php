@@ -8,6 +8,7 @@ class Model_Ordini_State_States_Arrivato extends Model_Ordini_State_OrderAbstrac
      * Status name
      */
     const STATUS_NAME = "Arrivato";
+    const STATUS_FIELD_DATA = "data_arrivato";    
     protected $_className = "Arrivato";
     
 

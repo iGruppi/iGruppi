@@ -8,6 +8,7 @@ class Model_Ordini_State_States_Aperto extends Model_Ordini_State_OrderAbstract
      * Status name
      */
     const STATUS_NAME = "Aperto";
+    const STATUS_FIELD_DATA = "data_inizio";
     protected $_className = "Aperto";
     
 

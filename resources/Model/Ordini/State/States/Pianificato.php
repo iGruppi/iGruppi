@@ -8,6 +8,7 @@ class Model_Ordini_State_States_Pianificato extends Model_Ordini_State_OrderAbst
      * Status name
      */
     const STATUS_NAME = "Pianificato";
+    const STATUS_FIELD_DATA = null;
     protected $_className = "Pianificato";
     
 
