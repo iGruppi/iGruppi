@@ -2,6 +2,7 @@
 <div class="row">
     <div class="col-md-10">
 
+<?php if(count($this->listini) > 0): ?>
         <form id="ordineform" action="<?php echo $this->form->getAction(); ?>" method="post" class="f1n200">
 
             <fieldset class="border_top">
@@ -12,7 +13,6 @@
             
             <fieldset class="border_top">
                 <legend>Listini</legend>
-<?php if(count($this->listini) > 0): ?>
     <?php foreach($this->listini AS $listino): ?>
                 <div class="row">
                     <div class="col-md-2">&nbsp;</div>
@@ -30,12 +30,15 @@
                 </div>
                 <hr />
     <?php endforeach; ?>
-<?php endif; ?>         
             
             </fieldset>
             <button type="submit" id="submit" class="btn btn-success btn-mylg">SALVA</button>
 
         </form>
+<?php else: ?>
+        <p>Non puoi aprire un nuovo ordine per il seguente motivo:</p>
+        <h4 class="text-danger">Nessun listino disponibile.</h4>
+<?php endif; ?>
     </div>
     <div class="col-md-2 col-right">
         &nbsp;
