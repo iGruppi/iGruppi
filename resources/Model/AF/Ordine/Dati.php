@@ -106,11 +106,14 @@ class Model_AF_Ordine_Dati extends Model_AF_Dati
     
     /**
      * Save data to DB
-     * @return bool
+     * @return boolean
      */    
     public function saveToDB_Dati() 
     {
         if($this->isChanged()) {
+            // RESET isChanged flag
+            $this->_isChanged = false;
+            
             $db = Zend_Registry::get("db");
             // check for INSERT or UPDATE
             if(is_null($this->getValue("idordine")) ) {
@@ -124,8 +127,7 @@ class Model_AF_Ordine_Dati extends Model_AF_Dati
                 $sth = $db->prepare("UPDATE ordini SET data_inizio= :data_inizio, data_fine= :data_fine, condivisione= :condivisione WHERE idordine= :idordine");
                 return $sth->execute(array('idordine' => $this->getIdOrdine(), 'data_inizio' => $this->getDataInizio(), 'data_fine' => $this->getDataFine(), 'condivisione' => $this->getCondivisione()));
             }
-            // RESET isChanged flag
-            $this->_isChanged = false;
         }
+        return true;
     }
 }

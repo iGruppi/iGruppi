@@ -174,27 +174,50 @@ class Controller_Listini extends MyFw_Controller {
         // init Listino form
         $form = new Form_Listino();
         $form->setAction("/listini/edit/idlistino/$idlistino");
+        
+        // Disable Descrizione by Permissions
+        if(!$mllObj->canEditName())
+        {
+            $form->removeField("descrizione");
+        }
+        // Disable Validità by Permissions
+        if(!$mllObj->canSetValidita())
+        {
+            $form->removeField("valido_dal");
+            $form->removeField("valido_al");
+        }
+        // Disable Condivisione by Permissions
+        if(!$mllObj->canManageCondivisione())
+        {
+            $form->removeField("condivisione");
+        }
+        
 
         if($this->getRequest()->isPost()) {
             // get Post values
             $fv = $this->getRequest()->getPost();
 
             // set values null for validita if it was not set
-            if( $fv["validita"] != "S" ) {
+            if( $mllObj->canSetValidita() && $fv["validita"] != "S" ) {
                 $fv["valido_dal"] = $fv["valido_al"] = null;
             }
             // check if values are valid
             if( $form->isValid($fv) )
             {   
-                // Save DATI
-                $mllObj->setDescrizione($form->getValue("descrizione"));
-                $mllObj->setCondivisione($form->getValue("condivisione"));
-                $mllObj->getMyGroup()->setValidita($form->getValue("valido_dal"), $form->getValue("valido_al"));
+                // Save DATI if this use CAN (by Permissions)
+                if($mllObj->canEditName()) {
+                    $mllObj->setDescrizione($form->getValue("descrizione"));
+                }
+                if($mllObj->canManageCondivisione()) {
+                    $mllObj->setCondivisione($form->getValue("condivisione"));
+                    // Rest GROUPS by Sharing
+                    $groupsToShare = isset($fv["groups"]) ? $fv["groups"] : array();
+                    $mllObj->resetGroups($form->getValue("condivisione"), $groupsToShare);
+                }
+                if($mllObj->canSetValidita()) {
+                    $mllObj->getMyGroup()->setValidita($form->getValue("valido_dal"), $form->getValue("valido_al"));
+                }
                 $mllObj->getMyGroup()->setVisibile( $form->getValue("visibile") );
-                
-                // Save GROUPS
-                $groupsToShare = isset($fv["groups"]) ? $fv["groups"] : array();
-                $mllObj->resetGroups($form->getValue("condivisione"), $groupsToShare);
                 
                 // SAVE ALL DATA CHANGED TO DB
                 $resSaveDati = $mllObj->saveToDB_Dati();
@@ -209,8 +232,10 @@ class Controller_Listini extends MyFw_Controller {
             // build array values for form
             $form->setValues($mllObj->getDatiValues());
             // set some values in the right format
-            $form->setValue("valido_dal", $mllObj->getMyGroup()->getValidita()->getDal(MyFw_Form_Filters_Date::_MYFORMAT_DATE_VIEW));
-            $form->setValue("valido_al", $mllObj->getMyGroup()->getValidita()->getAl(MyFw_Form_Filters_Date::_MYFORMAT_DATE_VIEW));
+            if($mllObj->canSetValidita()) {
+                $form->setValue("valido_dal", $mllObj->getMyGroup()->getValidita()->getDal(MyFw_Form_Filters_Date::_MYFORMAT_DATE_VIEW));
+                $form->setValue("valido_al", $mllObj->getMyGroup()->getValidita()->getAl(MyFw_Form_Filters_Date::_MYFORMAT_DATE_VIEW));
+            }
             $form->setValue("visibile", $mllObj->getMyGroup()->getVisibile()->getString());
         }
         
