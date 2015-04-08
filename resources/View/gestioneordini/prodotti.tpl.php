@@ -21,16 +21,16 @@
                 foreach ($subcat->getProdotti() AS $prodotto):
                     $pObj = $prodotto->getProdotto(); 
                     $arProductsGrid[] = array(
-                        'idprodotto'     => $pObj->getIdProdotto(),
-                        'idlistino'     => $pObj->getIdListino(),
-                        'codice'        => $pObj->getCodice(),
-                        'subcat'        => $subcat->getDescrizione(),
-                        'costo_ordine'        => $pObj->getCostoOrdine(),
-                        'udm'           => $pObj->getUdm() .($pObj->hasPezzatura() ? "<br /><small>(Minimo " . $pObj->getDescrizionePezzatura() . ")</small>" : ""),
-                        'offerta_ordine'       => $pObj->getOffertaOrdine(),
-                        'sconto_ordine'        => $pObj->getScontoOrdine(),
-                        'descrizione'   => $pObj->getDescrizioneListino(),
-                        'disponibile_ordine'   => $pObj->isDisponibile()
+                        'idprodotto'        => $pObj->getIdProdotto(),
+                        'idlistino'         => $pObj->getIdListino(),
+                        'codice'            => $pObj->getCodice(),
+                        'subcat'            => $subcat->getDescrizione(),
+                        'costo_ordine'      => $pObj->getCostoOrdine(),
+                        'udm'               => $pObj->getUdm() .($pObj->hasPezzatura() ? "<br /><small>(Minimo " . $pObj->getDescrizionePezzatura() . ")</small>" : ""),
+                        'offerta_ordine'    => $pObj->getOffertaOrdine(),
+                        'sconto_ordine'     => $pObj->getScontoOrdine(),
+                        'descrizione'       => $pObj->getDescrizioneListino(),
+                        'disponibile_ordine'=> $pObj->isDisponibile()
                     );
                 endforeach;
             endforeach;
@@ -100,17 +100,20 @@ $(document).ready(function () {
           if (source === 'edit') {
             for(var i = changes.length - 1; i >= 0; i--)
             {
+                // convert logicalIndex to physicalIndex to get the right SourceData
+                var physicalIndex = this.sortIndex[changes[i][0]][0];
+                // get SourceData by physicalIndex
+                var rowSourceData = this.getSourceDataAtRow(physicalIndex);
+                // get value changed fields
                 var field = changes[i][1];
                 var old_value = changes[i][2];
                 var new_value = changes[i][3];
+                // check if it is really changed
                 if(old_value !== new_value)
                 {   
-                    var rowSourceData = this.getSourceDataAtRow(changes[i][0]);
-                    var idprodotto = rowSourceData.idprodotto;
-                    var idlistino = rowSourceData.idlistino;
                     $.getJSON(
                         '/gestione-ordini/updateprodotto/',
-                        {idordine: idordine, idprodotto: idprodotto, idlistino: idlistino, field: field, value: new_value},
+                        {idordine: idordine, idprodotto: rowSourceData.idprodotto, idlistino: rowSourceData.idlistino, field: field, value: new_value},
                         function(data) {
                             if(data.res)
                             {

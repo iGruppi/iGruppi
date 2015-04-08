@@ -27,7 +27,7 @@
                 {
                     $availableProducts++;
                     $arProductsGrid[] = array(
-                        'idproduct'     => $pObj->getIdProdotto(),
+                        'idprodotto'     => $pObj->getIdProdotto(),
                         'codice'        => $pObj->getCodice(),
                         'subcat'        => $subcat->getDescrizione(),
                         'prezzo'        => $pObj->getCosto(),
@@ -86,13 +86,15 @@ $(document).ready(function () {
           if (source === 'edit') {
             for(var i = changes.length - 1; i >= 0; i--)
             {
-                console.log(changes);
+                // convert logicalIndex to physicalIndex to get the right SourceData
+                var physicalIndex = this.sortIndex[changes[i][0]][0];
+                var rowSourceData = this.getSourceDataAtRow(physicalIndex);
                 var row = changes[i][0];
                 var old_value = changes[i][2];
                 var new_value = changes[i][3];
                 var codice = this.getSourceDataAtRow(row);
-                var idproduct = codice.idproduct;
-                console.log(idproduct);  
+                var idprodotto = rowSourceData.idprodotto;
+                console.log(idprodotto);  
             }
           }
       }
