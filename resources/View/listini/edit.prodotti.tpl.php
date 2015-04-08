@@ -69,7 +69,7 @@ $(document).ready(function () {
           <?php echo (!$this->listino->canUpdatePrezzi() ? "readOnly: true," : ""); ?>
           type: 'numeric',
           format: '0,0.00 $',
-          language: 'de' // TODO: usare IT
+          language: 'it'
         },
         {
           data: 'udm',
@@ -86,8 +86,13 @@ $(document).ready(function () {
           if (source === 'edit') {
             for(var i = changes.length - 1; i >= 0; i--)
             {
-                // convert logicalIndex to physicalIndex to get the right SourceData
-                var physicalIndex = this.sortIndex[changes[i][0]][0];
+                // NOT SORTED (as Default value), logicalIndex = physicalIndex
+                var physicalIndex = changes[i][0];
+                if(isSorted(this)) {
+                    // SORTED, convert logicalIndex to physicalIndex to get the right SourceData
+                    physicalIndex = this.sortIndex[changes[i][0]][0];
+                }
+                // get SourceData by physicalIndex
                 var rowSourceData = this.getSourceDataAtRow(physicalIndex);
                 var row = changes[i][0];
                 var old_value = changes[i][2];

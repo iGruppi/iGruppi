@@ -40,6 +40,16 @@
         });
 
     });
+
+
+/**
+ * General functions for Handsontable
+ */
+    // Helper function to check if it is sorted
+    function isSorted(hotInstance){
+      return hotInstance.sortingEnabled && typeof hotInstance.sortColumn != 'undefined';
+    }    
+    
     
     
 /*
