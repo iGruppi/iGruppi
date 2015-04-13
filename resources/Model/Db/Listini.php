@@ -101,7 +101,16 @@ class Model_Db_Listini extends MyFw_DB_Base {
         $sql = "INSERT INTO listini_prodotti (idlistino, idprodotto, descrizione_listino, costo_listino, note_listino)
                 SELECT :idlistino, idprodotto, descrizione, costo, note FROM prodotti WHERE idproduttore= :idproduttore AND attivo='S' AND production='S'";
         $sth = $this->db->prepare($sql);
-        $sth->execute(array('idlistino' => $idlistino, 'idproduttore' => $idproduttore));
+        return $sth->execute(array('idlistino' => $idlistino, 'idproduttore' => $idproduttore));
     }
+    
+    function addProdottoToListinoByIdProdotto($idlistino, $idprodotto)
+    {
+        $sql = "INSERT INTO listini_prodotti (idlistino, idprodotto, descrizione_listino, costo_listino, note_listino)
+                SELECT :idlistino, idprodotto, descrizione, costo, note FROM prodotti WHERE idprodotto= :idprodotto";
+        $sth = $this->db->prepare($sql);
+        return $sth->execute(array('idlistino' => $idlistino, 'idprodotto' => $idprodotto));
+    }
+    
     
 }

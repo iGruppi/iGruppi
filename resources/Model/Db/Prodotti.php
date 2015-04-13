@@ -61,7 +61,7 @@ class Model_Db_Prodotti extends MyFw_DB_Base {
               ." LEFT JOIN listini_prodotti AS lp ON p.idprodotto=lp.idprodotto AND lp.idlistino= :idlistino"
               ." JOIN categorie_sub AS cs ON p.idsubcat=cs.idsubcat"
               ." JOIN categorie AS c ON cs.idcat=c.idcat "
-              ." WHERE l.idlistino= :idlistino"
+              ." WHERE l.idlistino= :idlistino AND p.attivo='S'"
               ." ORDER BY c.descrizione, p.codice";
         /**
          * @todo Qui mancano i filtri per i prodotti in PRODUCTION=S o proprietario tramite iduser_creator

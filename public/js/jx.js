@@ -152,3 +152,17 @@
             $('#submit_'+iduser).button('reset');
         }
     }
+    
+    function importProdottoToListino(idlistino, idprodotto)
+    {
+        $('#li_import_' + idlistino + '_' +idprodotto + ' > .btn').button('loading');
+        $.getJSON(
+			'/listini/importa/',
+            {idlistino: idlistino, idprodotto: idprodotto},
+			function(data) {
+                if(data.res)
+				{
+                    $('#li_import_' + idlistino + '_' +idprodotto).remove();
+                }
+			});
+    }

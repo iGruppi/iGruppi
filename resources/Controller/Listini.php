@@ -245,9 +245,19 @@ class Controller_Listini extends MyFw_Controller {
         $this->view->updated = $this->getParam("updated");
     }
     
-    function viewAction()
+    function importaAction()
     {
+        $layout = Zend_Registry::get("layout");
+        $layout->disableDisplay();
         
+        $idlistino = $this->getParam("idlistino");
+        $idprodotto = $this->getParam("idprodotto");
+        
+        $lModel = new Model_Db_Listini();
+        $res = $lModel->addProdottoToListinoByIdProdotto($idlistino, $idprodotto);
+        $result = array('res' => $res);
+        
+        echo json_encode($result);
     }
     
 }
