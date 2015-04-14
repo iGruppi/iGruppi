@@ -76,7 +76,7 @@ $(document).ready(function () {
           readOnly: true,
           type: 'numeric',
           format: '0,0.00 $',
-          language: 'de' // TODO: usare IT
+          language: 'it'
         },
         {
           data: 'udm',
@@ -93,7 +93,7 @@ $(document).ready(function () {
           readOnly: true,
           type: 'numeric',
           format: '0,0.00',
-          language: 'de'
+          language: 'it'
         },
         {
           data: 'subcat',
