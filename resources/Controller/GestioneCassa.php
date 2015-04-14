@@ -172,14 +172,20 @@ class Controller_GestioneCassa extends MyFw_Controller {
 
         // build & init PRODOTTI
         $mooObj->appendProdotti()->initProdotti_ByObject($listProd);
-                
-        // GET PRODUCTS LIST with Qta Ordered
-        $ordCalcObj = new Model_Ordini_Calcoli_Utenti($mooObj);
         
-        // SET PRODOTTI ORDINATI
+        // GET PRODOTTI Ordinati
         $listProdOrdered = $ordObj->getProdottiOrdinatiByIdordine($mooObj->getIdOrdine());
-        $ordCalcObj->setProdottiOrdinati($listProdOrdered);
-        $this->view->ordCalcObj = $ordCalcObj;
+        
+        // GET PRODOTTI ORDINATI per UTENTE
+        $ordCalcUtenti = new Model_Ordini_Calcoli_Utenti($mooObj);
+        $ordCalcUtenti->setProdottiOrdinati($listProdOrdered);
+        $this->view->ordCalcUtenti = $ordCalcUtenti;
+        
+        // GET PRODOTTI ORDINATI TOTALE
+        $ordCalcTotale = new Model_Ordini_Calcoli_Totali($mooObj);
+        $ordCalcTotale->setProdottiOrdinati($listProdOrdered);
+        $this->view->ordCalcTotale = $ordCalcTotale;
+        
         $this->view->ordine = $mooObj;
     }
     
