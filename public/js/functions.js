@@ -118,7 +118,6 @@
     
     function Trolley_setQtaProdotto(idprodotto, op) 
     {
-        $('#auto_saver > span').removeClass('glyphicon-ok').addClass('glyphicon-refresh');
         // check for ADD or SUB
         if( op === "+" ) {
             Trolley.add(idprodotto);
@@ -155,7 +154,6 @@
                 {
                     Trolley_rebuildPartial(idprodotto);
                     Trolley_rebuildTotal();
-                    $('#auto_saver > span').removeClass('glyphicon-refresh').addClass('glyphicon-ok');
                 }
 			});
     }

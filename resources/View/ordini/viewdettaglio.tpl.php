@@ -58,8 +58,11 @@
             <?php endforeach; ?>
             <h5>Totale ordine: <b id="totale"><?php echo $this->valuta($this->ordCalcObj->getTotaleByIduser($this->iduser)) ?></b></h5>
         <?php endif; ?>
-            
             <h4>Totale: <strong><?php echo $this->valuta($this->ordCalcObj->getTotaleConExtraByIduser($this->iduser)) ?></strong></h4>
+<?php if($this->ordine->is_Aperto()): ?>
+            <a role="button" class="btn btn-success" href="/ordini/ordina/idordine/<?php echo $this->ordine->getIdOrdine();?>"><span class="glyphicon glyphicon-arrow-left"></span> Continua ad ordinare</a>            
+<?php endif; ?>
+            
         </div>                    
     </div>
   </div>

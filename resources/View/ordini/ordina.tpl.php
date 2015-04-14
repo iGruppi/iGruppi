@@ -73,7 +73,7 @@
     <div class="bs-sidebar" data-spy="affix" data-offset-top="76" role="complementary">
         <div class="totale">
             <h4>Totale: <strong id="totale">Loading...</strong></h4>
-            <button id="auto_saver" class="btn btn-default" disabled="disabled"><span class="glyphicon glyphicon-ok"></span> Salvataggio automatico</button>
+            <a role="button" class="btn btn-success" href="/ordini/viewdettaglio/idordine/<?php echo $this->ordine->getIdOrdine();?>"><span class="glyphicon glyphicon-save"></span> Salva ordine</a>
         </div>
         <?php echo $this->partial('prodotti/subcat-navigation.tpl.php', array('categorie' => $categorie)); ?>
     </div>
