@@ -19,16 +19,17 @@ class Model_Db_Cassa extends MyFw_DB_Base {
         return $sth_app->fetch(PDO::FETCH_ASSOC);
     }
 
-    function getUltimiMovimenti($start=0, $limit=20) {
+    function getUltimiMovimentiByIdgroup($idgroup, $start=0, $limit=20) {
         $sql = "SELECT c.*, u.nome, u.cognome, u.email,"
               ." o.data_inizio "
               ." FROM cassa AS c "
               ." JOIN users AS u ON c.iduser=u.iduser "
               ." LEFT JOIN ordini AS o ON c.idordine=o.idordine"
+              ." WHERE c.iduser IN (SELECT iduser FROM users_group WHERE idgroup= :idgroup AND attivo='S')"
               ." ORDER BY c.data DESC"
               ." LIMIT $start, $limit";
         $sth = $this->db->prepare($sql);
-        $sth->execute();
+        $sth->execute(array('idgroup' => $idgroup));
         return $sth->fetchAll(PDO::FETCH_ASSOC);        
     }
     

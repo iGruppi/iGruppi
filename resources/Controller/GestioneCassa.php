@@ -6,6 +6,9 @@
  */
 class Controller_GestioneCassa extends MyFw_Controller {
 
+    private $_userSessionVal;
+    private $_iduser;    
+    
     function _init() 
     {
         $auth = Zend_Auth::getInstance();
@@ -25,7 +28,7 @@ class Controller_GestioneCassa extends MyFw_Controller {
         $limit = is_null($this->getParam("limit")) ? 20 : $this->getParam("limit");
         
         $cassaModel = new Model_Db_Cassa();
-        $movRecs = $cassaModel->getUltimiMovimenti($start, $limit);
+        $movRecs = $cassaModel->getUltimiMovimentiByIdgroup($this->_userSessionVal->idgroup, $start, $limit);
         $movimenti = array();
         if(count($movRecs) > 0)
         {
