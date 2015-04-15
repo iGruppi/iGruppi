@@ -28,7 +28,6 @@
                         'costo_ordine'      => $pObj->getCostoOrdine(),
                         'udm'               => $pObj->getUdm() .($pObj->hasPezzatura() ? "<br /><small>(Minimo " . $pObj->getDescrizionePezzatura() . ")</small>" : ""),
                         'offerta_ordine'    => $pObj->getOffertaOrdine(),
-                        'sconto_ordine'     => $pObj->getScontoOrdine(),
                         'descrizione'       => $pObj->getDescrizioneListino(),
                         'disponibile_ordine'=> $pObj->isDisponibile()
                     );
@@ -53,8 +52,8 @@ $(document).ready(function () {
       data: <?php echo json_encode($arProductsGrid); ?>,
       manualColumnMove: true,
       manualColumnResize: true,
-      colHeaders: ['Disp.', 'Codice', 'Descrizione', 'Prezzo', 'Udm', 'Offerta', 'Sconto', 'Categoria'],
-      colWidths: [50, 80, 380, 70, 120, 70, 70, 280],
+      colHeaders: ['Disp.', 'Codice', 'Descrizione', 'Prezzo', 'Udm', 'Offerta', 'Categoria'],
+      colWidths: [50, 80, 380, 70, 120, 70, 280],
       columnSorting: true,
       currentRowClassName: 'currentRow',
       columns: [
@@ -84,12 +83,6 @@ $(document).ready(function () {
         {
           data: 'offerta_ordine',
           type: 'checkbox'
-        },
-        {
-          data: 'sconto_ordine',
-          type: 'numeric',
-          format: '0,0.00 %',
-          language: 'it'
         },
         {
           data: 'subcat',
