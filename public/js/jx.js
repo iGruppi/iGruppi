@@ -68,49 +68,6 @@
             });
     }
     
-    function jx_ReferenteModifyQta(iduser, idprodotto, idordine)
-    {
-        var keyRow = iduser+'_'+idprodotto;
-        $('#btn_'+keyRow).button('loading');
-        $.getJSON(
-			'/gestione-ordini/getformqta/',
-            {iduser: iduser, idprodotto: idprodotto, idordine: idordine},
-			function(data) {
-                if(data.res)
-				{
-                    $('#qtareal_'+keyRow).hide();
-                    $('#div_chgqta_'+keyRow).html(data.myTpl).show();
-                }
-			});
-    }
-    
-    function jx_RefModQta_Save(iduser, idprodotto, idordine)
-    {
-        var keyRow = iduser+'_'+idprodotto;
-        $('#submit_'+keyRow).button('loading');
-        // SET Number field value
-        $('#qta_eff_'+keyRow)[0].setNumber();
-        // store the new value
-        var newValue = parseFloat($('#qta_eff_'+keyRow).val());
-        $('#qtareal_'+keyRow+' > strong').html(newValue);
-		$.post(
-			'/gestione-ordini/changeqta/idordine/'+idordine,
-			$('#qta_ord_form_'+keyRow).serialize(),
-			function(data){
-                if(data.res)
-				{
-                    var tot = parseFloat(data.newTotale);
-                    var grandTot = parseFloat(data.grandTotal);
-                    $('#td_totrow_'+keyRow+' > strong').html(tot.formatNumber(2, ',', '')+"&nbsp;&euro;");
-                    $('#td_grandtotrow_'+iduser+' > strong').html(grandTot.formatNumber(2, ',', '')+"&nbsp;&euro;");
-                    $('#qtareal_'+keyRow).show();
-                    $('#div_chgqta_'+keyRow).html(' ').hide();
-                    $('#btn_'+keyRow).button('reset');
-                }
-			},
-			"json");
-    }
-    
     function jx_ReferenteAddNewProd(iduser, idordine)
     {
         $('#td_add_'+iduser+' > a').button('loading');
@@ -157,12 +114,12 @@
     {
         $('#li_import_' + idlistino + '_' +idprodotto + ' > .btn').button('loading');
         $.getJSON(
-			'/listini/importa/',
+            '/listini/importa/',
             {idlistino: idlistino, idprodotto: idprodotto},
-			function(data) {
+            function(data) {
                 if(data.res)
 				{
                     $('#li_import_' + idlistino + '_' +idprodotto).remove();
                 }
-			});
+            });
     }

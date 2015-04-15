@@ -377,68 +377,23 @@ class Controller_GestioneOrdini extends MyFw_Controller {
         $this->view->ordCalcObj = $ordCalcObj;
     }
     
-    function getformqtaAction() 
-    {
-        // build Ordine
-        $ordine = $this->_buildOrdine( new Model_AF_UserOrdineFactory() );
-        
-        $layout = Zend_Registry::get("layout");
-        $layout->disableDisplay();
-        $this->view->iduser = $iduser = $this->getParam("iduser");
-        $this->view->idprodotto = $idprodotto = $this->getParam("idprodotto");
-        $this->view->idordine = $idordine = $this->getParam("idordine");
-        // GET Prodotto ordinato
-        $pObj = $ordine->getProdottoById($idprodotto);
-        if(!is_null($pObj)) 
-        {
-            $this->view->pObj = $pObj;
-            echo json_encode(array('res' => true, 'myTpl' => $this->view->fetch('gestioneordini/qtaordine-row.form.tpl.php')));
-        } else {
-            echo json_encode(array('res' => false));
-        }
-    }
-    
     function changeqtaAction()
     {
         $layout = Zend_Registry::get("layout");
         $layout->disableDisplay();
         
-        // build Ordine
-        $ordine = $this->_buildOrdine( new Model_AF_UserOrdineFactory() );
-        
-        if($this->getRequest()->isPost()) {
-            // get Post values
-            $fv = $this->getRequest()->getPost();
-            $idordine = $fv["idordine"];
-            $iduser = $fv["iduser"];
-            $idprodotto = $fv["idprodotto"];
-            $qta_reale = $fv["qta_reale"];
+        // get Params values
+        $iduser = $this->getParam("iduser");
+        $idprodotto = $this->getParam("idprodotto");
+        $idlistino = $this->getParam("idlistino");
+        $field = $this->getParam("field");
+        $value = $this->getParam("value");
             
-            $sth = $this->getDB()->prepare("UPDATE ordini_user_prodotti SET qta_reale= :qta_reale, data_ins=NOW() WHERE iduser= :iduser AND idprodotto= :idprodotto AND idordine= :idordine");
-            // UPDATE product selected
-            $fields = array('iduser' => $iduser, 'idprodotto' => $idprodotto, 'idordine' => $idordine, 'qta_reale' => $qta_reale);
-            $rsth = $sth->execute($fields);
-            if($rsth) 
-            {
-                $ordModel = new Model_Db_Ordini();
-                $prodotti = $ordModel->getProdottiOrdinatiByIdordineAndIdgroup($idordine,$this->_userSessionVal->idgroup);
-                if(is_array($prodotti) && count($prodotti) > 0)
-                {
-                    $ordCalcObj = new Model_Ordini_Calcoli_Utenti();
-                    $ordCalcObj->setOrdObj($ordine);
-                    $ordCalcObj->setProdotti($prodotti);
-                    $prodObj = $ordCalcObj->getProdottiByIduser($iduser);
-                    $newTotale = 0;
-                    if( isset($prodObj[$idprodotto]) ) {
-                        $pObj = $prodObj[$idprodotto];
-                        $newTotale = $pObj->getTotale();
-                    }
-                    echo json_encode(array('res' => true, 'newTotale' => $newTotale, 'grandTotal' => $ordCalcObj->getTotaleConSpedizioneByIduser($iduser)));
-                    exit;
-                }
-            }
-        }
-        echo json_encode(array('res' => false));
+        $sth = $this->getDB()->prepare("UPDATE ordini_user_prodotti SET $field= :$field, data_ins=NOW() WHERE iduser= :iduser AND idordine= :idordine AND idlistino= :idlistino  AND idprodotto= :idprodotto");
+        // UPDATE product selected
+        $fields = array('iduser' => $iduser, 'idordine' => $this->_idordine, 'idprodotto' => $idprodotto, 'idlistino' => $idlistino, $field => $value);
+        $rsth = $sth->execute($fields);
+        echo json_encode(array('res' => $rsth));
     }
     
     function newprodformAction() 

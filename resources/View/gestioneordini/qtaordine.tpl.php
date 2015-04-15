@@ -18,6 +18,9 @@
 <?php        
                 foreach ($user["prodotti"] AS $idprodotto => $pObj):
                     $arProductsGrid[] = array(
+                        'idprodotto'            => $pObj->getIdProdotto(),
+                        'idlistino'             => $pObj->getIdListino(),
+                        'iduser'                => $iduser,
                         'disponibile_ordine'    => $pObj->isDisponibile(),
                         'user'                  => $user["cognome"] . " " . $user["nome"],
                         'qta'                   => $pObj->getQta_ByIduser($iduser),
@@ -41,6 +44,8 @@
 
 <script>    
 $(document).ready(function () { 
+    // store my idordine
+    var idordine = <?php echo $this->ordine->getIdOrdine(); ?>;
 
     $('#grid-prodotti').handsontable({
         data: <?php echo json_encode($arProductsGrid); ?>,
@@ -99,7 +104,42 @@ $(document).ready(function () {
             cellProperties.readOnly = true;
           }
           return cellProperties;
+        },
+        afterChange: function (changes, source) {
+            if (source === 'edit') {
+              for(var i = changes.length - 1; i >= 0; i--)
+              {
+                  // NOT SORTED (as Default value), logicalIndex = physicalIndex
+                  var physicalIndex = changes[i][0];
+                  if(isSorted(this)) {
+                      // SORTED, convert logicalIndex to physicalIndex to get the right SourceData
+                      physicalIndex = this.sortIndex[changes[i][0]][0];
+                  }
+                  // get SourceData by physicalIndex
+                  var rowSourceData = this.getSourceDataAtRow(physicalIndex);
+                  // get value changed fields
+                  var field = changes[i][1];
+                  var old_value = changes[i][2];
+                  var new_value = changes[i][3];
+                  // check if it is really changed
+                  console.log(field + ": " + new_value + " - " + old_value );
+                  console.log(rowSourceData);
+                  if(old_value !== new_value)
+                  {   
+                      $.getJSON(
+                          '/gestione-ordini/changeqta/',
+                          {iduser: rowSourceData.iduser, idordine: idordine, idprodotto: rowSourceData.idprodotto, idlistino: rowSourceData.idlistino, field: field, value: new_value},
+                          function(data) {
+                              if(!data.res)
+                              {
+                                  console.log('ERROR!');
+                              }
+                          });
+                  }
+              }
+            }
         }
+        
     });
     
     
