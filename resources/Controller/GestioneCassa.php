@@ -174,7 +174,7 @@ class Controller_GestioneCassa extends MyFw_Controller {
         $mooObj->appendProdotti()->initProdotti_ByObject($listProd);
         
         // GET PRODOTTI Ordinati
-        $listProdOrdered = $ordObj->getProdottiOrdinatiByIdordine($mooObj->getIdOrdine());
+        $listProdOrdered = $ordObj->getProdottiOrdinatiByIdordineAndIdgroup($mooObj->getIdOrdine(), $this->_userSessionVal->idgroup);
         
         // GET PRODOTTI ORDINATI per UTENTE
         $ordCalcUtenti = new Model_Ordini_Calcoli_Utenti($mooObj);
@@ -228,7 +228,7 @@ class Controller_GestioneCassa extends MyFw_Controller {
             $ordCalcObj = new Model_Ordini_Calcoli_Utenti($mooObj);
 
             // SET PRODOTTI ORDINATI
-            $listProdOrdered = $ordObj->getProdottiOrdinatiByIdordine($mooObj->getIdOrdine());
+            $listProdOrdered = $ordObj->getProdottiOrdinatiByIdordineAndIdgroup($mooObj->getIdOrdine(),$this->_userSessionVal->idgroup);
             $ordCalcObj->setProdottiOrdinati($listProdOrdered);
             
             // Check If some product ordered EXISTS

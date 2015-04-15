@@ -98,7 +98,7 @@ class Controller_Ordini extends MyFw_Controller {
         $this->view->ordine = $mooObj;
         
         // GET PRODUCTS LIST with Qta Ordered
-        $listProdOrdered = $ordObj->getProdottiOrdinatiByIdordine($mooObj->getIdOrdine());
+        $listProdOrdered = $ordObj->getProdottiOrdinatiByIdordineAndIdgroup($mooObj->getIdOrdine(),$this->_userSessionVal->idgroup);
 
         // SET ORDINE e PRODOTTI
         $ordCalcObj = new Model_Ordini_Calcoli_Utenti($mooObj);
@@ -158,7 +158,7 @@ class Controller_Ordini extends MyFw_Controller {
         }
         
         // GET PRODUCTS LIST with Qta Ordered
-        $listProdOrdered = $ordObj->getProdottiOrdinatiByIdordine($mooObj->getIdOrdine());
+        $listProdOrdered = $ordObj->getProdottiOrdinatiByIdordineAndIdgroup($mooObj->getIdOrdine(),$this->_userSessionVal->idgroup);
 
         // SET ORDINE e PRODOTTI
         $ordCalcObj = new Model_Ordini_Calcoli_Utenti($mooObj);

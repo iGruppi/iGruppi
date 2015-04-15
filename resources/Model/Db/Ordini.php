@@ -262,11 +262,15 @@ class Model_Db_Ordini extends MyFw_DB_Base {
      * @param int $idordine
      * @return array the results set
      */
-    function getProdottiOrdinatiByIdordine($idordine) 
+    function getProdottiOrdinatiByIdordineAndIdgroup($idordine, $idgroup) 
     {
-        $sqlp = "SELECT * FROM ordini_user_prodotti WHERE idordine= :idordine";
+        $sqlp = "SELECT oup.* "
+               ." FROM ordini_user_prodotti AS oup "
+               ." JOIN users_group AS up ON oup.iduser=up.iduser"
+               ." WHERE oup.idordine= :idordine"
+               ." AND up.idgroup = :idgroup";
         $sthp = $this->db->prepare($sqlp);
-        $sthp->execute(array('idordine' => $idordine));
+        $sthp->execute(array('idordine' => $idordine, 'idgroup' => $idgroup));
         $prodotti = $sthp->fetchAll(PDO::FETCH_OBJ);
         return $prodotti;
     }

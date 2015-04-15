@@ -372,7 +372,7 @@ class Controller_GestioneOrdini extends MyFw_Controller {
         $ordCalcObj = new Model_Ordini_Calcoli_Utenti($ordine);
         // SET PRODOTTI ORDINATI
         $ordObj = new Model_Db_Ordini();
-        $listProdOrdered = $ordObj->getProdottiOrdinatiByIdordine($ordine->getIdOrdine());
+        $listProdOrdered = $ordObj->getProdottiOrdinatiByIdordineAndIdgroup($ordine->getIdOrdine(),$this->_userSessionVal->idgroup);
         $ordCalcObj->setProdottiOrdinati($listProdOrdered);
         $this->view->ordCalcObj = $ordCalcObj;
     }
@@ -421,7 +421,7 @@ class Controller_GestioneOrdini extends MyFw_Controller {
             if($rsth) 
             {
                 $ordModel = new Model_Db_Ordini();
-                $prodotti = $ordModel->getProdottiOrdinatiByIdordine($idordine);
+                $prodotti = $ordModel->getProdottiOrdinatiByIdordineAndIdgroup($idordine,$this->_userSessionVal->idgroup);
                 if(is_array($prodotti) && count($prodotti) > 0)
                 {
                     $ordCalcObj = new Model_Ordini_Calcoli_Utenti();
@@ -485,7 +485,7 @@ class Controller_GestioneOrdini extends MyFw_Controller {
             $ordObj = new Model_Db_Ordini();
             $added = $ordObj->addQtaProdottoForOrdine($idordine, $iduser, $idprodotto);
             if($added) {
-                $prodotti = $ordObj->getProdottiOrdinatiByIdordine($idordine);
+                $prodotti = $ordObj->getProdottiOrdinatiByIdordineAndIdgroup($idordine,$this->_userSessionVal->idgroup);
                 if(is_array($prodotti) && count($prodotti) > 0) {
                     $ordCalcObj = new Model_Ordini_Calcoli_Utenti();
                     $ordCalcObj->setOrdObj($ordine);
@@ -535,7 +535,7 @@ class Controller_GestioneOrdini extends MyFw_Controller {
         }
         // SET PRODOTTI ORDINATI
         $ordObj = new Model_Db_Ordini();
-        $listProdOrdered = $ordObj->getProdottiOrdinatiByIdordine($ordine->getIdOrdine());
+        $listProdOrdered = $ordObj->getProdottiOrdinatiByIdordineAndIdgroup($ordine->getIdOrdine(),$this->_userSessionVal->idgroup);
         $ordCalcObj->setProdottiOrdinati($listProdOrdered);
         $this->view->ordCalcObj = $ordCalcObj;
     }
