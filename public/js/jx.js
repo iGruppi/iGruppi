@@ -123,3 +123,18 @@
                 }
             });
     }
+    
+    function jx_ListinoUpdateData(idlistino)
+    {
+        $('#btn_listino_user_update').button('loading');
+        $.getJSON(
+            '/listini/updatedata/',
+            {idlistino: idlistino},
+            function(data) {
+                if(data.res)
+                {
+                    $('#listino_user_update').html(moment().format('DD/MM/YYYY'));
+                    $('#btn_listino_user_update').button('reset');
+                }
+            });
+    }

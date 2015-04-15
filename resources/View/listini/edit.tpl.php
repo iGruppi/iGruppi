@@ -6,8 +6,13 @@
 
 
     <h2 class="titolo">Modifica Listino <strong><?php echo $this->listino->getDescrizione(); ?></strong></h2>
-    <h3 class="subtitolo">Produttore: <strong><?php echo $this->listino->getProduttoreName(); ?></strong></h3>
-
+    <h3 class="subtitolo">Produttore: <strong><?php echo $this->listino->getProduttoreName(); ?></strong><br />
+        <small>Data Listino: <strong id="listino_user_update"><?php echo $this->date( $this->listino->getDataListino(), '%d/%m/%Y' ); ?></strong> 
+<?php if($this->listino->canSetDataListino()): ?>
+            <button type="button" data-loading-text="Aggiorno..." class="btn btn-warning btn-xs" id="btn_listino_user_update" href="javascript:void(0);" onclick="jx_ListinoUpdateData(<?php echo $this->listino->getIdListino(); ?>);">Aggiorna</button>
+<?php endif; ?>
+        </small>
+    </h3>
     <div class="row">
       <div class="col-md-12">
 

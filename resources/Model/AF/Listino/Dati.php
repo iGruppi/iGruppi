@@ -77,6 +77,11 @@ class Model_AF_Listino_Dati extends Model_AF_Dati
         return $this->getValue("email");
     }
     
+    public function getDataListino()
+    {
+        return $this->getValue("user_update");
+    }
+    
     
 /***************************
  *  SET METHODS
@@ -133,7 +138,7 @@ class Model_AF_Listino_Dati extends Model_AF_Dati
             // check for INSERT or UPDATE
             if(is_null($this->getValue("idlistino")) ) {
                 // INSERT, idlistino does not exists
-                $sth = $db->prepare("INSERT INTO listini SET descrizione= :descrizione, condivisione= :condivisione, idproduttore= :idproduttore, last_update=NOW()");
+                $sth = $db->prepare("INSERT INTO listini SET descrizione= :descrizione, condivisione= :condivisione, idproduttore= :idproduttore, last_update=NOW(), user_update=NOW()");
                 $res = $sth->execute(array('idproduttore' => $this->getIdProduttore(), 'descrizione' => $this->getDescrizione(), 'condivisione' => $this->getCondivisione()));
                 $this->setIdListino( $db->lastInsertId() );
                 return $res;

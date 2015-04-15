@@ -260,4 +260,18 @@ class Controller_Listini extends MyFw_Controller {
         echo json_encode($result);
     }
     
+    function updatedataAction()
+    {
+        $layout = Zend_Registry::get("layout");
+        $layout->disableDisplay();
+        
+        $idlistino = $this->getParam("idlistino");
+        
+        $lModel = new Model_Db_Listini();
+        $res = $lModel->updateDataListino($idlistino);
+        $result = array('res' => $res);
+        
+        echo json_encode($result);
+    }
+    
 }

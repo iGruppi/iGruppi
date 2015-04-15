@@ -113,4 +113,11 @@ class Model_Db_Listini extends MyFw_DB_Base {
     }
     
     
+    function updateDataListino($idlistino)
+    {
+        $sql = "UPDATE listini SET user_update= NOW() WHERE idlistino= :idlistino";
+        $sth = $this->db->prepare($sql);
+        return $sth->execute(array('idlistino' => $idlistino));
+    }
+    
 }

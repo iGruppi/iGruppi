@@ -22,8 +22,8 @@
                     <div class="col-md-7">
                         <h4><?php echo $listino->getDescrizione(); ?></h4>
                         <h5>
-                            Creato da <strong><?php echo $listino->getMasterGroup()->getRefNome(); ?></strong> (<?php echo $listino->getMasterGroup()->getGroupName(); ?>)<br />
-                            Ultimo aggiornamento: <strong>...</strong><br />
+                            Creato da <strong><?php echo $listino->getMasterGroup()->getGroupName(); ?></strong><br />
+                            Ultimo aggiornamento: <strong><?php echo $this->date($listino->getDataListino(), '%d/%m/%Y'); ?></strong><br />
                         </h5>
                     </div>
                     <div class="col-md-2">&nbsp;</div>

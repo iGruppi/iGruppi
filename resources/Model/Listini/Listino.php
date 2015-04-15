@@ -46,6 +46,10 @@ class Model_Listini_Listino extends Model_AF_AbstractCoR
         return $this->isOwner();
     }
     
+    public function canSetDataListino()
+    {
+        return $this->isOwner();   
+    }
     
     
 /*  **************************************************************************
