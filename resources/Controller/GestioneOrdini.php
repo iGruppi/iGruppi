@@ -229,7 +229,7 @@ class Controller_GestioneOrdini extends MyFw_Controller {
             $form->removeField("data_inizio");
             $form->removeField("data_fine");
         }
-        if(!$ordine->canManageUsersRef()) {
+        if(!$ordine->canManageReferente()) {
             $form->removeField("iduser_ref");
         }
         
@@ -254,7 +254,7 @@ class Controller_GestioneOrdini extends MyFw_Controller {
                     $groupsToShare = isset($fv["groups"]) ? $fv["groups"] : array();
                     $ordine->resetGroups($form->getValue("condivisione"), $groupsToShare);                
                 }
-                if($ordine->canManageUsersRef()) {
+                if($ordine->canManageReferente()) {
                     $ordine->getMyGroup()->setRefIdUser($form->getValue("iduser_ref"));
                 }
                 // Every group can set this data personalized
@@ -276,7 +276,7 @@ class Controller_GestioneOrdini extends MyFw_Controller {
                 $form->setValue("data_fine", $ordine->getDataFine(MyFw_Form_Filters_Date::_MYFORMAT_DATETIME_VIEW));
             }
             // Set this data only if CAN MANAGE USER-REF
-            if($ordine->canManageUsersRef()) {
+            if($ordine->canManageReferente()) {
                 $form->setValue("iduser_ref", $ordine->getMyGroup()->getRefIdUser());
             }
             $form->setValue("note_consegna", $ordine->getMyGroup()->getNoteConsegna());

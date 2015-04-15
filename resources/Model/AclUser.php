@@ -16,7 +16,7 @@ class Model_AclUser
      * Boolean flag for Founder
      * @return bool
      */
-    private function _isFounder()
+    public function isFounder()
     {
         return $this->_isFounder;
     }
@@ -25,14 +25,19 @@ class Model_AclUser
      * Boolean flag for Contabile
      * @return bool
      */
-    private function _isContabile()
+    public function isContabile()
     {
         return $this->_isContabile;
     }
     
 /*********************
- *  PERMISSIONS
- */    
+ *  WARNING! *********
+ * 
+ *  I seguenti metodi sono destinati a sparire perchè VANNO implementati nella varie classi (Ordini, Listini, ecc).
+ *  Su questa classe effettuare solo le chiamate ai metodi SOPRA!
+ * 
+ *  WARNING! *********
+ *********************/    
     
     /**
      * Can modify Users of the group
@@ -40,16 +45,7 @@ class Model_AclUser
      */
     public function canModifyUser()
     {
-        return $this->_isFounder();
-    }
-    
-    /**
-     * Can manage Ordini
-     * @return bool
-     */
-    public function canManageOrdini()
-    {
-        return $this->_isFounder();
+        return $this->isFounder();
     }
     
     /**
@@ -58,16 +54,7 @@ class Model_AclUser
      */
     public function canManageCassa()
     {
-        return $this->_isContabile();
-    }
-    
-    /**
-     * Only the Tesoriere can close the ORDER
-     * @return bool
-     */
-    public function canCloseOrder()
-    {
-        return $this->_isContabile();
+        return $this->isContabile();
     }
     
 }

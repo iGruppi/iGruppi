@@ -39,29 +39,9 @@ class Model_Ordini_State_States_Consegnato extends Model_Ordini_State_OrderAbstr
         return true; 
     }
     
-    /**
-     * Permission states for Referente
-     * @return bool
-     */
-    public function canRef_ModificaProdotti() 
-    { 
-        return true; 
-    }
-    // Se il Referente può modificare le Quantità ordinate dagli utenti
-    public function canRef_ModificaQtaOrdinate() 
-    {
-        return true;
-    }
-
     public function canUser_ViewDettaglio() 
     {
         return true;
     }
     
-    
-    public function canContabile_ArchiviaOrdine() 
-    {
-        return true;
-    }
-
 }

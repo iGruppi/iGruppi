@@ -39,14 +39,6 @@ class Model_Ordini_State_States_Inviato extends Model_Ordini_State_OrderAbstract
         return true; 
     }
     
-    /**
-     * Permission states for Referente
-     * @return bool
-     */
-    public function canRef_ModificaProdotti() 
-    { 
-        return true; 
-    }
     public function canUser_ViewDettaglio() 
     {
         return true;

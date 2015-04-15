@@ -63,6 +63,6 @@
     <button id="a_mso" class="btn btn-default" role="button" href="#" disabled="disabled"><span class="glyphicon glyphicon-check"></span> Archiviato</button>
 <?php endif; ?>
 
-<?php if( $this->ordine->canRef_InviaOrdine()): ?>
+<?php if( $this->ordine->canInviaOrdineByEmail()): ?>
 <!--      <a class="btn btn-success" href="/gestione-ordini/invia/idordine/<?php echo $this->ordine->getIdOrdine();?>"><span class="glyphicon glyphicon-envelope"></span> Invia al Produttore</a> -->
 <?php endif; ?>

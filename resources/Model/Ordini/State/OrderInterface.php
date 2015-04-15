@@ -49,19 +49,6 @@ interface Model_Ordini_State_OrderInterface
      */
     public function getStatusCSSClass();
     
-    
-    /**
-     * Permission states for Referente
-     * @return bool
-     */
-    // Se il Referente può modificare i prodotti (prezzi e disponibilità)    
-    public function canRef_ModificaProdotti();
-    // Se il Referente può modificare le Quantità ordinate dagli utenti
-    public function canRef_ModificaQtaOrdinate();
-    // Se il referente può inviare l'ordine
-    public function canRef_InviaOrdine();
-    
-    
     /**
      * Permission states for User
      * @return bool
@@ -70,6 +57,5 @@ interface Model_Ordini_State_OrderInterface
     public function canUser_OrderProducts();
     // Se l'utente può visualizzare il Dettaglio di un ordine
     public function canUser_ViewDettaglio();
-    
     
 }

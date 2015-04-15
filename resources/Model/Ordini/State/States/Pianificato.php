@@ -39,14 +39,6 @@ class Model_Ordini_State_States_Pianificato extends Model_Ordini_State_OrderAbst
         return true; 
     }
     
-    /**
-     * Permission states for Referente
-     * @return bool
-     */
-    public function canRef_ModificaProdotti() 
-    { 
-        return true; 
-    }
     
     
 }

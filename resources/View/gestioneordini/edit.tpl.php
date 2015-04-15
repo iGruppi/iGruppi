@@ -30,7 +30,7 @@
             <?php else: ?>
                 <p class="hint">Condiviso dal gruppo <strong><?php echo $this->ordine->getMasterGroup()->getGroupName(); ?></strong></p>
             <?php endif; ?>
-            <?php if($this->ordine->canManageUsersRef()): ?>
+            <?php if($this->ordine->canManageReferente()): ?>
                 <?php echo $this->form->renderField('iduser_ref'); ?>
             <?php endif; ?>
             </fieldset>

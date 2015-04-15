@@ -208,7 +208,7 @@ class Controller_GestioneCassa extends MyFw_Controller {
 
         // Verifico Stato
         $stateOrdine =  Model_Ordini_State_OrderFactory::getOrder($ordine);
-        if($stateOrdine->canContabile_ArchiviaOrdine() )
+        if($stateOrdine->canArchiviaOrdine() )
         {
             // build & init Gruppi
             $mooObj->appendGruppi()->initGruppi_ByObject( $ordObj->getGroupsByIdOrdine( $mooObj->getIdOrdine()) );

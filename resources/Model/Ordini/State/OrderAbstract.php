@@ -115,18 +115,6 @@ abstract class Model_Ordini_State_OrderAbstract implements Model_Ordini_State_Or
     }            
     
     /**
-     * Permission states for Referente
-     * @return bool
-     */
-    // Se il Referente può modificare i prodotti (prezzi e disponibilità)    
-    public function canRef_ModificaProdotti() { return false; }
-    // Se il Referente può modificare le Quantità ordinate dagli utenti
-    public function canRef_ModificaQtaOrdinate() { return false; }
-    // Se il referente può inviare l'ordine
-    public function canRef_InviaOrdine() { return false; }
-    
-    
-    /**
      * Permission states for User
      * @return bool
      */
@@ -135,11 +123,5 @@ abstract class Model_Ordini_State_OrderAbstract implements Model_Ordini_State_Or
     // Se l'utente può visualizzare il Dettaglio di un ordine
     public function canUser_ViewDettaglio() { return false; }
     
-    /**
-     * Permission states for Contabile
-     * @return bool
-     */
-    // Se il Contabile può archiviare un ordine
-    public function canContabile_ArchiviaOrdine() { return false; }
     
 }

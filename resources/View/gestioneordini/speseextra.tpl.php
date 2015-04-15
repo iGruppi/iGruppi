@@ -1,9 +1,10 @@
 <div id="ordine_header">
     <?php include $this->template('gestioneordini/gestione-header.tpl.php'); ?>
 </div>
+<h3>Modifica Spese extra</h3>
+<?php if($this->ordine->canManageSpeseExtra()): ?>
 <div class="row">
     <div class="col-md-8">
-        <h3>Modifica Spese extra</h3>
         <form id="form_extra_spese" action="/gestione-ordini/speseextra/idordine/<?php echo $this->ordine->getIdOrdine(); ?>" method="post" class="f1n200">
 
         <?php 
@@ -47,7 +48,6 @@
                 </select>
                 <hr />
             </fieldset>
-
             <button type="submit" id="submit" class="btn btn-success btn-mylg">SALVA</button>
 
         </form>
@@ -84,3 +84,6 @@ $(document).ready(function () {
     );
 });
 </script>
+<?php else: ?>
+    <p>Non è possibile gestire ora le Spesa extra per quest'ordine.</p>
+<?php endif; ?>

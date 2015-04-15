@@ -39,22 +39,6 @@ class Model_Ordini_State_States_Chiuso extends Model_Ordini_State_OrderAbstract
         return true; 
     }
     
-    /**
-     * Permission states for Referente
-     * @return bool
-     */
-    public function canRef_ModificaProdotti() 
-    { 
-        return true; 
-    }
-    public function canRef_InviaOrdine() 
-    {
-        return true;
-    }
-    public function canRef_ModificaQtaOrdinate() 
-    {
-        return true;
-    }
     public function canUser_ViewDettaglio() 
     {
         return true;

@@ -3,12 +3,14 @@
 </div>
 <div class="row">
   <div class="col-md-12">
-    <h3 class="big-margin-top">Quantità ordinate per utente</h3>
+    <h3>Quantità ordinate per utente</h3>
   </div>
 </div>  
 <div class="row">
     <div class="col-md-12">
-<?php if($this->ordine->canRef_ModificaQtaOrdinate()): ?>
+<?php if(!$this->ordine->canModificaQtaOrdinate()): ?>
+        <p class="text-danger">Non puoi modificare le quantità ordinate.</p>
+<?php endif; ?>
 <?php 
         $arProductsGrid = array();
         if($this->ordCalcObj->getProdottiUtenti() > 0): 
@@ -34,12 +36,8 @@
 <?php   else: ?>
         <div class="lead">Nessun prodotto ordinato!</div>
 <?php   endif; ?>
-<?php else: ?>
-        <p>Non è possibile modificare le quantità ordinate perchè l'ordine è in stato: <span class="<?php echo $this->ordine->getStatusCSSClass(); ?>"><?php echo $this->ordine->getStateName(); ?></span></p>
-<?php endif; ?>
   </div>
 </div>    
-
 
 <script>    
 $(document).ready(function () { 
@@ -91,7 +89,8 @@ $(document).ready(function () {
             data: 'qta_reale',
             type: 'numeric',
             format: '0,0.00',
-            language: 'it'
+            language: 'it',
+            readOnly: <?php echo (!$this->ordine->canModificaQtaOrdinate()) ? "true" : "false"; ?>
           }
         ],
         cells: function (row, col, prop) {
