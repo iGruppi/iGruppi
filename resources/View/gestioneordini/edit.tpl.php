@@ -36,11 +36,6 @@
             </fieldset>
 
             <fieldset class="border_top">
-                <legend>Costi extra</legend>
-                <?php echo $this->form->renderField('costo_spedizione'); ?>
-            </fieldset>
-
-            <fieldset class="border_top">
                 <legend>Note</legend>
                 <?php echo $this->form->renderField('note_consegna'); ?>
             </fieldset>
