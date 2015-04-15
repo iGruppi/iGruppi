@@ -60,8 +60,41 @@ class Model_AF_Ordine_Dati extends Model_AF_Dati
         return $this->getValue("condivisione");
     }
     
+    /**
+     * Return iduser of Supervisore (field ordini.iduser_ref)
+     * @return int
+     */
+    public function getSupervisore_IdUser()
+    {
+        return $this->getValue("iduser_ref");
+    }
     
+    /**
+     * Return Name of Supervisore
+     * @return string
+     */
+    public function getSupervisore_Name()
+    {
+        return $this->getValue("supervisore_name");
+    }
     
+    /**
+     * Return iduser of Supervisore (field ordini.iduser_ref)
+     * @return int
+     */
+    public function getSupervisore_IdGroup()
+    {
+        return $this->getValue("supervisore_idgroup");
+    }
+
+    /**
+     * Return the Group Name of Supervisore
+     * @return string
+     */
+    public function getSupervisore_GroupName()
+    {
+        return $this->getValue("supervisore_group");
+    }
     
 /***************************
  *  GET METHODS
@@ -103,7 +136,6 @@ class Model_AF_Ordine_Dati extends Model_AF_Dati
         $this->setValue("condivisione", $v);
     }
     
-    
     /**
      * Save data to DB
      * @return boolean
@@ -117,9 +149,11 @@ class Model_AF_Ordine_Dati extends Model_AF_Dati
             $db = Zend_Registry::get("db");
             // check for INSERT or UPDATE
             if(is_null($this->getValue("idordine")) ) {
+                // GET IDUSER che apre l'ordine per impostare iduser_ref (SUPERVISORE)
+                $iduser_ref = Zend_Auth::getInstance()->getIdentity()->iduser;
                 // INSERT, idordine does not exists
-                $sth = $db->prepare("INSERT INTO ordini SET data_inizio= :data_inizio, data_fine= :data_fine, condivisione= :condivisione");
-                $res = $sth->execute(array('data_inizio' => $this->getDataInizio(), 'data_fine' => $this->getDataFine(), 'condivisione' => $this->getCondivisione()));
+                $sth = $db->prepare("INSERT INTO ordini SET iduser_ref= :iduser_ref, data_inizio= :data_inizio, data_fine= :data_fine, condivisione= :condivisione");
+                $res = $sth->execute(array('iduser_ref' => $iduser_ref, 'data_inizio' => $this->getDataInizio(), 'data_fine' => $this->getDataFine(), 'condivisione' => $this->getCondivisione()));
                 $this->setIdOrdine( $db->lastInsertId() );
                 return $res;
             } else {

@@ -12,7 +12,14 @@ class Model_Db_Ordini extends MyFw_DB_Base {
     }
     
     function getByIdOrdine($idordine) {
-        $sql = "SELECT * FROM ordini WHERE idordine= :idordine";
+        $sql = "SELECT o.*, CONCAT(u.nome, ' ', u.cognome) AS supervisore_name,"
+            . " g.idgroup AS supervisore_idgroup, g.nome AS supervisore_group"
+            . " FROM ordini AS o"
+            . " JOIN users AS u ON o.iduser_ref=u.iduser"
+            . " JOIN users_group AS ug ON o.iduser_ref=ug.iduser"
+            . " JOIN groups AS g ON ug.idgroup=g.idgroup"
+            . " WHERE idordine= :idordine";
+        
         $sth = $this->db->prepare($sql);
         $sth->execute(array('idordine' => $idordine));
         if($sth->rowCount() > 0) {
