@@ -10,10 +10,21 @@ class Model_Db_Groups extends MyFw_DB_Base {
     function __construct() {
         parent::__construct();
     }
-
-    function getAll() {
-        $sth = $this->db->prepare("SELECT * FROM groups WHERE 1 ORDER BY nome ASC");
-        $sth->execute();
+    
+    /**
+     * Get All groups
+     * @param $excludeMyGroup (TRUE = exclude my group)
+     * @return null|array
+     */
+    function getAll($excludeMyGroup = false) {
+        if($excludeMyGroup) {
+            $userSessionVal = new Zend_Session_Namespace('userSessionVal');
+            $sth = $this->db->prepare("SELECT * FROM groups WHERE idgroup != :idgroup ORDER BY nome ASC");
+            $sth->execute(array('idgroup' => $userSessionVal->idgroup));
+        } else {
+            $sth = $this->db->prepare("SELECT * FROM groups ORDER BY nome ASC");
+            $sth->execute();
+        }
         if($sth->rowCount() > 0) {
             return $sth->fetchAll(PDO::FETCH_OBJ);
         }

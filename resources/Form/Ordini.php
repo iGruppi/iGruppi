@@ -35,10 +35,10 @@ class Form_Ordini extends MyFw_Form {
         ));
         
         $this->addField('visibile', array(
-                        'label'     => 'Visibile',
-                        'type'      => 'select',
-                        'options'   => array('S'=>'SI','N'=>'NO')
-            ));
+                    'label'     => 'Visibile',
+                    'type'      => 'select',
+                    'options'   => array('S'=>'SI','N'=>'NO')
+        ));
         
         
         $this->addField('note_consegna', array(
@@ -49,14 +49,22 @@ class Form_Ordini extends MyFw_Form {
         ));
         
         $this->addField('condivisione', array(
-                        'label'     => 'Condivisione',
-                        'type'      => 'select',
-                        'options'   => array('PUB'=>'Pubblico','SHA'=>'Condiviso','PRI'=>'Privato')
-            ));
+                    'label'     => 'Condivisione',
+                    'type'      => 'select',
+                    'options'   => array('PUB'=>'Pubblico','SHA'=>'Condiviso','PRI'=>'Privato')
+        ));
+        
+        // get Groups
+        $grObj = new Model_Db_Groups();
+        $groups = $grObj->convertToSingleArray($grObj->getAll(true), "idgroup", "nome");
+        $this->addField("groups", array(
+                    'type'      => 'checkbox',
+                    'options'   => $groups
+        ));
         
         // get IdUsers for Referente
-        $objU = new Model_Db_Users();
         $userSessionVal = new Zend_Session_Namespace('userSessionVal');
+        $objU = new Model_Db_Users();
         $arVal = $objU->convertToSingleArray($objU->getUsersByIdGroup($userSessionVal->idgroup, true), "iduser", "nominativo");
         $arVal[0] = 'Seleziona...';
         $this->addField('iduser_ref', array(

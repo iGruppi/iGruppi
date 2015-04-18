@@ -219,25 +219,25 @@ class Controller_GestioneOrdini extends MyFw_Controller {
         $form->setValue("idordine", $ordine->getIdOrdine());
         
         /**
-         * TODO: Disabilita campo Condivisione se l'ordine è già avviato!
-         * 
-            $form->getField("condivisione")->setAttribute("disabled", true);
-         * 
+         * DISABLE some fields IF cannot manage them
          */
+        if(!$ordine->canUpdateVisibile()) {
+            $form->getField("visibile")->setDisabled();
+        }
         if(!$ordine->canManageDate())
         {
-            $form->removeField("data_inizio");
-            $form->removeField("data_fine");
+            $form->getField("data_inizio")->setDisabled();
+            $form->getField("data_fine")->setDisabled();
+        }
+        if(!$ordine->canManageCondivisione()) {
+            $form->getField("condivisione")->setDisabled();
+            $form->getField("groups")->setDisabled();
         }
         if(!$ordine->canManageReferente()) {
-            $form->removeField("iduser_ref");
+            $form->getField("iduser_ref")->setDisabled();
         }
-        
 
-        // get elenco All Groups to fill checkboxes in the view (Condivisione)
-        $grObj = new Model_Db_Groups();
-        $this->view->groups = $groups = $grObj->getAll();
-        
+        // check POST and valid data
         if($this->getRequest()->isPost()) {
             
             // get Post and check if is valid
@@ -255,7 +255,8 @@ class Controller_GestioneOrdini extends MyFw_Controller {
                     $ordine->resetGroups($form->getValue("condivisione"), $groupsToShare);                
                 }
                 if($ordine->canManageReferente()) {
-                    $ordine->getMyGroup()->setRefIdUser($form->getValue("iduser_ref"));
+                    $iduser_ref = ($form->getValue("iduser_ref") > 0) ? $form->getValue("iduser_ref") : NULL;
+                    $ordine->getMyGroup()->setRefIdUser($iduser_ref);
                 }
                 // Every group can set this data personalized
                 $ordine->getMyGroup()->setNoteConsegna($form->getValue("note_consegna"));
@@ -270,17 +271,12 @@ class Controller_GestioneOrdini extends MyFw_Controller {
             }
         } else {
             $form->setValues($ordine->getDatiValues());
-            // Set this data only if CAN MANAGE DATE
-            if($ordine->canManageDate()) {
-                $form->setValue("data_inizio", $ordine->getDataInizio(MyFw_Form_Filters_Date::_MYFORMAT_DATETIME_VIEW));
-                $form->setValue("data_fine", $ordine->getDataFine(MyFw_Form_Filters_Date::_MYFORMAT_DATETIME_VIEW));
-            }
-            // Set this data only if CAN MANAGE USER-REF
-            if($ordine->canManageReferente()) {
-                $form->setValue("iduser_ref", $ordine->getMyGroup()->getRefIdUser());
-            }
+            $form->setValue("data_inizio", $ordine->getDataInizio(MyFw_Form_Filters_Date::_MYFORMAT_DATETIME_VIEW));
+            $form->setValue("data_fine", $ordine->getDataFine(MyFw_Form_Filters_Date::_MYFORMAT_DATETIME_VIEW));
+            $form->setValue("iduser_ref", $ordine->getMyGroup()->getRefIdUser());
             $form->setValue("note_consegna", $ordine->getMyGroup()->getNoteConsegna());
             $form->setValue("visibile", $ordine->getMyGroup()->getVisibile()->getString());
+            $form->setValue("groups", $ordine->getAllIdgroups());
         }
         
         // set Form in the View
@@ -515,27 +511,7 @@ class Controller_GestioneOrdini extends MyFw_Controller {
         } else {
             $res = $ordine->moveToPrevState();
         }
-        $result = array('res' => $res);
-        if($res) {
-            // GET new ORDER data
-            $orderObj = new Model_Db_Ordini();
-            $ordine = $orderObj->getByIdOrdine($ordine->getIdOrdine());
-            if($ordine) {
-                // init Dati Ordine
-                // build Ordine
-                $mooObj = new Model_Ordini_Ordine( new Model_AF_OrdineFactory() );
-                $mooObj->appendDati();
-                $mooObj->appendCategorie();
-                $mooObj->appendStates( Model_Ordini_State_OrderFactory::getOrder($ordine) );
-                // init Dati Ordine
-                $mooObj->initDati_ByObject($ordine);
-                $this->view->ordine = $mooObj;
-                $myTpl_status = $this->view->fetch("gestioneordini/header-status-details.tpl.php");
-                $myTpl_menu = $this->view->fetch("gestioneordini/header-menu.tpl.php");
-                $result = array('res' => true, 'myTpl_status' => $myTpl_status, 'myTpl_menu' => $myTpl_menu );
-            }
-        }
-        echo json_encode($result);
+        echo json_encode($res);
     }
     
     

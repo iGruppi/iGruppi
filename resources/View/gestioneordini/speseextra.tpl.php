@@ -85,5 +85,5 @@ $(document).ready(function () {
 });
 </script>
 <?php else: ?>
-    <p>Non è possibile gestire ora le Spesa extra per quest'ordine.</p>
+    <p>Non è possibile gestire le Spesa extra in questo stato.</p>
 <?php endif; ?>

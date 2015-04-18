@@ -99,8 +99,15 @@ abstract class Model_AF_Gruppi extends Model_AF_AbstractHandlerCoR
     {
         return $this->_groups;
     }
-
-
+    
+    /**
+     * Return array of all Idgroups
+     * @return array
+     */
+    public function getAllIdgroups()
+    {
+        return array_keys($this->_groups);
+    }
 
     /*
     MANAGE GROUPS ARRAY

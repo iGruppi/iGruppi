@@ -4,31 +4,26 @@
 <div class="row">
     <div class="col-md-10">
         <h3>Modifica dati ordine</h3>
+        
         <form id="ordineform" action="<?php echo $this->form->getAction(); ?>" method="post" class="f1n200">
 
             <fieldset class="border_top">
                 <legend>Validità ordine</legend>
                 <?php echo $this->form->renderField('visibile'); ?>
-            <?php if($this->ordine->canManageDate()): ?>
                 <?php echo $this->form->renderField('data_inizio'); ?>
                 <?php echo $this->form->renderField('data_fine'); ?>
-            <?php endif; ?>
             </fieldset>
 
             <fieldset class="border_top">
                 <legend>Gestione permessi</legend>
-            <?php if($this->ordine->canManageCondivisione()): ?>
-                <?php echo $this->form->renderField('condivisione'); ?>
-                <div id="d_sharing" class="hint" style="display: block;">
-                <?php foreach ($this->groups as $group):
-                        if($this->ordine->getMasterGroup()->getIdGroup() != $group->idgroup): ?>
-                    <p><input type="checkbox" name="groups[]" value="<?php echo $group->idgroup; ?>" 
-                       <?php if($this->ordine->issetGroup($group->idgroup)) { echo "checked='checked'"; } ?> /> <b><?php echo $group->nome; ?></b></p>
-                <?php   endif; 
-                      endforeach; ?>
-                </div>
-            <?php else: ?>
+            <?php if(!$this->ordine->isOwnerGroup()): ?>
                 <p class="hint">Condiviso dal gruppo <strong><?php echo $this->ordine->getMasterGroup()->getGroupName(); ?></strong></p>
+            <?php endif; ?>
+                <?php echo $this->form->renderField('condivisione'); ?>
+            <?php if($this->ordine->isSupervisoreOrdine()): ?>
+                <div id="d_sharing" style="display: block;">
+                    <?php echo $this->form->renderField('groups'); ?>
+                </div>
             <?php endif; ?>
             <?php if($this->ordine->canManageReferente()): ?>
                 <?php echo $this->form->renderField('iduser_ref'); ?>

@@ -61,7 +61,7 @@ class Model_Ordini_Ordine extends Model_AF_AbstractCoR
      * Return TRUE if Iduser is SUPERVISORE
      * @return bool
      */
-    private function isSupervisoreOrdine()
+    public function isSupervisoreOrdine()
     {
         $iduser = Zend_Auth::getInstance()->getIdentity()->iduser;
         return ($iduser == $this->getSupervisore_IdUser());
@@ -71,7 +71,7 @@ class Model_Ordini_Ordine extends Model_AF_AbstractCoR
      * Return TRUE if iduser session is Referente ordine
      * @return bool
      */
-    private function isReferenteOrdine()
+    public function isReferenteOrdine()
     {
         $iduser = Zend_Auth::getInstance()->getIdentity()->iduser;
         return ($iduser == $this->getMyGroup()->getRefIdUser());
@@ -81,10 +81,19 @@ class Model_Ordini_Ordine extends Model_AF_AbstractCoR
      * Return TRUE if iduser session is Admin and can manage Ordini
      * @return bool
      */
-    private function isAdminForGroup()
+    public function isAdminForGroup()
     {
         $userSessionVal = new Zend_Session_Namespace('userSessionVal');
         return $userSessionVal->aclUserObject->isFounder();
+    }
+    
+    /**
+     * Return TRUE if idgroup is the MASTER group
+     * @return boolean
+     */
+    public function isOwnerGroup()
+    {
+        return ($this->getMyIdGroup() == $this->getMasterGroup()->getIdGroup());
     }
     
     

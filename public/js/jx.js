@@ -63,8 +63,9 @@
             '/gestione-ordini/movestatus/',
             {idordine: idordine, flagMover: flagMover},
             function(data) {
-                $('#ordine_header_status').html(data.myTpl_status);
-                $('#ordine_header_menu').html(data.myTpl_menu);
+                if(data) {
+                    location.reload();
+                }
             });
     }
     
