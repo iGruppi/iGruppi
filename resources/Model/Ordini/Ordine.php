@@ -205,5 +205,4 @@ class Model_Ordini_Ordine extends Model_AF_AbstractCoR
         return ($userSessionVal->aclUserObject->isContabile() && $this->is_Consegnato());
     }
     
-    
 }
