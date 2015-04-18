@@ -400,7 +400,7 @@ legend { background-color: #eee; font-size: 16px; width: auto; margin: 10px 0 0 
 .hint_green { color: #393;}
 .hint_50 { margin: 2px 0 0px 50px; padding: 0; }
 .inputcheckbox { border:0px; }
-.disabled, .readonly { background-color: #e9e9e9; color: #666; }
+select[disabled], input[disabled], .disabled, .readonly { background-color: #f6f6f6; color: #999; }
 ul.errors { margin: 0 0 10px 103px; list-style: none; }
 ul.errors li { padding: 3px; color: #f00; list-style-image: url(/images/icon/icona_error_16.png); }
 ul.form-errors { list-style: none; margin-right: 20px; padding: 10px; background: #FBDCCA url(/images/icon/icona_stop_48.png) no-repeat 8px; border: 1px solid #f00; }
@@ -408,6 +408,7 @@ ul.form-errors li ul.errors li { list-style-image: none; }
 
 .np_form { font-weight: bold; }
 
+.checkbox_box { margin-bottom: 20px;}
 
 /***********************************
 FORM - Model 1 - Label 200px
