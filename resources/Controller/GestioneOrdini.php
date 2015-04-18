@@ -258,9 +258,11 @@ class Controller_GestioneOrdini extends MyFw_Controller {
                     $iduser_ref = ($form->getValue("iduser_ref") > 0) ? $form->getValue("iduser_ref") : NULL;
                     $ordine->getMyGroup()->setRefIdUser($iduser_ref);
                 }
+                if($ordine->canUpdateVisibile()) {
+                    $ordine->getMyGroup()->setVisibile($form->getValue("visibile"));
+                }
                 // Every group can set this data personalized
                 $ordine->getMyGroup()->setNoteConsegna($form->getValue("note_consegna"));
-                $ordine->getMyGroup()->setVisibile($form->getValue("visibile"));
                 
                 // SAVE ALL DATA CHANGED TO DB & REDIRECT
                 $resSaveGruppi = $ordine->saveToDB_Gruppi();
