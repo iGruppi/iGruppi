@@ -129,7 +129,7 @@ class Model_Ordini_Ordine extends Model_AF_AbstractCoR
      */
     public function canManageDate()
     {
-        return ($this->isSupervisoreOrdine() && ($this->is_Pianificato() || $this->is_Chiuso() ));
+        return ($this->isSupervisoreOrdine() && ($this->is_Pianificato() || $this->is_Aperto() || $this->is_Chiuso() ));
     }    
     
     /**
