@@ -54,6 +54,14 @@ class Form_Listino extends MyFw_Form {
                         'options'   => array('S'=>'SI','N'=>'NO')
             ));
         
+        // get Groups
+        $grObj = new Model_Db_Groups();
+        $groups = $grObj->convertToSingleArray($grObj->getAll(true), "idgroup", "nome");
+        $this->addField("groups", array(
+                    'type'      => 'checkbox',
+                    'options'   => $groups
+        ));        
+        
         
     # HIDDEN FIELDS
         $this->addField('idproduttore', array( 'type' => 'hidden' ));
