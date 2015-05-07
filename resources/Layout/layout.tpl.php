@@ -100,7 +100,7 @@
       <div class="container">
             <div class="info">
                 <p><a href="http://igruppi.com"><b>iGruppi</b></a><br /><small>Free Software per i Gruppi di acquisto</small></p>
-                <p class="icon_social github"><a href="https://github.com/Jazzo/iGruppi"><small>Code hosted by Github</small></a></p>
+                <p class="icon_social github"><a href="https://github.com/iGruppi/iGruppi"><small>Code hosted by Github</small></a></p>
             </div>
             <div class="social">
                 <p class="icon_social twitter"><a href="https://twitter.com/iGruppi"><small>@igruppi</small></a></p>
