@@ -22,6 +22,7 @@
                     <div class="col-md-7">
                         <h4><?php echo $listino->getDescrizione(); ?></h4>
                         <h5>
+                            Produttore: <strong><?php echo $listino->getProduttoreName(); ?></strong><br />
                             Creato da <strong><?php echo $listino->getMasterGroup()->getGroupName(); ?></strong><br />
                             Ultimo aggiornamento: <strong><?php echo $this->date($listino->getDataListino(), '%d/%m/%Y'); ?></strong><br />
                         </h5>
