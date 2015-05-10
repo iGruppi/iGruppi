@@ -140,7 +140,7 @@ class Model_Categorie extends Model_AF_AbstractHandlerCoR
     private function _initSubCat(stdClass $v, Model_Categorie_Element $cat)
     {
         if(isset($v->idsubcat)) {
-            if(is_null($cat->getChild($v->idsubcat))) {
+            if(($e = $subcat->getChild($v->idsubcat)) === null || !$e instanceof Model_Categorie_SubcatElement) {
                 // ADD SUB-CATEGORY Element
                 $scn = isset($v->categoria_sub) ? $v->categoria_sub : "";
                 $cat->add(new Model_Categorie_SubcatElement($v->idsubcat, $scn));
@@ -159,8 +159,8 @@ class Model_Categorie extends Model_AF_AbstractHandlerCoR
     private function _initProdotto(stdClass $v, Model_Categorie_Element $subcat)
     {
         if(isset($v->idprodotto)) {
-            if(is_null($subcat->getChild($v->idprodotto))) {
-                // ADD SUB-CATEGORY Element
+            if(($e = $subcat->getChild($v->idprodotto)) === null || !$e instanceof Model_Categorie_ProdottoElement) {
+                // ADD PRODOTTO Element
                 $scp = isset($v->descrizione_prodotto) ? $v->descrizione_prodotto : "";
                 $subcat->add(new Model_Categorie_ProdottoElement($v->idprodotto, $scp));
             }
