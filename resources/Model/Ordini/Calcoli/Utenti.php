@@ -103,7 +103,7 @@ class Model_Ordini_Calcoli_Utenti
                             }
                             // set Products
                             $idprodotto = $prodotto->getIdProdotto();
-                            if(!isset($this->_arProdUtenti[$idprodotto])) {
+                            if(!isset($this->_arProdUtenti[$iduser]["prodotti"][$idprodotto])) {
                                 $this->_arProdUtenti[$iduser]["prodotti"][$idprodotto] = $prodotto;
                             }
                         }
