@@ -140,7 +140,7 @@ class Model_Categorie extends Model_AF_AbstractHandlerCoR
     private function _initSubCat(stdClass $v, Model_Categorie_Element $cat)
     {
         if(isset($v->idsubcat)) {
-            if(($e = $subcat->getChild($v->idsubcat)) === null || !$e instanceof Model_Categorie_SubcatElement) {
+            if(($e = $cat->getChild($v->idsubcat)) === null || !$e instanceof Model_Categorie_SubcatElement) {
                 // ADD SUB-CATEGORY Element
                 $scn = isset($v->categoria_sub) ? $v->categoria_sub : "";
                 $cat->add(new Model_Categorie_SubcatElement($v->idsubcat, $scn));
