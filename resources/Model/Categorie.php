@@ -98,12 +98,19 @@ class Model_Categorie extends Model_AF_AbstractHandlerCoR
         // ADD Cat
         $catRoot = $this->getRoot();
         $cat = $this->_initCat($v, $catRoot);
-        if(!is_null($cat)) {
+        if(!is_null($cat))
+        {
             // ADD SubCat to Cat
             $subcat = $this->_initSubCat($v, $cat);
-            if ($subcat) {
+            if ($subcat)
+            {
+                // I prodotti sono solo in sottocategorie
                 $this->_initProdotto($v, $subcat);
-                $this->_initProduttore($v, $subcat);
+            }
+            else
+            {
+                // I produttori sono solo in categorie
+                $this->_initProduttore($v, $cat);
             }
         }
     }
@@ -170,7 +177,7 @@ class Model_Categorie extends Model_AF_AbstractHandlerCoR
      * @param stdClass $v values
      * @param Model_Categorie_Element $subcat
      */
-    private function _initProduttore(stdClass $v, Model_Categorie_SubcatElement $subcat)
+    private function _initProduttore(stdClass $v, Model_Categorie_CatElement $subcat)
     {
         if(isset($v->idproduttore)) {
             if (is_null($subcat->getProduttoreById($v->idproduttore))) {

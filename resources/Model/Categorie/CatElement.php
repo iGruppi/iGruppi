@@ -59,4 +59,16 @@ class Model_Categorie_CatElement
         }
         return null;
     }
+    
+    public function getProduttoreById($id)
+    {
+        foreach($this->createIterator() as $ch)
+        {
+            if($ch instanceof Model_Categorie_ProduttoreElement && $ch->getId() === $id)
+            {
+                return $ch;
+            }
+        }
+        return null;
+    }
 }
