@@ -262,12 +262,21 @@ class Controller_Listini extends MyFw_Controller {
         $layout->disableDisplay();
         
         $idlistino = $this->getParam("idlistino");
+        $idprodotto = $this->getParam("idprodotto");
+        $field = $this->getParam("field");
+        $value = $this->getParam("value");
         
         $lModel = new Model_Db_Listini();
-        $res = $lModel->updateDataListino($idlistino);
-        $result = array('res' => $res);
+        $res = false;
+        switch ($field) {
+            case "attivo_listino":
+            case "costo_listino":
+                $res = $lModel->updateDataListino($idlistino, $idprodotto, $field, $value);
+                break;
+        }
         
-        echo json_encode($result);
+        echo json_encode(array('res' => $res));
     }
+    
     
 }

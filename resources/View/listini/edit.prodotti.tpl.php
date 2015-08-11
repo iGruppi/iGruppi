@@ -28,9 +28,11 @@
                     $availableProducts++;
                     $arProductsGrid[] = array(
                         'idprodotto'     => $pObj->getIdProdotto(),
+                        'idlistino'      => $pObj->getIdListino(),
+                        'attivo_listino' => ($pObj->getAttivoListino() == "S" ? true : false),
                         'codice'        => $pObj->getCodice(),
                         'subcat'        => $subcat->getDescrizione(),
-                        'prezzo'        => $pObj->getCosto(),
+                        'costo_listino'  => $pObj->getCosto(),
                         'udm'           => $pObj->getUdm() .($pObj->hasPezzatura() ? "<br /><small>(Minimo " . $pObj->getDescrizionePezzatura() . ")</small>" : ""),
                         'descrizione'   => $pObj->getDescrizioneListino()
                     );
@@ -51,11 +53,16 @@ $(document).ready(function () {
       data: <?php echo json_encode($arProductsGrid); ?>,
       manualColumnMove: true,
       manualColumnResize: true,
-      colHeaders: ['Codice', 'Descrizione', 'Prezzo', 'Udm', 'Categoria'],
-      colWidths: [80, 380, 70, 120, 280],
+      colHeaders: ['Disponibile', 'Codice', 'Descrizione', 'Prezzo', 'Udm', 'Categoria'],
+      colWidths: [50, 80, 380, 70, 120, 280],
       columnSorting: true,
       currentRowClassName: 'currentRow',
       columns: [
+        {
+          data: 'attivo_listino',
+          readOnly: <?php echo (!$this->listino->canUpdatePrezzi() ? "true" : "false"); ?>,
+          type: 'checkbox'
+        },
         {
           data: 'codice',
           readOnly: true
@@ -65,8 +72,8 @@ $(document).ready(function () {
           readOnly: true
         },
         {
-          data: 'prezzo',
-          <?php echo (!$this->listino->canUpdatePrezzi() ? "readOnly: true," : ""); ?>
+          data: 'costo_listino',
+          readOnly: <?php echo (!$this->listino->canUpdatePrezzi() ? "true" : "false"); ?>,
           type: 'numeric',
           format: '0,0.00 $',
           language: 'it'
@@ -94,12 +101,24 @@ $(document).ready(function () {
                 }
                 // get SourceData by physicalIndex
                 var rowSourceData = this.getSourceDataAtRow(physicalIndex);
-                var row = changes[i][0];
+                // get value changed fields
+                var field = changes[i][1];
                 var old_value = changes[i][2];
                 var new_value = changes[i][3];
-                var codice = this.getSourceDataAtRow(row);
-                var idprodotto = rowSourceData.idprodotto;
-                console.log(idprodotto);  
+//                console.log(idprodotto);  
+                // check if it is really changed
+                if(old_value !== new_value)
+                {   
+                    $.getJSON(
+                        '/listini/updatedata/',
+                        {idprodotto: rowSourceData.idprodotto, idlistino: rowSourceData.idlistino, field: field, value: new_value},
+                        function(data) {
+                            if(!data.res)
+                            {
+                                console.log('ERROR!'); // TODO
+                            }
+                        });
+                }
             }
           }
       }
