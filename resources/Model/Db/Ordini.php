@@ -71,7 +71,7 @@ class Model_Db_Ordini extends MyFw_DB_Base {
              ." LEFT JOIN users AS u ON og.iduser_ref=u.iduser "
 //             ." LEFT JOIN referenti AS r ON o.idgroup=r.idgroup AND o.idproduttore=r.idproduttore "
 //             ." LEFT JOIN produttori AS p ON r.idproduttore=p.idproduttore "
-             ." WHERE 1";
+             ." WHERE og.visibile='S'";
         if(is_array($filters) && count($filters) > 0) {
             foreach($filters AS $fField => $fValue) {
                 switch ($fField) {
