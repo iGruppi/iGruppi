@@ -76,45 +76,54 @@ class Controller_GestioneOrdini extends MyFw_Controller {
         $form->removeField("condivisione");
         $form->removeField("iduser_ref");
         $form->removeField("idordine");
-        
+        // Specific error for LISTINI selection
+        $this->view->errorListino = false;
+
         if($this->getRequest()->isPost()) {
             
             // get Post and check if is valid
             $fv = $this->getRequest()->getPost();
             if( $form->isValid($fv) ) 
             {       
-                // BUILD a new Listino
-                $mooObj = new Model_Ordini_Ordine( new Model_AF_OrdineFactory() );
-                $mooObj->appendDati();
-                $mooObj->appendGruppi();
-                
-                // SAVE ORDINE to DB
-                $mooObj->setDataInizio($form->getValue("data_inizio"));
-                $mooObj->setDataFine($form->getValue("data_fine"));
-                $mooObj->setCondivisione("PRI"); // Default is Private
-                
-                if( $mooObj->saveToDB_Dati() ) 
+                // Check listino selection
+                $listini = isset($fv["listini"]) ? $fv["listini"] : null;
+                if(is_array($listini) && count($listini) > 0)
                 {
-                    $idordine = $mooObj->getIdOrdine();
-                    // create a NEW group
-                    $group = new stdClass();
-                    $group->id = $idordine;
-                    $group->idgroup_master = $this->_userSessionVal->idgroup;
-                    $group->idgroup_slave = $this->_userSessionVal->idgroup;
-                    $group->ref_iduser = $this->_iduser;
-                    // add my group
-                    $mooObj->addGroup($group);
-                    $resSave = $mooObj->saveToDB_Gruppi();                
-                    if($resSave)
+                    // BUILD a new Listino
+                    $mooObj = new Model_Ordini_Ordine( new Model_AF_OrdineFactory() );
+                    $mooObj->appendDati();
+                    $mooObj->appendGruppi();
+
+                    // SAVE ORDINE to DB
+                    $mooObj->setDataInizio($form->getValue("data_inizio"));
+                    $mooObj->setDataFine($form->getValue("data_fine"));
+                    $mooObj->setCondivisione("PRI"); // Default is Private
+
+                    if( $mooObj->saveToDB_Dati() ) 
                     {
-                        $listini = $fv["listini"];
-                        // Add the products of the selected LISTINI to ORDINI
-                        $ordineObj = new Model_Db_Ordini();
-                        $res = $ordineObj->createOrdiniByListini($idordine, $listini);
-                        if($res) {
-                            $this->redirect("gestione-ordini", "dashboard", array("idordine" => $idordine, "updated" => true));
+                        $idordine = $mooObj->getIdOrdine();
+                        // create a NEW group
+                        $group = new stdClass();
+                        $group->id = $idordine;
+                        $group->idgroup_master = $this->_userSessionVal->idgroup;
+                        $group->idgroup_slave = $this->_userSessionVal->idgroup;
+                        $group->ref_iduser = $this->_iduser;
+                        // add my group
+                        $mooObj->addGroup($group);
+                        $resSave = $mooObj->saveToDB_Gruppi();                
+                        if($resSave)
+                        {
+
+                            // Add the products of the selected LISTINI to ORDINI
+                            $ordineObj = new Model_Db_Ordini();
+                            $res = $ordineObj->createOrdiniByListini($idordine, $listini);
+                            if($res) {
+                                $this->redirect("gestione-ordini", "dashboard", array("idordine" => $idordine, "updated" => true));
+                            }
                         }
                     }
+                } else {
+                    $this->view->errorListino = true;
                 }
             }
         }

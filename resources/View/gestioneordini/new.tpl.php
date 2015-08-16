@@ -12,6 +12,9 @@
             </fieldset>
             
             <fieldset class="border_top">
+    <?php if($this->errorListino): ?>
+                <div class="alert alert-danger" role="alert">Devi selezionare almeno 1 listino.</div>
+    <?php endif; ?>
                 <legend>Listini</legend>
     <?php foreach($this->listini AS $listino): ?>
                 <div class="row">
