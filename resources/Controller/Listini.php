@@ -241,6 +241,43 @@ class Controller_Listini extends MyFw_Controller {
         $this->view->updated = $this->getParam("updated");
     }
     
+    function viewAction()
+    {
+        $idlistino = $this->getParam("idlistino");
+        if(is_null($idlistino)) 
+        {
+            $this->redirect("listini", "index");
+        }
+        
+        // init Listino DB Model to get data
+        $lObj = new Model_Db_Listini();
+        $listino = $lObj->getListinoById($idlistino);
+
+        // Create Listino Chain objects
+        $mllObj = new Model_Listini_Listino();
+        $mllObj->appendDati()
+               ->appendGruppi()
+               ->appendProdotti()
+               ->appendCategorie();
+        
+        // set DATI in Listino
+        $mllObj->initDati_ByObject($listino);
+        
+        // set GROUPS in Listino
+        $mllObj->initGruppi_ByObject( $lObj->getGroupsByIdlistino($idlistino) );
+        $mllObj->setMyIdGroup($this->_userSessionVal->idgroup);
+        // add All PRODOTTI by Listino
+        $objModel = new Model_Db_Prodotti();
+        $prodotti = $objModel->getProdottiByIdListino($idlistino);
+        $mllObj->initProdotti_ByObject( $prodotti );
+
+        // get CATEGORIE by array $prodotti
+        $mllObj->initCategorie_ByObject($prodotti);
+        
+        $this->view->listino = $mllObj;
+    }
+
+    
     function importaAction()
     {
         $layout = Zend_Registry::get("layout");
