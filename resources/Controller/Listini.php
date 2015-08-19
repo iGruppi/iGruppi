@@ -256,7 +256,7 @@ class Controller_Listini extends MyFw_Controller {
         echo json_encode($result);
     }
     
-    function updatedataAction()
+    function updateprodottilistinoAction()
     {
         $layout = Zend_Registry::get("layout");
         $layout->disableDisplay();
@@ -271,12 +271,21 @@ class Controller_Listini extends MyFw_Controller {
         switch ($field) {
             case "attivo_listino":
             case "costo_listino":
-                $res = $lModel->updateDataListino($idlistino, $idprodotto, $field, $value);
+                $res = $lModel->updateListinoProdotti($idlistino, $idprodotto, $field, $value);
                 break;
         }
         
         echo json_encode(array('res' => $res));
     }
     
-    
+    function updatedatalistinoAction()
+    {
+        $layout = Zend_Registry::get("layout");
+        $layout->disableDisplay();
+        
+        $idlistino = $this->getParam("idlistino");
+        $lModel = new Model_Db_Listini();
+        $res = $lModel->updateDataListino($idlistino);
+        echo json_encode(array('res' => $res));
+    }    
 }

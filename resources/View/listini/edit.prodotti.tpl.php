@@ -110,7 +110,7 @@ $(document).ready(function () {
                 if(old_value !== new_value)
                 {   
                     $.getJSON(
-                        '/listini/updatedata/',
+                        '/listini/updateprodottilistino/',
                         {idprodotto: rowSourceData.idprodotto, idlistino: rowSourceData.idlistino, field: field, value: new_value},
                         function(data) {
                             if(!data.res)

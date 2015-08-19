@@ -129,7 +129,7 @@
     {
         $('#btn_listino_user_update').button('loading');
         $.getJSON(
-            '/listini/updatedata/',
+            '/listini/updatedatalistino/',
             {idlistino: idlistino},
             function(data) {
                 if(data.res)
