@@ -53,7 +53,12 @@ class Controller_Listini extends MyFw_Controller {
                 if( $mllObj->canManageListino() ) {
                     array_unshift($listini, $mllObj);
                 } else {
-                    array_push($listini, $mllObj);
+                    // CHECK VALIDITA' e VISIBILITA'
+                    if($mllObj->getMyGroup()->getValidita()->isValido() &&
+                       $mllObj->getMyGroup()->getVisibile()->getBool() ) 
+                    {
+                        array_push($listini, $mllObj);
+                    }
                 }
             }
         }
