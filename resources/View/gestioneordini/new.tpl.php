@@ -53,7 +53,6 @@
     $(function() {
         $('#data_inizio').datetimepicker({
             lang:   'it',
-            i18n:   { it:{ months:mesi, dayOfWeek:giorni} },
             format: 'd/m/Y H:i',
             onShow: function( ct ){
                 if($('#data_fine').val())
@@ -67,7 +66,6 @@
         
         $('#data_fine').datetimepicker({
             lang:'it',
-            i18n:{ it:{ months:mesi, dayOfWeek:giorni} },
             format:'d/m/Y H:i',
             onShow:function( ct ){
                 if($('#data_inizio').val())

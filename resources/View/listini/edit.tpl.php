@@ -71,7 +71,6 @@
         
         $('#valido_dal').datetimepicker({
             lang:   'it',
-            i18n:   { it:{ months:mesi, dayOfWeek:giorni} },
             format: 'd/m/Y',
             timepicker:false,
             onShow: function( ct ){
@@ -86,7 +85,6 @@
         
         $('#valido_al').datetimepicker({
             lang:'it',
-            i18n:{ it:{ months:mesi, dayOfWeek:giorni} },
             format:'d/m/Y',
             timepicker:false,
             onShow:function( ct ){

@@ -15,7 +15,6 @@
         
         $('#data').datetimepicker({
             lang:   'it',
-            i18n:   { it:{ months:mesi, dayOfWeek:giorni} },
             format: 'd/m/Y H:i'
         });
     });
