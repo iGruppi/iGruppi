@@ -1,14 +1,13 @@
 -- phpMyAdmin SQL Dump
--- version 3.5.8.2
+-- version 3.3.3
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Mar 27, 2015 at 01:38 PM
--- Server version: 5.6.20
--- PHP Version: 5.5.15
+-- Generation Time: Aug 19, 2015 at 10:38 pm
+-- Server version: 5.1.54
+-- PHP Version: 5.3.14
 
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
-SET time_zone = "+00:00";
 
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -80,7 +79,8 @@ CREATE TABLE IF NOT EXISTS `groups` (
   `provincia` char(2) COLLATE utf8_unicode_ci NOT NULL,
   `data_creazione` date NOT NULL,
   `email_ml` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
-  PRIMARY KEY (`idgroup`)
+  PRIMARY KEY (`idgroup`),
+  KEY `fk_groups_province1_idx` (`provincia`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
@@ -154,7 +154,7 @@ CREATE TABLE IF NOT EXISTS `ordini` (
   `archiviato` enum('N','S') COLLATE utf8_unicode_ci NOT NULL DEFAULT 'N',
   `condivisione` enum('PUB','PRI','SHA') COLLATE utf8_unicode_ci NOT NULL DEFAULT 'PRI',
   PRIMARY KEY (`idordine`),
-  KEY `fk_ordini_users1` (`iduser_ref`)
+  KEY `fk_ordini_users1_idx` (`iduser_ref`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
@@ -169,7 +169,7 @@ CREATE TABLE IF NOT EXISTS `ordini_groups` (
   `idgroup_slave` int(10) unsigned NOT NULL,
   `iduser_ref` int(10) unsigned DEFAULT NULL,
   `visibile` enum('S','N') COLLATE utf8_unicode_ci NOT NULL DEFAULT 'S',
-  `extra` varchar(512) COLLATE utf8_unicode_ci NOT NULL DEFAULT '0',
+  `extra` varchar(1024) COLLATE utf8_unicode_ci NOT NULL,
   `note_consegna` text COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`idordine`,`idgroup_master`,`idgroup_slave`),
   KEY `fk_groups_ordini_ordini1_idx` (`idordine`),
@@ -262,7 +262,7 @@ CREATE TABLE IF NOT EXISTS `prodotti` (
   `codice` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
   `descrizione` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `udm` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
-  `moltiplicatore` decimal(8,2) NOT NULL,
+  `moltiplicatore` decimal(8,2) NOT NULL DEFAULT '1.00',
   `costo` decimal(8,2) NOT NULL,
   `aliquota_iva` tinyint(4) NOT NULL,
   `note` varchar(1024) COLLATE utf8_unicode_ci NOT NULL,
@@ -290,7 +290,8 @@ CREATE TABLE IF NOT EXISTS `produttori` (
   `email` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
   `note` varchar(2048) COLLATE utf8_unicode_ci NOT NULL,
   `production` enum('S','N') COLLATE utf8_unicode_ci NOT NULL DEFAULT 'N',
-  PRIMARY KEY (`idproduttore`)
+  PRIMARY KEY (`idproduttore`),
+  KEY `fk_produttori_province1_idx` (`provincia`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
@@ -338,7 +339,8 @@ CREATE TABLE IF NOT EXISTS `users` (
   `provincia` char(2) COLLATE utf8_unicode_ci NOT NULL,
   `role` enum('User','Admin') COLLATE utf8_unicode_ci NOT NULL DEFAULT 'User',
   PRIMARY KEY (`iduser`),
-  KEY `INDEX_email` (`email`)
+  KEY `INDEX_email` (`email`),
+  KEY `fk_users_province1_idx` (`provincia`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
@@ -445,8 +447,8 @@ ALTER TABLE `ordini_users`
 -- Constraints for table `ordini_user_prodotti`
 --
 ALTER TABLE `ordini_user_prodotti`
-  ADD CONSTRAINT `fk_ordini_user_prodotti_ordini_prodotti1` FOREIGN KEY (`idlistino`, `idprodotto`) REFERENCES `ordini_prodotti` (`idlistino`, `idprodotto`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_ordini_user_prodotti_ordini_user1` FOREIGN KEY (`iduser`, `idordine`) REFERENCES `ordini_users` (`iduser`, `idordine`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+  ADD CONSTRAINT `fk_ordini_user_prodotti_ordini_user1` FOREIGN KEY (`iduser`, `idordine`) REFERENCES `ordini_users` (`iduser`, `idordine`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_ordini_user_prodotti_ordini_prodotti1` FOREIGN KEY (`idlistino`, `idprodotto`) REFERENCES `ordini_prodotti` (`idlistino`, `idprodotto`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Constraints for table `ordini_variazioni`
