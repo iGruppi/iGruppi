@@ -35,6 +35,40 @@ class Model_Categorie_CatElement
         }
         return $ar;
     }
+
+    public function getCatById($id)
+    {
+        foreach($this->createIterator() as $ch)
+        {
+            if($ch instanceof Model_Categorie_CatElement && $ch->getId() === $id)
+            {
+                return $ch;
+            }
+        }
+        return null;
+    }
+
+    public function getSubCatById($id)
+    {
+        foreach($this->createIterator() as $ch)
+        {
+            if($ch instanceof Model_Categorie_SubcatElement && $ch->getId() === $id)
+            {
+                return $ch;
+            }
+        }
+        return null;
+    }
     
-    
+    public function getProduttoreById($id)
+    {
+        foreach($this->createIterator() as $ch)
+        {
+            if($ch instanceof Model_Categorie_ProduttoreElement && $ch->getId() === $id)
+            {
+                return $ch;
+            }
+        }
+        return null;
+    }
 }

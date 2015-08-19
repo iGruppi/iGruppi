@@ -53,4 +53,15 @@ class Model_Categorie_SubcatElement
         return $ar;
     }
     
+    public function getProdottoById($id)
+    {
+        foreach($this->createIterator() as $ch)
+        {
+            if($ch instanceof Model_Categorie_ProdottoElement && $ch->getId() === $id)
+            {
+                return $ch;
+            }
+        }
+        return null;
+    }
 }
