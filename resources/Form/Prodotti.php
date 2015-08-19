@@ -36,7 +36,7 @@ class Form_Prodotti extends MyFw_Form {
         
         $this->addField('attivo', array(
                         'type'      => 'select',
-                        'label'     => 'Disponibile',
+                        'label'     => 'Attivo',
                         'options'   => array('S' => 'SI', 'N' => 'NO')
             ));
         

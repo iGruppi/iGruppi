@@ -31,7 +31,7 @@ if(count($categorie) > 0):
                 Codice: <strong><?php echo $pObj->getCodice(); ?></strong><br />
             <?php echo $this->partial('prodotti/price-box.tpl.php', array('prodotto' => $pObj)); ?>
             <?php if(!$pObj->getAttivoAnagrafica()): ?>
-                <strong class="alert_red">Disabilitato</strong> (Non viene inserito quando crei un nuovo ordine)
+                <strong class="alert_red">NON ATTIVO</strong> (Non viene inserito quando crei un nuovo ordine)
             <?php endif; ?>
             </p>
         </div>
