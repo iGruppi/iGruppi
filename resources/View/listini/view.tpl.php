@@ -6,10 +6,10 @@
     <div class="row">
         <div class="col-md-12">
         <em>Validità:</em> 
-        <?php if(!$this->listino->getMyGroup()->getValidita()->isSetValidita()): ?>
+        <?php if(!$this->listino->getValidita()->isSetValidita()): ?>
             <b>SEMPRE</b>
         <?php else: ?> 
-            dal <b><?php echo $this->listino->getMyGroup()->getValidita()->getDal('d/m/Y'); ?></b> al <b><?php echo $this->listino->getMyGroup()->getValidita()->getAl('d/m/Y'); ?></b> 
+            dal <b><?php echo $this->listino->getValidita()->getDal('d/m/Y'); ?></b> al <b><?php echo $this->listino->getValidita()->getAl('d/m/Y'); ?></b> 
         <?php endif; ?><br />
         
         <?php echo $this->partial('listini/edit.prodotti.tpl.php', array('listino' => $this->listino)); ?>

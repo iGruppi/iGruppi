@@ -77,11 +77,41 @@ class Model_AF_Listino_Dati extends Model_AF_Dati
         return $this->getValue("email");
     }
     
+    /**
+     * get Data Listino updated by user
+     * @return date
+     */
     public function getDataListino()
     {
         return $this->getValue("user_update");
     }
     
+    /**
+     * Return TRUE if is PRIVATO (Condivisione = PRI)
+     * @return bool
+     */
+    public function isPrivato()
+    {
+        return ($this->getCondivisione() == "PRI") ? true : false;
+    }
+    
+    /**
+     * Return TRUE if it is SHARED (Condivisione = SHA)
+     * @return bool
+     */
+    public function isCondiviso()
+    {
+        return ($this->getCondivisione() == "SHA") ? true : false;
+    }
+
+    /**
+     * Return TRUE if it is PUBBLICO (Condivisione = PUB)
+     * @return bool
+     */
+    public function isPubblico()
+    {
+        return ($this->getCondivisione() == "PUB") ? true : false;
+    }
     
 /***************************
  *  SET METHODS

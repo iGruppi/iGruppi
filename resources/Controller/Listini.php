@@ -18,17 +18,10 @@ class Controller_Listini extends MyFw_Controller {
 
     function indexAction() 
     {
-        $filter = $this->getParam("filter");
-        if(is_null($filter)) 
-        {
-            $filter = "PRI"; // DEFAULT value
-        }
-        $this->view->filter = $filter;
-        
         // get Elenco Listini per Gruppo
         $lObj = new Model_Db_Listini();
         $cObj = new Model_Db_Categorie();
-        $listiniArray = $lObj->getListiniByIdgroup($this->_userSessionVal->idgroup, $filter);
+        $listiniArray = $lObj->getListiniByIdgroup($this->_userSessionVal->idgroup);
         $listini = array();
         if(!is_null($listiniArray)) {
             foreach ($listiniArray as $stdListino) {
@@ -54,8 +47,8 @@ class Controller_Listini extends MyFw_Controller {
                     array_unshift($listini, $mllObj);
                 } else {
                     // CHECK VALIDITA' e VISIBILITA'
-                    if($mllObj->getMyGroup()->getValidita()->isValido() &&
-                       $mllObj->getMyGroup()->getVisibile()->getBool() ) 
+                    if($mllObj->getValidita()->isValido() &&
+                       $mllObj->getVisibile()->getBool() ) 
                     {
                         array_push($listini, $mllObj);
                     }
@@ -233,9 +226,9 @@ class Controller_Listini extends MyFw_Controller {
         } else {
             // build array values for form
             $form->setValues($mllObj->getDatiValues());
-            $form->setValue("valido_dal", $mllObj->getMyGroup()->getValidita()->getDal(MyFw_Form_Filters_Date::_MYFORMAT_DATE_VIEW));
-            $form->setValue("valido_al", $mllObj->getMyGroup()->getValidita()->getAl(MyFw_Form_Filters_Date::_MYFORMAT_DATE_VIEW));
-            $form->setValue("visibile", $mllObj->getMyGroup()->getVisibile()->getString());
+            $form->setValue("valido_dal", $mllObj->getValidita()->getDal(MyFw_Form_Filters_Date::_MYFORMAT_DATE_VIEW));
+            $form->setValue("valido_al", $mllObj->getValidita()->getAl(MyFw_Form_Filters_Date::_MYFORMAT_DATE_VIEW));
+            $form->setValue("visibile", $mllObj->getVisibile()->getString());
             $form->setValue("groups", $mllObj->getAllIdgroups());
 
         }

@@ -181,6 +181,7 @@ abstract class Model_AF_Gruppi extends Model_AF_AbstractHandlerCoR
 
     
     /**
+     * RESET GROUPS by Condivisione and Array of Idgroup
      * @return void
      * @param string $condivisione Condivisione type, it could be: PRI, PUB or SHA 
      * @param array $groups Array of "idgroup" values to reset $this->_groups 
@@ -193,7 +194,7 @@ abstract class Model_AF_Gruppi extends Model_AF_AbstractHandlerCoR
         {
             $groups = array();
         }
-        // add My Group to $groups array because there must be ALMOST one group in listini_groups table
+        // add My Group to $groups array because there MUST BE ALMOST one group in listini_groups table
         if(!in_array($this->getMyIdGroup(), $groups)) {
             $groups[] = $this->getMyIdGroup();
         }

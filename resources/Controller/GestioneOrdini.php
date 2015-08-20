@@ -156,8 +156,12 @@ class Controller_GestioneOrdini extends MyFw_Controller {
                 $mllObj->initGruppi_ByObject( $lObj->getGroupsByIdlistino( $mllObj->getIdListino() ) );
                 $mllObj->setMyIdGroup($this->_userSessionVal->idgroup);
                 
-                // add Listino to array
-                array_push($listini, $mllObj);
+                // CHECK VALIDITA' e VISIBILITA'
+                if($mllObj->getValidita()->isValido() &&
+                   $mllObj->getVisibile()->getBool() ) 
+                {
+                    array_push($listini, $mllObj);
+                }
             }
         }
         $this->view->listini = $listini;
@@ -286,7 +290,7 @@ class Controller_GestioneOrdini extends MyFw_Controller {
             $form->setValue("data_fine", $ordine->getDataFine(MyFw_Form_Filters_Date::_MYFORMAT_DATETIME_VIEW));
             $form->setValue("iduser_ref", $ordine->getMyGroup()->getRefIdUser());
             $form->setValue("note_consegna", $ordine->getMyGroup()->getNoteConsegna());
-            $form->setValue("visibile", $ordine->getMyGroup()->getVisibile()->getString());
+            $form->setValue("visibile", $ordine->getVisibile()->getString());
             $form->setValue("groups", $ordine->getAllIdgroups());
         }
         
