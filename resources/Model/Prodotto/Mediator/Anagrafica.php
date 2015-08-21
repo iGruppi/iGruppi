@@ -22,7 +22,9 @@ class Model_Prodotto_Mediator_Anagrafica
             'aliquota_iva',
             'note',
             'attivo',
-            'production'        
+            'production',
+            'categoria',
+            'categoria_sub'
         );   
     
 

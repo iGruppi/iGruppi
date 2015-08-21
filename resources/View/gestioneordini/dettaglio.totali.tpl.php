@@ -52,8 +52,8 @@ $(document).ready(function () {
       data: <?php echo json_encode($arProductsGrid); ?>,
       manualColumnMove: true,
       manualColumnResize: true,
-      colHeaders: ['Disp.', 'Codice', 'Descrizione', 'Prezzo', 'Udm', 'Qta Ord.', 'Qta Reale', 'Categoria'],
-      colWidths: [50, 80, 380, 70, 120, 70, 70, 120],
+      colHeaders: ['Disp.', 'Codice', 'Descrizione', 'Udm', 'Qta Ord.', 'Qta Reale', 'Prezzo', 'Categoria'],
+      colWidths: [50, 80, 380, 120, 70, 70, 70, 270],
       columnSorting: true,
       currentRowClassName: 'currentRow',
       columns: [
@@ -70,14 +70,6 @@ $(document).ready(function () {
           data: 'descrizione',
           readOnly: true
         },
-        
-        {
-          data: 'costo_ordine',
-          readOnly: true,
-          type: 'numeric',
-          format: '0,0.00 $',
-          language: 'it'
-        },
         {
           data: 'udm',
           renderer: "html",
@@ -93,6 +85,13 @@ $(document).ready(function () {
           readOnly: true,
           type: 'numeric',
           format: '0,0.00',
+          language: 'it'
+        },
+        {
+          data: 'costo_ordine',
+          readOnly: true,
+          type: 'numeric',
+          format: '0,0.00 $',
           language: 'it'
         },
         {

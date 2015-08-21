@@ -12,7 +12,7 @@
     <td>
         Ordinata: <strong><?php echo $this->pObj->getQta_ByIduser($this->iduser);?></strong><br />
         <span id="qtareal_<?php echo $keyrow;?>">
-            Effettiva: <strong><?php echo $this->pObj->getQtaReale_ByIduser($this->iduser);?></strong> <?php echo $this->pObj->getUdm(); ?>
+            Effettiva: <strong><?php echo $this->formatQta( $this->pObj->getQtaReale_ByIduser($this->iduser));?></strong> <?php echo $this->pObj->getUdm(); ?>
         </span>
         <div style="display: none;" id="div_chgqta_<?php echo $keyrow;?>"></div>
     </td>
@@ -29,7 +29,7 @@
     <td class="danger">&nbsp;</td>
     <td class="danger strike">
         Ordinata: <strong><?php echo $this->pObj->getQta_ByIduser($this->iduser);?></strong><br />
-        Effettiva: <strong><?php echo $this->pObj->getQtaReale_ByIduser($this->iduser);?></strong> <?php echo $this->pObj->getUdm(); ?>
+        Effettiva: <strong><?php echo $this->formatQta( $this->pObj->getQtaReale_ByIduser($this->iduser));?></strong> <?php echo $this->pObj->getUdm(); ?>
     </td>
     <td class="danger text-right">
         <strong class="no_strike">NON DISPONIBILE!</strong>
