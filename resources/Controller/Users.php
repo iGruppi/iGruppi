@@ -42,16 +42,16 @@ class Controller_Users extends MyFw_Controller {
         $form->removeField("password2");
         $form->removeField("idgroup");
         
-        // Get Elenco produttori (con REFERENTE)
+        // Get Elenco produttori (con REFERENTI)
         $prObj = new Model_Db_Produttori();
-        $referenti = $prObj->getReferentiInterniByIdgroup_withKeyIdProduttore($this->_userSessionVal->idgroup);
+        $referenti = $prObj->getReferentiByIdgroup_withKeyIdProduttore($this->_userSessionVal->idgroup);
         foreach($prObj->getProduttori() AS $prod) 
         {
             // create Produttore
             $produttore = new Model_Produttori_Produttore();
             $produttore->initByArrayValues($prod);
             $refs = isset($referenti[$prod->idproduttore]) ? $referenti[$prod->idproduttore] : array();
-            $produttore->setReferentiInterni($refs);
+            $produttore->setReferenti($refs);
             $this->view->produttori[] = $produttore;
         }
 

@@ -1,5 +1,5 @@
 <form id="addprod_form_<?php echo $this->iduser; ?>" class="ordini" 
-      onsubmit="jx_ReferenteAddNewProd_Save(<?php echo $this->iduser; ?>,<?php echo $this->idordine;?>); return false;" method="post">
+      onsubmit="jx_GestioneOrdini_AddNewProd_Save(<?php echo $this->iduser; ?>,<?php echo $this->idordine;?>); return false;" method="post">
     <label>Descrizione:</label>
     <input type="text" id="txt_prod_<?php echo $this->iduser; ?>" name="txt_prod" value="" size="50" />
     <button style="margin: 2px;" class="btn btn-success" id="submit_<?php echo $this->iduser; ?>">Aggiungi</button>

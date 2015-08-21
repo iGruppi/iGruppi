@@ -44,7 +44,7 @@ class Model_Db_Produttori extends MyFw_DB_Base {
         return $sth_app->fetchAll(PDO::FETCH_OBJ);        
     }
     
-    function getReferentiInterniByIdgroup_withKeyIdProduttore($idgroup)
+    function getReferentiByIdgroup_withKeyIdProduttore($idgroup)
     {
         $sql = "SELECT r.*, u.nome AS ref_nome, u.cognome AS ref_cognome, u.email AS ref_email"
               ." FROM referenti AS r"

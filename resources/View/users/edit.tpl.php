@@ -41,15 +41,15 @@
                     $arReferenti = array();
                     foreach($this->produttori AS $produttore): 
                     // Check for Referente attuale
-                    if( $produttore->isReferenteInterno($this->user->iduser) ) {
+                    if( $produttore->isReferente($this->user->iduser) ) {
                         $arRef[] = $produttore;
                     } else {
-                        // create array Referenti Interni per Produttore
+                        // create array Referenti per Produttore
                         $countRef = 0;
-                        if($produttore->hasReferentiInterni())
+                        if($produttore->hasReferenti())
                         {
-                            $arReferenti[$produttore->idproduttore] = $produttore->getReferentiInterni();
-                            $countRef = count($produttore->getReferentiInterni());
+                            $arReferenti[$produttore->idproduttore] = $produttore->getReferenti();
+                            $countRef = count($produttore->getReferenti());
                         }
               ?>
                   <option value="<?php echo $produttore->idproduttore; ?>"><?php echo $produttore->ragsoc; ?> (<?php echo $countRef . " referente/i"; ?>)</option>

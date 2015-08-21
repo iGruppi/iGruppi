@@ -25,7 +25,7 @@
                     <?php echo $this->form->renderField('groups'); ?>
                 </div>
             <?php endif; ?>
-            <?php if($this->ordine->canManageReferente()): ?>
+            <?php if($this->ordine->canManageIncaricato()): ?>
                 <?php echo $this->form->renderField('iduser_ref'); ?>
             <?php endif; ?>
             </fieldset>

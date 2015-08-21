@@ -19,8 +19,8 @@ class Controller_Produttori extends MyFw_Controller {
     {    
         $pObj = new Model_Db_Produttori();
         $listProduttori = $pObj->getProduttori();
-        $referenti = $pObj->getReferentiInterniByIdgroup_withKeyIdProduttore($this->_userSessionVal->idgroup);
-        // add Referente object to every Produttore and ORDER them keeping isReferente on the TOP
+        $referenti = $pObj->getReferentiByIdgroup_withKeyIdProduttore($this->_userSessionVal->idgroup);
+        // create array PRODUTTORI with objects Model_Produttori_Produttore
         $listProduttoriOrdered = array();
         if(count($listProduttori) > 0) {
             foreach($listProduttori AS $prod) 
@@ -29,9 +29,9 @@ class Controller_Produttori extends MyFw_Controller {
                 $produttore = new Model_Produttori_Produttore();
                 $produttore->initByArrayValues($prod);
                 $refs = isset($referenti[$prod->idproduttore]) ? $referenti[$prod->idproduttore] : array();
-                $produttore->setReferentiInterni($refs);
-                // check for Referente
-                if( $this->_userSessionVal->refObject->is_Referente($produttore->idproduttore) ) {
+                $produttore->setReferenti($refs);
+                // IF IS Referente put the value on the TOP of array
+                if( $this->_userSessionVal->permsProduttori->is_Referente($produttore->idproduttore) ) {
                     array_unshift($listProduttoriOrdered, $produttore);
                 } else {
                     array_push($listProduttoriOrdered, $produttore);
@@ -61,14 +61,14 @@ class Controller_Produttori extends MyFw_Controller {
                 // ADD Produttore
                 $idproduttore = $this->getDB()->makeInsert("produttori", $fv);
 
-                // Add Relationship to REFERENTI
+                // Add Relationship to referenti (REFERENTE PRODUTTORE)
                 $this->getDB()->makeInsert("referenti", array(
                     'idproduttore'  => $idproduttore,
                     'idgroup'       => $this->_userSessionVal->idgroup,
                     'iduser_ref'    => $this->_iduser
                 ));
      
-                // Add Relationship to USERS_PRODUTTORI (Super Referente)
+                // Add Relationship to users_produttori (GESTORE PRODUTTORE)
                 $this->getDB()->makeInsert("users_produttori", array(
                     'idproduttore'  => $idproduttore,
                     'iduser'    => $this->_iduser
@@ -100,7 +100,7 @@ class Controller_Produttori extends MyFw_Controller {
         if($produttore === false) {
             $this->redirect("produttori");
         }
-        if(!$this->_userSessionVal->refObject->canManageProduttore($idproduttore)) {
+        if(!$this->_userSessionVal->permsProduttori->canManageProduttore($idproduttore)) {
             $this->forward("produttori", "view", array('idproduttore' => $idproduttore));
         }
         $this->view->produttore = $produttore;

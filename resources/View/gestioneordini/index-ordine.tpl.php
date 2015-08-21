@@ -7,11 +7,11 @@
                     $categorie = $this->ordine->getListaDescrizioniCategorie();
                     echo $this->arrayToString($categorie); 
                     ?></h5>
-                <h5><span class="text-muted">Referente ordine:</span> 
+                <h5> 
                     <?php if(!$this->ordine->getMyGroup()->isSetUserRef()): ?>
-                        <b class="text-danger">Nessun referente ordine assegnato!</b>
+                        <b class="text-danger">Nessun Incaricato ordine ordine assegnato!</b>
                     <?php else: ?>
-                        <?php echo $this->ordine->getMyGroup()->getRefNome(); ?>
+                        <span class="text-muted">Incaricato ordine:</span> <?php echo $this->ordine->getMyGroup()->getRefNome(); ?>
                     <?php endif; ?>
                             
                 </h5>

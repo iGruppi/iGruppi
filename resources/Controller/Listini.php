@@ -42,7 +42,7 @@ class Controller_Listini extends MyFw_Controller {
                 $mllObj->initGruppi_ByObject( $lObj->getGroupsByIdlistino( $mllObj->getIdListino() ) );
                 $mllObj->setMyIdGroup($this->_userSessionVal->idgroup);
                 
-                // check for Referente Listino
+                // IF can Manage Listino put the values at the TOP of array
                 if( $mllObj->canManageListino() ) {
                     array_unshift($listini, $mllObj);
                 } else {
@@ -149,7 +149,7 @@ class Controller_Listini extends MyFw_Controller {
         // set DATI in Listino
         $mllObj->initDati_ByObject($listino);
         
-        // check REFERENTE, controllo per i furbi (non Referenti)
+        // check canManageListino, controllo per i furbi (non autorizzati)
         if(!$mllObj->canManageListino()) {
             $this->redirect("index", "error", array('code' => 401));
         }

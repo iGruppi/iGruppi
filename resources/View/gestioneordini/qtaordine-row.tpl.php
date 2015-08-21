@@ -8,7 +8,7 @@
             <small>Pezzatura/Taglio: <?php echo $this->pObj->getDescrizionePezzatura(); ?></small>
         <?php endif; ?>
     </td>
-    <td><a id="btn_<?php echo $keyrow;?>" data-loading-text="..." onclick="jx_ReferenteModifyQta(<?php echo $this->iduser; ?>,<?php echo $this->idprodotto;?>, <?php echo $this->idordine;?>)" class="btn btn-default pull-left" href="javascript:void(0)"><span class="glyphicon glyphicon-pencil"></span></a></td>
+    <td><a id="btn_<?php echo $keyrow;?>" data-loading-text="..." onclick="jx_GestioneOrdini_ModifyQta(<?php echo $this->iduser; ?>,<?php echo $this->idprodotto;?>, <?php echo $this->idordine;?>)" class="btn btn-default pull-left" href="javascript:void(0)"><span class="glyphicon glyphicon-pencil"></span></a></td>
     <td>
         Ordinata: <strong><?php echo $this->pObj->getQta_ByIduser($this->iduser);?></strong><br />
         <span id="qtareal_<?php echo $keyrow;?>">

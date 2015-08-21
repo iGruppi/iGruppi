@@ -15,9 +15,9 @@
                       $categorie = $ordine->getListaDescrizioniCategorie();
                       echo $this->arrayToString($categorie); 
                       ?></h5>
-                  <h5><span class="text-muted">Referente ordine:</span> 
+                  <h5><span class="text-muted">Incaricato ordine:</span> 
                       <?php if(!$ordine->getMyGroup()->isSetUserRef()): ?>
-                          <b class="text-danger">Nessun referente ordine assegnato!</b>
+                          <b class="text-danger">Nessun Incaricato ordine assegnato!</b>
                       <?php else: ?>
                           <?php echo $ordine->getMyGroup()->getRefNome(); ?>
                       <?php endif; ?>

@@ -12,7 +12,7 @@
         </div>
         <div class="col-md-8">
             <p>Produttore: <strong><?php echo $lObj->getProduttoreName(); ?></strong><br />
-               Creato da <a href="mailto: <?php echo $lObj->getReferente_Email(); ?>"><?php echo $lObj->getReferente_Nome(); ?></a> (<?php echo $lObj->getMasterGroup()->getGroupName(); ?>)
+               Gestito da <a href="mailto: <?php echo $lObj->getReferente_Email(); ?>"><?php echo $lObj->getReferente_Nome(); ?></a> (<?php echo $lObj->getMasterGroup()->getGroupName(); ?>)
             </p>
             <h4><span class="text-muted">Prodotti:</span> <?php 
                 $categorie = $lObj->getListaDescrizioniCategorie();

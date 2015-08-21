@@ -40,7 +40,7 @@ class Form_Cassa extends MyFw_Form {
                         'required'  => true
             ));
 
-        // get IdUsers for Referente
+        // get IdUsers array for this group
         $objU = new Model_Db_Users();
         $userSessionVal = new Zend_Session_Namespace('userSessionVal');
         $arVal = $objU->convertToSingleArray($objU->getUsersByIdGroup($userSessionVal->idgroup, true), "iduser", "nominativo");

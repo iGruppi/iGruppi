@@ -50,8 +50,8 @@ class Controller_Auth extends MyFw_Controller {
                         
                         // set Referente Object in Session
                         $uObj = new Model_Db_Users();
-                        $refObj = new Model_Produttori_Referente($uObj->getGlobalRefByIduser($row->iduser), $uObj->getRefByIduserAndIdgroup($row->iduser, $row->idgroup));
-                        $userSessionVal->refObject = $refObj;
+                        $permsProduttori = new Model_Produttori_Permessi($uObj->getGlobalRefByIduser($row->iduser), $uObj->getRefByIduserAndIdgroup($row->iduser, $row->idgroup));
+                        $userSessionVal->permsProduttori = $permsProduttori;
                         
                         // set ACL User in session
                         $aclUserObj = new Model_AclUser($row->fondatore, $row->contabile);

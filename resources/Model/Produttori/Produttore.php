@@ -16,17 +16,17 @@ class Model_Produttori_Produttore {
     }
     
     
-    public function setReferentiInterni(array $ref)
+    public function setReferenti(array $ref)
     {
         $this->_referenti = $ref;
     }
     
-    public function getReferentiInterni()
+    public function getReferenti()
     {
         return $this->_referenti;
     }
     
-    public function hasReferentiInterni()
+    public function hasReferenti()
     {
         return count($this->_referenti);
     }
@@ -40,7 +40,7 @@ class Model_Produttori_Produttore {
         throw new Exception("Proprietà $name NOT EXISTS in " . __CLASS__);
     }
     
-    public function isReferenteInterno($iduser)
+    public function isReferente($iduser)
     {
         return isset($this->_referenti[$iduser]);
     }

@@ -75,7 +75,7 @@ class Model_Ordini_Ordine extends Model_AF_AbstractCoR
         Visibilità (SI/NO)
         Validità ordine (date dal/al)
         Condivisione
-        Referente Ordine del proprio Gruppo
+        Incaricato Ordine del proprio Gruppo
         Gestione Spese Extra
         Inserimento Nuovo Prodotto
         Modifica Prodotti (Prezzo e Offerta)
@@ -87,7 +87,7 @@ class Model_Ordini_Ordine extends Model_AF_AbstractCoR
 
           * Amministratore del Gruppo
           * Supervisore Ordine
-          * Referente Ordine
+          * Incaricato Ordine
           * Tesoriere
  * 
  */    
@@ -103,10 +103,10 @@ class Model_Ordini_Ordine extends Model_AF_AbstractCoR
     }
     
     /**
-     * Return TRUE if iduser session is Referente ordine
+     * Return TRUE if iduser session is Incaricato ordine
      * @return bool
      */
-    public function isReferenteOrdine()
+    public function isIncaricatoOrdine()
     {
         $iduser = Zend_Auth::getInstance()->getIdentity()->iduser;
         return ($iduser == $this->getMyGroup()->getRefIdUser());
@@ -143,7 +143,7 @@ class Model_Ordini_Ordine extends Model_AF_AbstractCoR
             return true;
         } else if($this->getMyGroup()->isSetUserRef())
         {
-            return $this->isReferenteOrdine();
+            return $this->isIncaricatoOrdine();
         } else {
             return false;
         }
@@ -164,7 +164,7 @@ class Model_Ordini_Ordine extends Model_AF_AbstractCoR
      */
     public function canUpdateVisibile()
     {
-        return ($this->isReferenteOrdine() && $this->is_Pianificato()) OR
+        return ($this->isIncaricatoOrdine() && $this->is_Pianificato()) OR
                ($this->isAdminForGroup() && $this->is_Aperto());
     }
 
@@ -190,7 +190,7 @@ class Model_Ordini_Ordine extends Model_AF_AbstractCoR
      * Return TRUE if can manage UsersRef for this group
      * @return bool
      */
-    public function canManageReferente()
+    public function canManageIncaricato()
     {
         return ($this->isAdminForGroup() && !$this->is_Archiviato());
     }
@@ -202,7 +202,7 @@ class Model_Ordini_Ordine extends Model_AF_AbstractCoR
      */
     public function canManageSpeseExtra()
     {
-        return ($this->isReferenteOrdine() && $this->is_Arrivato());
+        return ($this->isIncaricatoOrdine() && $this->is_Arrivato());
     }
     
     /**
@@ -231,7 +231,7 @@ class Model_Ordini_Ordine extends Model_AF_AbstractCoR
     {
         return (
                 ( $this->isSupervisoreOrdine() && ($this->is_Pianificato() || $this->is_Aperto()) ) OR
-                ( $this->isReferenteOrdine() && $this->is_Arrivato() )
+                ( $this->isIncaricatoOrdine() && $this->is_Arrivato() )
         );
     }
         
@@ -241,7 +241,7 @@ class Model_Ordini_Ordine extends Model_AF_AbstractCoR
      */
     public function canModificaQtaOrdinate()
     {
-        return ($this->isReferenteOrdine() && ($this->is_Chiuso() || $this->is_Arrivato()) );
+        return ($this->isIncaricatoOrdine() && ($this->is_Chiuso() || $this->is_Arrivato()) );
     }
     
     /**

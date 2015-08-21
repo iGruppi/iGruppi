@@ -8,14 +8,14 @@
       
       <div class="row row-myig">
         <div class="col-md-12">
-            <h3 class="no-margin <?php echo ($this->userSessionVal->refObject->canManageProduttore($produttore->idproduttore)) ? "green" : "text-dark"; ?>"><?php echo $produttore->ragsoc;?></h3>
+            <h3 class="no-margin <?php echo ($this->userSessionVal->permsProduttori->canManageProduttore($produttore->idproduttore)) ? "green" : "text-dark"; ?>"><?php echo $produttore->ragsoc;?></h3>
         </div>
         <div class="col-md-8">
             <p>
                 Gestore Produttore: <a href="mailto: <?php echo $produttore->ref_ext_email; ?>"><?php echo $produttore->ref_ext_nome . " " . $produttore->ref_ext_cognome; ?></a><br />
-                Referente interno: 
-             <?php if($produttore->hasReferentiInterni()):?>
-                <?php foreach ($produttore->getReferentiInterni() AS $iduser => $referente): ?>
+                Referente Produttore interno: 
+             <?php if($produttore->hasReferenti()):?>
+                <?php foreach ($produttore->getReferenti() AS $iduser => $referente): ?>
                     <a href="mailto: <?php echo $referente->ref_email; ?>"><?php echo $referente->ref_nome . " " . $referente->ref_cognome; ?></a>,
                 <?php endforeach; ?>
              <?php else: ?>

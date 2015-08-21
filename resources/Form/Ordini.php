@@ -62,13 +62,13 @@ class Form_Ordini extends MyFw_Form {
                     'options'   => $groups
         ));
         
-        // get IdUsers for Referente
+        // get IdUsers array for this group
         $userSessionVal = new Zend_Session_Namespace('userSessionVal');
         $objU = new Model_Db_Users();
         $arVal = $objU->convertToSingleArray($objU->getUsersByIdGroup($userSessionVal->idgroup, true), "iduser", "nominativo");
         $arVal[0] = 'Seleziona...';
         $this->addField('iduser_ref', array(
-                        'label'     => 'Referente ordine',
+                        'label'     => 'Incaricato ordine',
                         'type'      => 'select',
                         'options'   => $arVal,
                         'required'  => true

@@ -65,8 +65,8 @@ class Controller_GestioneOrdini extends MyFw_Controller {
             }
         }
         $this->view->ordini = $ordini;
-        // set Referenti Object in View
-        $this->view->refObject = $this->_userSessionVal->refObject;
+        // set Model_Produttori_Permessi Object in View
+        $this->view->permsProduttori = $this->_userSessionVal->permsProduttori;
     }
     
     function newAction() {
@@ -249,7 +249,7 @@ class Controller_GestioneOrdini extends MyFw_Controller {
             $form->getField("condivisione")->setDisabled();
             $form->getField("groups")->setDisabled();
         }
-        if(!$ordine->canManageReferente()) {
+        if(!$ordine->canManageIncaricato()) {
             $form->getField("iduser_ref")->setDisabled();
         }
 
@@ -270,7 +270,7 @@ class Controller_GestioneOrdini extends MyFw_Controller {
                     $groupsToShare = isset($fv["groups"]) ? $fv["groups"] : array();
                     $ordine->resetGroups($form->getValue("condivisione"), $groupsToShare);                
                 }
-                if($ordine->canManageReferente()) {
+                if($ordine->canManageIncaricato()) {
                     $iduser_ref = ($form->getValue("iduser_ref") > 0) ? $form->getValue("iduser_ref") : NULL;
                     $ordine->getMyGroup()->setRefIdUser($iduser_ref);
                 }

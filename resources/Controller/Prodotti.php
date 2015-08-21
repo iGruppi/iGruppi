@@ -70,8 +70,8 @@ class Controller_Prodotti extends MyFw_Controller {
 
     function editAction() {
         
-        // check REFERENTE, controllo per i furbi (non Referenti)
-        if(!$this->_userSessionVal->refObject->canEditProdotti($this->_produttore->idproduttore)) {
+        // controllo per i furbi (non autorizzati)
+        if(!$this->_userSessionVal->permsProduttori->canEditProdotti($this->_produttore->idproduttore)) {
             $this->redirect("index", "error", array('code' => 401));
         }
         
@@ -121,8 +121,8 @@ class Controller_Prodotti extends MyFw_Controller {
     
     function addAction() {
         
-        // check REFERENTE, controllo per i furbi (non Referenti)
-        if(!$this->_userSessionVal->refObject->canAddProdotti($this->_produttore->idproduttore)) {
+        // controllo per i furbi (non autorizzati)
+        if(!$this->_userSessionVal->permsProduttori->canAddProdotti($this->_produttore->idproduttore)) {
             $this->redirect("index", "error", array('code' => 401));
         }
                 

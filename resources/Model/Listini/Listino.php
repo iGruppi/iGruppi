@@ -85,7 +85,7 @@ class Model_Listini_Listino extends Model_AF_AbstractCoR
     private function isReferenteProduttore()
     {
         $userSessionVal = new Zend_Session_Namespace('userSessionVal');
-        return $userSessionVal->refObject->is_Referente($this->getIdProduttore());
+        return $userSessionVal->permsProduttori->is_Referente($this->getIdProduttore());
     }
     
     private function isOwner()
