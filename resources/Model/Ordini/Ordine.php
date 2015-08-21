@@ -78,7 +78,8 @@ class Model_Ordini_Ordine extends Model_AF_AbstractCoR
         Referente Ordine del proprio Gruppo
         Gestione Spese Extra
         Inserimento Nuovo Prodotto
-        Modifica Prodotti (Disponibilità, Prezzo e Offerta)
+        Modifica Prodotti (Prezzo e Offerta)
+        Modifica Prodotti (Disponibilità)
         Modifica Qtà ordinate
 
  *  
@@ -163,7 +164,8 @@ class Model_Ordini_Ordine extends Model_AF_AbstractCoR
      */
     public function canUpdateVisibile()
     {
-        return ($this->isReferenteOrdine() && $this->is_Pianificato());
+        return ($this->isReferenteOrdine() && $this->is_Pianificato()) OR
+               ($this->isAdminForGroup() && $this->is_Aperto());
     }
 
     /**
@@ -213,12 +215,24 @@ class Model_Ordini_Ordine extends Model_AF_AbstractCoR
     }
     
     /**
-     * Return TRUE Se il Referente può modificare i prodotti (prezzo, offerta e disponibilità)
+     * Return TRUE se può modificare i prodotti (prezzo e offerta)
      * @return boolean
      */
-    public function canModificaProdotti()
+    public function canModificaProdottiPrezzo()
     {
         return ($this->isSupervisoreOrdine() && ($this->is_Pianificato() || $this->is_Arrivato()) );
+    }
+    
+    /**
+     * Return TRUE se può modificare i prodotti (disponibilità)
+     * @return boolean
+     */
+    public function canModificaProdottiDisponibilita()
+    {
+        return (
+                ( $this->isSupervisoreOrdine() && ($this->is_Pianificato() || $this->is_Aperto()) ) OR
+                ( $this->isReferenteOrdine() && $this->is_Arrivato() )
+        );
     }
         
     /**

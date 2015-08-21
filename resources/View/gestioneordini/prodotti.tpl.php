@@ -12,11 +12,6 @@
     </div>
     <div class="row">
         <div class="col-md-12">
-<?php if($this->ordine->isSupervisoreOrdine()): ?>
-    <?php if(!$this->ordine->canModificaProdotti()): ?>
-        <p class="text-danger">Non puoi modificare i Prodotti in questo stato dell'ordine.</p>
-    <?php endif; ?>            
-<?php endif; ?>            
     <?php 
     $arProductsGrid = array();
     $categorie = $this->ordine->getProdottiWithCategoryArray();
@@ -65,7 +60,7 @@ $(document).ready(function () {
         {
           data: 'disponibile_ordine',
           type: 'checkbox',
-          readOnly: <?php echo (!$this->ordine->canModificaProdotti()) ? "true" : "false"; ?>
+          readOnly: <?php echo (!$this->ordine->canModificaProdottiDisponibilita()) ? "true" : "false"; ?>
         },
         {
           data: 'codice',
@@ -80,7 +75,7 @@ $(document).ready(function () {
           type: 'numeric',
           format: '0,0.00 $',
           language: 'it',
-          readOnly: <?php echo (!$this->ordine->canModificaProdotti()) ? "true" : "false"; ?>
+          readOnly: <?php echo (!$this->ordine->canModificaProdottiPrezzo()) ? "true" : "false"; ?>
         },
         {
           data: 'udm',
@@ -90,7 +85,7 @@ $(document).ready(function () {
         {
           data: 'offerta_ordine',
           type: 'checkbox',
-          readOnly: <?php echo (!$this->ordine->canModificaProdotti()) ? "true" : "false"; ?>
+          readOnly: <?php echo (!$this->ordine->canModificaProdottiPrezzo()) ? "true" : "false"; ?>
         },
         {
           data: 'subcat',
