@@ -1,7 +1,7 @@
       <div class="row-myig">
           <div class="row">
             <div class="col-md-12">
-                <h3 class="no-margin">Ordine del <strong><?php echo $this->date($this->ordine->getDataInizio(), '%d %B %Y');?></strong></h3>
+                <h3>Ordine del <strong><?php echo $this->date($this->ordine->getDataInizio(), '%d %B %Y');?></strong>  <?php echo $this->createLabelCondivisione($this->ordine->getCondivisione()); ?></h3>
                 <p><strong><?php echo $this->arrayToString( $this->ordine->getProduttoriList() ); ?></strong></p>
                 <h5><span class="text-muted">Prodotti:</span> <?php 
                     $categorie = $this->ordine->getListaDescrizioniCategorie();

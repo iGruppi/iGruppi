@@ -24,13 +24,47 @@ class Model_Ordini_Ordine extends Model_AF_AbstractCoR
     }
 
     /**
-     * Direct access to Extra Spese fot MyGroup
+     * Return Extra Spese part of Group
+     * For PUB get data from Master, others from MyGROUP
      * @return Model_Ordini_Extra_Spese
      */
     public function getSpeseExtra()
     {
-        return $this->getMyGroup()->getExtra();
+        if($this->isPubblico()) {
+            return $this->getMasterGroup()->getExtra();
+        } else {
+            return $this->getMyGroup()->getExtra();
+        }
     }
+    
+    /**
+     * Return VALIDITA part of Group
+     * For PUB get data from Master, others from MyGROUP
+     * @return Model_Builder_Parts_Validita
+     */
+    public function getValidita()
+    {
+        if($this->isPubblico()) {
+            return $this->getMasterGroup()->getValidita();
+        } else {
+            return $this->getMyGroup()->getValidita();
+        }
+    }
+    
+    /**
+     * Return VISIBILE part of Group
+     * For PUB get data from Master, others from MyGROUP
+     * @return Model_Builder_Parts_FlagSN
+     */
+    public function getVisibile()
+    {
+        if($this->isPubblico()) {
+            return $this->getMasterGroup()->getVisibile();
+        } else {
+            return $this->getMyGroup()->getVisibile();
+        }
+    }
+    
     
     
 /*  **************************************************************************

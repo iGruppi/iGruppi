@@ -31,18 +31,18 @@ class Controller_GestioneOrdini extends MyFw_Controller {
         
     }
     
-    function indexAction() {
-        
+    function indexAction() 
+    {
         $filter = $this->getParam("filter");
         if(is_null($filter)) 
         {
-            $filter = "PRI"; // DEFAULT value
+            $filter = "Aperto"; // DEFAULT value
         }
         $this->view->filter = $filter;
         
         $ordObj = new Model_Db_Ordini();
         $cObj = new Model_Db_Categorie();
-        $listOrd = $ordObj->getOrdiniByIdIdgroup($this->_userSessionVal->idgroup, $filter);
+        $listOrd = $ordObj->getOrdiniByIdIdgroup($this->_userSessionVal->idgroup);
         $ordini = array();
         if(count($listOrd) > 0) {
             foreach($listOrd AS $ordine) {
@@ -58,7 +58,10 @@ class Controller_GestioneOrdini extends MyFw_Controller {
                 $categorie = $cObj->getCategoriesByIdOrdine( $mooObj->getIdOrdine() );
                 $mooObj->appendCategorie()->initCategorie_ByObject($categorie);
                 // add Ordine to the list
-                $ordini[] = $mooObj;
+                if($mooObj->getStateName() == $filter)
+                {
+                    $ordini[] = $mooObj;
+                }
             }
         }
         $this->view->ordini = $ordini;

@@ -28,33 +28,16 @@ class Model_Db_Ordini extends MyFw_DB_Base {
         return null;
     }
     
-    function getOrdiniByIdIdgroup($idgroup, $condivisione = null) {
+    function getOrdiniByIdIdgroup($idgroup) {
         
         $sql = "SELECT * FROM ordini AS o"
               ." LEFT JOIN ordini_groups AS og ON o.idordine=og.idordine"
-              ." WHERE 1 ";
-        $params = array();
-        if(!is_null($condivisione))
-        {
-            switch ($condivisione) {
-                case "PUB":
-                    $sql .= " AND o.condivisione='PUB' ";
-                    break;
-                case "SHA":
-                    $sql .= " AND o.condivisione='SHA' AND og.idgroup_slave= :idgroup";
-                    $params = array('idgroup' => $idgroup);
-                    break;
-                default:
-                case "PRI":
-                    $sql .= " AND o.condivisione='PRI' AND og.idgroup_slave= :idgroup";
-                    $params = array('idgroup' => $idgroup);
-                    break;
-            }
-        }
-
-        $sql .= " ORDER BY o.archiviato, o.data_fine DESC";
+              ." WHERE o.condivisione='PUB'"
+              ." OR (o.condivisione='PRI' AND og.idgroup_master= :idgroup)"
+              ." OR (o.condivisione='SHA' AND og.idgroup_slave = :idgroup)"
+              ." ORDER BY o.archiviato, o.data_fine DESC";
         $sth = $this->db->prepare($sql);
-        $sth->execute($params);
+        $sth->execute(array('idgroup' => $idgroup));
         if($sth->rowCount() > 0) {
             return $sth->fetchAll(PDO::FETCH_OBJ);
         }

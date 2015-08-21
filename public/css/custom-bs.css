@@ -143,7 +143,7 @@ h1 strong, h2 strong, h3 strong, h4 strong, h5 strong, h6 strong {color: #090; f
 
 /* LISt WITH A SIDEBAR */
 #listwithsidebar .leftbar .btn { margin-bottom: 20px; display: block; text-align: left; }
-#listwithsidebar .panel-body a.selected { color: #666; border: 1px solid #eee; }
+#listwithsidebar .panel-body a.selected { color: #666; border: 1px solid rgb(170, 236, 143); background-color: rgb(235, 247, 234); }
 #listwithsidebar .panel-body a.selected:hover { color: #999; background-color: #fff; }
 
 
