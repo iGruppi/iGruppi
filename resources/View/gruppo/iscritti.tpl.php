@@ -15,7 +15,7 @@
             <?php endif; ?>
             </p>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-4 text-right">
         <?php if($this->aclUserObject->canModifyUser()): ?>
             <a class="btn btn-success" href="/users/edit/iduser/<?php echo $user->iduser;?>" style="margin-bottom: 5px;">Modifica</a>
             <?php if( !$this->yesnoToBool($user->attivo)): ?>

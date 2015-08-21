@@ -8,7 +8,7 @@
       
       <div class="row row-myig">
         <div class="col-md-12">
-            <h3 class="no-margin <?php echo ($lObj->canManageListino()) ? "green" : "text-dark"; ?>"><?php echo $lObj->getDescrizione();?> <?php echo $this->createLabelCondivisione($lObj->getCondivisione()); ?></h3>
+            <h3 class="title-list <?php echo ($lObj->canManageListino()) ? "green" : "text-dark"; ?>"><?php echo $lObj->getDescrizione();?> <?php echo $this->createLabelCondivisione($lObj->getCondivisione()); ?></h3>
         </div>
         <div class="col-md-8">
             <p>Produttore: <strong><?php echo $lObj->getProduttoreName(); ?></strong><br />
@@ -19,9 +19,9 @@
                 echo $this->arrayToString($categorie); 
                 ?></h4>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-4 text-right">
         <?php if($lObj->canManageListino()): ?>
-            <a role="button" class="btn btn-success" href="/listini/edit/idlistino/<?php echo $lObj->getIdListino(); ?>"><span class="glyphicon glyphicon-user"></span> Gestisci Listino</a>
+            <a role="button" class="btn btn-success" href="/listini/edit/idlistino/<?php echo $lObj->getIdListino(); ?>"><span class="glyphicon glyphicon-pencil"></span> Gestisci Listino</a>
         <?php else: ?>
             <a role="button" class="btn btn-default" href="/listini/view/idlistino/<?php echo $lObj->getIdListino(); ?>"><span class="glyphicon glyphicon-search"></span> Visualizza Listino</a>
         <?php endif; ?>

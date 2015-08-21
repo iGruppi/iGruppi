@@ -26,7 +26,7 @@
             <h4><span class="text-muted">Prodotti:</span> <?php echo implode(", ", $this->arCat[$produttore->idproduttore]); ?></h4>
         <?php endif; ?>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-4 text-right">
             <?php include $this->template('produttori/sub-menu.tpl.php'); ?>
         </div>
       </div>
