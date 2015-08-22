@@ -98,6 +98,7 @@ class Controller_GestioneOrdini extends MyFw_Controller {
                     $mooObj->appendGruppi();
 
                     // SAVE ORDINE to DB
+                    $mooObj->setDescrizione($form->getValue("descrizione"));
                     $mooObj->setDataInizio($form->getValue("data_inizio"));
                     $mooObj->setDataFine($form->getValue("data_fine"));
                     $mooObj->setCondivisione("PRI"); // Default is Private
@@ -237,6 +238,9 @@ class Controller_GestioneOrdini extends MyFw_Controller {
         /**
          * DISABLE some fields IF cannot manage them
          */
+        if(!$ordine->canManageDescrizione()) {
+            $form->getField("descrizione")->setDisabled();
+        }
         if(!$ordine->canUpdateVisibile()) {
             $form->getField("visibile")->setDisabled();
         }
@@ -260,6 +264,9 @@ class Controller_GestioneOrdini extends MyFw_Controller {
             $fv = $this->getRequest()->getPost();
             if( $form->isValid($fv) ) 
             {    
+                if($ordine->canManageDescrizione()) {
+                    $ordine->setDescrizione($form->getValue("descrizione"));
+                }
                 if($ordine->canManageDate()) {
                     $ordine->setDataInizio($form->getValue("data_inizio"));
                     $ordine->setDataFine($form->getValue("data_fine"));

@@ -150,6 +150,15 @@ class Model_Ordini_Ordine extends Model_AF_AbstractCoR
     }
     
     /**
+     * Return TRUE if can modify Descrizione
+     * @return boolean
+     */
+    public function canManageDescrizione()
+    {
+        return $this->isSupervisoreOrdine();
+    }
+    
+    /**
      * Return TRUE if can UPDATE STATO
      * @return boolean
      */

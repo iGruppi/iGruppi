@@ -5,6 +5,10 @@
 <?php if(count($this->listini) > 0): ?>
         <form id="ordineform" action="<?php echo $this->form->getAction(); ?>" method="post" class="f1n200">
 
+            <fieldset>
+                <?php echo $this->form->renderField('descrizione'); ?>
+            </fieldset>
+            
             <fieldset class="border_top">
                 <legend>Validità ordine</legend>
                 <?php echo $this->form->renderField('data_inizio'); ?>

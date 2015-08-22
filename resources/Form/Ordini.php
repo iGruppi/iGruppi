@@ -13,6 +13,12 @@ class Form_Ordini extends MyFw_Form {
     
     function createFields() {
 
+        $this->addField('descrizione', array(
+                        'label'     => 'Descrizione',
+                        'size'      => 40,
+                        'maxlength' => 50
+            ));
+        
         $this->addField('data_inizio', array(
                     'label'     => 'Data apertura',
                     'size'      => 20,

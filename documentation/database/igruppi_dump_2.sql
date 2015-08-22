@@ -146,6 +146,7 @@ CREATE TABLE IF NOT EXISTS `listini_prodotti` (
 CREATE TABLE IF NOT EXISTS `ordini` (
   `idordine` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `iduser_ref` int(10) unsigned NOT NULL,
+  `descrizione` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
   `data_inizio` datetime NOT NULL,
   `data_fine` datetime NOT NULL,
   `data_inviato` datetime DEFAULT NULL,
