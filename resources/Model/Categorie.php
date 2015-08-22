@@ -26,6 +26,7 @@ class Model_Categorie extends Model_AF_AbstractHandlerCoR
     
     /**
      * get Root Categorie composite object
+     * IF not exists it will init a new Model_Categorie_CatElement for ROOT
      * @return Model_Categorie_CatElement
      */
     public function getRoot()
@@ -37,6 +38,10 @@ class Model_Categorie extends Model_AF_AbstractHandlerCoR
         return $this->_categorie;
     }
     
+    /**
+     * Recursive Iterator to get PRODUTTORI LIST
+     * @return array
+     */
     public function getProduttoriList()
     {
         $ar = array();
@@ -53,9 +58,14 @@ class Model_Categorie extends Model_AF_AbstractHandlerCoR
         return array_unique($ar);
     }
     
+    /**
+     * Recursive Iterator to get CATEGORIE LIST
+     * @return array
+     */
     public function getListaDescrizioniCategorie()
     {
         $ar = array();
+        // in the first level of root we have only CATEGORIES
         foreach($this->getRoot()->createIterator() AS $categoria)
         {
             $ar[] = $categoria->getDescrizione();
@@ -63,8 +73,8 @@ class Model_Categorie extends Model_AF_AbstractHandlerCoR
         return $ar;
     }
     /**
-     * @todo  
-     * It does not work here because it needs to call 'getProdottoById' method that here does not exists!
+     * Recursive Iterator to get PRODOTTI in CATEGORY array
+     * @return array  
      */
     public function getProdottiWithCategoryArray()
     {
@@ -100,17 +110,15 @@ class Model_Categorie extends Model_AF_AbstractHandlerCoR
         $cat = $this->_initCat($v, $catRoot);
         if(!is_null($cat))
         {
+            // I produttori sono solo in categorie
+            $this->_initProduttore($v, $cat);
+            
             // ADD SubCat to Cat
             $subcat = $this->_initSubCat($v, $cat);
-            if ($subcat)
+            if (!is_null($subcat))
             {
                 // I prodotti sono solo in sottocategorie
                 $this->_initProdotto($v, $subcat);
-            }
-            else
-            {
-                // I produttori sono solo in categorie
-                $this->_initProduttore($v, $cat);
             }
         }
     }
