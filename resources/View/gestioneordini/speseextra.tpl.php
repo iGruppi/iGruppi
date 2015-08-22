@@ -15,10 +15,10 @@
                 ?>
             <fieldset id="fieldset_extra_<?php echo $counterextra; ?>">
                     <label for="descrizione">Descrizione:</label>
-                    <input type="text" name="extra[<?php echo $counterextra; ?>][descrizione]" id="descrizione_<?php echo $counterextra; ?>" size="25" maxlength="25" required="" value="<?php echo $extra->getDescrizione(); ?>" />
+                    <input type="text" name="extra[<?php echo $counterextra; ?>][descrizione]" id="descrizione_<?php echo $counterextra; ?>" size="25" maxlength="25" required="" value="<?php echo htmlspecialchars($extra->getDescrizione()); ?>" />
                     <br />
                     <label for="descrizione">Costo (&euro;):</label>
-                    <input type="text" name="extra[<?php echo $counterextra; ?>][costo]" id="costo_<?php echo $counterextra; ?>" size="10" maxlength="10" required="" value="<?php echo $extra->getCosto(); ?>" />
+                    <input type="text" name="extra[<?php echo $counterextra; ?>][costo]" id="costo_<?php echo $counterextra; ?>" size="10" maxlength="10" required="" value="<?php echo htmlspecialchars($extra->getCosto()); ?>" />
                     <br />
                     <label for="tipo">Tipo:</label>
                     <select name="extra[<?php echo $counterextra; ?>][tipo]" id="tipo_<?php echo $counterextra; ?>">
