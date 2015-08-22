@@ -44,6 +44,7 @@ class Controller_GestioneOrdini extends MyFw_Controller {
         $cObj = new Model_Db_Categorie();
         $listOrd = $ordObj->getOrdiniByIdIdgroup($this->_userSessionVal->idgroup);
         $ordini = array();
+        $counterOrdiniStati = array();
         if(count($listOrd) > 0) {
             foreach($listOrd AS $ordine) {
                 $mooObj = new Model_Ordini_Ordine( new Model_AF_OrdineFactory() );
@@ -62,8 +63,15 @@ class Controller_GestioneOrdini extends MyFw_Controller {
                 {
                     $ordini[] = $mooObj;
                 }
+                // add in counter for States
+                if(!isset($counterOrdiniStati[$mooObj->getStateName()]) ) {
+                    $counterOrdiniStati[$mooObj->getStateName()] = 1;
+                } else {
+                    $counterOrdiniStati[$mooObj->getStateName()]++;
+                }
             }
         }
+        $this->view->counterOrdiniStati = $counterOrdiniStati;
         $this->view->ordini = $ordini;
         // set Model_Produttori_Permessi Object in View
         $this->view->permsProduttori = $this->_userSessionVal->permsProduttori;

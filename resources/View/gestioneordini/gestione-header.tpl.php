@@ -1,4 +1,4 @@
-<?php echo $this->partial('gestioneordini/ordine-title.tpl.php', array('ordine' => $this->ordine) ); ?>
+<?php echo $this->partial('gestioneordini/header-title.tpl.php', array('ordine' => $this->ordine) ); ?>
 <?php if($this->updated): ?>
 <div class="row">
     <div class="col-md-12">

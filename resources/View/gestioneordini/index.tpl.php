@@ -35,7 +35,7 @@
               <div class="panel-body">
     <?php $stati = Model_Ordini_State_OrderFactory::getOrderStatesArray();
             foreach($stati AS $stato): ?>
-                <a <?php if($this->filter == $stato){ echo 'class="selected"'; } ?> href="/gestione-ordini/index/filter/<?php echo $stato; ?>"><?php echo $stato; ?></a>
+                <a <?php if($this->filter == $stato){ echo 'class="selected"'; } ?> href="/gestione-ordini/index/filter/<?php echo $stato; ?>"><span class="badge"><?php echo isset($this->counterOrdiniStati[$stato]) ? $this->counterOrdiniStati[$stato] : 0; ?></span> <?php echo $stato; ?></a>
     <?php   endforeach; ?>
               </div>
             </div>
