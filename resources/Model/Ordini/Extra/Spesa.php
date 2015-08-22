@@ -64,6 +64,9 @@ abstract class Model_Ordini_Extra_Spesa implements Model_Ordini_Extra_Interface
         return $this->_tipo;
     }
     
-    
+    public function getDescrizioneTipo()
+    {
+        return $this->_descrizioneTipo;
+    }
     
 }

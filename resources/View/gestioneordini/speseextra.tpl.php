@@ -23,8 +23,8 @@
                     <label for="tipo">Tipo:</label>
                     <select name="extra[<?php echo $counterextra; ?>][tipo]" id="tipo_<?php echo $counterextra; ?>">
                         <option value="RU" <?php echo ($extra->getTipo() == "RU") ? 'selected=""' : ''; ?>>Ripartite per utente</option>
-                        <option value="RI" <?php echo ($extra->getTipo() == "RI") ? 'selected=""' : ''; ?>>Ripartite per importo (TODO!)</option>
-                        <option value="FU" <?php echo ($extra->getTipo() == "FU") ? 'selected=""' : ''; ?>>Fisse per ogni utente (TODO!)</option>
+                        <option value="RI" <?php echo ($extra->getTipo() == "RI") ? 'selected=""' : ''; ?>>Ripartite per importo</option>
+                        <option value="FU" <?php echo ($extra->getTipo() == "FU") ? 'selected=""' : ''; ?>>Fisse per ogni utente</option>
                     </select>
                     <hr />
             </fieldset>

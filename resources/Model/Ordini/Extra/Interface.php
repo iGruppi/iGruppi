@@ -28,10 +28,10 @@ interface Model_Ordini_Extra_Interface {
     /**
      * Return Totale Spesa per Gruppo
      */
-    public function getTotaleGruppo(Model_Ordini_Calcoli_CalcoliDecoratorInterface $ordine=null);
+    public function getTotaleGruppo(Model_Ordini_CalcoliDecoratorInterface $ordine=null);
     
     /**
      * Return Parziale by Iduser
      */
-    public function getParzialeByIduser(Model_Ordini_Calcoli_CalcoliDecoratorInterface $ordine=null, $iduser=null);
+    public function getParzialeByIduser(Model_Ordini_CalcoliDecoratorInterface $ordine=null, $iduser=null);
 }

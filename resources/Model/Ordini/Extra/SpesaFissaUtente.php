@@ -1,17 +1,17 @@
 <?php
 /**
- * Description of SpesaRipartitaUtente
+ * Description of SpesaFissaUtente
  *
  * @author gullo
  */
-class Model_Ordini_Extra_SpesaRipartitaUtente extends Model_Ordini_Extra_Spesa 
+class Model_Ordini_Extra_SpesaFissaUtente extends Model_Ordini_Extra_Spesa 
 {
     /**
      * Descrizione Tipo di spesa extra
      * @var string
      */
-    protected $_descrizioneTipo = 'Ripartita per Utente';
-
+    protected $_descrizioneTipo = 'Spesa fissa per Utente';
+    
     /**
      * Call the constructor in Model_Ordini_Extra_Spesa
      * @param string $descrizione
@@ -26,7 +26,8 @@ class Model_Ordini_Extra_SpesaRipartitaUtente extends Model_Ordini_Extra_Spesa
      */
     public function getTotaleGruppo(Model_Ordini_CalcoliDecoratorInterface $ordine=null)
     {
-        return $this->getCosto();
+        $n_users = count($ordine->getElencoUtenti());
+        return $this->getCosto() * $n_users;
     }
     
     
@@ -36,12 +37,7 @@ class Model_Ordini_Extra_SpesaRipartitaUtente extends Model_Ordini_Extra_Spesa
      */
     public function getParzialeByIduser(Model_Ordini_CalcoliDecoratorInterface $ordine=null, $iduser=null)
     {
-        $n_users = count($ordine->getElencoUtenti());
-        if($n_users > 0)
-        {
-            return $this->getCosto() / $n_users;
-        }
-        return 0;
+        return $this->getCosto();
     }
     
     

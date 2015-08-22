@@ -1,16 +1,16 @@
 <?php
 /**
- * Description of SpesaRipartitaUtente
+ * Description of SpesaRipartitaImporto
  *
  * @author gullo
  */
-class Model_Ordini_Extra_SpesaRipartitaUtente extends Model_Ordini_Extra_Spesa 
+class Model_Ordini_Extra_SpesaRipartitaImporto extends Model_Ordini_Extra_Spesa 
 {
     /**
      * Descrizione Tipo di spesa extra
      * @var string
      */
-    protected $_descrizioneTipo = 'Ripartita per Utente';
+    protected $_descrizioneTipo = 'Ripartita per Utente in % su Importo';
 
     /**
      * Call the constructor in Model_Ordini_Extra_Spesa
@@ -36,10 +36,11 @@ class Model_Ordini_Extra_SpesaRipartitaUtente extends Model_Ordini_Extra_Spesa
      */
     public function getParzialeByIduser(Model_Ordini_CalcoliDecoratorInterface $ordine=null, $iduser=null)
     {
-        $n_users = count($ordine->getElencoUtenti());
-        if($n_users > 0)
+        $totale_ordine = $ordine->getTotale();
+        $totale_utente = $ordine->getTotaleByIduser($iduser);
+        if($totale_utente > 0)
         {
-            return $this->getCosto() / $n_users;
+            return $totale_utente / $totale_ordine * $this->getCosto();
         }
         return 0;
     }
