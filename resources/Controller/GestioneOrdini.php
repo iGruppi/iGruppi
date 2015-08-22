@@ -383,7 +383,7 @@ class Controller_GestioneOrdini extends MyFw_Controller {
         $ordine = $this->_buildOrdine( new Model_AF_UserOrdineFactory() );
         
         // GET PRODUCTS LIST with Qta Ordered
-        $ordCalcObj = new Model_Ordini_Calcoli_Utenti($ordine);
+        $ordCalcObj = new Model_Ordini_CalcoliDecorator($ordine);
         // SET PRODOTTI ORDINATI
         $ordObj = new Model_Db_Ordini();
         $listProdOrdered = $ordObj->getProdottiOrdinatiByIdordineAndIdgroup($ordine->getIdOrdine(),$this->_userSessionVal->idgroup);
@@ -456,7 +456,7 @@ class Controller_GestioneOrdini extends MyFw_Controller {
             if($added) {
                 $prodotti = $ordObj->getProdottiOrdinatiByIdordineAndIdgroup($idordine,$this->_userSessionVal->idgroup);
                 if(is_array($prodotti) && count($prodotti) > 0) {
-                    $ordCalcObj = new Model_Ordini_Calcoli_Utenti();
+                    $ordCalcObj = new Model_Ordini_CalcoliDecorator();
                     $ordCalcObj->setOrdObj($ordine);
                     $ordCalcObj->setProdotti($prodotti);
                     $prodObj = $ordCalcObj->getProdottiByIduser($iduser);

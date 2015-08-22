@@ -11,7 +11,7 @@
 </div>
 
 <h3 class="big-margin-top">Riepilogo per utente</h3>
-<?php if($this->ordCalcUtenti->getProdottiUtenti() > 0): ?>
+<?php if($this->ordCalcoli->getProdottiUtenti() > 0): ?>
 <div class="row">
   <div class="col-md-8">
         <table class="table table-condensed">
@@ -22,15 +22,15 @@
               </tr>
             </thead>
             <tbody>
-    <?php foreach ($this->ordCalcUtenti->getProdottiUtenti() AS $iduser => $user): ?>
+    <?php foreach ($this->ordCalcoli->getProdottiUtenti() AS $iduser => $user): ?>
                 <tr>
                     <td><b><?php echo $user["nome"] . " " . $user["cognome"]; ?></b></td>
-                    <td class="text-right"><strong><?php echo $this->valuta($this->ordCalcUtenti->getTotaleConExtraByIduser($iduser)) ?></strong></td>
+                    <td class="text-right"><strong><?php echo $this->valuta($this->ordCalcoli->getTotaleConExtraByIduser($iduser)) ?></strong></td>
                 </tr>
     <?php endforeach; ?>
                 <tr class="success">
                     <td>Totale: </td>
-                    <td class="text-right"><strong><?php echo $this->valuta($this->ordCalcTotale->getTotaleConExtra()); ?></strong></td>
+                    <td class="text-right"><strong><?php echo $this->valuta($this->ordCalcoli->getTotaleConExtra()); ?></strong></td>
                 </tr>
             </tbody>
         </table>        
@@ -38,8 +38,8 @@
   </div>
   <div class="col-md-1">&nbsp;</div>
   <div class="col-md-3">
-<?php if($this->ordCalcUtenti->canArchiviaOrdine()): ?>      
-    <a class="btn btn-success" role="button" href="/gestione-cassa/archivia/idordine/<?php echo $this->ordCalcUtenti->getIdOrdine();?>"><span class="glyphicon glyphicon-ok"></span> Archivia</a>
+<?php if($this->ordCalcoli->canArchiviaOrdine()): ?>      
+    <a class="btn btn-success" role="button" href="/gestione-cassa/archivia/idordine/<?php echo $this->ordCalcoli->getIdOrdine();?>"><span class="glyphicon glyphicon-ok"></span> Archivia</a>
 <?php endif; ?>    
   </div>
 </div>
