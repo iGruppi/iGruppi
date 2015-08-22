@@ -1,6 +1,4 @@
-<h2>Ordine del <strong><?php echo $this->date($this->ordine->getDataInizio(), '%d %B %Y');?></strong></h2>
-<h3>Produttori <strong><?php echo $this->arrayToString( $this->ordine->getProduttoriList() ); ?></strong></h3>
-
+<?php echo $this->partial('gestioneordini/ordine-title.tpl.php', array('ordine' => $this->ordine) ); ?>
 <?php if($this->updated): ?>
 <div class="row">
     <div class="col-md-12">

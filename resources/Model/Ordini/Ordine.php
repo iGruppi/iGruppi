@@ -22,6 +22,11 @@ class Model_Ordini_Ordine extends Model_AF_AbstractCoR
     {
         return $this->append("States", $sof );
     }
+    
+    public function isMultiProduttore()
+    {
+        return count($this->getProduttoriList()) > 1;
+    }
 
     /**
      * Return Extra Spese part of Group

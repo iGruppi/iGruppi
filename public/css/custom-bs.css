@@ -151,6 +151,10 @@ h1 strong, h2 strong, h3 strong, h4 strong, h5 strong, h6 strong {color: #090; f
 #edit_listino_form h2.titolo { margin-bottom: 0; }
 #edit_listino_form h3.subtitolo { margin-top: 0; margin-bottom: 30px; }
 
+/* ORDINE HEADER */
+#ordine_header { margin-top: 20px; }
+.ordine_title a.disabled, .ordine_title a.disabled:hover { background-color: transparent; cursor: default; }
+
 
 /*
  * Side navigation ORDINI

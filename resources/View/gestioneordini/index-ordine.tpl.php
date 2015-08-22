@@ -1,12 +1,7 @@
       <div class="row-myig">
           <div class="row">
             <div class="col-md-12">
-                <h3 class="title-list">Ordine del <strong><?php echo $this->date($this->ordine->getDataInizio(), '%d %B %Y');?></strong>  <?php echo $this->createLabelCondivisione($this->ordine->getCondivisione()); ?></h3>
-                <p><strong><?php echo $this->arrayToString( $this->ordine->getProduttoriList() ); ?></strong></p>
-                <h5><span class="text-muted">Prodotti:</span> <?php 
-                    $categorie = $this->ordine->getListaDescrizioniCategorie();
-                    echo $this->arrayToString($categorie); 
-                    ?></h5>
+                <?php echo $this->partial('gestioneordini/ordine-title.tpl.php', array('ordine' => $this->ordine) ); ?>
                 <h5> 
                     <?php if(!$this->ordine->getMyGroup()->isSetUserRef()): ?>
                         <b class="text-danger">Nessun Incaricato ordine ordine assegnato!</b>
