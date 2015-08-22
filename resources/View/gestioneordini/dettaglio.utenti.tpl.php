@@ -28,15 +28,16 @@
                     <td class="text-right"><strong><?php echo $this->valuta($pObj->getTotale_ByIduser($iduser)); ?></strong></td>
                 </tr>        
         <?php endforeach; ?>
-        <?php if($this->ordCalcObj->getSpeseExtra()->has() && $this->ordCalcObj->getTotaleByIduser($iduser)): ?>
-            <?php foreach ($this->ordCalcObj->getSpeseExtra()->get() AS $extra): ?>
+        <?php $extraArray = $this->ordCalcObj->getSpeseExtra_Utente($iduser);
+            if(count($extraArray) > 0): ?>
+            <?php foreach ($extraArray AS $extra): ?>
                 <tr class="warning">
-                    <td colspan="3">&nbsp;</td>
-                    <td><b><?php echo $extra->getDescrizione(); ?></b></td>
-                    <td class="text-right"><strong><?php echo $this->valuta($extra->getParzialeByIduser($this->ordCalcObj, $iduser)); ?></strong></td>
+                    <td>&nbsp;</td>
+                    <td colspan="3"><?php echo $extra["descrizione"]; ?> (<em><?php echo $extra["descrizioneTipo"]; ?></em>)</td>
+                    <td class="text-right"><strong><?php echo $this->valuta($extra["parziale_utente"]); ?></strong></td>
                 </tr>
             <?php endforeach; ?>
-        <?php endif; ?>
+        <?php endif; ?>            
             </tbody>
         </table>        
         

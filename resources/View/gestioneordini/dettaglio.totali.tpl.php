@@ -28,16 +28,25 @@
 
     <div class="totale_line">
         <div class="sub_menu">
-            <h3 class="totale">Totale colli: <strong><?php echo $this->ordCalcObj->getTotaleColli(); ?></strong></h3>
-            <h3 class="totale">Totale ordine (senza IVA): <strong><?php echo $this->valuta($this->ordCalcObj->getTotaleSenzaIva()); ?></strong></h3>
+            <h3 class="totale">Totale: <strong><?php echo $this->valuta($this->ordCalcObj->getTotaleConExtra()); ?></strong></h3>
+    <?php if(1): ?>
             <h3 class="totale">Totale ordine (con IVA): <strong><?php echo $this->valuta($this->ordCalcObj->getTotale()); ?></strong></h3>
-    <?php if($this->ordCalcObj->getSpeseExtra()->has()): ?>
-        <?php foreach ($this->ordCalcObj->getSpeseExtra()->get() AS $extra): ?>
-            <h4 class="totale"><?php echo $extra->getDescrizione(); ?> (extra): <strong><?php echo $this->valuta($extra->getTotaleGruppo()); ?></strong></h4>
+            <h3 class="totale">Totale ordine (senza IVA): <strong><?php echo $this->valuta($this->ordCalcObj->getTotaleSenzaIva()); ?></strong></h3>
+    <?php endif; ?>
+            <h4>Totali Spese Extra</h4>
+            <p>
+    <?php $extraArray = $this->ordCalcObj->getSpeseExtra_Totale();
+        if(count($extraArray) > 0): ?>
+        <?php foreach ($extraArray AS $extra): ?>
+            <?php echo $extra["descrizione"]; ?> (<em><?php echo $extra["descrizioneTipo"]; ?></em>): <strong><?php echo $this->valuta($extra["totale"]); ?></strong><br />
         <?php endforeach; ?>
     <?php endif; ?>            
-            <h3 class="totale">Totale ordine: <strong><?php echo $this->valuta($this->ordCalcObj->getTotaleConExtra()); ?></strong></h3>
-        </div>                    
+            </p>
+            <h4>Colli</h4>
+            <p>
+                Totale colli: <strong><?php echo $this->ordCalcObj->getTotaleColli(); ?></strong><br />
+            </p>
+        </div>
         <div class="my_clear" style="clear:both;">&nbsp;</div>
     </div>
 <?php else: ?>

@@ -5,7 +5,7 @@
  * @author Davide Gullo <gullo at m4ss.net>
  * 
  */
-interface Model_Ordini_Calcoli_CalcoliDecoratorInterface {
+interface Model_Ordini_CalcoliDecoratorInterface {
     
     /**
      * It CAN ONLY decorate the Model_Ordini_Ordine

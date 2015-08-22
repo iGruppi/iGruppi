@@ -489,23 +489,18 @@ class Controller_GestioneOrdini extends MyFw_Controller {
         {
             $tipo = "totali";
         }
-        
-        // GET PRODUCTS LIST with Qta Ordered
         $this->view->tipo = $tipo;
-        switch ($tipo) 
-        {
-            case "totali":
-                $ordCalcObj = new Model_Ordini_Calcoli_Totali($ordine);
-                break;
+        
+        // add CALCOLI DECORATOR
+        $ordCalcObj = new Model_Ordini_CalcoliDecorator($ordine);
 
-            case "utenti":
-                $ordCalcObj = new Model_Ordini_Calcoli_Utenti($ordine);
-                break;
-        }
-        // SET PRODOTTI ORDINATI
+        // SET PRODOTTI ORDINATI in DECORATOR
         $ordObj = new Model_Db_Ordini();
         $listProdOrdered = $ordObj->getProdottiOrdinatiByIdordineAndIdgroup($ordine->getIdOrdine(),$this->_userSessionVal->idgroup);
         $ordCalcObj->setProdottiOrdinati($listProdOrdered);
+        
+        //Zend_Debug::dump($ordCalcObj);die;
+        
         $this->view->ordCalcObj = $ordCalcObj;
     }
     
