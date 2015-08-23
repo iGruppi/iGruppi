@@ -1,7 +1,7 @@
 <div class="row">
-  <div class="col-md-8 col-sm-8">
-    
-    <h3>Ordine <strong class="<?php echo $this->ordine->getStatusCSSClass(); ?>"><?php echo $this->ordine->getStateName(); ?></strong> il <?php echo $this->date($this->ordine->getDataInizio(), '%d/%m/%Y');?> alle <?php echo $this->date($this->ordine->getDataInizio(), '%H:%M');?></h3>
+<div class="col-md-8 col-sm-8">
+    <?php echo $this->partial('ordini/header-title.tpl.php', array('ordine' => $this->ordine) ); ?>
+
 <?php if($this->ordine->is_Aperto()): ?>
     <p>
         Chiusura prevista il <strong><?php echo $this->date($this->ordine->getDataFine(), '%d/%m/%Y');?></strong> alle <?php echo $this->date($this->ordine->getDataFine(), '%H:%M');?></strong>
