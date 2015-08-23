@@ -25,7 +25,7 @@
         </form>
 
     </div>
-    <div class="col-md-4 col-right">
+    <div class="col-md-4">
         &nbsp;
     </div>    
 </div>

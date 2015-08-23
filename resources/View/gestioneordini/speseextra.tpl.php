@@ -52,7 +52,7 @@
 
         </form>
     </div>
-    <div class="col-md-4 col-right">
+    <div class="col-md-3 col-md-offset-1">
         <a id="add_extra_row" class="btn btn-default btn-mylg" href="#"><span class="glyphicon glyphicon-plus"></span> Aggiungi Spesa Extra</a>
     </div>    
 </div>

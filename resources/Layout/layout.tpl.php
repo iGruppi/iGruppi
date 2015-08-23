@@ -47,40 +47,51 @@
     <div id="wrap">
       <div class="container">
         <div class="header hidden-print">
-            <a class="pull-left" href="/"><img id="logo_top" src="/images/igruppi_logo.png" alt="iGruppi logo"></a>
+            <div class="row">
+                <div class="col-md-3 col-sm-3">
+                    <a class="pull-left" href="/"><img id="logo_top" src="/images/igruppi_logo.png" alt="iGruppi logo"></a>
+                </div>
 <?php   $auth= Zend_Auth::getInstance();
         if($auth->hasIdentity()):
             $userData = $auth->getStorage()->read();
 ?>
-            <div id="userdata">
-                <b><?php echo $userData->nome . " " . $userData->cognome; ?></b><br />
-                <em>Gruppo:</em> <b><?php echo $userData->gruppo; ?></b>
-            </div>                
-            <ul class="nav nav-pills pull-right">
-              <li><a class="btn btn-default btn-mylg" href="/dashboard"><span class="glyphicon glyphicon-home"></span> Home</a></li>
-              <li><a class="btn btn-success btn-mylg" href="/ordini"><span class="glyphicon glyphicon-shopping-cart"></span> Ordini</a></li>
-              <li>
-                <div class="btn-group">
-                  <button type="button" class="btn btn-default dropdown-toggle btn-mylg" data-toggle="dropdown">
-                    <span class="glyphicon glyphicon-glass"></span> Gruppo <span class="caret"></span>
-                  </button>
-                  <ul class="dropdown-menu" role="menu">
-                    <li><a href="/gruppo/iscritti">Utenti</a></li>
-                    <li><a href="/produttori">Produttori</a></li>
-                    <li><a href="/listini">Listini</a></li>
-                    <li><a href="/gestione-ordini">Gestione ordini</a></li>
-                    <li><a href="/gestione-cassa">Gestione cassa</a></li>
-                  </ul>
-                </div>            
-              </li>
-              <li><a class="btn btn-default btn-mylg" href="/auth/logout"><span class="glyphicon glyphicon-log-out"></span> Esci</a></li>
-            </ul>
+                <div class="col-md-3 col-sm-3">
+                    <div id="userdata">
+                        <b><?php echo $userData->nome . " " . $userData->cognome; ?></b><br />
+                        <em>Gruppo:</em> <b><?php echo $userData->gruppo; ?></b>
+                    </div>                
+                </div>
+                <div class="col-md-6 col-sm-6">
+                    <ul class="nav nav-pills pull-right">
+                      <li><a class="btn btn-default btn-mylg" href="/dashboard"><span class="glyphicon glyphicon-home"></span> Home</a></li>
+                      <li><a class="btn btn-success btn-mylg" href="/ordini"><span class="glyphicon glyphicon-shopping-cart"></span> Ordini</a></li>
+                      <li>
+                        <div class="btn-group">
+                          <button type="button" class="btn btn-default dropdown-toggle btn-mylg" data-toggle="dropdown">
+                            <span class="glyphicon glyphicon-glass"></span> Gruppo <span class="caret"></span>
+                          </button>
+                          <ul class="dropdown-menu" role="menu">
+                            <li><a href="/gruppo/iscritti">Utenti</a></li>
+                            <li><a href="/produttori">Produttori</a></li>
+                            <li><a href="/listini">Listini</a></li>
+                            <li><a href="/gestione-ordini">Gestione ordini</a></li>
+                            <li><a href="/gestione-cassa">Gestione cassa</a></li>
+                          </ul>
+                        </div>            
+                      </li>
+                      <li><a class="btn btn-default btn-mylg" href="/auth/logout"><span class="glyphicon glyphicon-log-out"></span> Esci</a></li>
+                    </ul>
+                </div>
+                    
 <?php   else: ?>
-            <ul class="nav nav-pills pull-right">
-              <li><a class="btn btn-success btn-mylg" href="/auth/login">Login</a></li>
-              <li><a class="btn btn-primary btn-mylg" href="/auth/register"><span class="glyphicon glyphicon-user"></span> Nuovo utente</a></li>
-            </ul>                
+                <div class="col-md-9 col-sm-9">
+                    <ul class="nav nav-pills pull-right">
+                      <li><a class="btn btn-success btn-mylg" href="/auth/login">Login</a></li>
+                      <li><a class="btn btn-primary btn-mylg" href="/auth/register"><span class="glyphicon glyphicon-user"></span> Nuovo utente</a></li>
+                    </ul>                
+                </div>
 <?php   endif; ?>
+            </div>
             <div class="clearfix">&nbsp;</div>       
         </div>
 

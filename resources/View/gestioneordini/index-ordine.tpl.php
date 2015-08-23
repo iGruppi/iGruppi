@@ -4,7 +4,7 @@
                 <?php echo $this->partial('gestioneordini/header-title.tpl.php', array('ordine' => $this->ordine) ); ?>
                 <h5> 
                     <?php if(!$this->ordine->getMyGroup()->isSetUserRef()): ?>
-                        <b class="text-danger">Nessun Incaricato ordine ordine assegnato!</b>
+                        <b class="text-danger">Nessun "Incaricato ordine" assegnato!</b>
                     <?php else: ?>
                         <span class="text-muted">Incaricato ordine:</span> <?php echo $this->ordine->getMyGroup()->getRefNome(); ?>
                     <?php endif; ?>

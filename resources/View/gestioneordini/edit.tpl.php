@@ -43,7 +43,7 @@
 
         </form>
     </div>
-    <div class="col-md-2 col-right">
+    <div class="col-md-2">
         &nbsp;
     </div>    
 </div>

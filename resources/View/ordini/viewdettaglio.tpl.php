@@ -49,7 +49,7 @@
     <h3>Nessun prodotto ordinato.</h3>
 <?php endif; ?>
   </div>
-  <div class="col-md-4 col-right">
+  <div class="col-md-3 col-md-offset-1">
     <div class="bs-sidebar" data-spy="affix" data-offset-top="80" role="complementary">
         <div class="totale">
         <?php if($this->ordCalcObj->getSpeseExtra()->has() && $this->ordCalcObj->getTotaleByIduser($this->iduser)): ?>

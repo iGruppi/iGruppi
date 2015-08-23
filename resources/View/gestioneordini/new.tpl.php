@@ -48,7 +48,7 @@
         <h4 class="text-danger">Nessun listino disponibile.</h4>
 <?php endif; ?>
     </div>
-    <div class="col-md-2 col-right">
+    <div class="col-md-2">
         &nbsp;
     </div>    
 </div>     

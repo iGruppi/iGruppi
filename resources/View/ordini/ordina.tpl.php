@@ -1,5 +1,5 @@
 <div class="row">
-  <div class="col-md-8">
+  <div class="col-md-8 col-sm-8">
     
     <h3>Ordine <strong class="<?php echo $this->ordine->getStatusCSSClass(); ?>"><?php echo $this->ordine->getStateName(); ?></strong> il <?php echo $this->date($this->ordine->getDataInizio(), '%d/%m/%Y');?> alle <?php echo $this->date($this->ordine->getDataInizio(), '%H:%M');?></h3>
 <?php if($this->ordine->is_Aperto()): ?>
@@ -72,9 +72,9 @@
 <?php endif; ?>
     
   </div>
-  <div class="col-md-4 col-right">
+  <div class="col-md-3 col-md-offset-1 col-sm-4">
 <?php if(count($categorie) > 0): ?>      
-    <div class="bs-sidebar" data-spy="affix" data-offset-top="76" role="complementary">
+    <div class="bs-sidebar" data-spy="affix" data-offset-top="80" role="complementary">
         <div class="totale">
             <h4>Totale: <strong id="totale">Loading...</strong></h4>
             <a role="button" class="btn btn-success" href="/ordini/viewdettaglio/idordine/<?php echo $this->ordine->getIdOrdine();?>"><span class="glyphicon glyphicon-list"></span> Visualizza ordine</a>

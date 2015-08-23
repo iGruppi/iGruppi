@@ -9,7 +9,7 @@ body {
     border-bottom: 1px solid #eee;
     padding-bottom: 10px;
 }
-#userdata { float: left; border-left: 10px solid #fcfcfc; margin: 0 0 0 70px; padding: 0 10px; font-size: 16px; }
+#userdata { float: left; border-left: 10px solid #fcfcfc; margin: 0; padding: 0 10px; font-size: 14px; }
 
 /* Wrapper for page content to push down footer */
 #wrap {
@@ -75,7 +75,6 @@ h1 strong, h2 strong, h3 strong, h4 strong, h5 strong, h6 strong {color: #090; f
 .alert_green { color: #2b2; }
 
 .content { padding: 10px 30px; }
-.col-right { padding-left: 40px; }
 
 .breadcrumb {
     font-size: 13px;
@@ -206,6 +205,30 @@ h1 strong, h2 strong, h3 strong, h4 strong, h5 strong, h6 strong {color: #090; f
   font-size: 90%;
 }
 
+@media screen and (min-width: 768px) {
+  .bs-sidebar .nav > .active > ul {
+    display: block;
+  }
+  .bs-sidebar { margin-left: 0; }
+  /* Widen the fixed sidebar */
+  .bs-sidebar.affix,
+  .bs-sidebar.affix-top,
+  .bs-sidebar.affix-bottom {
+    width: 260px;
+  }
+  .bs-sidebar.affix {
+    top: 50px;
+  }
+  .bs-sidebar.affix-bottom {
+    position: absolute; /* Undo the static from mobile first approach */
+  }
+  .bs-sidebar.affix-bottom .bs-sidenav,
+  .bs-sidebar.affix .bs-sidenav {
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+}
+
 /* Show and affix the side nav when space allows it */
 @media screen and (min-width: 992px) {
   .bs-sidebar .nav > .active > ul {
@@ -219,7 +242,7 @@ h1 strong, h2 strong, h3 strong, h4 strong, h5 strong, h6 strong {color: #090; f
     width: 260px;
   }
   .bs-sidebar.affix {
-    top: 80px;
+    top: 20px;
   }
   .bs-sidebar.affix-bottom {
     position: absolute; /* Undo the static from mobile first approach */
@@ -231,10 +254,26 @@ h1 strong, h2 strong, h3 strong, h4 strong, h5 strong, h6 strong {color: #090; f
   }
 }
 @media screen and (min-width: 1200px) {
-  /* Widen the fixed sidebar again */
-  .bs-sidebar.affix-bottom,
+  .bs-sidebar .nav > .active > ul {
+    display: block;
+  }
+  .bs-sidebar { margin-left: 0; }
+  /* Widen the fixed sidebar */
+  .bs-sidebar.affix,
+  .bs-sidebar.affix-top,
+  .bs-sidebar.affix-bottom {
+    width: 260px;
+  }
   .bs-sidebar.affix {
-    width: 263px;
+    top: 20px;
+  }
+  .bs-sidebar.affix-bottom {
+    position: absolute; /* Undo the static from mobile first approach */
+  }
+  .bs-sidebar.affix-bottom .bs-sidenav,
+  .bs-sidebar.affix .bs-sidenav {
+    margin-top: 0;
+    margin-bottom: 0;
   }
 }
 

@@ -49,7 +49,7 @@ if(count($categorie) > 0):
     <h3>Nessun prodotto!</h3>
 <?php endif; ?>
   </div>
-  <div class="col-md-4 col-right">
+  <div class="col-md-3 col-md-offset-1">
     <div class="bs-sidebar" data-spy="affix" data-offset-top="76" role="complementary">
 <?php if($this->userSessionVal->permsProduttori->canAddProdotti($this->produttore->idproduttore)): ?>
       <a class="btn btn-default btn-mylg" href="/prodotti/add/idproduttore/<?php echo $this->produttore->idproduttore;?>"><span class="glyphicon glyphicon-plus"></span> Nuovo prodotto</a>
