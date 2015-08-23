@@ -32,6 +32,9 @@
             <h3 class="no-margin"><?php echo $prodotto->getDescrizioneListino();?></h3>
             <p>
                 Categoria: <strong><?php echo $prodotto->getSubCategoria(); ?></strong><br />
+        <?php if($this->ordine->isMultiproduttore()): ?>
+                Produttore: <strong><?php echo $prodotto->getProduttore(); ?></strong><br />
+        <?php endif; ?>                
                 <?php echo $this->partial('prodotti/price-box.tpl.php', array('prodotto' => $prodotto)); ?>
         <?php if($prodotto->getNoteListino() != ""): ?>
                 <a href="javascript:void(0)" class="note" data-toggle="popover" title="" data-content="<?php echo $prodotto->getNoteListino(); ?>">Visualizza note</a>
