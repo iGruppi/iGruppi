@@ -12,6 +12,7 @@
         {
             $arProductsGrid[] = array(
                 'disponibile_ordine'    => $pObj->isDisponibile(),
+                'produttore'            => $pObj->getProduttore(),
                 'codice'                => $pObj->getCodice(),
                 'descrizione'           => $pObj->getDescrizioneListino(),
                 'costo_ordine'          => $pObj->getCostoOrdine(),
@@ -61,8 +62,8 @@ $(document).ready(function () {
       data: <?php echo json_encode($arProductsGrid); ?>,
       manualColumnMove: true,
       manualColumnResize: true,
-      colHeaders: ['Disp.', 'Codice', 'Descrizione', 'Udm', 'Qta Ord.', 'Qta Reale', 'Prezzo', 'Categoria'],
-      colWidths: [50, 80, 380, 120, 70, 70, 70, 270],
+      colHeaders: ['Disp.', <?php if($this->ordCalcObj->isMultiProduttore()) { echo "'Produttore', "; } ?> 'Codice', 'Descrizione', 'Udm', 'Qta Ord.', 'Qta Reale', 'Prezzo', 'Categoria'],
+      colWidths: [50, <?php if($this->ordCalcObj->isMultiProduttore()) { echo "150, "; } ?> 80, 380, 120, 70, 70, 70, 270],
       columnSorting: true,
       currentRowClassName: 'currentRow',
       columns: [
@@ -71,6 +72,12 @@ $(document).ready(function () {
           readOnly: true,
           type: 'checkbox'
         },
+    <?php if($this->ordCalcObj->isMultiProduttore()): ?>
+        {
+          data: 'produttore',
+          readOnly: true
+        },
+    <?php endif; ?>            
         {
           data: 'codice',
           readOnly: true

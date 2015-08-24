@@ -12,6 +12,7 @@ class Model_Prodotto_Mediator_Anagrafica
     protected $_data = array(
             'idprodotto',
             'idproduttore',
+            'ragsoc_produttore',
             'idsubcat',
             'iduser_creator',
             'codice',
@@ -93,6 +94,14 @@ class Model_Prodotto_Mediator_Anagrafica
     public function getIdProduttore()
     {
         return $this->_getValue("idproduttore");
+    }
+
+    /**
+     * @return mixed
+     */    
+    public function getProduttore()
+    {
+        return $this->_getValue("ragsoc_produttore");
     }
 
     /**
