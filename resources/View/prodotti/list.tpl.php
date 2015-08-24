@@ -1,4 +1,4 @@
-<h2>Listino Prodotti di <strong><?php echo $this->produttore->ragsoc;?></strong></h2>
+<h2>Prodotti di <strong><?php echo $this->produttore->ragsoc;?></strong></h2>
 
 <div class="row">
   <div class="col-md-8">
@@ -11,31 +11,33 @@
 <?php endif; ?>
 
       
-<?php if(count($this->listProdotti) > 0): 
-    foreach ($this->listProdotti as $idcat => $cat): ?>
-    <span id="cat_<?php echo $idcat; ?>" style="visibility: hidden;"><?php echo $this->listSubCat[$idcat]["categoria"]; ?></span>
-<?php foreach ($cat as $idsubcat => $prodotti): ?>
-        
-        <?php include $this->template('prodotti/subcat-title.tpl.php'); ?>
-        
-<?php   foreach ($prodotti as $idprodotto): 
-                $pObj = $this->lpObjs[$idprodotto];
-            ?>
-      
-      <div class="row row-myig" id="prod_<?php echo $pObj->idprodotto;?>">
+<?php 
+$categorie = $this->prodotti->getProdottiWithCategoryArray();
+if(count($categorie) > 0): 
+    foreach ($categorie AS $cat): 
+?>
+    <span id="cat_<?php echo $cat->getId(); ?>" style="visibility: hidden;"><?php echo $cat->getDescrizione(); ?></span>
+<?php foreach ($cat->getSubcat() AS $subcat):
+        // create Sub Cat Title
+        echo $this->partial('prodotti/subcat-title.tpl.php', array('cat' => $cat, 'subcat' => $subcat));
+        // get Prodotti List in this Subcat
+        foreach ($subcat->getProdotti() AS $prodotto): 
+            $pObj = $prodotto->getProdotto(); 
+?>
+      <div class="row row-myig" id="prod_<?php echo $pObj->getIdProdotto();?>">
         <div class="col-md-10">
-            <h3 class="no-margin"><?php echo $pObj->descrizione;?></h3>
+            <h3 class="no-margin"><?php echo $pObj->getDescrizioneAnagrafica();?></h3>
             <p>
-                Codice: <strong><?php echo $pObj->codice; ?></strong><br />
+                Codice: <strong><?php echo $pObj->getCodice(); ?></strong><br />
             <?php echo $this->partial('prodotti/price-box.tpl.php', array('prodotto' => $pObj)); ?>
-            <?php if(!$pObj->isAttivo()): ?>
-                <strong class="alert_red">Disabilitato</strong> (Non viene inserito quando crei un nuovo ordine)
+            <?php if(!$pObj->getAttivoAnagrafica()): ?>
+                <strong class="alert_red">NON ATTIVO</strong> (Non viene inserito quando crei un nuovo ordine)
             <?php endif; ?>
             </p>
         </div>
         <div class="col-md-2">
-        <?php if($this->produttore->refObj->is_Referente()): ?>
-            <a class="btn btn-success" href="/prodotti/edit/idprodotto/<?php echo $idprodotto;?>">Modifica</a>
+        <?php if($this->userSessionVal->permsProduttori->canEditProdotti($this->produttore->idproduttore)): ?>
+            <a class="btn btn-success" href="/prodotti/edit/idprodotto/<?php echo $pObj->getIdProdotto();?>">Modifica</a>
         <?php endif; ?>
         </div>
       </div>
@@ -47,14 +49,14 @@
     <h3>Nessun prodotto!</h3>
 <?php endif; ?>
   </div>
-  <div class="col-md-4 col-right">
+  <div class="col-md-3 col-md-offset-1">
     <div class="bs-sidebar" data-spy="affix" data-offset-top="76" role="complementary">
-<?php if($this->produttore->refObj->is_Referente()): ?>    
+<?php if($this->userSessionVal->permsProduttori->canAddProdotti($this->produttore->idproduttore)): ?>
       <a class="btn btn-default btn-mylg" href="/prodotti/add/idproduttore/<?php echo $this->produttore->idproduttore;?>"><span class="glyphicon glyphicon-plus"></span> Nuovo prodotto</a>
       <br />
       <br />
 <?php endif; ?>
-      <?php echo $this->partial('prodotti/subcat-navigation.tpl.php', array('listSubCat' => $this->listSubCat)); ?>
+      <?php echo $this->partial('prodotti/subcat-navigation.tpl.php', array('categorie' => $categorie )); ?>
     </div>
   </div>
 </div>

@@ -22,7 +22,7 @@ class Form_Produttori extends MyFw_Form {
         
         $this->addField('indirizzo', array(
                         'label'     => 'Indirizzo',
-                        'size'      => 60
+                        'size'      => 50
             ));
         
         $this->addField('comune', array(

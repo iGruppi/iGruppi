@@ -56,7 +56,7 @@ class Form_User extends MyFw_Form {
             ));
 
         // GRUPPI
-        $objGr = new Model_Groups();
+        $objGr = new Model_Db_Groups();
         $arVal = $objGr->convertToSingleArray($objGr->getAll(), "idgroup", "nome");
         $arVal[0] = 'Seleziona...';
         $this->addField('idgroup', array(

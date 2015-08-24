@@ -1,3 +1,3 @@
-<h2 id="subcat_<?php echo $idsubcat; ?>" class="subcat-title">
-    <?php echo $this->listSubCat[$idcat]["categoria"]; ?> - <?php echo $this->listSubCat[$idcat]["subcat"][$idsubcat]; ?>
+<h2 id="subcat_<?php echo $this->subcat->getId(); ?>" class="subcat-title">
+    <?php echo $this->cat->getDescrizione(); ?> - <?php echo $this->subcat->getDescrizione(); ?>
 </h2>

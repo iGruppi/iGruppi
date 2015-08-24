@@ -40,7 +40,6 @@ class Controller_Auth extends MyFw_Controller {
                         $auth = Zend_Auth::getInstance();
                         $auth->clearIdentity();
                         $storage = $auth->getStorage();
-                        
                         // remove password & write data to the store
                         unset($row->password);
                         $storage->write($row);
@@ -48,7 +47,16 @@ class Controller_Auth extends MyFw_Controller {
                         // set idgroup in session
                         $userSessionVal = new Zend_Session_Namespace('userSessionVal');
                         $userSessionVal->idgroup = $row->idgroup;
-
+                        
+                        // set Referente Object in Session
+                        $uObj = new Model_Db_Users();
+                        $permsProduttori = new Model_Produttori_Permessi($uObj->getGlobalRefByIduser($row->iduser), $uObj->getRefByIduserAndIdgroup($row->iduser, $row->idgroup));
+                        $userSessionVal->permsProduttori = $permsProduttori;
+                        
+                        // set ACL User in session
+                        $aclUserObj = new Model_AclUser($row->fondatore, $row->contabile);
+                        $userSessionVal->aclUserObject = $aclUserObj;
+                        
                         // redirect HTTP_REFERER if it comes from a different URI
                         if(strpos($_SERVER["HTTP_REFERER"], "auth/login") === false)
                         {
@@ -122,7 +130,7 @@ class Controller_Auth extends MyFw_Controller {
                             $idgroup = $fValues["idgroup"];
                             unset($fValues["idgroup"]);
 
-                            $gObj = new Model_Groups();
+                            $gObj = new Model_Db_Groups();
                             $group = $gObj->getGroupById($idgroup);
                             if($group !== false) {
 
@@ -158,8 +166,8 @@ class Controller_Auth extends MyFw_Controller {
                             } else {
                                 $form->setError("idgroup", "Devi selezionare un gruppo esistente!");
                             }
-                        } catch (Exception $exc) {
-                            echo $exc->getTraceAsString();
+                        } catch (MyFw_Exception $exc) {
+                            $exc->displayError();
                         }
                     }
                 }

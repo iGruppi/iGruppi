@@ -40,6 +40,16 @@
         });
 
     });
+
+
+/**
+ * General functions for Handsontable
+ */
+    // Helper function to check if it is sorted
+    function isSorted(hotInstance){
+      return hotInstance.sortingEnabled && typeof hotInstance.sortColumn != 'undefined';
+    }    
+    
     
     
 /*
@@ -47,13 +57,17 @@
  *  Gestisce le operazioni di inserimento e cancellazione di Items nel carrello (Ordine)
  */
     var Trolley = {
+        // idordine
+        idordine: 0,
+        // list of products
         products: {},
                 
-        initByParams: function(idproduct, prezzo, multip, qta) {
+        initByParams: function(idproduct, idlistino, prezzo, multip, qta) {
             this.products[idproduct] = {
-                prezzo: parseFloat(prezzo), 
-                multip: parseFloat(multip), 
-                qta   : parseInt(qta)
+                idlistino: parseFloat(idlistino), 
+                prezzo:    parseFloat(prezzo), 
+                multip:    parseFloat(multip), 
+                qta   :    parseInt(qta)
             };
 //            console.log(idproduct + " - " + prezzo +" x "+qta);
         },
@@ -104,13 +118,14 @@
     
     function Trolley_setQtaProdotto(idprodotto, op) 
     {
+        // check for ADD or SUB
         if( op === "+" ) {
             Trolley.add(idprodotto);
         } else {
             Trolley.sub(idprodotto);
         }
-        Trolley_rebuildPartial(idprodotto);
-        Trolley_rebuildTotal();
+        // Update Qta via ajax
+        jx_updateQtaProdotto(idprodotto);
     }
     
     function Trolley_rebuildPartial(idprodotto)
@@ -127,3 +142,18 @@
         $('#totale').html(totale.formatNumber(2, ',', '') + "&nbsp;&euro;");
     }
     
+    function jx_updateQtaProdotto(idprodotto)
+    {
+        var idlistino = Trolley.products[idprodotto].idlistino;
+        var qta = Trolley.products[idprodotto].qta;
+        $.getJSON(
+			'/ordini/updateorder/',
+            {idordine: Trolley.idordine, idprodotto: idprodotto, idlistino: idlistino, qta: qta},
+			function(data) {
+                if(data)
+                {
+                    Trolley_rebuildPartial(idprodotto);
+                    Trolley_rebuildTotal();
+                }
+			});
+    }

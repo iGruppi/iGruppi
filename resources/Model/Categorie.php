@@ -1,74 +1,199 @@
 <?php
-
 /**
- * Description of Model_Cateogorie
- * 
- * @author gullo
+ * This is the Client for Categorie Composite pattern
  */
-class Model_Categorie extends MyFw_DB_Base {
+class Model_Categorie extends Model_AF_AbstractHandlerCoR
+{
+    /**
+     * @var Model_Categorie_CatElement
+     */
+    protected $_categorie = null;
 
-    function __construct() {
-        parent::__construct();
-    }
-
-
-    function getCategoriaById($idcat) {
-
-        $sth_app = $this->db->prepare("SELECT * FROM categorie WHERE idcat= :$idcat");
-        $sth_app->execute(array('idcat' => $idcat));
-        return $sth_app->fetch(PDO::FETCH_ASSOC);
-    }
-
-    function getCategorie() {
-        $sth = $this->db->query("SELECT * FROM categorie ORDER BY descrizione");
-        return $sth->fetchAll(PDO::FETCH_ASSOC);
-    }
-    
-    function getSubCategories($idgroup, $idproduttore) {
-        $sql = "SELECT cs.*, c.descrizione AS cat_descrizione "
-              ."FROM categorie_sub AS cs "
-              ."LEFT JOIN categorie AS c ON cs.idcat=c.idcat "
-              ."LEFT JOIN groups_produttori AS gp ON cs.idgroup=gp.idgroup AND cs.idproduttore=gp.idproduttore "
-              ."WHERE gp.idgroup= :idgroup AND gp.idproduttore= :idproduttore";
-        $sth = $this->db->prepare($sql);
-        $sth->execute(array('idgroup' => $idgroup, 'idproduttore' => $idproduttore));
-        return $sth->fetchAll(PDO::FETCH_ASSOC);        
-    }
-    
-    function getSubCategoriesByIdgroup($idgroup) {
-        $sql = "SELECT cs.*, c.descrizione AS cat_descrizione "
-              ."FROM categorie_sub AS cs "
-              ."LEFT JOIN categorie AS c ON cs.idcat=c.idcat "
-              ."WHERE cs.idgroup= :idgroup";
-        $sth = $this->db->prepare($sql);
-        $sth->execute(array('idgroup' => $idgroup));
-        $subCat = $sth->fetchAll(PDO::FETCH_OBJ);
-        $res = array();
-        if(count($subCat) > 0) {
-            foreach($subCat AS $sub) {
-                $res[$sub->idproduttore][$sub->idcat] = $sub->cat_descrizione;
+    /**
+     * @param mixed (stdClass|array) $values
+     * @return void
+     */
+    public function initCategorie_ByObject($values)
+    {
+        if(is_object($values)) {
+            $this->_addElement($values);
+        } else if(is_array($values) && count($values) > 0) {
+            foreach ($values AS $v) {
+                $this->_addElement($v);
             }
         }
-        return $res;
     }
-
     
-    function addSubCategoria($arVal) {
-        $sth = $this->db->prepare("INSERT INTO categorie_sub SET idgroup= :idgroup, idproduttore= :idproduttore, idcat= :idcat, descrizione= :descrizione");
-        if( $sth->execute($arVal)) {
-            return $this->db->lastInsertId();
-        } else {
-            return null;
+    /**
+     * get Root Categorie composite object
+     * IF not exists it will init a new Model_Categorie_CatElement for ROOT
+     * @return Model_Categorie_CatElement
+     */
+    public function getRoot()
+    {
+        if(is_null($this->_categorie))
+        {
+            $this->_categorie = new Model_Categorie_CatElement(0, "Root");
+        }
+        return $this->_categorie;
+    }
+    
+    /**
+     * Recursive Iterator to get PRODUTTORI LIST
+     * @return array
+     */
+    public function getProduttoriList()
+    {
+        $ar = array();
+        $iterator = new RecursiveIteratorIterator( 
+                            $this->getRoot()->createIterator(),
+                                RecursiveIteratorIterator::SELF_FIRST,
+                                RecursiveIteratorIterator::CATCH_GET_CHILD
+                );
+        foreach($iterator AS $child) {
+            if( $child instanceof Model_Categorie_ProduttoreElement) {
+                $ar[] = $child->getDescrizione();
+            }
+        }
+        return array_unique($ar);
+    }
+    
+    /**
+     * Recursive Iterator to get CATEGORIE LIST
+     * @return array
+     */
+    public function getListaDescrizioniCategorie()
+    {
+        $ar = array();
+        // in the first level of root we have only CATEGORIES
+        foreach($this->getRoot()->createIterator() AS $categoria)
+        {
+            $ar[] = $categoria->getDescrizione();
+        }
+        return $ar;
+    }
+    /**
+     * Recursive Iterator to get PRODOTTI in CATEGORY array
+     * @return array  
+     */
+    public function getProdottiWithCategoryArray()
+    {
+        $iterator = new RecursiveIteratorIterator( 
+                            $this->getRoot()->createIterator(),
+                                RecursiveIteratorIterator::SELF_FIRST,
+                                RecursiveIteratorIterator::CATCH_GET_CHILD
+                );
+        if($iterator->getSubIterator()->count()) {
+            foreach($iterator AS $child) {
+                if( $child instanceof Model_Categorie_ProdottoElement) {
+                    $child->setProdotto( $this->getCoR()->getProdottoById($child->getId()) );
+                }
+            }
+            return $iterator->getSubIterator()->getArrayCopy();
+        }
+        return array();   
+    }
+    
+    
+/*  *************************************************************
+ *  PRIVATE METHODS to BUILD Elements
+ */
+    
+    /**
+     * add Element to the Composite TREE
+     * @param stdClass $v values
+     */
+    private function _addElement(stdClass $v)
+    {
+        // ADD Cat
+        $catRoot = $this->getRoot();
+        $cat = $this->_initCat($v, $catRoot);
+        if(!is_null($cat))
+        {
+            // I produttori sono solo in categorie
+            $this->_initProduttore($v, $cat);
+            
+            // ADD SubCat to Cat
+            $subcat = $this->_initSubCat($v, $cat);
+            if (!is_null($subcat))
+            {
+                // I prodotti sono solo in sottocategorie
+                $this->_initProdotto($v, $subcat);
+            }
         }
     }
     
-    function editSubCategorie($arVal) {
-        $this->db->beginTransaction();
-        $sth_update = $this->db->prepare("UPDATE categorie_sub SET idcat= :idcat, descrizione= :descrizione WHERE idsubcat= :idsubcat");
-        foreach($arVal AS $arSubCat) {
-            $sth_update->execute($arSubCat);
+    /**
+     * add CAT to the Composite TREE
+     * @param stdClass $v values
+     * @return mixed (null|Model_Categorie_CatElement)
+     */
+    private function _initCat(stdClass $v, Model_Categorie_CatElement $root)
+    {
+        if(isset($v->idcat)) {
+            $cat = $root->getCatById($v->idcat);
+            if(is_null($cat)) {
+                // ADD CATEGORY Element
+                $cn = isset($v->categoria) ? $v->categoria : "";
+                $cat = new Model_Categorie_CatElement($v->idcat, $cn);
+                $root->add($cat);
+            }
+            return $cat;
         }
-        $this->db->commit();
+        return null;
     }
-
+    
+    /**
+     * add SUBCAT to the Composite tree
+     * @param stdClass $v values
+     * @param Model_Categorie_CatElement $cat
+     * @return mixed (null|Model_Categorie_SubcatElement)
+     */
+    private function _initSubCat(stdClass $v, Model_Categorie_CatElement $cat)
+    {
+        if(isset($v->idsubcat)) {
+            $subcat = $cat->getSubCatById($v->idsubcat);
+            if(is_null($subcat)) {
+                // ADD SUB-CATEGORY Element
+                $scn = isset($v->categoria_sub) ? $v->categoria_sub : "";
+                $subcat = new Model_Categorie_SubcatElement($v->idsubcat, $scn);
+                $cat->add($subcat);
+            }
+            return $subcat;
+        }
+        return null;
+    }
+    
+    /**
+     * add PRODOTTO to the Composite tree
+     * @param stdClass $v values
+     * @param Model_Categorie_Element $subcat
+     */
+    private function _initProdotto(stdClass $v, Model_Categorie_SubcatElement $subcat)
+    {
+        if(isset($v->idprodotto)) {
+            if (is_null($subcat->getProdottoById($v->idprodotto))) {
+                // ADD PRODOTTO Element
+                $scp = isset($v->descrizione_prodotto) ? $v->descrizione_prodotto : "";
+                $subcat->add(new Model_Categorie_ProdottoElement($v->idprodotto, $scp));
+            }
+        }
+    }
+    
+    /**
+     * add PRODUTTORE to the Composite tree
+     * @param stdClass $v values
+     * @param Model_Categorie_Element $subcat
+     */
+    private function _initProduttore(stdClass $v, Model_Categorie_CatElement $subcat)
+    {
+        if(isset($v->idproduttore)) {
+            if (is_null($subcat->getProduttoreById($v->idproduttore))) {
+                // ADD PRODUTTORE Element
+                $scp = isset($v->ragsoc_produttore) ? $v->ragsoc_produttore : "";
+                $subcat->add(new Model_Categorie_ProduttoreElement($v->idproduttore, $scp));
+            }
+        }
+    }
+            
 }

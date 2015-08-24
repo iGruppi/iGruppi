@@ -15,7 +15,7 @@ class Controller_Prodotti extends MyFw_Controller {
     function _init() {
         $auth = Zend_Auth::getInstance();
         $this->_iduser = $auth->getIdentity()->iduser;
-        $this->_userSessionVal = new Zend_Session_Namespace('userSessionVal');
+        $this->view->userSessionVal = $this->_userSessionVal = new Zend_Session_Namespace('userSessionVal');
         
         // Try to GET Produttore
         $idproduttore = $this->getParam("idproduttore");
@@ -23,7 +23,7 @@ class Controller_Prodotti extends MyFw_Controller {
             // Try to GET Prodotto
             $idprodotto = $this->getParam("idprodotto");
             if(!is_null($idprodotto)) {
-                $prodObj = new Model_Prodotti();
+                $prodObj = new Model_Db_Prodotti();
                 $prodotto = $prodObj->getProdottoById($idprodotto);
                 if(!is_null($prodotto)) {
                     $this->_prodotto = $this->view->prodotto = $prodotto;
@@ -34,11 +34,8 @@ class Controller_Prodotti extends MyFw_Controller {
         if(is_null($idproduttore)) {
             $this->redirect("index", "error", array('code' => 404));
         }
-        $produttoreObj = new Model_Produttori();
-        $produttore = $produttoreObj->getProduttoreById($idproduttore, $this->_userSessionVal->idgroup);
-        // ADD Referente object to Produttore (so I can check the ref directly into the view)
-        $produttore->refObj = new Model_Produttori_Referente($produttore->iduser_ref);
-        $this->_produttore = $this->view->produttore = $produttore;
+        $produttoreObj = new Model_Db_Produttori();
+        $this->_produttore = $this->view->produttore = $produttoreObj->getProduttoreById($idproduttore);
         
         // Get updated if it is set
         $this->view->updated = $this->getParam("updated");        
@@ -53,61 +50,68 @@ class Controller_Prodotti extends MyFw_Controller {
     function listAction() {
         
         // get All Prodotti by Produttore
-        $objModel = new Model_Prodotti();
+        $objModel = new Model_Db_Prodotti();
         $listProd = $objModel->getProdottiByIdProduttore($this->_produttore->idproduttore);
-        $listProdObj = array();
-        if(count($listProd) > 0)
-        {
-            foreach ($listProd as $value)
-            {
-                $listProdObj[$value->idprodotto] = new Model_Prodotti_Prodotto($value);
-            }
-        }
-        $this->view->lpObjs = $listProdObj;        
         
-        // organize by category and subCat
-        $scoObj = new Model_Prodotti_SubCatOrganizer($listProd);
-        $this->view->listProdotti = $scoObj->getListProductsCategorized();
-        $this->view->listSubCat = $scoObj->getListCategories();
-//        Zend_Debug::dump($this->view->listProdotti);die;
+        // BUILD Prodotti Anagrafica object
+        $prodotti = new Model_AnagraficaProdotti();
+        $prodotti->appendProdotti();
+        $prodotti->appendCategorie();
+        
+        // init Prodotti by Object
+        $prodotti->initProdotti_ByObject($listProd);
+        
+        // get Categories from $listProd (array Prodotti)
+        $prodotti->initCategorie_ByObject($listProd);
+        
+        $this->view->prodotti = $prodotti;
+//        Zend_Debug::dump($prodotti->getCategorie()->getChild(8)->getChild(47)->getProdotti());
     }
 
     function editAction() {
         
-        // check REFERENTE, controllo per i furbi (non Referenti)
-        if(!$this->_produttore->refObj->is_Referente()) {
-            $this->redirect("index", "error", array('code' => 404));
+        // controllo per i furbi (non autorizzati)
+        if(!$this->_userSessionVal->permsProduttori->canEditProdotti($this->_produttore->idproduttore)) {
+            $this->redirect("index", "error", array('code' => 401));
         }
         
-        $idprodotto = $this->_prodotto->idprodotto;
         if(is_null($this->_prodotto)) 
         {
             $this->redirect("prodotti", "list");
         }
-
+        
+        // Build Prodotto
+        $prodotto = new Model_Prodotto_Mediator_Mediator();
+        $prodotto->initByObject($this->_prodotto);
+        
+        // init a new form Prodotti
         $form = new Form_Prodotti();
-        $form->setAction("/prodotti/edit/idprodotto/$idprodotto");
+        $form->setAction("/prodotti/edit/idprodotto/" . $prodotto->getIdProdotto());
         // remove useless fields
         $form->removeField("offerta");
         $form->removeField("sconto");
         
         // set Categories
-        $objCat = new Model_Categorie();
-        $form->setOptions("idsubcat", $objCat->convertToSingleArray($objCat->getSubCategories($this->_userSessionVal->idgroup, $this->_prodotto->idproduttore), "idsubcat", "descrizione"));
+        $objCat = new Model_Db_Categorie();
+        $form->getField("idsubcat")
+             ->setOptions($objCat->convertToSingleArray($objCat->getSubCategoriesByIdproduttore($this->_prodotto->idproduttore), "idsubcat", "descrizione"));
         
         // set array values Udm that need Multiplier
-        $this->view->arValWithMultip = json_encode( Model_Prodotti_UdM::getArWithMultip() );
+        $this->view->arValWithMultip = json_encode( Model_Prodotto_UdM::getArWithMultip() );
         
         if($this->getRequest()->isPost()) {
             $fv = $this->getRequest()->getPost();
             if( $form->isValid($fv) ) {
-
-                $this->getDB()->makeUpdate("prodotti", "idprodotto", $form->getValues());
+                
+                // save Prodotto, after overwriting the fields values with form values
+                $prodotto->initByObject($fv);
+                $this->getDB()->makeUpdate("prodotti", "idprodotto", $prodotto->getAnagraficaValues());
+                
                 // REDIRECT
-                $this->redirect("prodotti", "list", array("idproduttore" => $this->_prodotto->idproduttore, "updated" => $idprodotto));
+                $this->redirect("prodotti", "list", array("idproduttore" => $this->_prodotto->idproduttore, "updated" => $prodotto->getIdProdotto()));
             }
         } else {
-            $form->setValues((array)$this->_prodotto);
+            $form->setValues($prodotto->getValues());
         }
         // Zend_Debug::dump($form); die;
         // set Form in the View
@@ -117,9 +121,9 @@ class Controller_Prodotti extends MyFw_Controller {
     
     function addAction() {
         
-        // check REFERENTE, controllo per i furbi (non Referenti)
-        if(!$this->_produttore->refObj->is_Referente()) {
-            $this->redirect("index", "error", array('code' => 404));
+        // controllo per i furbi (non autorizzati)
+        if(!$this->_userSessionVal->permsProduttori->canAddProdotti($this->_produttore->idproduttore)) {
+            $this->redirect("index", "error", array('code' => 401));
         }
                 
         $idproduttore = $this->_produttore->idproduttore;
@@ -137,10 +141,11 @@ class Controller_Prodotti extends MyFw_Controller {
         $form->removeField("sconto");
         $form->removeField("note");
         $form->removeField("idprodotto");
-
+        
         // set Categories
-        $objCat = new Model_Categorie();
-        $form->setOptions("idsubcat", $objCat->convertToSingleArray($objCat->getSubCategories($this->_userSessionVal->idgroup, $idproduttore), "idsubcat", "descrizione"));
+        $objCat = new Model_Db_Categorie();
+        $form->getField("idsubcat")
+             ->setOptions($objCat->convertToSingleArray($objCat->getSubCategoriesByIdproduttore($idproduttore), "idsubcat", "descrizione"));
         
         if($this->getRequest()->isPost()) 
         {
@@ -148,8 +153,11 @@ class Controller_Prodotti extends MyFw_Controller {
             $fv = $this->getRequest()->getPost();
             if( $form->isValid($fv) ) 
             {
+                $values = $form->getValues();
+                $values["iduser_creator"] = $this->_iduser;
                 // ADD NEW Prodotto
-                $idprodotto = $this->getDB()->makeInsert("prodotti", $form->getValues());
+                $idprodotto = $this->getDB()->makeInsert("prodotti", $values);
+
                 // REDIRECT to EDIT
                 $this->redirect("prodotti", "edit", array("idprodotto" => $idprodotto));
             }

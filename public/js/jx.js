@@ -1,20 +1,4 @@
 /* Jx Functions */
-
-    function jx_SelProdottoOrdine(idprodotto) {
-        
-        var idSelected = $('#prod_sel_'+idprodotto);
-        if(idSelected.val() == "S") {
-            $('#img_sel_'+idprodotto).addClass('ok').removeClass('delete');
-            $('#box_'+idprodotto).addClass('box_row_dis');
-            idSelected.val("N");
-            
-        } else {
-            $('#img_sel_'+idprodotto).addClass('delete').removeClass('ok');
-            $('#box_'+idprodotto).removeClass('box_row_dis');
-            idSelected.val("S");
-        }
-        
-    }
     
     function jx_AddSubCategoria(idproduttore) {
         $('#no_subCat').hide();
@@ -47,86 +31,45 @@
 			});
     }
     
-    function jx_AddReferenteUser(iduser) {
+    function jx_AddSetReferenteUser(iduser, flag) {
         $('#no_user_ref').hide();
         var idproduttore = $('#iduser_ref').find(":selected").val();
         $.getJSON(
-			'/users/addref/',
-            {iduser: iduser, idproduttore: idproduttore},
-			function(data) {
+            '/users/addref/',
+            {iduser: iduser, idproduttore: idproduttore, flag: flag},
+            function(data) {
                 if(data) {
                     $('#list_user_ref').append('<h4>'+$('#iduser_ref').find(":selected").text()+'</h4>');
                 }
-			});
+            });
     }
 
     function jx_EnableUser(iduser) {
         $('#disabled_button_'+iduser).button('loading');
         $.getJSON(
-			'/users/enable/',
+            '/users/enable/',
             {iduser: iduser},
-			function(data) {
+            function(data) {
                 if(data) {
                     $('#disabled_'+iduser).remove();
                     $('#disabled_button_'+iduser).remove();
                 }
-			});
+            });
     }
 
-    function jx_OrdineMoveStatus(idordine, newStatus) {
+    function jx_OrdineMoveStatus(idordine, flagMover) {
         $('#a_mso').button('loading');
         $.getJSON(
-			'/gestione-ordini/movestatus/',
-            {idordine: idordine, newStatus: newStatus},
-			function(data) {
-                $('#ordine_header').html(data.myTpl);
-			});
-    }
-    
-    function jx_ReferenteModifyQta(iduser, idprodotto, idordine)
-    {
-        var keyRow = iduser+'_'+idprodotto;
-        $('#btn_'+keyRow).button('loading');
-        $.getJSON(
-			'/gestione-ordini/getformqta/',
-            {iduser: iduser, idprodotto: idprodotto, idordine: idordine},
-			function(data) {
-                if(data.res)
-				{
-                    $('#qtareal_'+keyRow).hide();
-                    $('#div_chgqta_'+keyRow).html(data.myTpl).show();
+            '/gestione-ordini/movestatus/',
+            {idordine: idordine, flagMover: flagMover},
+            function(data) {
+                if(data) {
+                    location.reload();
                 }
-			});
+            });
     }
     
-    function jx_RefModQta_Save(iduser, idprodotto, idordine)
-    {
-        var keyRow = iduser+'_'+idprodotto;
-        $('#submit_'+keyRow).button('loading');
-        // SET Number field value
-        $('#qta_eff_'+keyRow)[0].setNumber();
-        // store the new value
-        var newValue = parseFloat($('#qta_eff_'+keyRow).val());
-        $('#qtareal_'+keyRow+' > strong').html(newValue);
-		$.post(
-			'/gestione-ordini/changeqta/idordine/'+idordine,
-			$('#qta_ord_form_'+keyRow).serialize(),
-			function(data){
-                if(data.res)
-				{
-                    var tot = parseFloat(data.newTotale);
-                    var grandTot = parseFloat(data.grandTotal);
-                    $('#td_totrow_'+keyRow+' > strong').html(tot.formatNumber(2, ',', '')+"&nbsp;&euro;");
-                    $('#td_grandtotrow_'+iduser+' > strong').html(grandTot.formatNumber(2, ',', '')+"&nbsp;&euro;");
-                    $('#qtareal_'+keyRow).show();
-                    $('#div_chgqta_'+keyRow).html(' ').hide();
-                    $('#btn_'+keyRow).button('reset');
-                }
-			},
-			"json");
-    }
-    
-    function jx_ReferenteAddNewProd(iduser, idordine)
+    function jx_GestioneOrdini_AddNewProd(iduser, idordine)
     {
         $('#td_add_'+iduser+' > a').button('loading');
         $.getJSON(
@@ -141,7 +84,7 @@
 			});
     }
 
-    function jx_ReferenteAddNewProd_Save(iduser, idordine)
+    function jx_GestioneOrdini_AddNewProd_Save(iduser, idordine)
     {
         $('#submit_'+iduser).button('loading');
         var idprodotto = $('#addprod_form_'+iduser+' > #idprodotto').val();
@@ -166,4 +109,33 @@
             alert('Nessun prodotto selezionato!');
             $('#submit_'+iduser).button('reset');
         }
+    }
+    
+    function importProdottoToListino(idlistino, idprodotto)
+    {
+        $('#li_import_' + idlistino + '_' +idprodotto + ' > .btn').button('loading');
+        $.getJSON(
+            '/listini/importa/',
+            {idlistino: idlistino, idprodotto: idprodotto},
+            function(data) {
+                if(data.res)
+				{
+                    $('#li_import_' + idlistino + '_' +idprodotto).remove();
+                }
+            });
+    }
+    
+    function jx_ListinoUpdateData(idlistino)
+    {
+        $('#btn_listino_user_update').button('loading');
+        $.getJSON(
+            '/listini/updatedatalistino/',
+            {idlistino: idlistino},
+            function(data) {
+                if(data.res)
+                {
+                    $('#listino_user_update').html(moment().format('DD/MM/YYYY'));
+                    $('#btn_listino_user_update').button('reset');
+                }
+            });
     }

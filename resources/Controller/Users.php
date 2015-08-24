@@ -10,6 +10,11 @@ class Controller_Users extends MyFw_Controller {
         $auth = Zend_Auth::getInstance();
         $this->_iduser = $auth->getIdentity()->iduser;
         $this->_userSessionVal = new Zend_Session_Namespace('userSessionVal');
+        
+        // Check Permission to modify User
+        if(!$this->_userSessionVal->aclUserObject->canModifyUser()) {
+            $this->redirect("gruppo", "iscritti");
+        }
     }
 
     
@@ -21,7 +26,7 @@ class Controller_Users extends MyFw_Controller {
         $iduser = $this->getParam("iduser");
         
         // check if CAN edit this Produttore
-        $uObj = new Model_Users();
+        $uObj = new Model_Db_Users();
         $user = $uObj->getUserByIdInGroup($iduser, $this->_userSessionVal->idgroup);
         if($user === false) {
             $this->redirect("gruppo", "iscritti");
@@ -37,10 +42,18 @@ class Controller_Users extends MyFw_Controller {
         $form->removeField("password2");
         $form->removeField("idgroup");
         
-        // Get Elenco produttori (con REFERENTE)
-        $prObj = new Model_Produttori();
-        $this->view->produttori = $prObj->getProduttoriByIdGroup($this->_userSessionVal->idgroup);
-        //Zend_Debug::dump($this->view->user);
+        // Get Elenco produttori (con REFERENTI)
+        $prObj = new Model_Db_Produttori();
+        $referenti = $prObj->getReferentiByIdgroup_withKeyIdProduttore($this->_userSessionVal->idgroup);
+        foreach($prObj->getProduttori() AS $prod) 
+        {
+            // create Produttore
+            $produttore = new Model_Produttori_Produttore();
+            $produttore->initByArrayValues($prod);
+            $refs = isset($referenti[$prod->idproduttore]) ? $referenti[$prod->idproduttore] : array();
+            $produttore->setReferenti($refs);
+            $this->view->produttori[] = $produttore;
+        }
 
         if($this->getRequest()->isPost()) {
             $fv = $this->getRequest()->getPost();
@@ -83,20 +96,15 @@ class Controller_Users extends MyFw_Controller {
         
         $idproduttore = $this->getParam("idproduttore");
         $iduser = $this->getParam("iduser");
-        
-        $sth = $this->getDB()->prepare("SELECT * FROM groups_produttori WHERE idproduttore= :idproduttore AND idgroup= :idgroup");
-        $arVal = array('idproduttore' => $idproduttore, 'idgroup' => $this->_userSessionVal->idgroup);
-        $sth->execute($arVal);
-        if($sth->rowCount() > 0) {
+        $flag = $this->getParam("flag");
+        $arVal = array('idproduttore' => $idproduttore, 'idgroup' => $this->_userSessionVal->idgroup, 'iduser_ref' => $iduser);
+        if($flag == "set") {
             // UPDATE
-            $sth_update = $this->getDB()->prepare("UPDATE groups_produttori SET iduser_ref= :iduser_ref WHERE idproduttore= :idproduttore AND idgroup= :idgroup");
-            $arVal["iduser_ref"] = $iduser;
-            $result = $sth_update->execute($arVal);
+            $sth = $this->getDB()->prepare("UPDATE referenti SET iduser_ref= :iduser_ref WHERE idproduttore= :idproduttore AND idgroup= :idgroup");
         } else {
-            // Non dovrebbe mai capitare: un produttore ha SEMPRE un referente!
-            $result = false;
+            $sth = $this->getDB()->prepare("INSERT INTO referenti SET iduser_ref= :iduser_ref, idproduttore= :idproduttore, idgroup= :idgroup");
         }
-
+        $result = $sth->execute($arVal);
         echo json_encode($result);
     }
     
@@ -105,12 +113,12 @@ class Controller_Users extends MyFw_Controller {
         $layout->disableDisplay();
         
         $iduser = $this->getParam("iduser");
-        $uObj = new Model_Users();
+        $uObj = new Model_Db_Users();
         $user = $uObj->getUserByIdInGroup($iduser, $this->_userSessionVal->idgroup);
         $result = false;
         if(!is_null($user)) {
             // send email to User
-            $gObj = new Model_Groups();
+            $gObj = new Model_Db_Groups();
             $mail = new MyFw_Mail();
             $group = $gObj->getGroupById($this->_userSessionVal->idgroup);
             $mail->setSubject("Iscrizione al Gruppo ".$group->nome);

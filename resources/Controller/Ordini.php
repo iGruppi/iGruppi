@@ -17,127 +17,173 @@ class Controller_Ordini extends MyFw_Controller {
 
     function indexAction() {
         
-        // init filters array
-        $filters = array();
-        
         // init Filters class for View
-        $fObj = new Model_Ordini_Filters($filters);
+        $fObj = new Model_Ordini_Filters();
         $fObj->setUrlBase("/ordini/index");
         
         // SET idproduttore FILTER
         $fObj->setFilterByField("idproduttore", $this->getParam("idproduttore"));
         // SET stato FILTER
         $fObj->setFilterByField("stato", $this->getParam("stato"));
-        // SET periodo FILTER
-        //$fObj->setFilterByField("periodo", $this->getParam("periodo"));
         
         $this->view->fObj = $fObj;
-        //Zend_Debug::dump($fObj->getFilters());
+        
         // set elenco Stati
-        $this->view->statusArray = Model_Ordini_Status::getArrayStatus();
+        $this->view->statusArray = Model_Ordini_State_OrderFactory::getOrderStatesArray();
         
-        // set elenco produttori
-        $prodObj = new Model_Produttori();
-        $produttori = $prodObj->getProduttoriByIdGroup($this->_userSessionVal->idgroup);
-        $this->view->produttori = $produttori;
-        // Create array Categorie prodotti for Produttori
-        $catObj = new Model_Categorie();
-        $arCat = $catObj->getSubCategoriesByIdgroup($this->_userSessionVal->idgroup);
-        $this->view->arCat = $arCat;
-        
-        $ordiniObj = new Model_Ordini();
+        // build list Ordini
+        $ordiniObj = new Model_Db_Ordini();
         $listOrd = $ordiniObj->getAllByIdgroupWithFilter($this->_userSessionVal->idgroup, $fObj->getFilters());
-        // add Status model to Ordini
+        //Zend_Debug::dump($listOrd);die;
+        $cObj = new Model_Db_Categorie();
+        // create array of Ordini
+        $ordini = array();
         if(count($listOrd) > 0) {
-            foreach($listOrd AS &$ordine) {
-                $ordine->statusObj = new Model_Ordini_Status($ordine);
+            foreach($listOrd AS $ordine) 
+            {
+                // BUILD Ordine object with a Chain of objects
+                $mooObj = new Model_Ordini_Ordine( new Model_AF_OrdineFactory() );
+                //$mooObj->enableDebug();
+                $mooObj->appendDati();
+                $mooObj->appendCategorie();
+                $mooObj->appendStates( Model_Ordini_State_OrderFactory::getOrder($ordine) );
+                
+                // init Dati by stdClass
+                $mooObj->initDati_ByObject($ordine);
+                
+                // init Categorie by IdOrdine
+                $categorie = $cObj->getCategoriesByIdOrdine($mooObj->getIdOrdine());
+                $mooObj->initCategorie_ByObject($categorie);
+                //Zend_Debug::dump($catObj);
+                
+                
+                // add Ordine object to the array
+                $ordini[] = $mooObj;
             }
         }
-        $this->view->list = $listOrd;
+        
+        $this->view->ordini = $ordini;
+        
     }
     
     function viewdettaglioAction() {
         $idordine = $this->getParam("idordine");
         
         // INIT Ordine
-        $ordObj = new Model_Ordini();
+        $ordObj = new Model_Db_Ordini();
         $ordine = $ordObj->getByIdOrdine($idordine);
-        $this->view->ordine = $ordine;
-        $this->view->statusObj = new Model_Ordini_Status($ordine);
+        
+        // build Ordine
+        $mooObj = new Model_Ordini_Ordine( new Model_AF_UserOrdineFactory() );
+        // build & init DATI Ordine
+        $mooObj->appendDati()->initDati_ByObject($ordine);
+        // build & init STATE Ordine
+        $mooObj->appendStates( Model_Ordini_State_OrderFactory::getOrder($ordine) );
 
-        // GET PRODUTTORE
-        $produttoreObj = new Model_Produttori();
-        $produttore = $produttoreObj->getProduttoreById($ordine->idproduttore, $this->_userSessionVal->idgroup);
-        $this->view->produttore = $produttore;
+        // build & init Gruppi
+        $mooObj->appendGruppi()->initGruppi_ByObject( $ordObj->getGroupsByIdOrdine( $mooObj->getIdOrdine()) );
+        $mooObj->setMyIdGroup($this->_userSessionVal->idgroup);
+        
+        // creo elenco prodotti
+        $prodottiModel = new Model_Db_Prodotti();
+        $listProd = $prodottiModel->getProdottiByIdOrdine($idordine);
+        
+        // build & init CATEGORIE
+        $mooObj->appendCategorie()->initCategorie_ByObject($listProd);
+
+        // build & init PRODOTTI
+        $mooObj->appendProdotti()->initProdotti_ByObject($listProd);
+
+        // set Ordine in the View by default
+        $this->view->ordine = $mooObj;
         
         // GET PRODUCTS LIST with Qta Ordered
-        $listProdOrdered = $ordObj->getProdottiOrdinatiByIdordine($idordine);
-        // init Calcoli Utente class
-        $cuObj = new Model_Ordini_Calcoli_Utenti();
-        $cuObj->setOrdObj($ordine);
-        $cuObj->setProdotti($listProdOrdered);
-        $this->view->listaProdotti = $cuObj->getProdottiByIduser($this->_iduser);
-        // Costo di SPEDIZIONE
-        $this->view->costo_spedizione = $cuObj->getSpedizione()->getCostoSpedizioneRipartitoByIduser($this->_iduser);
-        $this->view->totale_ordine = $cuObj->getTotaleByIduser($this->_iduser);
-        $this->view->totale_con_spedizione = $cuObj->getTotaleConSpedizioneByIduser($this->_iduser);
+        $listProdOrdered = $ordObj->getProdottiOrdinatiByIdordineAndIdgroup($mooObj->getIdOrdine(),$this->_userSessionVal->idgroup);
+
+        // SET ORDINE e PRODOTTI
+        $ordCalcObj = new Model_Ordini_CalcoliDecorator($mooObj);
+        $ordCalcObj->setProdottiOrdinati($listProdOrdered);
+        $this->view->ordCalcObj = $ordCalcObj;
 //        Zend_Debug::dump($this->view->listaProdotti);die;
+        
+        // Set my iduser to View
+        $this->view->iduser = $this->_iduser;
     }
 
     
     function ordinaAction() {
         
         $idordine = $this->getParam("idordine");
-        $ordObj = new Model_Ordini();
-        
-        // SAVE FORM if there is POST data
-        $this->view->updated = false;
-        if($this->getRequest()->isPost()) 
-        {
-            // get Post and check if is valid
-            $fv = $this->getRequest()->getPost();
-            $prod_qta = isset($fv["prod_qta"]) ? $fv["prod_qta"] : array();
-            $this->view->updated = $ordObj->setQtaProdottiForOrdine($idordine, $this->_iduser, $prod_qta);
-        }
-        
+        $ordObj = new Model_Db_Ordini();
         // INIT Ordine
         $ordine = $ordObj->getByIdOrdine($idordine);
-        
         // Validate ORDINE for this GROUP
-        if(is_null($ordine) || $ordine->idgroup != $this->_userSessionVal->idgroup) 
+        /**
+         *  @todo
+         * Qui mancano sicuramente i controlli per verificare se può o meno aprire quest'ordine!
+         */
+        if(is_null($ordine)) 
         {
             $this->redirect("ordini");
         }
-        $this->view->ordine = $ordine;
-        // Check ORDINE Status (can Order Products?)
-        $statusObj = new Model_Ordini_Status($ordine);
-        if(!$statusObj->canUser_OrderProducts()) 
-        {
-            $this->redirect("ordini");
-        }
-        $this->view->statusObj = $statusObj;
         
-        // GET PRODUTTORE
-        $produttoreObj = new Model_Produttori();
-        $produttore = $produttoreObj->getProduttoreById($ordine->idproduttore, $this->_userSessionVal->idgroup);
-        $this->view->produttore = $produttore;
+        // build Ordine
+        $mooObj = new Model_Ordini_Ordine( new Model_AF_UserOrdineFactory() );
+        // build & init DATI Ordine
+        $mooObj->appendDati()->initDati_ByObject($ordine);
+        // build & init STATE Ordine
+        $mooObj->appendStates( Model_Ordini_State_OrderFactory::getOrder($ordine) );
+
+        // build & init Gruppi
+        $mooObj->appendGruppi()->initGruppi_ByObject( $ordObj->getGroupsByIdOrdine( $mooObj->getIdOrdine()) );
+        $mooObj->setMyIdGroup($this->_userSessionVal->idgroup);
+        
+        // creo elenco prodotti
+        $prodottiModel = new Model_Db_Prodotti();
+        $listProd = $prodottiModel->getProdottiByIdOrdine($idordine);
+        
+        // build & init CATEGORIE
+        $mooObj->appendCategorie()->initCategorie_ByObject($listProd);
+
+        // build & init PRODOTTI
+        $mooObj->appendProdotti()->initProdotti_ByObject($listProd);
+
+        // set Ordine in the View by default
+        $this->view->ordine = $mooObj;
+        
+        // Check ORDINE Status (can Order Products?)
+        if(!$mooObj->canUser_OrderProducts()) 
+        {
+            $this->redirect("ordini");
+        }
         
         // GET PRODUCTS LIST with Qta Ordered
-        $listProdOrdered = $ordObj->getProdottiOrdinatiByIdordine($idordine);
+        $listProdOrdered = $ordObj->getProdottiOrdinatiByIdordineAndIdgroup($mooObj->getIdOrdine(),$this->_userSessionVal->idgroup);
+
+        // SET ORDINE e PRODOTTI
+        $ordCalcObj = new Model_Ordini_CalcoliDecorator($mooObj);
+        $ordCalcObj->setProdottiOrdinati($listProdOrdered);
+        $this->view->ordCalcObj = $ordCalcObj;
         
-        // init Calcoli Utente class
-        $cuObj = new Model_Ordini_Calcoli_Utenti();
-        $cuObj->setOrdObj($ordine);
-        $cuObj->setProdotti($listProdOrdered);
-        $this->view->cuObj = $cuObj;
-        $this->view->prodottiIduser = $cuObj->getProdottiByIduser($this->_iduser);
-        
-        // ORGANIZE by category and subCat
-        $scoObj = new Model_Prodotti_SubCatOrganizer($listProdOrdered);
-        //Zend_Debug::dump($scoObj);
-        $this->view->listProdotti = $scoObj->getListProductsCategorized();
-        $this->view->listSubCat = $scoObj->getListCategories();
+        // Set my iduser to View
+        $this->view->iduser = $this->_iduser;
     }
 
+    
+    function updateorderAction()
+    {
+        Zend_Registry::get("layout")->disableDisplay();
+        
+        // get values
+        $idordine = $this->getParam("idordine");
+        $idprodotto = $this->getParam("idprodotto");
+        $idlistino = $this->getParam("idlistino");
+        $qta = $this->getParam("qta");
+        
+        // UPDATE qta for this Prodotto
+        $ordObj = new Model_Db_Ordini();
+        $result = $ordObj->setQtaProdottoForOrdine($idordine, $idlistino, $idprodotto, $this->_iduser, $qta);
+        //Zend_Debug::dump($result);
+        echo json_encode($result);
+    }
 }
-?>

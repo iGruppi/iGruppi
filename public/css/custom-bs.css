@@ -9,7 +9,7 @@ body {
     border-bottom: 1px solid #eee;
     padding-bottom: 10px;
 }
-#userdata { float: left; border-left: 10px solid #fcfcfc; margin: 0 0 0 70px; padding: 0 10px; font-size: 16px; }
+#userdata { float: left; border-left: 10px solid #fcfcfc; margin: 0; padding: 0 10px; font-size: 14px; }
 
 /* Wrapper for page content to push down footer */
 #wrap {
@@ -32,7 +32,9 @@ body {
 }
 
 #wrap > .container {
-    padding: 20px 15px;
+    padding: 20px;
+    width: auto;
+    max-width: 1170px;
 }
 
 .container .jumbotron { margin-top: 50px; height: 360px; background: transparent url(/images/logo-iGruppi_icon.png) no-repeat 145px -23px; }
@@ -56,29 +58,39 @@ body {
 a {color: #47a447;}
 a:hover, a:focus { color: #666; }
 strong { color: #000; }
-h1, h2, h3, h4, h5, h6 {color: #666; font-weight: 200; }
-h1 { font-size: 30px; }
-h2 { font-size: 24px; }
+h1, h2, h3, h4, h5, h6 {color: #777; font-weight: 200; }
+h1 { font-size: 26px; }
+h2 { font-size: 22px; }
 h3 { font-size: 20px; }
 h4, h5, h6 { margin-top: 5px; margin-bottom: 5px; }
+h1 strong, h2 strong, h3 strong, h4 strong, h5 strong, h6 strong {color: #090; font-weight: 200; }
 
 .no-margin {margin:0;}
 .big-margin-top { margin-top: 55px; }
-h3.green {color: #47a447;}
+.green {color: #47a447;}
 .text-dark { color: #333;}
+.title-list { margin: 0 0 8px 0; }
 
 .alert_red { color: #f22; }
 .alert_green { color: #2b2; }
 
 .content { padding: 10px 30px; }
-.col-right { padding-left: 40px; }
+
+.breadcrumb {
+    font-size: 13px;
+    margin: -10px 0px 0px -15px;
+    padding: 8px 15px;
+    list-style: none;
+    background-color: transparent;
+}
 
 /* STILI ORDINI STATUS */
 .ordine { margin-top: 10px; margin-bottom: 2px; }
 .Pianificato { color: #666; }
 .Aperto { color: #2b2; }
 .Chiuso { color: #f22; }
-.In_Consegna { color: #ec971f; }
+.Inviato { color: #ec971f; }
+.Arrivato { color: #ec9700; }
 .Consegnato { color: #ec971f; }
 .Archiviato { color: #ccc; }
 
@@ -127,6 +139,21 @@ h3.green {color: #47a447;}
 .totale { margin-bottom: 20px; padding: 10px 20px; background-color: #fcfcfc; border-radius: 2px;}
 .totale h2 { margin-top: 10px; }
 .totale h4 { margin-bottom: 15px; }
+
+
+/* LISt WITH A SIDEBAR */
+#listwithsidebar .leftbar .btn { margin-bottom: 20px; display: block; text-align: left; }
+#listwithsidebar .panel-body a.selected { color: #666; border: 1px solid rgb(170, 236, 143); background-color: rgb(235, 247, 234); }
+#listwithsidebar .panel-body a.selected:hover { color: #999; background-color: #fff; }
+
+
+#edit_listino_form h2.titolo { margin-bottom: 0; }
+#edit_listino_form h3.subtitolo { margin-top: 0; margin-bottom: 30px; }
+
+/* ORDINE HEADER */
+#ordine_header { margin-top: 20px; }
+.ordine_title a.disabled, .ordine_title a.disabled:hover { background-color: transparent; cursor: default; }
+
 
 /*
  * Side navigation ORDINI
@@ -178,6 +205,30 @@ h3.green {color: #47a447;}
   font-size: 90%;
 }
 
+@media screen and (min-width: 768px) {
+  .bs-sidebar .nav > .active > ul {
+    display: block;
+  }
+  .bs-sidebar { margin-left: 0; }
+  /* Widen the fixed sidebar */
+  .bs-sidebar.affix,
+  .bs-sidebar.affix-top,
+  .bs-sidebar.affix-bottom {
+    width: 260px;
+  }
+  .bs-sidebar.affix {
+    top: 50px;
+  }
+  .bs-sidebar.affix-bottom {
+    position: absolute; /* Undo the static from mobile first approach */
+  }
+  .bs-sidebar.affix-bottom .bs-sidenav,
+  .bs-sidebar.affix .bs-sidenav {
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+}
+
 /* Show and affix the side nav when space allows it */
 @media screen and (min-width: 992px) {
   .bs-sidebar .nav > .active > ul {
@@ -191,7 +242,7 @@ h3.green {color: #47a447;}
     width: 260px;
   }
   .bs-sidebar.affix {
-    top: 80px;
+    top: 20px;
   }
   .bs-sidebar.affix-bottom {
     position: absolute; /* Undo the static from mobile first approach */
@@ -203,10 +254,26 @@ h3.green {color: #47a447;}
   }
 }
 @media screen and (min-width: 1200px) {
-  /* Widen the fixed sidebar again */
-  .bs-sidebar.affix-bottom,
+  .bs-sidebar .nav > .active > ul {
+    display: block;
+  }
+  .bs-sidebar { margin-left: 0; }
+  /* Widen the fixed sidebar */
+  .bs-sidebar.affix,
+  .bs-sidebar.affix-top,
+  .bs-sidebar.affix-bottom {
+    width: 260px;
+  }
   .bs-sidebar.affix {
-    width: 263px;
+    top: 20px;
+  }
+  .bs-sidebar.affix-bottom {
+    position: absolute; /* Undo the static from mobile first approach */
+  }
+  .bs-sidebar.affix-bottom .bs-sidenav,
+  .bs-sidebar.affix .bs-sidenav {
+    margin-top: 0;
+    margin-bottom: 0;
   }
 }
 
@@ -216,8 +283,8 @@ h3.green {color: #47a447;}
 .row-myig { margin-top: 40px; padding-bottom: 8px; border-bottom: 20px solid #fbfbfb; }
 .row-myig-thin { margin-top: 20px; padding-top: 10px; padding-bottom: 4px; border-bottom: 1px solid #fbfbfb; }
 .row-myig-thin:hover { background-color: #fbfbfb; }
-.dashboard-right { margin-top: 30px; border-left: 1px solid #eee; }
-
+.dashboard-right { margin-top: 10px; }
+.row-margin-bottom { margin-bottom: 15px; }
 
 /*------------------ Buttons and more.... */
 .btn { border-radius: 2px; }
@@ -293,10 +360,22 @@ h3.green {color: #47a447;}
   color: #4CAD3A;
 }
 
+/*
+ * Handsontable
+ *
+ * Some specific styles to optimize Handsontable grids.
+ */
 
-/*------------------------------------
-    FORM 
-------------------------------------*/
+.myhandsontable { font-size: 14px; margin-top: 20px; }
+.handsontable .currentRow {
+  background-color: #BCF1BE;
+}
+
+
+/*
+ * FORM
+ * My Forms styles...
+ */
 
 
 form{ margin:0px; margin-top: 35px; padding:0px; font-size: 16px; }
@@ -306,10 +385,9 @@ form p { margin-bottom: 15px; }
 label{ cursor: pointer;	color: #000; font-weight: bold;}
 label input{ font-weight: normal; }
 input, textarea, select { margin: 0px 2px 20px 2px; color: #000; }
-input  { background-color: #fff; border: solid 1px #aaa; padding: 2px; font-size: 16px;}
+input  { background-color: #fff; border: solid 1px #aaa; padding: 2px 6px; font-size: 16px;}
 textarea { border:1px solid #aaa; padding:3px; font-size:11pt; margin-bottom: 5px;}
 select {
-    height: 28px;
     padding: 6px 12px;
     color: #555;
     background-color: #fff;
@@ -357,20 +435,23 @@ li.witherrors { background-color: #F8FFDD; border: 1px solid #ddFFdd; padding: 2
 li.form_row a.info { background-position: 0 1px; padding: 0 0 0 18px; font-size: 10pt; margin-left: 6px; color: #999; }
 li.form_row a.info:hover {color: #060; }
 
-legend{ background-color: #eee; font-size: 16px; width: auto; margin: 10px 0 0 30px; padding: 3px 5px 3px 5px; color: #666; font-weight: 200; border: 1px solid #ddd; }
+legend { background-color: #eee; font-size: 16px; width: auto; margin: 10px 0 0 30px; padding: 3px 5px 3px 5px; color: #666; font-weight: 200; border: 1px solid #ddd; }
 
 /* Other class in form */
-.intro{ margin: 0 10px 20px 0; border: 1px solid #060;}
+.intro { margin: 0 10px 20px 0; border: 1px solid #060;}
 .hint, .hint_green { margin: 2px 0 12px 108px; padding: 0; }
 .hint_green { color: #393;}
+.hint_50 { margin: 2px 0 0px 50px; padding: 0; }
 .inputcheckbox { border:0px; }
-.disabled, .readonly { background-color: #e9e9e9; color: #666; }
+select[disabled], input[disabled], .disabled, .readonly { background-color: #f6f6f6; color: #999; }
 ul.errors { margin: 0 0 10px 103px; list-style: none; }
 ul.errors li { padding: 3px; color: #f00; list-style-image: url(/images/icon/icona_error_16.png); }
 ul.form-errors { list-style: none; margin-right: 20px; padding: 10px; background: #FBDCCA url(/images/icon/icona_stop_48.png) no-repeat 8px; border: 1px solid #f00; }
 ul.form-errors li ul.errors li { list-style-image: none; }
 
 .np_form { font-weight: bold; }
+
+.checkbox_box { margin-bottom: 20px;}
 
 /***********************************
 FORM - Model 1 - Label 200px
@@ -392,9 +473,6 @@ form.f1n150 .hint,
 form.f1n150 fieldset .error p { margin-left: 158px; }
 form.f1n150 input#submit, form.f1n150 button#submit { margin-left: 167px; }
 
-.is_Number_invalid { border: solid 1px red; background-color: rgba(255,0,0,0.1); }
-
-
 /***********************************
 FORM - Model 1 - Label 120px
 ***********************************/
@@ -404,8 +482,3 @@ form.f1n120 fieldset .checkbox_box,
 form.f1n120 .hint,
 form.f1n120 fieldset .error p { margin-left: 128px; }
 form.f1n120 input#submit, form.f1n120 button#submit { margin-left: 137px; }
-
-
-
-
-

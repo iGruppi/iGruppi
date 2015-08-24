@@ -12,20 +12,26 @@ class Controller_Produttori extends MyFw_Controller {
     function _init() {
         $auth = Zend_Auth::getInstance();
         $this->_iduser = $auth->getIdentity()->iduser;
-        $this->_userSessionVal = new Zend_Session_Namespace('userSessionVal');
+        $this->view->userSessionVal = $this->_userSessionVal = new Zend_Session_Namespace('userSessionVal');
     }
 
-    function indexAction() {
-        
-        $pObj = new Model_Produttori();
-        $listProduttori = $pObj->getProduttoriByIdGroup($this->_userSessionVal->idgroup);        
-        // add Referente object to every Produttore and ORDER them keeping isReferente on the TOP
+    function indexAction() 
+    {    
+        $pObj = new Model_Db_Produttori();
+        $listProduttori = $pObj->getProduttori();
+        $referenti = $pObj->getReferentiByIdgroup_withKeyIdProduttore($this->_userSessionVal->idgroup);
+        // create array PRODUTTORI with objects Model_Produttori_Produttore
         $listProduttoriOrdered = array();
         if(count($listProduttori) > 0) {
-            foreach($listProduttori AS &$produttore) {
-                $produttore->refObj = new Model_Produttori_Referente($produttore->iduser_ref);
-                // check for Referente
-                if( $produttore->refObj->is_Referente() ) {
+            foreach($listProduttori AS $prod) 
+            {
+                // create Produttore
+                $produttore = new Model_Produttori_Produttore();
+                $produttore->initByArrayValues($prod);
+                $refs = isset($referenti[$prod->idproduttore]) ? $referenti[$prod->idproduttore] : array();
+                $produttore->setReferenti($refs);
+                // IF IS Referente put the value on the TOP of array
+                if( $this->_userSessionVal->permsProduttori->is_Referente($produttore->idproduttore) ) {
                     array_unshift($listProduttoriOrdered, $produttore);
                 } else {
                     array_push($listProduttoriOrdered, $produttore);
@@ -35,13 +41,13 @@ class Controller_Produttori extends MyFw_Controller {
         $this->view->list = $listProduttoriOrdered;
         
         // Create array Categorie prodotti for Produttori
-        $catObj = new Model_Categorie();
-        $arCat = $catObj->getSubCategoriesByIdgroup($this->_userSessionVal->idgroup);
+        $catObj = new Model_Db_Categorie();
+        $arCat = $catObj->getCategories_withKeyIdProduttore();
         $this->view->arCat = $arCat;
         
     }
 
-    
+/*    
     function addAction() {
         
         $form = new Form_Produttori();
@@ -55,14 +61,19 @@ class Controller_Produttori extends MyFw_Controller {
                 // ADD Produttore
                 $idproduttore = $this->getDB()->makeInsert("produttori", $fv);
 
-                // Add Relationship with Group
-                $this->getDB()->makeInsert("groups_produttori", array(
+                // Add Relationship to referenti (REFERENTE PRODUTTORE)
+                $this->getDB()->makeInsert("referenti", array(
                     'idproduttore'  => $idproduttore,
                     'idgroup'       => $this->_userSessionVal->idgroup,
-                    'stato'         => 'A',
                     'iduser_ref'    => $this->_iduser
                 ));
      
+                // Add Relationship to users_produttori (GESTORE PRODUTTORE)
+                $this->getDB()->makeInsert("users_produttori", array(
+                    'idproduttore'  => $idproduttore,
+                    'iduser'    => $this->_iduser
+                ));
+                
                 // REDIRECT TO EDIT
                 $this->redirect("produttori", "edit", array('idproduttore' => $idproduttore));
             }
@@ -71,28 +82,25 @@ class Controller_Produttori extends MyFw_Controller {
         // set Form in the View
         $this->view->form = $form;
     }
-    
+*/    
     function viewAction() {
         $idproduttore = $this->getParam("idproduttore");
-        $myObj = new Model_Produttori();
-        $this->view->produttore = $myObj->getProduttoreById($idproduttore, $this->_userSessionVal->idgroup);
+        $myObj = new Model_Db_Produttori();
+        $this->view->produttore = $myObj->getProduttoreById($idproduttore);
     }
     
     function editAction() {
 
         $idproduttore = $this->getParam("idproduttore");
         
-        $this->view->updated = false;
-        
         // check if CAN edit this Produttore
-        $myObj = new Model_Produttori();
-        $produttore = $myObj->getProduttoreById($idproduttore, $this->_userSessionVal->idgroup);
+        $myObj = new Model_Db_Produttori();
+        $produttore = $myObj->getProduttoreById($idproduttore);
         // Un po' di controlli per i furbi...
         if($produttore === false) {
             $this->redirect("produttori");
         }
-        $pRefObj = new Model_Produttori_Referente($produttore->iduser_ref);
-        if(!$pRefObj->is_Referente()) {
+        if(!$this->_userSessionVal->permsProduttori->canManageProduttore($idproduttore)) {
             $this->forward("produttori", "view", array('idproduttore' => $idproduttore));
         }
         $this->view->produttore = $produttore;
@@ -102,7 +110,7 @@ class Controller_Produttori extends MyFw_Controller {
         $form->setAction("/produttori/edit/idproduttore/$idproduttore");
         
         // Get elenco Categorie
-        $catObj = new Model_Categorie();
+        $catObj = new Model_Db_Categorie();
         $this->view->categorie = $catObj->convertToSingleArray($catObj->getCategorie(), "idcat", "descrizione");
         
         // Get POST and Validate data
@@ -134,18 +142,17 @@ class Controller_Produttori extends MyFw_Controller {
                     $catObj->editSubCategorie($arVal);
                 }
 
-                $this->view->updated = true;
+                $this->redirect("produttori", "edit", array('idproduttore' => $idproduttore, 'updated' => true));
             }
-            //Zend_Debug::dump($sth); die;
-            
         } else {
             $form->setValues($produttore);
         }
         
         // get Elenco subCat
-        $this->view->arSubCat =  $catObj->getSubCategories($this->_userSessionVal->idgroup, $idproduttore);
+        $this->view->arSubCat =  $catObj->getSubCategoriesByIdproduttore($idproduttore);
         // set Form in the View
         $this->view->form = $form;
+        $this->view->updated = $this->getParam("updated");        
     }
 
 
@@ -165,12 +172,11 @@ class Controller_Produttori extends MyFw_Controller {
         
         // prepare array
         $arVal = array(
-                'idgroup'       => $this->_userSessionVal->idgroup,
                 'idproduttore'  => $idproduttore,
                 'idcat'         => $idcat,
                 'descrizione'   => $catName
             );
-        $catObj = new Model_Categorie();
+        $catObj = new Model_Db_Categorie();
         $idsubcat = $catObj->addSubCategoria($arVal);
         
         if(!is_null($idsubcat)) {
@@ -178,7 +184,7 @@ class Controller_Produttori extends MyFw_Controller {
             // set data in view of the new Subcat created
             $this->view->subCat = $arVal;
             // Get elenco Categorie
-            $catObj = new Model_Categorie();
+            $catObj = new Model_Db_Categorie();
             $this->view->categorie = $catObj->convertToSingleArray($catObj->getCategorie(), "idcat", "descrizione");
             // fetch View
             $myTpl = $this->view->fetch("produttori/form.cat-single.tpl.php");
@@ -196,7 +202,7 @@ class Controller_Produttori extends MyFw_Controller {
         
         $idsubcat = $this->getParam("idsubcat");
         // get Prodotti by idsubcat
-        $prodObj = new Model_Prodotti();
+        $prodObj = new Model_Db_Prodotti();
         $prodotti = $prodObj->getProdottiByIdSubCat($idsubcat);
         if(count($prodotti) > 0) {
             

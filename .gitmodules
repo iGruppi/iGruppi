@@ -16,3 +16,6 @@
 [submodule "library/jquery"]
 	path = library/jquery
 	url = https://github.com/Jazzo/jquery.git
+[submodule "library/handsontable"]
+	path = library/handsontable
+	url = https://github.com/Jazzo/handsontable.git

@@ -1,6 +1,6 @@
-<h2>Gestione Ordini per <strong><?php echo $this->produttore->ragsoc; ?></strong></h2>
+<h2>Gestione Ordini</h2>
 
-<div class="row">
+<div class="row" id="listwithsidebar">
   <div class="col-md-8">
       
 <?php if($this->updated): ?>
@@ -10,18 +10,37 @@
     </div>
 <?php endif; ?>
       
-<?php if(count($this->list) > 0): ?>
-    <?php foreach ($this->list as $key => $ordine): ?>
-      <div id="ordine_<?php echo $ordine->idordine;?>">
+<?php if(count($this->ordini) > 0): ?>
+    <?php foreach ($this->ordini as $key => $ordine): ?>
+      <div id="ordine_<?php echo $ordine->getIdOrdine();?>">
       <?php echo $this->partial('gestioneordini/index-ordine.tpl.php', array('ordine' => $ordine)); ?>
       </div>
     <?php endforeach; ?>
 <?php else: ?>
-    <h3>Nessun ordine per questo produttore!</h3>
+    <h3>Nessun ordine in questo stato.</h3>
 <?php endif; ?>
   </div>
-  <div class="col-md-1">&nbsp;</div>
-  <div class="col-md-3">
-      <a class="btn btn-default btn-mylg" href="/gestione-ordini/new/idproduttore/<?php echo $this->produttore->idproduttore;?>"><span class="glyphicon glyphicon-plus"></span> Nuovo ordine</a>
-  </div>    
+  <div class="col-md-3 col-md-offset-1 leftbar">
+<?php if($this->permsProduttori->canOpenNewOrdine()): ?>
+        <a class="btn btn-default btn-mylg" href="/gestione-ordini/new"><span class="glyphicon glyphicon-plus"></span> Nuovo ordine</a>
+<?php endif; ?>        
+        <div class="panel-group" id="accordion">
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h4 class="panel-title">
+                <a class="accordion-toggle" data-toggle="collapse" href="#collapseOne"><span class="glyphicon glyphicon-filter"></span> Filtra ordini per Stato</a>
+              </h4>
+            </div>
+            <div id="collapseOne" class="panel-collapse collapse in">
+              <div class="panel-body">
+    <?php $stati = Model_Ordini_State_OrderFactory::getOrderStatesArray();
+            foreach($stati AS $stato): ?>
+                <a <?php if($this->filter == $stato){ echo 'class="selected"'; } ?> href="/gestione-ordini/index/filter/<?php echo $stato; ?>"><span class="badge"><?php echo isset($this->counterOrdiniStati[$stato]) ? $this->counterOrdiniStati[$stato] : 0; ?></span> <?php echo $stato; ?></a>
+    <?php   endforeach; ?>
+              </div>
+            </div>
+          </div>
+        </div>
+  </div>
+  
 </div>

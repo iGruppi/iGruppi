@@ -15,8 +15,8 @@
             <?php endif; ?>
             </p>
         </div>
-        <div class="col-md-4">
-        <?php if($this->imFondatore): ?>
+        <div class="col-md-4 text-right">
+        <?php if($this->aclUserObject->canModifyUser()): ?>
             <a class="btn btn-success" href="/users/edit/iduser/<?php echo $user->iduser;?>" style="margin-bottom: 5px;">Modifica</a>
             <?php if( !$this->yesnoToBool($user->attivo)): ?>
                 <a class="btn btn-primary" id="disabled_button_<?php echo $user->iduser;?>"  data-loading-text="Loading..." href="javascript:void(0)" onclick="jx_EnableUser(<?php echo $user->iduser;?>)">Abilita e Invia email</a>

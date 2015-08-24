@@ -1,92 +1,147 @@
 <div id="ordine_header">
     <?php include $this->template('gestioneordini/gestione-header.tpl.php'); ?>
 </div>
-
 <div class="row">
-<?php if($this->statusObj->canRef_ModificaQtaOrdinate()): ?>
-    <div class="col-md-8">
-    <h3 class="big-margin-top">Quantità ordinate per utente</h3>
-    <?php if($this->ordCalcObj->getProdottiUtenti() > 0): ?>
-        <?php foreach ($this->ordCalcObj->getProdottiUtenti() AS $iduser => $user): ?>
-            <h3 id="user_<?php echo $iduser; ?>" class="big-margin-top"><strong><?php echo $user["nome"] . " " . $user["cognome"]; ?></strong></h3>
-            <table class="table table-condensed">
-                <thead>
-                  <tr>
-                    <th style="width:320px">Prodotto</th>
-                    <th style="width:40px">&nbsp;</th>
-                    <th style="width:190px">Quantità</th>
-                    <th class="text-right" style="width:80px">Totale</th>
-                  </tr>
-                </thead>
-                <tbody>
-            <?php foreach ($user["prodotti"] AS $idprodotto => $pObj):
-                    echo $this->partial('gestioneordini/qtaordine-row.tpl.php', array('pObj' => $pObj, 'idordine' => $this->ordCalcObj->getIdOrdine(), 'iduser' => $iduser, 'idprodotto' => $idprodotto));
-                  endforeach; ?>
-                    <tr id="tr_last_<?php echo $iduser; ?>" style="display: none;"><td colspan="4"></td></tr>
-            <?php if($this->ordCalcObj->hasCostoSpedizione() && $this->ordCalcObj->getTotaleByIduser($iduser)): ?>
-                    <tr class="warning">
-                        <td><b>Spese di spedizione</b></td>
-                        <td colspan="2">&nbsp;</td>
-                        <td class="text-right"><strong><?php echo $this->valuta($this->ordCalcObj->getSpedizione()->getCostoSpedizioneRipartitoByIduser($iduser)); ?></strong></td>
-                    </tr>
-            <?php endif; ?>
-                    <tr>
-                        <td colspan="2">&nbsp;</td>
-                        <td><b>Totale:</b></td>
-                        <td class="text-right" id="td_grandtotrow_<?php echo $iduser;?>"><strong><?php echo $this->valuta($this->ordCalcObj->getTotaleConSpedizioneByIduser($iduser)); ?></strong></td>
-                    </tr>
-                    <tr>
-                        <td colspan="4" id="td_add_<?php echo $iduser; ?>">
-                            <a href="javascript:void(0);" onclick="jx_ReferenteAddNewProd(<?php echo $iduser; ?>,<?php echo $this->ordCalcObj->getIdOrdine(); ?>)" class="btn btn-success"><span class="glyphicon glyphicon-plus"></span> Aggiungi</a>
-                            <div id="div_add_<?php echo $iduser; ?>" style="padding: 5px; display: none;"></div>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        <?php endforeach; ?>
-
-    <?php else: ?>
-        <div class="lead">Nessun prodotto ordinato!</div>
-    <?php endif; ?>
-    </div>
-    <div class="col-md-4 col-right">
-        <div class="bs-sidebar" data-spy="affix" data-offset-top="176" data-offset-bottom="150" role="complementary">
-    <?php if(count($this->users) > 0): ?>
-        <ul class="nav bs-sidenav">
-            <li><a href="javascript: void(0);" onclick="$('html,body').animate({scrollTop: $('#wrap').offset().top});" class="text-right"><small>Top <span class="glyphicon glyphicon-circle-arrow-up"></span></small></a></li>
-
-        <?php foreach ($this->users as $iduser => $userVal): ?>
-            <li>
-              <a class="restricted" href="#user_<?php echo $iduser; ?>"><?php echo $userVal["nome"] . " " . $userVal["cognome"]; ?></a>
-            </li>    
-        <?php endforeach; ?>
-        </ul>
-        </div>
-        <script>
-        !function ($) {
-          $(function(){
-            var $window = $(window);
-            var $body   = $(document.body);
-            var navHeight = $('.header').outerHeight(true) + 10;
-            $body.scrollspy({
-              target: '.bs-sidebar',
-              offset: navHeight
-            });
-            $window.on('load', function () {
-              $body.scrollspy('refresh');
-            });
-            $('.moreThan30').tooltip('hide');
-          })
-        }(window.jQuery)
-        </script>
-    <?php endif; ?>
-    </div>
-    
-<?php else: ?>
-    <div class="col-md-8">
-    <h3 class="big-margin-top">Quantità ordinate per utente</h3>
-        <p>Non è possibile modificare le quantità ordinate perchè l'ordine è in stato: <span class="<?php echo $this->statusObj->getStatusCSSClass(); ?>"><?php echo $this->statusObj->getStatus(); ?></span></p>
-    </div>
+  <div class="col-md-12">
+    <h3>Quantità ordinate per utente</h3>
+  </div>
+</div>  
+<div class="row">
+    <div class="col-md-12">
+<?php if(!$this->ordine->canModificaQtaOrdinate()): ?>
+        <p class="text-danger">Non puoi modificare le quantità ordinate.</p>
 <?php endif; ?>
-</div>
+<?php 
+        $arProductsGrid = array();
+        if($this->ordCalcObj->getProdottiUtenti() > 0): 
+            foreach ($this->ordCalcObj->getProdottiUtenti() AS $iduser => $user): ?>
+<?php        
+                foreach ($user["prodotti"] AS $idprodotto => $pObj):
+                    $arProductsGrid[] = array(
+                        'idprodotto'            => $pObj->getIdProdotto(),
+                        'idlistino'             => $pObj->getIdListino(),
+                        'iduser'                => $iduser,
+                        'disponibile_ordine'    => $pObj->isDisponibile(),
+                        'user'                  => $user["cognome"] . " " . $user["nome"],
+                        'qta'                   => $pObj->getQta_ByIduser($iduser),
+                        'qta_reale'             => $pObj->getQtaReale_ByIduser($iduser),
+                        'codice'                => $pObj->getCodice(),
+                        'descrizione'           => $pObj->getDescrizioneListino(),
+                        'costo_ordine'          => $pObj->getCostoOrdine(),
+                        'udm'                   => $pObj->getUdm() .($pObj->hasPezzatura() ? "<br /><small>(Minimo " . $pObj->getDescrizionePezzatura() . ")</small>" : ""),
+                        'subcat'                => $pObj->getSubCategoria()
+                    );
+    ?>
+<?php           endforeach; ?>
+<?php       endforeach; ?>
+        <div id="grid-prodotti" class="handsontable myhandsontable"></div>
 
+<?php   else: ?>
+        <div class="lead">Nessun prodotto ordinato!</div>
+<?php   endif; ?>
+  </div>
+</div>    
+
+<script>    
+$(document).ready(function () { 
+    // store my idordine
+    var idordine = <?php echo $this->ordine->getIdOrdine(); ?>;
+
+    $('#grid-prodotti').handsontable({
+        data: <?php echo json_encode($arProductsGrid); ?>,
+        manualColumnMove: true,
+        manualColumnResize: true,
+        colHeaders: ['Disp.', 'Codice', 'Descrizione', 'Prezzo', 'Udm', 'Utente', 'Qta Ord.', 'Qta Reale'],
+        colWidths: [50, 80, 350, 80, 100, 200, 70, 70],
+        columnSorting: true,
+        currentRowClassName: 'currentRow',
+        columns: [
+          {
+            data: 'disponibile_ordine',
+            type: 'checkbox',
+            readOnly: true
+          },
+          {
+            data: 'codice',
+            readOnly: true
+          },
+          {
+            data: 'descrizione',
+            readOnly: true
+          },
+          {
+            data: 'costo_ordine',
+            readOnly: true,
+            type: 'numeric',
+            format: '0,0.00 $',
+            language: 'it'
+          },
+          {
+            data: 'udm',
+            renderer: "html",
+            readOnly: true
+          },
+          {
+            data: 'user',
+            readOnly: true
+          },
+          {
+            data: 'qta',
+            readOnly: true,
+            type: 'numeric'
+          },
+          {
+            data: 'qta_reale',
+            type: 'numeric',
+            format: '0,0.00',
+            language: 'it',
+            readOnly: <?php echo (!$this->ordine->canModificaQtaOrdinate()) ? "true" : "false"; ?>
+          }
+        ],
+        cells: function (row, col, prop) {
+          var cellProperties = {};
+          if (this.instance.getData()[row]["disponibile_ordine"] === false) {
+            cellProperties.readOnly = true;
+          }
+          return cellProperties;
+        },
+        afterChange: function (changes, source) {
+            if (source === 'edit') {
+              for(var i = changes.length - 1; i >= 0; i--)
+              {
+                  // NOT SORTED (as Default value), logicalIndex = physicalIndex
+                  var physicalIndex = changes[i][0];
+                  if(isSorted(this)) {
+                      // SORTED, convert logicalIndex to physicalIndex to get the right SourceData
+                      physicalIndex = this.sortIndex[changes[i][0]][0];
+                  }
+                  // get SourceData by physicalIndex
+                  var rowSourceData = this.getSourceDataAtRow(physicalIndex);
+                  // get value changed fields
+                  var field = changes[i][1];
+                  var old_value = changes[i][2];
+                  var new_value = changes[i][3];
+                  // check if it is really changed
+                  console.log(field + ": " + new_value + " - " + old_value );
+                  console.log(rowSourceData);
+                  if(old_value !== new_value)
+                  {   
+                      $.getJSON(
+                          '/gestione-ordini/changeqta/',
+                          {iduser: rowSourceData.iduser, idordine: idordine, idprodotto: rowSourceData.idprodotto, idlistino: rowSourceData.idlistino, field: field, value: new_value},
+                          function(data) {
+                              if(!data.res)
+                              {
+                                  console.log('ERROR!');
+                              }
+                          });
+                  }
+              }
+            }
+        }
+        
+    });
+    
+    
+});
+</script>
