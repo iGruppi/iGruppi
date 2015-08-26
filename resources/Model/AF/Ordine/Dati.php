@@ -69,12 +69,12 @@ class Model_AF_Ordine_Dati extends Model_AF_Dati
     }
     
     /**
-     * Return iduser of Supervisore (field ordini.iduser_ref)
+     * Return iduser of Supervisore (field ordini.iduser_supervisore)
      * @return int
      */
     public function getSupervisore_IdUser()
     {
-        return $this->getValue("iduser_ref");
+        return $this->getValue("iduser_supervisore");
     }
     
     /**
@@ -87,7 +87,7 @@ class Model_AF_Ordine_Dati extends Model_AF_Dati
     }
     
     /**
-     * Return iduser of Supervisore (field ordini.iduser_ref)
+     * Return idgroup of the Supervisore
      * @return int
      */
     public function getSupervisore_IdGroup()
@@ -193,11 +193,11 @@ class Model_AF_Ordine_Dati extends Model_AF_Dati
             $db = Zend_Registry::get("db");
             // check for INSERT or UPDATE
             if(is_null($this->getValue("idordine")) ) {
-                // GET IDUSER che apre l'ordine per impostare iduser_ref (SUPERVISORE)
-                $iduser_ref = Zend_Auth::getInstance()->getIdentity()->iduser;
+                // GET IDUSER che apre l'ordine per impostare iduser_supervisore
+                $iduser_supervisore = Zend_Auth::getInstance()->getIdentity()->iduser;
                 // INSERT, idordine does not exists
-                $sth = $db->prepare("INSERT INTO ordini SET iduser_ref= :iduser_ref, descrizione= :descrizione, data_inizio= :data_inizio, data_fine= :data_fine, condivisione= :condivisione");
-                $res = $sth->execute(array('iduser_ref' => $iduser_ref, 'descrizione' => $this->getDescrizione(), 'data_inizio' => $this->getDataInizio(), 'data_fine' => $this->getDataFine(), 'condivisione' => $this->getCondivisione()));
+                $sth = $db->prepare("INSERT INTO ordini SET iduser_supervisore= :iduser_supervisore, descrizione= :descrizione, data_inizio= :data_inizio, data_fine= :data_fine, condivisione= :condivisione");
+                $res = $sth->execute(array('iduser_supervisore' => $iduser_supervisore, 'descrizione' => $this->getDescrizione(), 'data_inizio' => $this->getDataInizio(), 'data_fine' => $this->getDataFine(), 'condivisione' => $this->getCondivisione()));
                 $this->setIdOrdine( $db->lastInsertId() );
                 return $res;
             } else {

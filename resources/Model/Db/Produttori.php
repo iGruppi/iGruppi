@@ -16,7 +16,7 @@ class Model_Db_Produttori extends MyFw_DB_Base {
         $sql = "SELECT p.ragsoc, p.idproduttore "
               ." FROM produttori AS p"
               ." LEFT JOIN referenti AS r ON p.idproduttore=r.idproduttore"
-              ." WHERE r.iduser_ref= :iduser"
+              ." WHERE r.iduser_referente= :iduser"
               ." ORDER BY p.ragsoc";
         $sth_app = $this->db->prepare($sql);
         $sth_app->execute(array('iduser' => $iduser));
@@ -46,9 +46,9 @@ class Model_Db_Produttori extends MyFw_DB_Base {
     
     function getReferentiByIdgroup_withKeyIdProduttore($idgroup)
     {
-        $sql = "SELECT r.*, u.nome AS ref_nome, u.cognome AS ref_cognome, u.email AS ref_email"
+        $sql = "SELECT r.*, u.nome AS nome_referente, u.cognome AS cognome_referente, u.email AS email_referente"
               ." FROM referenti AS r"
-              ." LEFT OUTER JOIN users AS u ON r.iduser_ref=u.iduser"
+              ." LEFT OUTER JOIN users AS u ON r.iduser_referente=u.iduser"
               ." WHERE r.idgroup= :idgroup"
               ." ORDER BY r.idproduttore";
         $sth = $this->db->prepare($sql);
@@ -57,7 +57,7 @@ class Model_Db_Produttori extends MyFw_DB_Base {
         $res = array();
         if(count($refs) > 0) {
             foreach($refs AS $ref) {
-                $res[$ref->idproduttore][$ref->iduser_ref] = $ref;
+                $res[$ref->idproduttore][$ref->iduser_referente] = $ref;
             }
         }
         return $res;

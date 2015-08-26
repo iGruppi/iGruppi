@@ -36,7 +36,7 @@ class Model_Db_Users extends MyFw_DB_Base {
     
     function getRefByIduserAndIdgroup($iduser, $idgroup) 
     {
-        $sql = "SELECT idproduttore FROM referenti WHERE iduser_ref= :iduser AND idgroup= :idgroup";
+        $sql = "SELECT idproduttore FROM referenti WHERE iduser_referente= :iduser AND idgroup= :idgroup";
         $sth = $this->db->prepare($sql);
         $sth->execute(array('iduser' => $iduser, 'idgroup' => $idgroup));
         return $sth->fetchAll(PDO::FETCH_CLASS);

@@ -35,7 +35,7 @@ class Model_AF_Ordine_Gruppi extends Model_AF_Gruppi
             return false;
         }
         // INSERT groups
-        $sth_insert = $db->prepare("INSERT INTO ordini_groups SET idordine= :idordine, idgroup_master= :idgroup_master, idgroup_slave= :idgroup_slave, iduser_ref= :iduser_ref, note_consegna= :note_consegna, visibile= :visibile, extra= :extra");
+        $sth_insert = $db->prepare("INSERT INTO ordini_groups SET idordine= :idordine, idgroup_master= :idgroup_master, idgroup_slave= :idgroup_slave, iduser_incaricato= :iduser_incaricato, note_consegna= :note_consegna, visibile= :visibile, extra= :extra");
         foreach($this->getAllGroups() AS $group) {
             $res = $sth_insert->execute($group->dumpValuesForDB());
             if(!$res) {

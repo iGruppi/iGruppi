@@ -6,7 +6,7 @@
                     <?php if(!$this->ordine->getMyGroup()->isSetUserRef()): ?>
                         <b class="text-danger">Nessun "Incaricato ordine" assegnato!</b>
                     <?php else: ?>
-                        <span class="text-muted">Incaricato ordine:</span> <?php echo $this->ordine->getMyGroup()->getRefNome(); ?>
+                        <span class="text-muted">Incaricato ordine:</span> <?php echo $this->ordine->getMyGroup()->getIncaricato(); ?>
                     <?php endif; ?>
                             
                 </h5>

@@ -16,7 +16,7 @@
                 Referente Produttore interno: 
              <?php if($produttore->hasReferenti()):?>
                 <?php foreach ($produttore->getReferenti() AS $iduser => $referente): ?>
-                    <a href="mailto: <?php echo $referente->ref_email; ?>"><?php echo $referente->ref_nome . " " . $referente->ref_cognome; ?></a>,
+                    <a href="mailto: <?php echo $referente->email_referente; ?>"><?php echo $referente->nome_referente . " " . $referente->cognome_referente; ?></a>,
                 <?php endforeach; ?>
              <?php else: ?>
                     <b class="text-danger">Nessuno</b>

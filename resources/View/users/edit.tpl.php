@@ -96,7 +96,7 @@
                     var reftext = new Array();
                     for(i in refs)
                     {
-                        reftext.push( refs[i].ref_nome + " " + refs[i].ref_cognome );
+                        reftext.push( refs[i].nome_referente + " " + refs[i].cognome_referente );
                     }
                     $('#refs > b').html(reftext.join(', '));
                     $('#refs').show();

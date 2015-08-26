@@ -73,7 +73,7 @@ class Form_Ordini extends MyFw_Form {
         $objU = new Model_Db_Users();
         $arVal = $objU->convertToSingleArray($objU->getUsersByIdGroup($userSessionVal->idgroup, true), "iduser", "nominativo");
         $arVal[0] = 'Seleziona...';
-        $this->addField('iduser_ref', array(
+        $this->addField('iduser_incaricato', array(
                         'label'     => 'Incaricato ordine',
                         'type'      => 'select',
                         'options'   => $arVal,

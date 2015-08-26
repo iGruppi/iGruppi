@@ -30,7 +30,7 @@
                 </div>
             <?php endif; ?>
             <?php if($this->ordine->canManageIncaricato()): ?>
-                <?php echo $this->form->renderField('iduser_ref'); ?>
+                <?php echo $this->form->renderField('iduser_incaricato'); ?>
             <?php endif; ?>
             </fieldset>
 

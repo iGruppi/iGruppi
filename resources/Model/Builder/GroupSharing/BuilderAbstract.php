@@ -42,13 +42,23 @@ abstract class Model_Builder_GroupSharing_BuilderAbstract
     /**
      * @return void
      */
-    public function addRef()
+    public function addIncaricato()
     {
-        $this->group->setPart('ref_iduser', new Model_Builder_Parts_Id());
-        $this->group->setPart('ref_nome', new Model_Builder_Parts_Text());
-        $this->group->setPart('ref_cognome', new Model_Builder_Parts_Text());
+        $this->group->setPart('iduser_incaricato', new Model_Builder_Parts_Id());
+        $this->group->setPart('nome_incaricato', new Model_Builder_Parts_Text());
+        $this->group->setPart('cognome_incaricato', new Model_Builder_Parts_Text());
     }
     
+    /**
+     * @return void
+     */
+    public function addReferente()
+    {
+        $this->group->setPart('iduser_referente', new Model_Builder_Parts_Id());
+        $this->group->setPart('nome_referente', new Model_Builder_Parts_Text());
+        $this->group->setPart('cognome_referente', new Model_Builder_Parts_Text());
+    }
+
     /**
      * @return void
      */

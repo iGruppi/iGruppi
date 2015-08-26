@@ -97,12 +97,12 @@ class Controller_Users extends MyFw_Controller {
         $idproduttore = $this->getParam("idproduttore");
         $iduser = $this->getParam("iduser");
         $flag = $this->getParam("flag");
-        $arVal = array('idproduttore' => $idproduttore, 'idgroup' => $this->_userSessionVal->idgroup, 'iduser_ref' => $iduser);
+        $arVal = array('idproduttore' => $idproduttore, 'idgroup' => $this->_userSessionVal->idgroup, 'iduser_referente' => $iduser);
         if($flag == "set") {
             // UPDATE
-            $sth = $this->getDB()->prepare("UPDATE referenti SET iduser_ref= :iduser_ref WHERE idproduttore= :idproduttore AND idgroup= :idgroup");
+            $sth = $this->getDB()->prepare("UPDATE referenti SET iduser_referente= :iduser_referente WHERE idproduttore= :idproduttore AND idgroup= :idgroup");
         } else {
-            $sth = $this->getDB()->prepare("INSERT INTO referenti SET iduser_ref= :iduser_ref, idproduttore= :idproduttore, idgroup= :idgroup");
+            $sth = $this->getDB()->prepare("INSERT INTO referenti SET iduser_referente= :iduser_referente, idproduttore= :idproduttore, idgroup= :idgroup");
         }
         $result = $sth->execute($arVal);
         echo json_encode($result);

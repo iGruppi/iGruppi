@@ -16,7 +16,8 @@ class Model_Builder_GroupSharing_Director
         $builder->addId();
         $builder->addGroupKeys();
         $builder->addGroupName();
-        $builder->addRef();
+        $builder->addReferente();
+        $builder->addIncaricato();
         $builder->addValidita();
         $builder->addVisibile();
         $builder->addExtra();

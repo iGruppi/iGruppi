@@ -33,6 +33,10 @@ abstract class Model_Builder_GroupSharing_Parts_Group
     {
         return $this->data["id"]->get();
     }
+
+/**************************
+ * GROUPS: SLAVE and MASTER
+ */        
     
     /**
      * @param int $idgroup
@@ -82,39 +86,76 @@ abstract class Model_Builder_GroupSharing_Parts_Group
         return $this->data["group_nome"]->get();
     }
 
+/**********************
+ * REFERENTE PRODUTTORE
+ */    
+    
     /**
-     * @param int $iduser
+     * Set Incaricato by Nome and Cognome
+     * @param string $nome
+     * @param string $cognome
      */
-    public function setRefIdUser($iduser)
+    public function setReferente($iduser, $nome="", $cognome="")
     {
-        $this->data["ref_iduser"]->set($iduser);
+        $this->data["iduser_referente"]->set($iduser);
+        $this->data["nome_referente"]->set($nome);
+        $this->data["cognome_referente"]->set($cognome);
     }
     
     /**
      * @return int
      */
-    public function getRefIdUser()
+    public function getIdUser_Referente()
     {
-        return $this->data["ref_iduser"]->get();
+        return $this->data["iduser_referente"]->get();
     }
 
     /**
-     * @param string $ref_nome
-     * @param string $ref_cognome
+     * @return string
      */
-    public function setRefNome($ref_nome, $ref_cognome)
+    public function getReferente()
     {
-        $this->data["ref_nome"]->set($ref_nome);
-        $this->data["ref_cognome"]->set($ref_cognome);
+        return $this->data["nome_referente"]->get() . " " . $this->data["cognome_referente"]->get();
+    }
+
+    
+/*******************
+ * INCARICATO ORDINE
+ */    
+    
+    /**
+     * Set Incaricato by Nome and Cognome
+     * @param string $nome
+     * @param string $cognome
+     */
+    public function setIncaricato($iduser, $nome="", $cognome="")
+    {
+        $this->data["iduser_incaricato"]->set($iduser);
+        $this->data["nome_incaricato"]->set($nome);
+        $this->data["cognome_incaricato"]->set($cognome);
     }
     
     /**
+     * @return int
+     */
+    public function getIdUser_Incaricato()
+    {
+        return $this->data["iduser_incaricato"]->get();
+    }
+
+    /**
      * @return string
      */
-    public function getRefNome()
+    public function getIncaricato()
     {
-        return $this->data["ref_nome"]->get() . " " . $this->data["ref_cognome"]->get();
+        return $this->data["nome_incaricato"]->get() . " " . $this->data["cognome_incaricato"]->get();
     }
+    
+
+    
+/**************
+ * OTHER FIELDS
+ */ 
     
     /**
      * @param mixed  $flag

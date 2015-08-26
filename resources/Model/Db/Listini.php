@@ -29,7 +29,7 @@ class Model_Db_Listini extends MyFw_DB_Base {
                 . " JOIN listini_groups AS lg ON l.idlistino=lg.idlistino"
                 . " JOIN produttori AS p ON l.idproduttore=p.idproduttore "
                 . " JOIN referenti AS ref ON ref.idproduttore=l.idproduttore AND ref.idgroup= lg.idgroup_master"
-                . " JOIN users AS u ON ref.iduser_ref=u.iduser"
+                . " JOIN users AS u ON ref.iduser_referente=u.iduser"
                 . " WHERE l.condivisione='PUB'"
                 . " OR (l.condivisione='PRI' AND lg.idgroup_master= :idgroup)"
                 . " OR (l.condivisione='SHA' AND lg.idgroup_slave = :idgroup)";
@@ -43,13 +43,13 @@ class Model_Db_Listini extends MyFw_DB_Base {
     
     function getGroupsByIdlistino($idlistino)
     {
-        $sql = "SELECT gl.*, gl.idlistino AS id, g_slave.nome AS group_nome, u_slave.iduser AS ref_iduser, u_slave.nome AS ref_nome, u_slave.cognome AS ref_cognome "
+        $sql = "SELECT gl.*, gl.idlistino AS id, g_slave.nome AS group_nome, u_slave.iduser AS iduser_referente, u_slave.nome AS nome_referente, u_slave.cognome AS cognome_referente "
                 . " FROM listini AS l"
                 . " JOIN listini_groups AS gl ON l.idlistino=gl.idlistino"
             // JOIN SLAVES and REFERENTI
                 . " JOIN groups AS g_slave ON gl.idgroup_slave=g_slave.idgroup "
                 . " LEFT JOIN referenti AS ref_slave ON ref_slave.idproduttore=l.idproduttore AND g_slave.idgroup=ref_slave.idgroup "
-                . " LEFT JOIN users AS u_slave ON ref_slave.iduser_ref=u_slave.iduser "
+                . " LEFT JOIN users AS u_slave ON ref_slave.iduser_referente=u_slave.iduser "
                 . " WHERE l.idlistino= :idlistino ";
         $sth = $this->db->prepare($sql);
         $sth->execute(array('idlistino' => $idlistino));
@@ -66,7 +66,7 @@ class Model_Db_Listini extends MyFw_DB_Base {
                 JOIN listini AS l ON lg.idlistino = l.idlistino
                 JOIN produttori AS p ON l.idproduttore=p.idproduttore
                 JOIN referenti AS ref ON l.idproduttore = ref.idproduttore AND lg.idgroup_slave = :idgroup
-                WHERE ref.iduser_ref = :iduser AND lg.visibile = 'S'";
+                WHERE ref.iduser_referente = :iduser AND lg.visibile = 'S'";
         $sth = $this->db->prepare($sql);
         $sth->execute(array('idgroup' => $idgroup, 'iduser' => $iduser));
         if($sth->rowCount() > 0) {

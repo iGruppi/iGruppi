@@ -34,15 +34,15 @@
             <h3 class="totale">Totale ordine (con IVA): <strong><?php echo $this->valuta($this->ordCalcObj->getTotale()); ?></strong></h3>
             <h3 class="totale">Totale ordine (senza IVA): <strong><?php echo $this->valuta($this->ordCalcObj->getTotaleSenzaIva()); ?></strong></h3>
     <?php endif; ?>
-            <h4>Totali Spese Extra</h4>
-            <p>
     <?php $extraArray = $this->ordCalcObj->getSpeseExtra_Totale();
         if(count($extraArray) > 0): ?>
+            <h4>Totali Spese Extra</h4>
+            <p>
         <?php foreach ($extraArray AS $extra): ?>
             <?php echo $extra["descrizione"]; ?> (<em><?php echo $extra["descrizioneTipo"]; ?></em>): <strong><?php echo $this->valuta($extra["totale"]); ?></strong><br />
         <?php endforeach; ?>
-    <?php endif; ?>            
             </p>
+    <?php endif; ?>            
             <h4>Colli</h4>
             <p>
                 Totale colli: <strong><?php echo $this->ordCalcObj->getTotaleColli(); ?></strong><br />

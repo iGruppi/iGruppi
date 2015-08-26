@@ -19,7 +19,7 @@
                       <?php if(!$ordine->getMyGroup()->isSetUserRef()): ?>
                           <b class="text-danger">Nessun Incaricato ordine assegnato!</b>
                       <?php else: ?>
-                          <?php echo $ordine->getMyGroup()->getRefNome(); ?>
+                          <?php echo $ordine->getMyGroup()->getIncaricato(); ?>
                       <?php endif; ?>
 
                   </h5>

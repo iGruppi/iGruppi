@@ -9,7 +9,7 @@ class Model_Builder_GroupSharing_Parts_Ordine
     
     public function isSetUserRef()
     {
-        return !is_null($this->getRefIdUser()); 
+        return !is_null($this->getIdUser_Incaricato());
     }
     
     /**
@@ -21,7 +21,7 @@ class Model_Builder_GroupSharing_Parts_Ordine
             'idordine'          => $this->getId(),
             'idgroup_master'    => $this->getIdGroupMaster(),
             'idgroup_slave'     => $this->getIdGroup(),
-            'iduser_ref'        => $this->getRefIdUser(),
+            'iduser_incaricato' => $this->getIdUser_Incaricato(),
             'visibile'          => $this->getVisibile()->getString(),
             'note_consegna'     => $this->getNoteConsegna(),
             'extra'             => $this->getExtra()->getSerializedArray()

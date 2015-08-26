@@ -33,7 +33,7 @@
         </tbody>
     </table>
   </div>
-  <div class="col-md-2 col-md-offset-1">
+  <div class="col-md-3">
       <a class="btn btn-default btn-mylg" href="/gestione-cassa/add"><span class="glyphicon glyphicon-plus"></span> Aggiungi movimento</a>
       <br /><br />
       <a class="btn btn-default btn-mylg" href="/gestione-cassa/ordertoclose"><span class="glyphicon glyphicon-list-alt"></span> Ordini da chiudere</a>

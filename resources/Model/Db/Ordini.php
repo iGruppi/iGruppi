@@ -15,8 +15,8 @@ class Model_Db_Ordini extends MyFw_DB_Base {
         $sql = "SELECT o.*, CONCAT(u.nome, ' ', u.cognome) AS supervisore_name,"
             . " g.idgroup AS supervisore_idgroup, g.nome AS supervisore_group"
             . " FROM ordini AS o"
-            . " JOIN users AS u ON o.iduser_ref=u.iduser"
-            . " JOIN users_group AS ug ON o.iduser_ref=ug.iduser"
+            . " JOIN users AS u ON o.iduser_supervisore=u.iduser"
+            . " JOIN users_group AS ug ON o.iduser_supervisore=ug.iduser"
             . " JOIN groups AS g ON ug.idgroup=g.idgroup"
             . " WHERE idordine= :idordine";
         
@@ -48,10 +48,10 @@ class Model_Db_Ordini extends MyFw_DB_Base {
         
         $arFilters = array('idgroup' => $idgroup);
         
-        $sql = "SELECT o.*, og.*, u.nome AS ref_nome, u.cognome AS ref_cognome "
+        $sql = "SELECT o.*, og.*, u.nome AS nome_incaricato, u.cognome AS cognome_incaricato "
              ." FROM ordini AS o "
              ." JOIN ordini_groups AS og ON og.idordine=o.idordine AND og.idgroup_slave= :idgroup"
-             ." LEFT JOIN users AS u ON og.iduser_ref=u.iduser "
+             ." LEFT JOIN users AS u ON og.iduser_incaricato=u.iduser "
 //             ." LEFT JOIN referenti AS r ON o.idgroup=r.idgroup AND o.idproduttore=r.idproduttore "
 //             ." LEFT JOIN produttori AS p ON r.idproduttore=p.idproduttore "
              ." WHERE og.visibile='S'";
@@ -114,16 +114,16 @@ class Model_Db_Ordini extends MyFw_DB_Base {
             return $sth->fetchAll(PDO::FETCH_OBJ);
         }
         return null;
-
     }
     
     function getGroupsByIdOrdine($idordine)
     {
-        $sql = "SELECT og.*, og.idordine AS id, g_slave.nome AS group_nome, u_slave.iduser AS ref_iduser, u_slave.nome AS ref_nome, u_slave.cognome AS ref_cognome "
+        $sql = "SELECT og.*, og.idordine AS id, g_slave.nome AS group_nome, "
+                . " u_incaricato.nome AS nome_incaricato, u_incaricato.cognome AS cognome_incaricato "
                 . " FROM ordini_groups AS og "
-            // JOIN SLAVES and related iduser_ref
+            // JOIN SLAVES and related iduser_incaricato
                 . " JOIN groups AS g_slave ON og.idgroup_slave=g_slave.idgroup "
-                . " LEFT JOIN users AS u_slave ON og.iduser_ref=u_slave.iduser "
+                . " LEFT JOIN users AS u_incaricato ON og.iduser_incaricato=u_incaricato.iduser "
                 . " WHERE og.idordine= :idordine "
                 . " GROUP BY og.idgroup_master, og.idgroup_slave";
         $sth = $this->db->prepare($sql);

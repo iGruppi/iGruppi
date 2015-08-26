@@ -1,6 +1,6 @@
 <h2>Modifica Produttore <strong><?php echo $this->produttore->ragsoc; ?></strong></h2>
 <div class="row">
-  <div class="col-md-8 col-sm-8 col-xs-8">
+  <div class="col-md-12 col-sm-12 col-xs-12">
     
 <?php if($this->updated): ?>
     <div class="alert alert-success alert-dismissable">

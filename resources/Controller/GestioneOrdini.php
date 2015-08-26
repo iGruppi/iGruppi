@@ -85,7 +85,7 @@ class Controller_GestioneOrdini extends MyFw_Controller {
         $form->removeField("visibile");
         $form->removeField("note_consegna");
         $form->removeField("condivisione");
-        $form->removeField("iduser_ref");
+        $form->removeField("iduser_incaricato");
         $form->removeField("idordine");
         // Specific error for LISTINI selection
         $this->view->errorListino = false;
@@ -119,7 +119,7 @@ class Controller_GestioneOrdini extends MyFw_Controller {
                         $group->id = $idordine;
                         $group->idgroup_master = $this->_userSessionVal->idgroup;
                         $group->idgroup_slave = $this->_userSessionVal->idgroup;
-                        $group->ref_iduser = $this->_iduser;
+                        $group->iduser_incaricato = $this->_iduser;
                         // add my group
                         $mooObj->addGroup($group);
                         $resSave = $mooObj->saveToDB_Gruppi();                
@@ -262,7 +262,7 @@ class Controller_GestioneOrdini extends MyFw_Controller {
             $form->getField("groups")->setDisabled();
         }
         if(!$ordine->canManageIncaricato()) {
-            $form->getField("iduser_ref")->setDisabled();
+            $form->getField("iduser_incaricato")->setDisabled();
         }
 
         // check POST and valid data
@@ -286,8 +286,8 @@ class Controller_GestioneOrdini extends MyFw_Controller {
                     $ordine->resetGroups($form->getValue("condivisione"), $groupsToShare);                
                 }
                 if($ordine->canManageIncaricato()) {
-                    $iduser_ref = ($form->getValue("iduser_ref") > 0) ? $form->getValue("iduser_ref") : NULL;
-                    $ordine->getMyGroup()->setRefIdUser($iduser_ref);
+                    $iduser_incaricato = ($form->getValue("iduser_incaricato") > 0) ? $form->getValue("iduser_incaricato") : NULL;
+                    $ordine->getMyGroup()->setIncaricato($iduser_incaricato);
                 }
                 if($ordine->canUpdateVisibile()) {
                     $ordine->getMyGroup()->setVisibile($form->getValue("visibile"));
@@ -306,7 +306,7 @@ class Controller_GestioneOrdini extends MyFw_Controller {
             $form->setValues($ordine->getDatiValues());
             $form->setValue("data_inizio", $ordine->getDataInizio(MyFw_Form_Filters_Date::_MYFORMAT_DATETIME_VIEW));
             $form->setValue("data_fine", $ordine->getDataFine(MyFw_Form_Filters_Date::_MYFORMAT_DATETIME_VIEW));
-            $form->setValue("iduser_ref", $ordine->getMyGroup()->getRefIdUser());
+            $form->setValue("iduser_incaricato", $ordine->getMyGroup()->getIdUser_Incaricato());
             $form->setValue("note_consegna", $ordine->getMyGroup()->getNoteConsegna());
             $form->setValue("visibile", $ordine->getVisibile()->getString());
             $form->setValue("groups", $ordine->getAllIdgroups());
