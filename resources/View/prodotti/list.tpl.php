@@ -36,7 +36,7 @@ if(count($categorie) > 0):
             </p>
         </div>
         <div class="col-md-2">
-        <?php if($this->userSessionVal->permsProduttori->canEditProdotti($this->produttore->idproduttore)): ?>
+        <?php if(Zend_Registry::get("permsProduttori")->canEditProdotti($this->produttore->idproduttore)): ?>
             <a class="btn btn-success" href="/prodotti/edit/idprodotto/<?php echo $pObj->getIdProdotto();?>">Modifica</a>
         <?php endif; ?>
         </div>
@@ -51,7 +51,7 @@ if(count($categorie) > 0):
   </div>
   <div class="col-md-3 col-md-offset-1">
     <div class="bs-sidebar" data-spy="affix" data-offset-top="76" role="complementary">
-<?php if($this->userSessionVal->permsProduttori->canAddProdotti($this->produttore->idproduttore)): ?>
+<?php if(Zend_Registry::get("permsProduttori")->canAddProdotti($this->produttore->idproduttore)): ?>
       <a class="btn btn-default btn-mylg" href="/prodotti/add/idproduttore/<?php echo $this->produttore->idproduttore;?>"><span class="glyphicon glyphicon-plus"></span> Nuovo prodotto</a>
       <br />
       <br />

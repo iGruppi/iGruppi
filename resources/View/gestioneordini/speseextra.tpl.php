@@ -43,8 +43,8 @@
                 <label for="tipo">Tipo:</label>
                 <select name="" id="tipo" disabled="">
                     <option value="RU" selected="">Ripartite per utente</option>
-                    <option value="RI">Ripartite per importo (TODO!)</option>
-                    <option value="FU">Fisse per ogni utente (TODO!)</option>
+                    <option value="RI">Ripartite per importo</option>
+                    <option value="FU">Fisse per ogni utente</option>
                 </select>
                 <hr />
             </fieldset>

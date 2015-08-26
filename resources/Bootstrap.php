@@ -53,6 +53,7 @@ class Bootstrap {
     private function startPlugin() {
         $pObj = new MyFw_Plugin();
         $pObj->loadPlugin('Auth');
+        $pObj->loadPlugin('ProduttoriPermessi');
         Zend_Registry::set('plugin', $pObj);
     }
 

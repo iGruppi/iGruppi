@@ -48,7 +48,7 @@
                 ?>
 <script>
     // Start these procedures always
-	$(document).ready(function(){
+    $(document).ready(function(){
         Trolley.initByParams(<?php echo $idprodotto;?>, <?php echo $prodotto->getIdListino(); ?>, <?php echo $prodotto->getCostoOrdine();?>, <?php echo $prodotto->getMoltiplicatore(); ?>, <?php echo $qta_ordinata;?>);
         Trolley_rebuildPartial(<?php echo $idprodotto;?>);
     });
@@ -83,6 +83,9 @@
             <a role="button" class="btn btn-success" href="/ordini/viewdettaglio/idordine/<?php echo $this->ordine->getIdOrdine();?>"><span class="glyphicon glyphicon-list"></span> Visualizza ordine</a>
         </div>
         <?php echo $this->partial('prodotti/subcat-navigation.tpl.php', array('categorie' => $categorie)); ?>
+        <br />
+        Cerca: <input type="text" name="search" id="search" />
+        
     </div>
 <?php endif; ?>
   </div>
@@ -99,5 +102,10 @@
         
         //enable POPUP
         $('.note').popover();
+        
+        function searchProducts(text)
+        {
+            
+        }
     });
 </script>

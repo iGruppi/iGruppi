@@ -48,11 +48,6 @@ class Controller_Auth extends MyFw_Controller {
                         $userSessionVal = new Zend_Session_Namespace('userSessionVal');
                         $userSessionVal->idgroup = $row->idgroup;
                         
-                        // set Referente Object in Session
-                        $uObj = new Model_Db_Users();
-                        $permsProduttori = new Model_Produttori_Permessi($uObj->getGlobalRefByIduser($row->iduser), $uObj->getRefByIduserAndIdgroup($row->iduser, $row->idgroup));
-                        $userSessionVal->permsProduttori = $permsProduttori;
-                        
                         // set ACL User in session
                         $aclUserObj = new Model_AclUser($row->fondatore, $row->contabile);
                         $userSessionVal->aclUserObject = $aclUserObj;

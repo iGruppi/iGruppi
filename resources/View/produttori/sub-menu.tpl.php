@@ -1,5 +1,5 @@
 <div class="btn-group btn-group-myig">
-    <?php if($this->userSessionVal->permsProduttori->canManageProduttore($produttore->idproduttore)): ?>
+    <?php if(Zend_Registry::get("permsProduttori")->canManageProduttore($produttore->idproduttore)): ?>
           <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown">Gestisci Produttore <span class="caret"></span></button>
           <ul class="dropdown-menu" role="menu">
             <li><a href="/produttori/edit/idproduttore/<?php echo $produttore->idproduttore;?>">Dati produttore</a></li>

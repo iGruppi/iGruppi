@@ -76,8 +76,6 @@ class Controller_GestioneOrdini extends MyFw_Controller {
         }
         $this->view->counterOrdiniStati = $counterOrdiniStati;
         $this->view->ordini = $ordini;
-        // set Model_Produttori_Permessi Object in View
-        $this->view->permsProduttori = $this->_userSessionVal->permsProduttori;
     }
     
     function newAction() {

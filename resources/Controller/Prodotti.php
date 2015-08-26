@@ -71,7 +71,7 @@ class Controller_Prodotti extends MyFw_Controller {
     function editAction() {
         
         // controllo per i furbi (non autorizzati)
-        if(!$this->_userSessionVal->permsProduttori->canEditProdotti($this->_produttore->idproduttore)) {
+        if(!Zend_Registry::get("permsProduttori")->canEditProdotti($this->_produttore->idproduttore)) {
             $this->redirect("index", "error", array('code' => 401));
         }
         
@@ -122,7 +122,7 @@ class Controller_Prodotti extends MyFw_Controller {
     function addAction() {
         
         // controllo per i furbi (non autorizzati)
-        if(!$this->_userSessionVal->permsProduttori->canAddProdotti($this->_produttore->idproduttore)) {
+        if(!Zend_Registry::get("permsProduttori")->canAddProdotti($this->_produttore->idproduttore)) {
             $this->redirect("index", "error", array('code' => 401));
         }
                 

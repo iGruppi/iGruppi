@@ -31,7 +31,7 @@ class Controller_Produttori extends MyFw_Controller {
                 $refs = isset($referenti[$prod->idproduttore]) ? $referenti[$prod->idproduttore] : array();
                 $produttore->setReferenti($refs);
                 // IF IS Referente put the value on the TOP of array
-                if( $this->_userSessionVal->permsProduttori->is_Referente($produttore->idproduttore) ) {
+                if( Zend_Registry::get("permsProduttori")->canManageProduttore($produttore->idproduttore) ) {
                     array_unshift($listProduttoriOrdered, $produttore);
                 } else {
                     array_push($listProduttoriOrdered, $produttore);
@@ -100,7 +100,7 @@ class Controller_Produttori extends MyFw_Controller {
         if($produttore === false) {
             $this->redirect("produttori");
         }
-        if(!$this->_userSessionVal->permsProduttori->canManageProduttore($idproduttore)) {
+        if(!Zend_Registry::get("permsProduttori")->canManageProduttore($idproduttore)) {
             $this->forward("produttori", "view", array('idproduttore' => $idproduttore));
         }
         $this->view->produttore = $produttore;
