@@ -201,10 +201,10 @@ CREATE TABLE IF NOT EXISTS `province` (
 CREATE TABLE IF NOT EXISTS `referenti` (
   `idgroup` int(10) unsigned NOT NULL,
   `idproduttore` int(10) unsigned NOT NULL,
-  `iduser_ref` int(10) unsigned NOT NULL,
-  PRIMARY KEY (`idgroup`,`idproduttore`,`iduser_ref`),
+  `iduser_referente` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`idgroup`,`idproduttore`,`iduser_referente`),
   KEY `fk_referenti_produttori1_idx` (`idproduttore`),
-  KEY `fk_referenti_users1_idx` (`iduser_ref`)
+  KEY `fk_referenti_users1_idx` (`iduser_referente`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `users` (
@@ -295,7 +295,7 @@ ALTER TABLE `prodotti`
 ALTER TABLE `referenti`
   ADD CONSTRAINT `fk_referenti_groups1` FOREIGN KEY (`idgroup`) REFERENCES `groups` (`idgroup`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   ADD CONSTRAINT `fk_referenti_produttori1` FOREIGN KEY (`idproduttore`) REFERENCES `produttori` (`idproduttore`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_referenti_users1` FOREIGN KEY (`iduser_ref`) REFERENCES `users` (`iduser`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+  ADD CONSTRAINT `fk_referenti_users1` FOREIGN KEY (`iduser_referente`) REFERENCES `users` (`iduser`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 ALTER TABLE `users_group`
   ADD CONSTRAINT `FK_group_users_group` FOREIGN KEY (`idgroup`) REFERENCES `groups` (`idgroup`) ON DELETE NO ACTION ON UPDATE NO ACTION,
