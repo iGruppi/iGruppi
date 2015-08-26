@@ -59,8 +59,9 @@ class Controller_GestioneOrdini extends MyFw_Controller {
                 $categorie = $cObj->getCategoriesByIdOrdine( $mooObj->getIdOrdine() );
                 $mooObj->appendCategorie()->initCategorie_ByObject($categorie);
                 // add Ordine to the list
-                if($mooObj->getStateName() == $filter)
-                {
+                if($mooObj->getStateName() == $filter && 
+                   $mooObj->canManageOrdine()
+                ) {
                     $ordini[] = $mooObj;
                 }
                 // add in counter for States

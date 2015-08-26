@@ -114,7 +114,7 @@ class Model_Ordini_Ordine extends Model_AF_AbstractCoR
     public function isIncaricatoOrdine()
     {
         $iduser = Zend_Auth::getInstance()->getIdentity()->iduser;
-        return ($iduser == $this->getMyGroup()->getRefIdUser());
+        return ($iduser == $this->getMyGroup()->getIdUser_Incaricato());
     }
     
     /**
@@ -144,7 +144,7 @@ class Model_Ordini_Ordine extends Model_AF_AbstractCoR
      */
     public function canManageOrdine()
     {
-        if($this->isAdminForGroup()) {
+        if($this->isAdminForGroup() || $this->isSupervisoreOrdine()) {
             return true;
         } else if($this->getMyGroup()->isSetUserRef())
         {
