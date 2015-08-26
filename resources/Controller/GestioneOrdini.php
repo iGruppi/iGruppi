@@ -58,17 +58,19 @@ class Controller_GestioneOrdini extends MyFw_Controller {
                 // set Categories in Ordine object
                 $categorie = $cObj->getCategoriesByIdOrdine( $mooObj->getIdOrdine() );
                 $mooObj->appendCategorie()->initCategorie_ByObject($categorie);
-                // add Ordine to the list
-                if($mooObj->getStateName() == $filter && 
-                   $mooObj->canManageOrdine()
-                ) {
-                    $ordini[] = $mooObj;
-                }
-                // add in counter for States
-                if(!isset($counterOrdiniStati[$mooObj->getStateName()]) ) {
-                    $counterOrdiniStati[$mooObj->getStateName()] = 1;
-                } else {
-                    $counterOrdiniStati[$mooObj->getStateName()]++;
+                // add Ordine to the list checking permission and filters
+                if($mooObj->canManageOrdine()) {
+                    // ADD to array to view
+                    if($mooObj->getStateName() == $filter) {
+                        
+                        $ordini[] = $mooObj;
+                    }
+                    // ADD in counter for States
+                    if(!isset($counterOrdiniStati[$mooObj->getStateName()]) ) {
+                        $counterOrdiniStati[$mooObj->getStateName()] = 1;
+                    } else {
+                        $counterOrdiniStati[$mooObj->getStateName()]++;
+                    }
                 }
             }
         }
