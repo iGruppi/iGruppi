@@ -6,15 +6,17 @@
  */
 class Plugin_ProduttoriPermessi {
 
-    private $_iduser;
+    private $_iduser = null;
     private $_userSessionVal;
 
 
     public function __construct ()
     {
         $auth = Zend_Auth::getInstance();
-        $this->_iduser = $auth->getIdentity()->iduser;
-        $this->_userSessionVal = new Zend_Session_Namespace('userSessionVal');
+        if($auth->hasIdentity()) {
+            $this->_iduser = $auth->getIdentity()->iduser;
+            $this->_userSessionVal = new Zend_Session_Namespace('userSessionVal');
+        }
     }
 
     /**
@@ -26,8 +28,15 @@ class Plugin_ProduttoriPermessi {
      */
     public function preDispatch(MyFw_ControllerFront $cf)
     {
-        $uObj = new Model_Db_Users();
-        $permsProduttori = new Model_Produttori_Permessi($uObj->getGlobalRefByIduser($this->_iduser), $uObj->getRefByIduserAndIdgroup($this->_iduser, $this->_userSessionVal->idgroup));
+        $arGestore = array();
+        $arReferenti = array();
+        if(!is_null($this->_iduser)) {
+            $uObj = new Model_Db_Users();
+            $arGestore = $uObj->getGlobalRefByIduser($this->_iduser);
+            $arReferenti = $uObj->getRefByIduserAndIdgroup($this->_iduser, $this->_userSessionVal->idgroup);
+        }
+        $permsProduttori = new Model_Produttori_Permessi($arGestore, $arReferenti);
+        // SET permsProduttori in Registry
         Zend_Registry::set('permsProduttori', $permsProduttori);
     }
 
