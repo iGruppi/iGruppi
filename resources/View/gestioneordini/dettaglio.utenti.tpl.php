@@ -1,6 +1,5 @@
 <div class="row">
   <div class="col-md-12">
-    <h3 class="big-margin-top">Dettaglio Parziali per utente</h3>
 <?php if($this->ordCalcObj->getProdottiUtenti() > 0): ?>
     <?php foreach ($this->ordCalcObj->getProdottiUtenti() AS $iduser => $user): ?>
         <h3 class="big-margin-top"><strong><?php echo $user["nome"] . " " . $user["cognome"]; ?></strong></h3>

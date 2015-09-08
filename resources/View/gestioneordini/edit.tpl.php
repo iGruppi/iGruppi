@@ -1,9 +1,14 @@
 <div id="ordine_header">
-    <?php include $this->template('gestioneordini/gestione-header.tpl.php'); ?>
+    <?php include $this->template('gestioneordini/header.tpl.php'); ?>
+    <div class="row">
+      <div class="col-md-12">
+        <h3 class="big-margin-top">Modifica dati ordine</h3>
+      </div>
+    </div>
 </div>
+
 <div class="row">
     <div class="col-md-10">
-        <h3>Modifica dati ordine</h3>
         
         <form id="ordineform" action="<?php echo $this->form->getAction(); ?>" method="post" class="f1n200">
 

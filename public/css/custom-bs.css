@@ -152,6 +152,7 @@ h1 strong, h2 strong, h3 strong, h4 strong, h5 strong, h6 strong {color: #090; f
 
 /* ORDINE HEADER */
 #ordine_header { margin-top: 20px; }
+#ordine_header .big-margin-top { margin-top: 30px; }
 .ordine_title a.disabled, .ordine_title a.disabled:hover { background-color: transparent; cursor: default; }
 
 

@@ -1,47 +1,48 @@
 <div id="ordine_header">
-    <?php include $this->template('gestioneordini/gestione-header.tpl.php'); ?>
+    <?php include $this->template('gestioneordini/header.tpl.php'); ?>
+    <div class="row">
+      <div class="col-md-12">
+        <h3 class="big-margin-top">Modifica Prodotti Ordine</h3>
+      </div>
+    </div>
 </div>
-
-    <div class="row">
-        <div class="col-md-8">
-            <h3>Prodotti inseriti in quest'ordine:</h3>
-        </div>
-        <div class="col-md-3 col-md-offset-1">
+<div class="row">
+    <div class="col-md-3 col-md-offset-1">
 <!--            <a class="btn btn-default btn-mylg" href="/gestione-ordini/addprodotto/idordine/<?php echo $this->ordine->getIdOrdine();?>"><span class="glyphicon glyphicon-plus"></span> Aggiungi prodotto</a> -->
-        </div>    
-    </div>
-    <div class="row">
-        <div class="col-md-12">
-    <?php 
-    $arProductsGrid = array();
-    $categorie = $this->ordine->getProdottiWithCategoryArray();
-    if(count($categorie) > 0): 
-        foreach ($categorie AS $cat): 
-            foreach ($cat->getSubcat() AS $subcat):
-                foreach ($subcat->getProdotti() AS $prodotto):
-                    $pObj = $prodotto->getProdotto(); 
-                    $arProductsGrid[] = array(
-                        'idprodotto'        => $pObj->getIdProdotto(),
-                        'idlistino'         => $pObj->getIdListino(),
-                        'codice'            => $pObj->getCodice(),
-                        'subcat'            => $subcat->getDescrizione(),
-                        'costo_ordine'      => $pObj->getCostoOrdine(),
-                        'udm'               => $pObj->getUdm() .($pObj->hasPezzatura() ? "<br /><small>(Minimo " . $pObj->getDescrizionePezzatura() . ")</small>" : ""),
-                        'offerta_ordine'    => $pObj->getOffertaOrdine(),
-                        'descrizione'       => $pObj->getDescrizioneListino(),
-                        'disponibile_ordine'=> $pObj->isDisponibile()
-                    );
-                endforeach;
+    </div>    
+</div>
+<div class="row">
+    <div class="col-md-12">
+<?php 
+$arProductsGrid = array();
+$categorie = $this->ordine->getProdottiWithCategoryArray();
+if(count($categorie) > 0): 
+    foreach ($categorie AS $cat): 
+        foreach ($cat->getSubcat() AS $subcat):
+            foreach ($subcat->getProdotti() AS $prodotto):
+                $pObj = $prodotto->getProdotto(); 
+                $arProductsGrid[] = array(
+                    'idprodotto'        => $pObj->getIdProdotto(),
+                    'idlistino'         => $pObj->getIdListino(),
+                    'codice'            => $pObj->getCodice(),
+                    'subcat'            => $subcat->getDescrizione(),
+                    'costo_ordine'      => $pObj->getCostoOrdine(),
+                    'udm'               => $pObj->getUdm() .($pObj->hasPezzatura() ? "<br /><small>(Minimo " . $pObj->getDescrizionePezzatura() . ")</small>" : ""),
+                    'offerta_ordine'    => $pObj->getOffertaOrdine(),
+                    'descrizione'       => $pObj->getDescrizioneListino(),
+                    'disponibile_ordine'=> $pObj->isDisponibile()
+                );
             endforeach;
-        endforeach; 
-        //Zend_Debug::dump($arProductsGrid);
-        ?>
-            <div id="grid-prodotti" class="handsontable myhandsontable"></div>
+        endforeach;
+    endforeach; 
+    //Zend_Debug::dump($arProductsGrid);
+    ?>
+        <div id="grid-prodotti" class="handsontable myhandsontable"></div>
 <?php else: ?>
-            <h3>Nessun prodotto inserito</h3>        
+        <h3>Nessun prodotto inserito</h3>        
 <?php endif; ?>
-        </div>
     </div>
+</div>
 
 <script>    
 $(document).ready(function () {

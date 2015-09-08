@@ -1,11 +1,11 @@
 <div id="ordine_header">
-    <?php include $this->template('gestioneordini/gestione-header.tpl.php'); ?>
+    <?php include $this->template('gestioneordini/header.tpl.php'); ?>
+    <div class="row">
+      <div class="col-md-12">
+        <h3 class="big-margin-top">Modifica Quantità ordinate</h3>
+      </div>
+    </div>
 </div>
-<div class="row">
-  <div class="col-md-12">
-    <h3>Quantità ordinate per utente</h3>
-  </div>
-</div>  
 <div class="row">
     <div class="col-md-12">
 <?php if(!$this->ordine->canModificaQtaOrdinate()): ?>

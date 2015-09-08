@@ -1,7 +1,12 @@
 <div id="ordine_header">
-    <?php include $this->template('gestioneordini/gestione-header.tpl.php'); ?>
+    <?php include $this->template('gestioneordini/header.tpl.php'); ?>
+    <div class="row">
+      <div class="col-md-12">
+        <h3 class="big-margin-top">Modifica Spese extra</h3>
+      </div>
+    </div>
 </div>
-<h3>Modifica Spese extra</h3>
+
 <?php if($this->ordine->canManageSpeseExtra()): ?>
 <div class="row">
     <div class="col-md-8">

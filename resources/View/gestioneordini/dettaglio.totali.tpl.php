@@ -1,9 +1,4 @@
 <div class="row">
-  <div class="col-md-12">
-    <h3 class="big-margin-top">Riepilogo Totale Prodotti ordinati</h3>
-  </div>
-</div>    
-<div class="row">
     <div class="col-md-12">
 <?php 
     $arProductsGrid = array();

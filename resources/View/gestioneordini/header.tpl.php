@@ -27,7 +27,20 @@
             </div>
     <?php else: ?>
             <div class="alert alert-info" role="alert">
-                Sei il <b>Supervisore</b> di questo ordine.
+                Sei il <b>Supervisore</b> di questo ordine.<br />
+                <br />
+        <?php if($this->ordine->isMultiGruppo()): ?>
+                <div class="btn-group">
+                  <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Riepilogo Multi Gruppi <span class="caret"></span>
+                  </button>
+                  <ul class="dropdown-menu">
+                    <li><a href="#">Totale Ordinato</a></li>
+                    <li><a href="#">Parziali Utenti/Prodotti</a></li>
+                    <li><a href="#">Dettaglio Utenti</a></li>
+                  </ul>
+                </div>                
+        <?php endif; ?>
             </div>
     <?php endif; ?>
     </div>
