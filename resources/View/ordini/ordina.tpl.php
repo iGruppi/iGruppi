@@ -9,9 +9,20 @@
 <?php endif; ?>
 
 <?php echo $this->partial('ordini/box-note.tpl.php', array('ordine' => $this->ordine)); ?>
+    
+<div class="row row-myig" id="search_no_result" style="display: none;">
+    <div class="col-md-12">
+        <div class="alert alert-danger" role="alert">Nessun prodotto trovato.</div>            
+    </div>
+</div>
+
+<div id="search_num_result" style="display:none;">
+    <h3>Trovati <strong>_</strong> prodotti</h3>
+</div>
 
 <?php 
      $categorie = $this->ordine->getProdottiWithCategoryArray();
+     $arTrolley = array();
      if(count($categorie) > 0): 
         foreach ($categorie AS $cat): ?>
     <span id="cat_<?php echo $cat->getId(); ?>" style="visibility: hidden;"><?php echo $cat->getDescrizione(); ?></span>
@@ -23,13 +34,13 @@
                  //Zend_Debug::dump($prodotto);die;
     ?>
         
-      <div class="row row-myig<?php if(!$prodotto->isDisponibile()) { echo " box_row_dis"; } ; ?>">
+      <div class="row row-myig<?php if(!$prodotto->isDisponibile()) { echo " box_row_dis"; } ; ?> div_product_row">
         <div class="col-md-9">
         <?php if($prodotto->getOffertaOrdine()): ?>
                 <small><span class="label label-danger">Offerta</span></small>
         <?php endif;?>
             
-            <h3 class="no-margin"><?php echo $prodotto->getDescrizioneListino();?></h3>
+            <h3 class="no-margin product_descrizione"><?php echo $prodotto->getDescrizioneListino();?></h3>
             <p>
                 Categoria: <strong><?php echo $prodotto->getSubCategoria(); ?></strong><br />
         <?php if($this->ordine->isMultiproduttore()): ?>
@@ -45,14 +56,14 @@
             <div class="sub_menu">
             <?php if($prodotto->isDisponibile()):
                     $qta_ordinata = $prodotto->getQta_ByIduser($this->iduser);
+                    // Create array for Trolley
+                    $arTrolley[$idprodotto] = array(
+                        'idListino'     => $prodotto->getIdListino(),
+                        'costoOrdine'   => $prodotto->getCostoOrdine(),
+                        'moltiplicatore'=> $prodotto->getMoltiplicatore(),
+                        'qtaOrdinata'   => $qta_ordinata
+                    );
                 ?>
-<script>
-    // Start these procedures always
-    $(document).ready(function(){
-        Trolley.initByParams(<?php echo $idprodotto;?>, <?php echo $prodotto->getIdListino(); ?>, <?php echo $prodotto->getCostoOrdine();?>, <?php echo $prodotto->getMoltiplicatore(); ?>, <?php echo $qta_ordinata;?>);
-        Trolley_rebuildPartial(<?php echo $idprodotto;?>);
-    });
-</script>
                 <a class="menu_icon" href="javascript:void(0)" onclick="Trolley_setQtaProdotto(<?php echo $idprodotto;?>, '+')">+</a>
                 <input readonly class="prod_qta" type="text" id="prod_qta_<?php echo $idprodotto;?>" value="<?php echo $qta_ordinata;?>" />
                 <a class="menu_icon" href="javascript:void(0)" onclick="Trolley_setQtaProdotto(<?php echo $idprodotto;?>, '-')">-</a>
@@ -76,36 +87,84 @@
     
   </div>
   <div class="col-md-3 col-md-offset-1 col-sm-4">
-<?php if(count($categorie) > 0): ?>      
     <div class="bs-sidebar" data-spy="affix" data-offset-top="80" role="complementary">
         <div class="totale">
             <h4>Totale: <strong id="totale">Loading...</strong></h4>
             <a role="button" class="btn btn-success" href="/ordini/viewdettaglio/idordine/<?php echo $this->ordine->getIdOrdine();?>"><span class="glyphicon glyphicon-list"></span> Visualizza ordine</a>
         </div>
-        <?php echo $this->partial('prodotti/subcat-navigation.tpl.php', array('categorie' => $categorie)); ?>
+        <input type="text" name="search_products" id="search_products" placeholder="Cerca prodotto..." oninput="searchProducts(this.value);" />
         <br />
-        Cerca: <input type="text" name="search" id="search" />
-        
-    </div>
+<?php if(count($categorie) > 0): ?> 
+        <?php echo $this->partial('prodotti/subcat-navigation.tpl.php', array('categorie' => $categorie)); ?>
 <?php endif; ?>
+    </div>
   </div>
 </div>
 
 <script>
-    // Start these procedures always
-	$(document).ready(function(){
-        
+    
+    // Advanced Search for Prodotti
+    function searchProducts(text)
+    {
+        myText = String(text);
+        found = 0;
+        if(myText.length >= 1) {
+            // hide Categories
+            $(document).find('.subcat-title').each(function(){
+                $(this).hide();
+            });
+            $(document).find('.product_descrizione').each(function(){
+                // search text case insensitive (toLowerCase)
+                if($(this).text().toLowerCase().search(myText.toLowerCase()) === -1 ) {
+                    $(this).parent().parent().hide();
+                } else {
+                    $(this).parent().parent().show();
+                    found++;
+                }
+            });
+            
+            // show NO RESULT
+            if(found === 0) {
+                $('#search_no_result').show();
+                $('#search_num_result').hide();
+            } else {
+                $('#search_no_result').hide();
+                $('#search_num_result').show();
+                $('#search_num_result > h3 > strong').html(found);
+            }
+            
+        } else {
+            // SHOW Categories
+            $(document).find('.subcat-title').each(function(){
+                $(this).show();
+            });
+            // SHOW ALL Products
+            $(document).find('.product_descrizione').each(function(){
+                $(this).parent().parent().show();
+            });
+            // HIDE no result alert
+            $('#search_no_result').hide();
+            $('#search_num_result').hide();
+        }
+    }
+    
+    
+    
+    $(document).ready(function () {
+
         // SET idordine
         Trolley.idordine = <?php echo $this->ordine->getIdOrdine();?>;
+        // SET Products ordered
+    <?php foreach($arTrolley AS $idprodotto => $prodotto): ?>
+        Trolley.initByParams(<?php echo $idprodotto;?>, <?php echo $prodotto["idListino"]; ?>, <?php echo $prodotto["costoOrdine"];?>, <?php echo $prodotto["moltiplicatore"]; ?>, <?php echo $prodotto["qtaOrdinata"];?>);
+        Trolley_rebuildPartial(<?php echo $idprodotto;?>);
+    <?php endforeach; ?> 
+        
         // Rebuils Totale after loading page
         Trolley_rebuildTotal();
         
         //enable POPUP
         $('.note').popover();
         
-        function searchProducts(text)
-        {
-            
-        }
     });
 </script>

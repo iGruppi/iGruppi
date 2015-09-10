@@ -22,29 +22,21 @@
     <?php endforeach; ?>
     </ul>
 <script>
-    !function ($) {
-
-      $(function(){
-
-        var $window = $(window);
-        var $body   = $(document.body);
+    $(document).ready(function () {
 
         var navHeight = $('.header').outerHeight(true) + 10;
 
-        $body.scrollspy({
+        $('body').scrollspy({
           target: '.bs-sidebar',
           offset: navHeight
         });
 
-        $window.on('load', function () {
-          $body.scrollspy('refresh');
+        $(window).on('load', function () {
+          $('body').scrollspy('refresh');
         });
 
         $('.moreThan30').tooltip('hide');
 
-    })
-
-    }(window.jQuery)
-
+    });
 </script>
 <?php endif; ?>
