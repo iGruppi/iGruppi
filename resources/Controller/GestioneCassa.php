@@ -177,7 +177,7 @@ class Controller_GestioneCassa extends MyFw_Controller {
         $listProdOrdered = $ordObj->getProdottiOrdinatiByIdordineAndIdgroup($mooObj->getIdOrdine(), $this->_userSessionVal->idgroup);
         
         // Add Calcoli Decorator
-        $ordCalcoli = new Model_Ordini_CalcoliDecorator($mooObj);
+        $ordCalcoli = new Model_Ordini_CalcoliDecorator($mooObj, $this->_userSessionVal->idgroup);
         $ordCalcoli->setProdottiOrdinati($listProdOrdered);
         $this->view->ordCalcoli = $ordCalcoli;
         
@@ -219,7 +219,7 @@ class Controller_GestioneCassa extends MyFw_Controller {
             $mooObj->appendProdotti()->initProdotti_ByObject($listProd);
 
             // GET PRODUCTS LIST with Qta Ordered
-            $ordCalcObj = new Model_Ordini_CalcoliDecorator($mooObj);
+            $ordCalcObj = new Model_Ordini_CalcoliDecorator($mooObj, $this->_userSessionVal->idgroup);
 
             // SET PRODOTTI ORDINATI
             $listProdOrdered = $ordObj->getProdottiOrdinatiByIdordineAndIdgroup($mooObj->getIdOrdine(),$this->_userSessionVal->idgroup);

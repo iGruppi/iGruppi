@@ -101,7 +101,7 @@ class Controller_Ordini extends MyFw_Controller {
         $listProdOrdered = $ordObj->getProdottiOrdinatiByIdordineAndIdgroup($mooObj->getIdOrdine(),$this->_userSessionVal->idgroup);
 
         // SET ORDINE e PRODOTTI
-        $ordCalcObj = new Model_Ordini_CalcoliDecorator($mooObj);
+        $ordCalcObj = new Model_Ordini_CalcoliDecorator($mooObj, $this->_userSessionVal->idgroup);
         $ordCalcObj->setProdottiOrdinati($listProdOrdered);
         $this->view->ordCalcObj = $ordCalcObj;
 //        Zend_Debug::dump($this->view->listaProdotti);die;
@@ -158,10 +158,10 @@ class Controller_Ordini extends MyFw_Controller {
         }
         
         // GET PRODUCTS LIST with Qta Ordered
-        $listProdOrdered = $ordObj->getProdottiOrdinatiByIdordineAndIdgroup($mooObj->getIdOrdine(),$this->_userSessionVal->idgroup);
+        $listProdOrdered = $ordObj->getProdottiOrdinatiByIdordineAndIdgroup($mooObj->getIdOrdine(), $this->_userSessionVal->idgroup);
 
         // SET ORDINE e PRODOTTI
-        $ordCalcObj = new Model_Ordini_CalcoliDecorator($mooObj);
+        $ordCalcObj = new Model_Ordini_CalcoliDecorator($mooObj, $this->_userSessionVal->idgroup);
         $ordCalcObj->setProdottiOrdinati($listProdOrdered);
         $this->view->ordCalcObj = $ordCalcObj;
         

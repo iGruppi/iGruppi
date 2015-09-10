@@ -399,7 +399,7 @@ class Controller_GestioneOrdini extends MyFw_Controller {
         $ordine = $this->_buildOrdine( new Model_AF_UserOrdineFactory() );
         
         // GET PRODUCTS LIST with Qta Ordered
-        $ordCalcObj = new Model_Ordini_CalcoliDecorator($ordine);
+        $ordCalcObj = new Model_Ordini_CalcoliDecorator($ordine, $this->_userSessionVal->idgroup);
         // SET PRODOTTI ORDINATI
         $ordObj = new Model_Db_Ordini();
         $listProdOrdered = $ordObj->getProdottiOrdinatiByIdordineAndIdgroup($ordine->getIdOrdine(),$this->_userSessionVal->idgroup);
@@ -451,7 +451,7 @@ class Controller_GestioneOrdini extends MyFw_Controller {
         echo json_encode(array('res' => true, 'myTpl' => $this->view->fetch('gestioneordini/qtaordine-newprod.form.tpl.php')));
 
     }
-    
+    /*
     function newprodsaveAction() 
     {
         $layout = Zend_Registry::get("layout");
@@ -493,7 +493,7 @@ class Controller_GestioneOrdini extends MyFw_Controller {
         // Some error...
         echo json_encode(array('res' => false));
     }
-    
+    */
     function dettaglioAction() 
     {
         // build Ordine
