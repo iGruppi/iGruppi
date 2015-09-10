@@ -29,7 +29,7 @@
             <div class="alert alert-info" role="alert">
                 Sei il <b>Supervisore</b> di questo ordine.<br />
                 <br />
-        <?php if($this->ordine->isMultiGruppo()): ?>
+        <?php if($this->ordine->canViewMultigruppoFunctions()): ?>
                 <div class="btn-group">
                   <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     Riepilogo Multi Gruppi <span class="caret"></span>

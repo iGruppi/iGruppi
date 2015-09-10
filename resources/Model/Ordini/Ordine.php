@@ -23,10 +23,24 @@ class Model_Ordini_Ordine extends Model_AF_AbstractCoR
         return $this->append("States", $sof );
     }
     
+    /**
+     * Return TRUE if there are more than 1 Produttore
+     * @return boolean
+     */
     public function isMultiProduttore()
     {
         return count($this->getProduttoriList()) > 1;
     }
+    
+    /**
+     * Return TRUE if Ordine is SHA or PUB
+     * @return boolean
+     */
+    public function isMultiGruppo()
+    {
+        return !$this->isPrivato();
+    }
+    
 
     /**
      * Return Extra Spese part of Group
@@ -274,6 +288,12 @@ class Model_Ordini_Ordine extends Model_AF_AbstractCoR
     {
         $userSessionVal = new Zend_Session_Namespace('userSessionVal');
         return ($userSessionVal->aclUserObject->isContabile() && $this->is_Consegnato());
+    }
+    
+    public function canViewMultigruppoFunctions()
+    {
+        return ( ($this->isSupervisoreOrdine() || $this->isAdminForGroup()) &&
+                $this->isMultiGruppo());
     }
     
 }

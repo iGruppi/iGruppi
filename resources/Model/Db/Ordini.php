@@ -258,7 +258,28 @@ class Model_Db_Ordini extends MyFw_DB_Base {
         return $prodotti;
     }
     
-    
+    /**
+     * GET all groups where there is ALMOST 1 USER that ordered something
+     * @param int $idordine
+     * @return array
+     */
+    function getGroupsWithAlmostOneProductOrderedByIdOrdine($idordine)
+    {
+        $sql = "SELECT DISTINCT ug.idgroup, g.nome "
+               ." FROM ordini_user_prodotti AS oup "
+               ." JOIN users_group AS ug ON oup.iduser=ug.iduser"
+               ." JOIN groups AS g ON ug.idgroup=g.idgroup"
+               ." WHERE oup.idordine= :idordine";
+        $sth = $this->db->prepare($sql);
+        $sth->execute(array('idordine' => $idordine));
+        $groups = array();
+        if($sth->rowCount() > 0) {
+            foreach($sth->fetchAll(PDO::FETCH_OBJ) AS $group) {
+                $groups[$group->idgroup] = $group->nome;
+            }
+        }
+        return $groups;
+    }
     
     
     

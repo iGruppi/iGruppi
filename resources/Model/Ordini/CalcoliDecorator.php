@@ -14,6 +14,12 @@ class Model_Ordini_CalcoliDecorator
      * @var Model_Ordini_Ordine
      */
     protected $_ordine;
+
+    /**
+     * IdGroup for this Ordine
+     * @var int
+     */
+    protected $_idgroup;
     
     /**
      * Array of all the group members
@@ -31,8 +37,9 @@ class Model_Ordini_CalcoliDecorator
      * It CAN ONLY decorate the Model_Ordini_Ordine
      * @param Model_Ordini_Ordine $ordine
      */
-    public function __construct(Model_Ordini_Ordine $ordine) {
+    public function __construct(Model_Ordini_Ordine $ordine, $idgroup) {
         $this->_ordine = $ordine;
+        $this->_idgroup = $idgroup;
     }
     
     /**
@@ -322,7 +329,7 @@ class Model_Ordini_CalcoliDecorator
             // get ELENCO users del Gruppo
             $this->_userSessionVal = new Zend_Session_Namespace('userSessionVal');
             $userModel = new Model_Db_Users();
-            $users = $userModel->getUsersByIdGroup($this->_userSessionVal->idgroup, true);
+            $users = $userModel->getUsersByIdGroup($this->_idgroup, true);
             foreach($users AS $user)
             {
                 $this->_arUsers[$user->iduser] = $user;
