@@ -399,10 +399,11 @@ class Controller_GestioneOrdini extends MyFw_Controller {
         $ordine = $this->_buildOrdine( new Model_AF_UserOrdineFactory() );
         
         // GET PRODUCTS LIST with Qta Ordered
-        $ordCalcObj = new Model_Ordini_CalcoliDecorator($ordine, $this->_userSessionVal->idgroup);
+        $ordCalcObj = new Model_Ordini_CalcoliDecorator($ordine);
+        $ordCalcObj->setIdgroup($this->_userSessionVal->idgroup);
         // SET PRODOTTI ORDINATI
         $ordObj = new Model_Db_Ordini();
-        $listProdOrdered = $ordObj->getProdottiOrdinatiByIdordineAndIdgroup($ordine->getIdOrdine(),$this->_userSessionVal->idgroup);
+        $listProdOrdered = $ordObj->getProdottiOrdinatiByIdordine($ordine->getIdOrdine(),$this->_userSessionVal->idgroup);
         $ordCalcObj->setProdottiOrdinati($listProdOrdered);
         $this->view->ordCalcObj = $ordCalcObj;
     }
@@ -470,9 +471,10 @@ class Controller_GestioneOrdini extends MyFw_Controller {
             $ordObj = new Model_Db_Ordini();
             $added = $ordObj->addQtaProdottoForOrdine($idordine, $iduser, $idprodotto);
             if($added) {
-                $prodotti = $ordObj->getProdottiOrdinatiByIdordineAndIdgroup($idordine,$this->_userSessionVal->idgroup);
+                $prodotti = $ordObj->getProdottiOrdinatiByIdordine($idordine,$this->_userSessionVal->idgroup);
                 if(is_array($prodotti) && count($prodotti) > 0) {
                     $ordCalcObj = new Model_Ordini_CalcoliDecorator();
+                    $ordCalcObj->setIdgroup($this->_userSessionVal->idgroup);
                     $ordCalcObj->setOrdObj($ordine);
                     $ordCalcObj->setProdotti($prodotti);
                     $prodObj = $ordCalcObj->getProdottiByIduser($iduser);
@@ -525,14 +527,43 @@ class Controller_GestioneOrdini extends MyFw_Controller {
         $this->view->groups = $groups;
         
         // add CALCOLI DECORATOR
-        $ordCalcObj = new Model_Ordini_CalcoliDecorator($ordine, $idgroup);
+        $ordCalcObj = new Model_Ordini_CalcoliDecorator($ordine);
+        $ordCalcObj->setIdgroup($idgroup);
 
         // SET PRODOTTI ORDINATI in DECORATOR
-        $listProdOrdered = $ordObj->getProdottiOrdinatiByIdordineAndIdgroup($ordine->getIdOrdine(), $idgroup);
+        $listProdOrdered = $ordObj->getProdottiOrdinatiByIdordine($ordine->getIdOrdine(), $idgroup);
         $ordCalcObj->setProdottiOrdinati($listProdOrdered);
         
         //Zend_Debug::dump($ordCalcObj);die;
         $this->view->ordCalcObj = $ordCalcObj;
+    }
+    
+    function dettagliomgAction() 
+    {
+        // build Ordine
+        $ordine = $this->_buildOrdine( new Model_AF_UserOrdineFactory() );
+        
+        // GET View by Tipo
+        $tipo = $this->getParam("tipo");
+        if(is_null($tipo)) {
+            $tipo = "totali";
+        }
+        $this->view->tipo = $tipo;
+        
+        // init Model DB Ordini
+        $ordObj = new Model_Db_Ordini();
+        
+        // add CALCOLI DECORATOR
+        $ordCalcObj = new Model_Ordini_CalcoliMultigruppoDecorator($ordine);
+
+        // SET PRODOTTI ORDINATI in DECORATOR
+        $listProdOrdered = $ordObj->getProdottiOrdinatiByIdordine($ordine->getIdOrdine());
+        $ordCalcObj->setProdottiOrdinati($listProdOrdered);
+        
+        //Zend_Debug::dump($listProdOrdered);die;
+        $this->view->ordCalcObj = $ordCalcObj;
+        
+        
     }
     
     function inviaAction() {

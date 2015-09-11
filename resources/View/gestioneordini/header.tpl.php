@@ -35,7 +35,7 @@
                     Riepilogo Multi Gruppi <span class="caret"></span>
                   </button>
                   <ul class="dropdown-menu">
-                    <li><a href="#">Totale Ordinato</a></li>
+                    <li><a href="/gestione-ordini/dettagliomg/idordine/<?php echo $this->ordine->getIdOrdine(); ?>/tipo/totali">Totale Ordinato</a></li>
                     <li><a href="#">Parziali Utenti/Prodotti</a></li>
                     <li><a href="#">Dettaglio Utenti</a></li>
                   </ul>

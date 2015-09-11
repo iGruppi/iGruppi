@@ -22,9 +22,11 @@
               </tr>
             </thead>
             <tbody>
-    <?php foreach ($this->ordCalcoli->getProdottiUtenti() AS $iduser => $user): ?>
+    <?php foreach ($this->ordCalcoli->getProdottiUtenti() AS $iduser => $dataUser):
+                $user = $dataUser["user"];
+        ?>
                 <tr>
-                    <td><b><?php echo $user["nome"] . " " . $user["cognome"]; ?></b></td>
+                    <td><b><?php echo $user->nome . " " . $user->cognome; ?></b></td>
                     <td class="text-right"><strong><?php echo $this->valuta($this->ordCalcoli->getTotaleConExtraByIduser($iduser)) ?></strong></td>
                 </tr>
     <?php endforeach; ?>

@@ -1,8 +1,10 @@
 <div class="row">
   <div class="col-md-12">
 <?php if($this->ordCalcObj->getProdottiUtenti() > 0): ?>
-    <?php foreach ($this->ordCalcObj->getProdottiUtenti() AS $iduser => $user): ?>
-        <h3 class="big-margin-top"><strong><?php echo $user["nome"] . " " . $user["cognome"]; ?></strong></h3>
+    <?php foreach ($this->ordCalcObj->getProdottiUtenti() AS $iduser => $dataUser): 
+              $user = $dataUser["user"];
+        ?>
+        <h3 class="big-margin-top"><strong><?php echo $user->nome . " " . $user->cognome; ?></strong></h3>
         <table class="table table-condensed">
             <thead>
               <tr>
@@ -14,7 +16,7 @@
               </tr>
             </thead>
             <tbody>
-        <?php foreach ($user["prodotti"] AS $idprodotto => $pObj): ?>
+        <?php foreach ($dataUser["prodotti"] AS $idprodotto => $pObj): ?>
             <?php if( $pObj->isDisponibile()): ?>
                 <tr>
             <?php else: ?>

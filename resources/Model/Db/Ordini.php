@@ -243,17 +243,22 @@ class Model_Db_Ordini extends MyFw_DB_Base {
     /**
      * GET all prodotti ordered by idordine
      * @param int $idordine
+     * @param int $idgroup
      * @return array the results set
      */
-    function getProdottiOrdinatiByIdordineAndIdgroup($idordine, $idgroup) 
+    function getProdottiOrdinatiByIdordine($idordine, $idgroup=false) 
     {
-        $sqlp = "SELECT oup.* "
+        $sql = "SELECT oup.* "
                ." FROM ordini_user_prodotti AS oup "
                ." JOIN users_group AS up ON oup.iduser=up.iduser"
-               ." WHERE oup.idordine= :idordine"
-               ." AND up.idgroup = :idgroup";
-        $sthp = $this->db->prepare($sqlp);
-        $sthp->execute(array('idordine' => $idordine, 'idgroup' => $idgroup));
+               ." WHERE oup.idordine= :idordine";
+        $params = array('idordine' => $idordine);
+        if($idgroup !== false) {
+            $sql .= " AND up.idgroup = :idgroup";
+            $params['idgroup'] = $idgroup;
+        }
+        $sthp = $this->db->prepare($sql);
+        $sthp->execute($params);
         $prodotti = $sthp->fetchAll(PDO::FETCH_OBJ);
         return $prodotti;
     }
@@ -281,7 +286,24 @@ class Model_Db_Ordini extends MyFw_DB_Base {
         return $groups;
     }
     
-    
+    function getUsersWithAlmostOneProductOrderedByIdOrdine($idordine)
+    {
+        $sql = "SELECT DISTINCT oup.iduser, u.*, ug.idgroup, g.nome "
+               ." FROM ordini_user_prodotti AS oup "
+               ." JOIN users AS u ON oup.iduser=u.iduser"
+               ." JOIN users_group AS ug ON oup.iduser=ug.iduser"
+               ." JOIN groups AS g ON ug.idgroup=g.idgroup"
+               ." WHERE oup.idordine= :idordine";
+        $sth = $this->db->prepare($sql);
+        $sth->execute(array('idordine' => $idordine));
+        $users = array();
+        if($sth->rowCount() > 0) {
+            foreach($sth->fetchAll(PDO::FETCH_OBJ) AS $user) {
+                $users[$user->iduser] = $user;
+            }
+        }
+        return $users;
+    }
     
     /**
      *  SQL FILTERS for STATO

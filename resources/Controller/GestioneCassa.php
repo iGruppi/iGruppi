@@ -174,10 +174,11 @@ class Controller_GestioneCassa extends MyFw_Controller {
         $mooObj->appendProdotti()->initProdotti_ByObject($listProd);
         
         // GET PRODOTTI Ordinati
-        $listProdOrdered = $ordObj->getProdottiOrdinatiByIdordineAndIdgroup($mooObj->getIdOrdine(), $this->_userSessionVal->idgroup);
+        $listProdOrdered = $ordObj->getProdottiOrdinatiByIdordine($mooObj->getIdOrdine(), $this->_userSessionVal->idgroup);
         
         // Add Calcoli Decorator
-        $ordCalcoli = new Model_Ordini_CalcoliDecorator($mooObj, $this->_userSessionVal->idgroup);
+        $ordCalcoli = new Model_Ordini_CalcoliDecorator($mooObj);
+        $ordCalcoli->setIdgroup($this->_userSessionVal->idgroup);
         $ordCalcoli->setProdottiOrdinati($listProdOrdered);
         $this->view->ordCalcoli = $ordCalcoli;
         
@@ -219,10 +220,11 @@ class Controller_GestioneCassa extends MyFw_Controller {
             $mooObj->appendProdotti()->initProdotti_ByObject($listProd);
 
             // GET PRODUCTS LIST with Qta Ordered
-            $ordCalcObj = new Model_Ordini_CalcoliDecorator($mooObj, $this->_userSessionVal->idgroup);
+            $ordCalcObj = new Model_Ordini_CalcoliDecorator($mooObj);
+            $ordCalcObj->setIdgroup($this->_userSessionVal->idgroup);
 
             // SET PRODOTTI ORDINATI
-            $listProdOrdered = $ordObj->getProdottiOrdinatiByIdordineAndIdgroup($mooObj->getIdOrdine(),$this->_userSessionVal->idgroup);
+            $listProdOrdered = $ordObj->getProdottiOrdinatiByIdordine($mooObj->getIdOrdine(),$this->_userSessionVal->idgroup);
             $ordCalcObj->setProdottiOrdinati($listProdOrdered);
             
             // Check If some product ordered EXISTS
