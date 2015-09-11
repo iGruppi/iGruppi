@@ -54,7 +54,7 @@ class Model_AclUser
      */
     public function canManageCassa()
     {
-        return $this->isContabile();
+        return ($this->isContabile() || $this->isFounder());
     }
     
 }

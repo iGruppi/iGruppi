@@ -75,7 +75,10 @@
                             <li><a href="/produttori">Produttori</a></li>
                             <li><a href="/listini">Listini</a></li>
                             <li><a href="/gestione-ordini">Gestione ordini</a></li>
+    <?php $userSessionVal = new Zend_Session_Namespace('userSessionVal');
+            if($userSessionVal->aclUserObject->canManageCassa()): ?>
                             <li><a href="/gestione-cassa">Gestione cassa</a></li>
+    <?php   endif; ?>
                           </ul>
                         </div>            
                       </li>
