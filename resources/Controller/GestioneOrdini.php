@@ -508,9 +508,6 @@ class Controller_GestioneOrdini extends MyFw_Controller {
         }
         $this->view->tipo = $tipo;
         
-        // init Model DB Ordini
-        $ordObj = new Model_Db_Ordini();
-
         // GET idgroup (only for Supervisore Ordine)
         $idgroup = $this->_userSessionVal->idgroup; // DEFAULT idgroup of the user
         if($ordine->canViewMultigruppoFunctions()) { 
@@ -522,6 +519,9 @@ class Controller_GestioneOrdini extends MyFw_Controller {
         }
         $this->view->idgroup = $idgroup;
         
+        // init Model DB Ordini
+        $ordObj = new Model_Db_Ordini();
+
         // GET elenco GRUPPI che hanno ordinato
         $groups = $ordObj->getGroupsWithAlmostOneProductOrderedByIdOrdine($ordine->getIdOrdine());
         $this->view->groups = $groups;
@@ -543,6 +543,11 @@ class Controller_GestioneOrdini extends MyFw_Controller {
         // build Ordine
         $ordine = $this->_buildOrdine( new Model_AF_UserOrdineFactory() );
         
+        // CHECK if can access this area
+        if(!$ordine->canViewMultigruppoFunctions()) { 
+            $this->redirect("gestione-ordini", "dashboard", array("idordine" => $ordine->getIdOrdine()));
+        }
+        
         // GET View by Tipo
         $tipo = $this->getParam("tipo");
         if(is_null($tipo)) {
@@ -550,20 +555,16 @@ class Controller_GestioneOrdini extends MyFw_Controller {
         }
         $this->view->tipo = $tipo;
         
-        // init Model DB Ordini
-        $ordObj = new Model_Db_Ordini();
-        
         // add CALCOLI DECORATOR
         $ordCalcObj = new Model_Ordini_CalcoliMultigruppoDecorator($ordine);
 
         // SET PRODOTTI ORDINATI in DECORATOR
+        $ordObj = new Model_Db_Ordini();
         $listProdOrdered = $ordObj->getProdottiOrdinatiByIdordine($ordine->getIdOrdine());
         $ordCalcObj->setProdottiOrdinati($listProdOrdered);
         
         //Zend_Debug::dump($listProdOrdered);die;
         $this->view->ordCalcObj = $ordCalcObj;
-        
-        
     }
     
     function inviaAction() {
