@@ -51,6 +51,62 @@
     }    
     
     
+/**
+ * Advanced functions for Ordina/Prodotti
+ */
+
+    // Advanced Search for Prodotti
+    function searchProducts(text)
+    {
+        myText = String(text);
+        found = 0;
+        if(myText.length >= 1) {
+            // HIDE Categories
+            $(document).find('.categorie_hidden').each(function(){
+                $(this).hide();
+            });
+            // HIDE Sub-Categories
+            $(document).find('.subcat-title').each(function(){
+                $(this).hide();
+            });
+            $(document).find('.product_descrizione').each(function(){
+                // search text case insensitive (toLowerCase)
+                if($(this).text().toLowerCase().search(myText.toLowerCase()) === -1 ) {
+                    $(this).parent().parent().hide();
+                } else {
+                    $(this).parent().parent().show();
+                    found++;
+                }
+            });
+            
+            // show NO RESULT
+            if(found === 0) {
+                $('#search_no_result').show();
+                $('#search_num_result').hide();
+            } else {
+                $('#search_no_result').hide();
+                $('#search_num_result').show();
+                $('#search_num_result > h3 > strong').html(found);
+            }
+            
+        } else {
+            // SHOW Categories
+            $(document).find('.categorie_hidden').each(function(){
+                $(this).show();
+            });
+            // SHOW Sub-Categories
+            $(document).find('.subcat-title').each(function(){
+                $(this).show();
+            });
+            // SHOW ALL Products
+            $(document).find('.product_descrizione').each(function(){
+                $(this).parent().parent().show();
+            });
+            // HIDE no result alert
+            $('#search_no_result').hide();
+            $('#search_num_result').hide();
+        }
+    }
     
 /*
  *  Trolley class
