@@ -54,6 +54,45 @@ class Form_User extends MyFw_Form {
                         'maxlength' => 12,
                         'required'  => true
             ));
+        
+        $this->addField('tel', array(
+                        'label'     => 'Telefono',
+                        'size'      => 20,
+                        'maxlength' => 30
+            ));
+
+        $this->addField('indirizzo', array(
+                        'label'     => 'Indirizzo',
+                        'size'      => 30,
+                        'maxlength' => 50
+            ));
+
+        $this->addField('localita', array(
+                        'label'     => 'Località',
+                        'size'      => 20,
+                        'maxlength' => 45
+            ));
+
+        $this->addField('provincia', array(
+                        'label'     => 'Provincia',
+                        'size'      => 4,
+                        'maxlength' => 2
+            ));
+
+        $this->addField('in_prova', array(
+                        'type'      => 'select',
+                        'label'     => 'In prova',
+                        'options'   => array('S' => 'SI', 'N' => 'NO'),
+                        'required'  => true
+            ));
+
+        $this->addField('note', array(
+                        'type'      => 'textarea',
+                        'label'     => 'Note',
+                        'cols'      => 60,
+                        'rows' => 4
+            ));
+
 
         // GRUPPI
         $objGr = new Model_Db_Groups();
