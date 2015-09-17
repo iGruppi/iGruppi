@@ -107,9 +107,9 @@ CREATE TABLE IF NOT EXISTS `ordini_groups` (
   `note_consegna` text COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`idordine`,`idgroup_master`,`idgroup_slave`),
   KEY `fk_groups_ordini_ordini1_idx` (`idordine`),
+  KEY `fk_groups_ordini_users1_idx` (`iduser_incaricato`),
   KEY `fk_groups_ordini_groups2_idx` (`idgroup_slave`),
-  KEY `fk_groups_ordini_groups1_idx` (`idgroup_master`),
-  KEY `fk_groups_ordini_users1_idx` (`iduser_incaricato`)
+  KEY `fk_groups_ordini_groups1_idx` (`idgroup_master`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `ordini_prodotti` (
@@ -143,8 +143,8 @@ CREATE TABLE IF NOT EXISTS `ordini_user_prodotti` (
   `qta_reale` decimal(6,3) NOT NULL,
   `data_ins` datetime NOT NULL,
   PRIMARY KEY (`iduser`,`idordine`,`idlistino`,`idprodotto`),
-  KEY `fk_ordini_user_prodotti_ordini_prodotti1_idx` (`idlistino`,`idprodotto`),
-  KEY `fk_ordini_user_prodotti_ordini_user1_idx` (`iduser`,`idordine`)
+  KEY `fk_ordini_user_prodotti_ordini_user1_idx` (`iduser`,`idordine`),
+  KEY `fk_ordini_user_prodotti_ordini_prodotti1_idx` (`idlistino`,`idprodotto`,`idordine`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `ordini_variazioni` (
@@ -162,7 +162,7 @@ CREATE TABLE IF NOT EXISTS `prodotti` (
   `idprodotto` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `idproduttore` int(10) unsigned NOT NULL,
   `idsubcat` int(10) unsigned NOT NULL,
-  `iduser_creator` int(10) unsigned NOT NULL,
+  `iduser_creator` int(10) unsigned DEFAULT NULL,
   `codice` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
   `descrizione` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `udm` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
@@ -214,9 +214,13 @@ CREATE TABLE IF NOT EXISTS `users` (
   `email` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
   `password` varchar(12) COLLATE utf8_unicode_ci NOT NULL,
   `num_members` tinyint(4) NOT NULL,
-  `comune` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
+  `tel` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
+  `indirizzo` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
+  `localita` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
   `provincia` char(2) COLLATE utf8_unicode_ci NOT NULL,
+  `in_prova` enum('S','N') COLLATE utf8_unicode_ci NOT NULL DEFAULT 'N',
   `role` enum('User','Admin') COLLATE utf8_unicode_ci NOT NULL DEFAULT 'User',
+  `note` varchar(1024) COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`iduser`),
   KEY `INDEX_email` (`email`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
@@ -254,7 +258,7 @@ ALTER TABLE `listini`
   ADD CONSTRAINT `fk_listini_produttori1` FOREIGN KEY (`idproduttore`) REFERENCES `produttori` (`idproduttore`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 ALTER TABLE `listini_groups`
-  ADD CONSTRAINT `fk_groups_listini_listini1` FOREIGN KEY (`idlistino`) REFERENCES `listini` (`idlistino`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_groups_listini_listini1` FOREIGN KEY (`idlistino`) REFERENCES `listini` (`idlistino`) ON DELETE CASCADE ON UPDATE NO ACTION,
   ADD CONSTRAINT `fk_groups_produttori_groups1` FOREIGN KEY (`idgroup_master`) REFERENCES `groups` (`idgroup`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   ADD CONSTRAINT `fk_groups_produttori_groups2` FOREIGN KEY (`idgroup_slave`) REFERENCES `groups` (`idgroup`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
@@ -280,7 +284,7 @@ ALTER TABLE `ordini_users`
   ADD CONSTRAINT `fk_ordini_user_users1` FOREIGN KEY (`iduser`) REFERENCES `users` (`iduser`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 ALTER TABLE `ordini_user_prodotti`
-  ADD CONSTRAINT `fk_ordini_user_prodotti_ordini_prodotti1` FOREIGN KEY (`idlistino`, `idprodotto`) REFERENCES `ordini_prodotti` (`idlistino`, `idprodotto`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_ordini_user_prodotti_ordini_prodotti1` FOREIGN KEY (`idlistino`, `idprodotto`, `idordine`) REFERENCES `ordini_prodotti` (`idlistino`, `idprodotto`, `idordine`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   ADD CONSTRAINT `fk_ordini_user_prodotti_ordini_user1` FOREIGN KEY (`iduser`, `idordine`) REFERENCES `ordini_users` (`iduser`, `idordine`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 ALTER TABLE `ordini_variazioni`
