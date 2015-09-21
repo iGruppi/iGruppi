@@ -24,7 +24,11 @@ class Controller_Ordini extends MyFw_Controller {
         // SET idproduttore FILTER
         $fObj->setFilterByField("idproduttore", $this->getParam("idproduttore"));
         // SET stato FILTER
-        $fObj->setFilterByField("stato", $this->getParam("stato"));
+        $stato = $this->getParam("stato");
+        if(is_null($stato)) {
+            $stato = "Aperto";
+        }
+        $fObj->setFilterByField("stato", $stato);
         
         $this->view->fObj = $fObj;
         
