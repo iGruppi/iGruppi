@@ -4,7 +4,12 @@
     <?php foreach ($this->ordCalcObj->getProdottiUtenti() AS $iduser => $dataUser): 
               $user = $dataUser["user"];
         ?>
-        <h3 class="big-margin-top"><strong><?php echo $user->nome . " " . $user->cognome; ?></strong></h3>
+        <h4 class="big-margin-top"><strong><?php echo $user->nome . " " . $user->cognome; ?></strong></h4>
+        <p>
+            <?php echo $user->indirizzo; ?> - <?php echo $user->localita; ?> (<?php echo $user->provincia; ?>)<br />
+            Tel: <?php echo $user->tel; ?><br />
+            Email: <a href="mailto: <?php echo $user->email; ?>"><?php echo $user->email; ?></a>
+        </p>
         <table class="table table-condensed">
             <thead>
               <tr>

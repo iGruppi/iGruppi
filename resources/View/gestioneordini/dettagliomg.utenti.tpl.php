@@ -18,8 +18,8 @@
                     'descrizione'           => $pObj->getDescrizioneListino(),
                     'costo_ordine'          => $pObj->getCostoOrdine(),
                     'udm'                   => $pObj->getUdm() .($pObj->hasPezzatura() ? "<br /><small>(Minimo " . $pObj->getDescrizionePezzatura() . ")</small>" : ""),
-                    'qta'                   => $pObj->getQta(),
-                    'qta_reale'             => $pObj->getQtaReale(),
+                    'qta'                   => $pObj->getQta_ByIduser($user->iduser),
+                    'qta_reale'             => $pObj->getQtaReale_ByIduser($user->iduser),
                     'subcat'                => $pObj->getSubCategoria()
                 );
             }

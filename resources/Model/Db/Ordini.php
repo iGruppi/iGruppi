@@ -276,7 +276,7 @@ class Model_Db_Ordini extends MyFw_DB_Base {
                ." JOIN users_group AS ug ON oup.iduser=ug.iduser"
                ." JOIN groups AS g ON ug.idgroup=g.idgroup"
                ." JOIN ordini_groups AS og ON oup.idordine=og.idordine AND og.idgroup_slave=g.idgroup"
-               ." JOIN users AS u ON og.iduser_incaricato=u.iduser"
+               ." LEFT JOIN users AS u ON og.iduser_incaricato=u.iduser"
                ." WHERE oup.idordine= :idordine";
         $sth = $this->db->prepare($sql);
         $sth->execute(array('idordine' => $idordine));
