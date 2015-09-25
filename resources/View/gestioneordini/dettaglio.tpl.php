@@ -17,21 +17,26 @@
         <?php include $this->template('gestioneordini/header.tpl.php'); ?>
         <div class="row">
           <div class="col-md-12">
-            <h3 class="big-margin-top"><?php echo $titolo; ?> 
-    <?php if($this->ordine->canViewMultigruppoFunctions()): ?>
-                (<strong><?php echo $this->groups[$this->idgroup]; ?></strong>)
-    <?php endif; ?>
-            </h3>
+            <h3 class="big-margin-top"><?php echo $titolo; ?></h3>
     <?php if($this->ordine->canViewMultigruppoFunctions()): ?>
             <div class="btn-group hidden-print">
                 <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     Visualizza per Gruppo <span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu">
-        <?php foreach($this->groups AS $idgroup => $nome): ?>
-                    <li><a href="/gestione-ordini/dettaglio/idordine/<?php echo $this->ordine->getIdOrdine(); ?>/tipo/<?php echo $this->tipo; ?>/idgroup/<?php echo $idgroup; ?>"><?php echo $nome; ?></a></li>
+        <?php foreach($this->groups AS $idgroup => $group): ?>
+                    <li><a href="/gestione-ordini/dettaglio/idordine/<?php echo $this->ordine->getIdOrdine(); ?>/tipo/<?php echo $this->tipo; ?>/idgroup/<?php echo $idgroup; ?>"><?php echo $group->nome_gruppo; ?></a></li>
         <?php endforeach; ?>
                 </ul>
+            </div>
+            <div>
+                <?php $group = $this->groups[$this->idgroup]; ?>
+                <h4 class="big-margin-top"><strong><?php echo $group->nome_gruppo; ?></strong></h4>
+                <p>
+                    Incaricato ordine: <b><?php echo $group->cognome_incaricato; ?> <?php echo $group->nome_incaricato; ?></b><br />
+                    Tel: <b><?php echo $group->tel_incaricato; ?></b><br />
+                    Email: <a href="mailto: <?php echo $group->email_incaricato; ?>"><?php echo $group->email_incaricato; ?></a>
+                </p>
             </div>
     <?php endif; ?>
           </div>

@@ -525,6 +525,7 @@ class Controller_GestioneOrdini extends MyFw_Controller {
         // GET elenco GRUPPI che hanno ordinato
         $groups = $ordObj->getGroupsWithAlmostOneProductOrderedByIdOrdine($ordine->getIdOrdine());
         $this->view->groups = $groups;
+//        Zend_Debug::dump($groups);die;
         
         // add CALCOLI DECORATOR
         $ordCalcObj = new Model_Ordini_CalcoliDecorator($ordine);

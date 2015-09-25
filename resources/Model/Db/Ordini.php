@@ -270,17 +270,20 @@ class Model_Db_Ordini extends MyFw_DB_Base {
      */
     function getGroupsWithAlmostOneProductOrderedByIdOrdine($idordine)
     {
-        $sql = "SELECT DISTINCT ug.idgroup, g.nome "
+        $sql = "SELECT DISTINCT ug.idgroup, g.nome AS nome_gruppo, og.iduser_incaricato, "
+               ." u.nome AS nome_incaricato, u.cognome AS cognome_incaricato, u.tel AS tel_incaricato, u.email AS email_incaricato "
                ." FROM ordini_user_prodotti AS oup "
                ." JOIN users_group AS ug ON oup.iduser=ug.iduser"
                ." JOIN groups AS g ON ug.idgroup=g.idgroup"
+               ." JOIN ordini_groups AS og ON oup.idordine=og.idordine AND og.idgroup_slave=g.idgroup"
+               ." JOIN users AS u ON og.iduser_incaricato=u.iduser"
                ." WHERE oup.idordine= :idordine";
         $sth = $this->db->prepare($sql);
         $sth->execute(array('idordine' => $idordine));
         $groups = array();
         if($sth->rowCount() > 0) {
             foreach($sth->fetchAll(PDO::FETCH_OBJ) AS $group) {
-                $groups[$group->idgroup] = $group->nome;
+                $groups[$group->idgroup] = $group;
             }
         }
         return $groups;
