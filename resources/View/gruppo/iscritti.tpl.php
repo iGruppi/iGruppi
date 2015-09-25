@@ -10,8 +10,19 @@
             <h3 class="no-margin"><?php echo $user->nome . " " . $user->cognome; ?></h3>
             <p>
                 Email: <a href="mailto:<?php echo $user->email;?>"><?php echo $user->email;?></a><br />
+                Telefono: <?php echo $user->tel;?><br />
+                Indirizzo: <?php echo $user->indirizzo;?> - <?php echo $user->localita;?> (<?php echo $user->provincia;?>)<br />
+            <?php if( $this->yesnoToBool($user->fondatore)): ?>
+                <span class="label label-success">Amministratore</span>
+            <?php endif; ?>
+            <?php if( $this->yesnoToBool($user->contabile)): ?>
+                <span class="label label-info">Contabile</span>
+            <?php endif; ?>
             <?php if( !$this->yesnoToBool($user->attivo)): ?>
-                <strong id="disabled_<?php echo $user->iduser;?>" class="alert_red">Disabilitato</strong>
+                <span class="label label-danger">Disabilitato</span>
+            <?php endif; ?>
+            <?php if( $this->yesnoToBool($user->in_prova)): ?>
+                <span class="label label-warning">In prova</span>
             <?php endif; ?>
             </p>
         </div>

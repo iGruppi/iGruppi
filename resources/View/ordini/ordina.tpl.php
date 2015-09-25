@@ -25,7 +25,7 @@
      $arTrolley = array();
      if(count($categorie) > 0): 
         foreach ($categorie AS $cat): ?>
-    <span id="cat_<?php echo $cat->getId(); ?>" style="visibility: hidden;"><?php echo $cat->getDescrizione(); ?></span>
+    <span class="categorie_hidden" id="cat_<?php echo $cat->getId(); ?>" style="visibility: hidden;"><?php echo $cat->getDescrizione(); ?></span>
 <?php       foreach ($cat->getSubcat() AS $subcat): 
             echo $this->partial('prodotti/subcat-title.tpl.php', array('cat' => $cat, 'subcat' => $subcat));
                 foreach ($subcat->getProdotti() AS $prodObj):
@@ -34,7 +34,7 @@
                  //Zend_Debug::dump($prodotto);die;
     ?>
         
-      <div class="row row-myig<?php if(!$prodotto->isDisponibile()) { echo " box_row_dis"; } ; ?> div_product_row">
+      <div class="row row-myig<?php if(!$prodotto->isDisponibile()) { echo " box_row_dis"; } ; ?>">
         <div class="col-md-9">
         <?php if($prodotto->getOffertaOrdine()): ?>
                 <small><span class="label label-danger">Offerta</span></small>
@@ -102,54 +102,6 @@
 </div>
 
 <script>
-    
-    // Advanced Search for Prodotti
-    function searchProducts(text)
-    {
-        myText = String(text);
-        found = 0;
-        if(myText.length >= 1) {
-            // hide Categories
-            $(document).find('.subcat-title').each(function(){
-                $(this).hide();
-            });
-            $(document).find('.product_descrizione').each(function(){
-                // search text case insensitive (toLowerCase)
-                if($(this).text().toLowerCase().search(myText.toLowerCase()) === -1 ) {
-                    $(this).parent().parent().hide();
-                } else {
-                    $(this).parent().parent().show();
-                    found++;
-                }
-            });
-            
-            // show NO RESULT
-            if(found === 0) {
-                $('#search_no_result').show();
-                $('#search_num_result').hide();
-            } else {
-                $('#search_no_result').hide();
-                $('#search_num_result').show();
-                $('#search_num_result > h3 > strong').html(found);
-            }
-            
-        } else {
-            // SHOW Categories
-            $(document).find('.subcat-title').each(function(){
-                $(this).show();
-            });
-            // SHOW ALL Products
-            $(document).find('.product_descrizione').each(function(){
-                $(this).parent().parent().show();
-            });
-            // HIDE no result alert
-            $('#search_no_result').hide();
-            $('#search_num_result').hide();
-        }
-    }
-    
-    
-    
     $(document).ready(function () {
 
         // SET idordine

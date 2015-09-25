@@ -10,13 +10,22 @@
     </div>
 <?php endif; ?>
 
+<div class="row row-myig" id="search_no_result" style="display: none;">
+    <div class="col-md-12">
+        <div class="alert alert-danger" role="alert">Nessun prodotto trovato.</div>            
+    </div>
+</div>
+
+<div id="search_num_result" style="display:none;">
+    <h3>Trovati <strong>_</strong> prodotti</h3>
+</div>      
       
 <?php 
 $categorie = $this->prodotti->getProdottiWithCategoryArray();
 if(count($categorie) > 0): 
     foreach ($categorie AS $cat): 
 ?>
-    <span id="cat_<?php echo $cat->getId(); ?>" style="visibility: hidden;"><?php echo $cat->getDescrizione(); ?></span>
+    <span class="categorie_hidden" id="cat_<?php echo $cat->getId(); ?>" style="visibility: hidden;"><?php echo $cat->getDescrizione(); ?></span>
 <?php foreach ($cat->getSubcat() AS $subcat):
         // create Sub Cat Title
         echo $this->partial('prodotti/subcat-title.tpl.php', array('cat' => $cat, 'subcat' => $subcat));
@@ -26,8 +35,9 @@ if(count($categorie) > 0):
 ?>
       <div class="row row-myig" id="prod_<?php echo $pObj->getIdProdotto();?>">
         <div class="col-md-10">
-            <h3 class="no-margin"><?php echo $pObj->getDescrizioneAnagrafica();?></h3>
+            <h3 class="no-margin product_descrizione"><?php echo $pObj->getDescrizioneAnagrafica();?></h3>
             <p>
+                Categoria: <strong><?php echo $pObj->getSubCategoria(); ?></strong><br />
                 Codice: <strong><?php echo $pObj->getCodice(); ?></strong><br />
             <?php echo $this->partial('prodotti/price-box.tpl.php', array('prodotto' => $pObj)); ?>
             <?php if(!$pObj->getAttivoAnagrafica()): ?>
@@ -54,6 +64,8 @@ if(count($categorie) > 0):
 <?php if(Zend_Registry::get("permsProduttori")->canAddProdotti($this->produttore->idproduttore)): ?>
       <a class="btn btn-default btn-mylg" href="/prodotti/add/idproduttore/<?php echo $this->produttore->idproduttore;?>"><span class="glyphicon glyphicon-plus"></span> Nuovo prodotto</a>
       <br />
+      <br />
+      <input type="text" name="search_products" id="search_products" placeholder="Cerca prodotto..." oninput="searchProducts(this.value);" />
       <br />
 <?php endif; ?>
       <?php echo $this->partial('prodotti/subcat-navigation.tpl.php', array('categorie' => $categorie )); ?>

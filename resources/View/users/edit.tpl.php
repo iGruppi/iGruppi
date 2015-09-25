@@ -21,7 +21,16 @@
                 <?php echo $this->form->renderField('nome'); ?>
                 <?php echo $this->form->renderField('cognome'); ?>
                 <?php echo $this->form->renderField('email'); ?>
+                <?php echo $this->form->renderField('in_prova'); ?>
+            </fieldset>
+            <fieldset>
+                <legend>Dati secondari</legend>
                 <?php echo $this->form->renderField('num_members'); ?>
+                <?php echo $this->form->renderField('tel'); ?>
+                <?php echo $this->form->renderField('indirizzo'); ?>
+                <?php echo $this->form->renderField('localita'); ?>
+                <?php echo $this->form->renderField('provincia'); ?>
+                <?php echo $this->form->renderField('note'); ?>
             </fieldset>
           </div>
           <div class="tab-pane" id="settings">
