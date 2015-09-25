@@ -288,7 +288,7 @@ class Model_Db_Ordini extends MyFw_DB_Base {
     
     function getUsersWithAlmostOneProductOrderedByIdOrdine($idordine)
     {
-        $sql = "SELECT DISTINCT oup.iduser, u.*, ug.idgroup, g.nome "
+        $sql = "SELECT DISTINCT oup.iduser, u.*, ug.idgroup, g.nome AS nome_gas "
                ." FROM ordini_user_prodotti AS oup "
                ." JOIN users AS u ON oup.iduser=u.iduser"
                ." JOIN users_group AS ug ON oup.iduser=ug.iduser"

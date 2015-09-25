@@ -36,8 +36,7 @@
                   </button>
                   <ul class="dropdown-menu">
                     <li><a href="/gestione-ordini/dettagliomg/idordine/<?php echo $this->ordine->getIdOrdine(); ?>/tipo/totali">Totale Ordinato</a></li>
-                    <li><a href="#">Parziali Utenti/Prodotti</a></li>
-                    <li><a href="#">Dettaglio Utenti</a></li>
+                    <li><a href="/gestione-ordini/dettagliomg/idordine/<?php echo $this->ordine->getIdOrdine(); ?>/tipo/utenti">Parziali Utenti/Prodotti</a></li>
                   </ul>
                 </div>                
         <?php endif; ?>

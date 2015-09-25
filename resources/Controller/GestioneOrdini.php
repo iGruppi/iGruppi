@@ -563,7 +563,7 @@ class Controller_GestioneOrdini extends MyFw_Controller {
         $listProdOrdered = $ordObj->getProdottiOrdinatiByIdordine($ordine->getIdOrdine());
         $ordCalcObj->setProdottiOrdinati($listProdOrdered);
         
-        //Zend_Debug::dump($listProdOrdered);die;
+//        Zend_Debug::dump($ordCalcObj->getProdottiUtenti());die;
         $this->view->ordCalcObj = $ordCalcObj;
     }
     
