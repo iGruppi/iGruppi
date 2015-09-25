@@ -19,7 +19,7 @@
         <?php echo $this->partial('gestioneordini/header-status-details.tpl.php', array('ordine' => $this->ordine) ); ?>
         <?php echo $this->partial('gestioneordini/header-menu.tpl.php', array('ordine' => $this->ordine) ); ?>
     </div>
-    <div class="col-md-4">
+    <div class="col-md-4 hidden-print">
     <?php if(!$this->ordine->isSupervisoreOrdine()): ?>
             <div class="alert alert-warning" role="alert">
                 <b>Attenzione!</b><br />

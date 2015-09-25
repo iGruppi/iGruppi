@@ -7,7 +7,7 @@
 <?php endif; ?>
     
 <?php if($this->ordine->isMultiProduttore()): ?>
-    <div class="btn-group">
+    <div class="btn-group hidden-print">
         <button type="button" class="btn btn-warning btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           Ordine multiproduttore <span class="badge"><?php echo count($this->ordine->getProduttoriList()); ?></span> &nbsp; <span class="caret"></span>
         </button>

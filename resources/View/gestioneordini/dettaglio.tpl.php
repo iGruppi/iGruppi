@@ -23,7 +23,7 @@
     <?php endif; ?>
             </h3>
     <?php if($this->ordine->canViewMultigruppoFunctions()): ?>
-            <div class="btn-group">
+            <div class="btn-group hidden-print">
                 <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     Visualizza per Gruppo <span class="caret"></span>
                 </button>

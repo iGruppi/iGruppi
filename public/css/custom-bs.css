@@ -454,9 +454,7 @@ ul.form-errors li ul.errors li { list-style-image: none; }
 
 .checkbox_box { margin-bottom: 20px;}
 
-/***********************************
-FORM - Model 1 - Label 200px
-***********************************/
+/* FORM - Model 1 - Label 200px */
 form.f1n200 fieldset label{ width: 200px; }
 form.f1n200 ul.errors,
 form.f1n200 fieldset .checkbox_box,
@@ -464,9 +462,7 @@ form.f1n200 .hint,
 form.f1n200 fieldset .error p { margin-left: 208px; }
 form.f1n200 input#submit, form.f1n200 button#submit, form.f1n200 .contact_submit { margin-left: 217px; }
 
-/***********************************
-FORM - Model 1 - Label 150px
-***********************************/
+/* FORM - Model 1 - Label 150px */
 form.f1n150 fieldset label{ width: 150px; }
 form.f1n150 ul.errors, 
 form.f1n150 fieldset .checkbox_box,
@@ -474,12 +470,39 @@ form.f1n150 .hint,
 form.f1n150 fieldset .error p { margin-left: 158px; }
 form.f1n150 input#submit, form.f1n150 button#submit { margin-left: 167px; }
 
-/***********************************
-FORM - Model 1 - Label 120px
-***********************************/
+/* FORM - Model 1 - Label 120px */
 form.f1n120 fieldset label{ width: 120px; }
 form.f1n120 ul.errors,
 form.f1n120 fieldset .checkbox_box,
 form.f1n120 .hint,
 form.f1n120 fieldset .error p { margin-left: 128px; }
 form.f1n120 input#submit, form.f1n120 button#submit { margin-left: 137px; }
+
+
+
+
+/***********************************
+    MEDIA PRINT
+***********************************/
+
+
+@media print {
+
+    #wrap > .container, .content {
+        padding: 0.1em;
+    }
+    
+/* remove some useless parts of handsontable on media print */
+    .ht_clone_top {
+        visibility: hidden;
+    }
+    .htCore {
+        border-collapse: collapse!important;
+    }
+    .htCore td {
+        border: 1px solid #999;
+        padding: 0 2px;
+    }
+}
+
+

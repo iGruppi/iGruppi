@@ -1,3 +1,4 @@
+<div class="hidden-print">
     <a class="btn btn-default" role="button" href="/gestione-ordini/dashboard/idordine/<?php echo $this->ordine->getIdOrdine();?>"><span class="glyphicon glyphicon-th-large"></span></a>
     <div class="btn-group">
         <a class="btn btn-default dropdown-toggle" data-toggle="dropdown">
@@ -69,3 +70,4 @@
     <!--      <a class="btn btn-success" href="/gestione-ordini/invia/idordine/<?php echo $this->ordine->getIdOrdine();?>"><span class="glyphicon glyphicon-envelope"></span> Invia al Produttore</a> -->
     <?php endif; ?>
 <?php endif; ?>
+</div>
