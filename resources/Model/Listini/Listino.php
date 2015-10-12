@@ -54,27 +54,27 @@ class Model_Listini_Listino extends Model_AF_AbstractCoR
     
     public function canManageCondivisione()
     {
-        return $this->isOwner();
+        return $this->isOwnerListino();
     }
     
     public function canEditName()
     {
-        return $this->isOwner();   
+        return $this->isOwnerListino();   
     }
     
     public function canSetValidita()
     {
-        return $this->isOwner();   
+        return $this->isOwnerListino();   
     }
     
     public function canUpdatePrezzi()
     {
-        return $this->isOwner();
+        return $this->isOwnerListino();
     }
     
     public function canSetDataListino()
     {
-        return $this->isOwner();   
+        return $this->isOwnerListino();   
     }
     
     
@@ -87,9 +87,9 @@ class Model_Listini_Listino extends Model_AF_AbstractCoR
         return Zend_Registry::get("permsProduttori")->is_Referente($this->getIdProduttore());
     }
     
-    private function isOwner()
+    private function isOwnerListino()
     {
-        return ($this->getMyIdGroup() == $this->getMasterGroup()->getIdGroup());
+        return ($this->getMyIdGroup() == $this->getMasterGroup()->getIdGroup() && $this->isReferenteProduttore());
     }
     
     
