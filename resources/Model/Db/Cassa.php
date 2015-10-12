@@ -52,4 +52,31 @@ class Model_Db_Cassa extends MyFw_DB_Base {
         return $sth->fetchAll(PDO::FETCH_ASSOC);        
     }
     
+    function getSaldiGroup($idgroup)
+    {
+        $sql = "SELECT concat( cognome, ' ', users.nome ) AS Utente, coalesce(TotAttivi, 0) as TotaleVersamenti, coalesce(TotPassivi, 0) as TotaleOrdiniPagati, 
+                coalesce(Num_ordini, 0) as NumeroOrdiniArchiviati, coalesce(Saldo,0) as SaldoUtente, coalesce(Num_ordini_attivi,0) as NumeroOrdiniInCorso, 
+                -1*coalesce(StimaProxSpese,0) as StimaSpeseProxOrdini, coalesce(Saldo,0)-coalesce(StimaProxSpese,0) as ProiezioneSaldo
+                FROM users
+                JOIN users_group ON users.iduser = users_group.iduser
+                LEFT JOIN 
+                (select iduser, coalesce( sum( case when idordine is null then importo else 0 end ) , 0 ) AS TotAttivi, coalesce( sum( case when idordine is not null then importo else 0 end ) , 0 ) AS TotPassivi, 
+                coalesce( count( DISTINCT cassa.idordine ) , 0 ) AS Num_ordini, coalesce( sum( importo ) , 0 ) AS Saldo from cassa group by cassa.iduser) cassa1 
+                ON cassa1.iduser = users.iduser
+                LEFT JOIN 
+                (select iduser, coalesce( count( DISTINCT ordini.idordine ) , 0 ) AS Num_ordini_attivi, ROUND(coalesce( sum( costo_ordine * qta_reale ) , 0 ),2) AS StimaProxSpese
+                from ordini_user_prodotti 
+                LEFT JOIN ordini_prodotti ON ordini_prodotti.idordine = ordini_user_prodotti.idordine and ordini_prodotti.idprodotto = ordini_user_prodotti.idprodotto
+                LEFT JOIN ordini ON ordini_prodotti.idordine = ordini.idordine
+                where ordini.archiviato = 'N'
+                group by iduser) ordini_user_prodotti1
+                ON ordini_user_prodotti1.iduser = users.iduser
+                WHERE users_group.idgroup = :idgroup
+                GROUP BY users.iduser
+                ORDER BY cognome";
+        $sth = $this->db->prepare($sql);
+        $sth->execute(array('idgroup' => $idgroup));
+        return $sth->fetchAll(PDO::FETCH_OBJ);        
+    }
+    
 }

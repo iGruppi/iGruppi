@@ -254,4 +254,13 @@ class Controller_GestioneCassa extends MyFw_Controller {
             }
         }
     }
+    
+    
+    function viewsaldiAction()
+    {
+        $cassaObj = new Model_Db_Cassa();
+        $saldi = $cassaObj->getSaldiGroup($this->_userSessionVal->idgroup);
+        $this->view->saldi = $saldi;
+    }
+    
 }
