@@ -257,10 +257,7 @@ class Model_Ordini_Ordine extends Model_AF_AbstractCoR
      */
     public function canModificaProdottiDisponibilita()
     {
-        return (
-                ( $this->isSupervisoreOrdine() && ($this->is_Pianificato() || $this->is_Aperto()) ) OR
-                ( $this->isIncaricatoOrdine() && $this->is_Arrivato() )
-        );
+        return $this->isSupervisoreOrdine() && ($this->is_Pianificato() || $this->is_Aperto() ||  $this->is_Arrivato() );
     }
         
     /**
