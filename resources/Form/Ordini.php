@@ -54,10 +54,15 @@ class Form_Ordini extends MyFw_Form {
                     'cols'      => 60,
         ));
         
+        /**
+         * REMOVED "PUBBLICO"
+         * There is a BUG in Model_Ordini_Ordine, it does NOT find MyGroup when a user is NOT in MasterGroup
+         * @TODO: to fix after understanding WHAT "Ordine PUBBLICO" means!
+         */
         $this->addField('condivisione', array(
                     'label'     => 'Condivisione',
                     'type'      => 'select',
-                    'options'   => array('PUB'=>'Pubblico','SHA'=>'Condiviso','PRI'=>'Privato')
+                    'options'   => array('SHA'=>'Condiviso','PRI'=>'Privato') 
         ));
         
         // get Groups
