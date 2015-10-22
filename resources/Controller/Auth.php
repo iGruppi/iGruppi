@@ -92,6 +92,7 @@ class Controller_Auth extends MyFw_Controller {
         $form->setAction("/auth/register");
         // remove useless fields
         $form->removeField("iduser");
+        $form->removeField("in_prova");
         $form->removeField("attivo");
         $form->removeField("fondatore");
         $form->removeField("contabile");
