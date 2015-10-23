@@ -96,6 +96,11 @@ class Controller_Auth extends MyFw_Controller {
         $form->removeField("attivo");
         $form->removeField("fondatore");
         $form->removeField("contabile");
+        $form->removeField("tel");
+        $form->removeField("indirizzo");
+        $form->removeField("localita");
+        $form->removeField("provincia");
+        $form->removeField("note");
 
         // reset errorLogin
         $this->view->added = false;
