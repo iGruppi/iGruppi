@@ -8,5 +8,3 @@ verrà <b>Aperto</b> un nuovo ordine per il produttore <b><?php echo $this->ordi
 <br />
 Data chiusura ordine: <b><?php echo $this->date($this->ordine->data_fine, '%d/%m/%Y');?> alle <?php echo $this->date($this->ordine->data_fine, '%H:%M');?></b><br />
 <br />
-<br />
-Buona spesa a tutti!<br />
