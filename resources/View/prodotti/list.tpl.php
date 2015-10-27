@@ -40,8 +40,8 @@ if(count($categorie) > 0):
                 Categoria: <strong><?php echo $pObj->getSubCategoria(); ?></strong><br />
                 Codice: <strong><?php echo $pObj->getCodice(); ?></strong><br />
             <?php echo $this->partial('prodotti/price-box.tpl.php', array('prodotto' => $pObj)); ?>
-            <?php if(!$pObj->getAttivoAnagrafica()): ?>
-                <strong class="alert_red">NON ATTIVO</strong> (Non viene inserito quando crei un nuovo ordine)
+            <?php if($pObj->getAttivoAnagrafica() == "N"): ?>
+                <strong class="alert_red">NON ATTIVO</strong> (Non viene inserito quando crei un nuovo Listino)
             <?php endif; ?>
             </p>
         </div>
