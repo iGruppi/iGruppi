@@ -2,8 +2,9 @@
     <div class="col-md-12">
 <?php 
     $arProductsGrid = array();
-    if(count($this->ordCalcObj->getProdotti()) > 0):
-        foreach ($this->ordCalcObj->getProdotti() AS $pObj)
+    $arProdottiOrdinati = $this->ordCalcObj->getProdottiOrdinati();
+    if(count($arProdottiOrdinati) > 0):
+        foreach ($arProdottiOrdinati AS $pObj)
         {
             $arProductsGrid[] = array(
                 'disponibile_ordine'    => ($pObj->isDisponibile() ? "SI" : "NO"),

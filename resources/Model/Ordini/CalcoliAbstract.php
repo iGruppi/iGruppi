@@ -64,6 +64,23 @@ abstract class Model_Ordini_CalcoliAbstract
         }
     }
 
+    /**
+     * Get elenco prodotti Ordinati (where QTA > 0)
+     * @return array 
+     */
+    public function getProdottiOrdinati()
+    {
+        $arPO = array();
+        if(count($this->_ordine->getProdotti()) > 0) {
+            foreach ($this->_ordine->getProdotti() AS $idprodotto => $pObj)
+            {
+                if($pObj->getQta() > 0) {
+                    $arPO[$idprodotto] = $pObj;
+                }
+            }
+        }
+        return $arPO;
+    }
     
     
     
