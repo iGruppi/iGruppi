@@ -29,7 +29,7 @@ if(count($categorie) > 0):
                     'costo_ordine'      => $pObj->getCostoOrdine(),
                     'udm'               => $pObj->getUdm() .($pObj->hasPezzatura() ? "<br /><small>(Minimo " . $pObj->getDescrizionePezzatura() . ")</small>" : ""),
                     'offerta_ordine'    => $pObj->getOffertaOrdine(),
-                    'descrizione'       => $pObj->getDescrizioneListino(),
+                    'descrizione'       => $pObj->getDescrizioneAnagrafica(),
                     'disponibile_ordine'=> $pObj->isDisponibile()
                 );
             endforeach;

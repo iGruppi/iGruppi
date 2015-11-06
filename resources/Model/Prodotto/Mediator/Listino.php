@@ -12,7 +12,6 @@ class Model_Prodotto_Mediator_Listino
     protected $_data = array(
             'idlistino',
             'idprodotto',
-            'descrizione_listino',
             'costo_listino',
             'note_listino',
             'attivo_listino'
@@ -45,14 +44,6 @@ class Model_Prodotto_Mediator_Listino
         return $this->_getValue("idlistino");
     }
     
-    /**
-     * @return string
-     */    
-    public function getDescrizioneListino()
-    {
-        return $this->_getValue("descrizione_listino");
-    }
-
     /**
      * @return float
      */
@@ -96,15 +87,6 @@ class Model_Prodotto_Mediator_Listino
     public function setIdProdotto($id)
     {
         $this->_setValue("idprodotto", $id);
-    }
-    
-    
-    /**
-     * @param string $d
-     */
-    public function setDescrizioneListino($d)
-    {
-        $this->_setValue("descrizione_listino", $d);
     }
     
     /**

@@ -34,7 +34,7 @@
                         'subcat'        => $subcat->getDescrizione(),
                         'costo_listino'  => $pObj->getCosto(),
                         'udm'           => $pObj->getUdm() .($pObj->hasPezzatura() ? "<br /><small>(Minimo " . $pObj->getDescrizionePezzatura() . ")</small>" : ""),
-                        'descrizione'   => $pObj->getDescrizioneListino()
+                        'descrizione'   => $pObj->getDescrizioneAnagrafica()
                     );
                 }
             }

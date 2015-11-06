@@ -28,7 +28,7 @@
                 <tr class="danger strike">
             <?php endif; ?>
                     <td><strong><?php echo $pObj->getCodice();?></strong></td>
-                    <td><?php echo $pObj->getDescrizioneListino();?></td>
+                    <td><?php echo $pObj->getDescrizioneAnagrafica();?></td>
                     <td class="text-right"><strong><?php echo $this->formatQta( $pObj->getQtaReale_ByIduser($iduser), $pObj->getUdm() );?></strong></td>
                     <td><?php echo $pObj->getDescrizioneCosto();?></td>
                     <td class="text-right"><strong><?php echo $this->valuta($pObj->getTotale_ByIduser($iduser)); ?></strong></td>

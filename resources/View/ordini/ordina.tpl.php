@@ -40,7 +40,7 @@
                 <small><span class="label label-danger">Offerta</span></small>
         <?php endif;?>
             
-            <h3 class="no-margin product_descrizione"><?php echo $prodotto->getDescrizioneListino();?></h3>
+            <h3 class="no-margin product_descrizione"><?php echo $prodotto->getDescrizioneAnagrafica();?></h3>
             <p>
                 Categoria: <strong><?php echo $prodotto->getSubCategoria(); ?></strong><br />
         <?php if($this->ordine->isMultiproduttore()): ?>

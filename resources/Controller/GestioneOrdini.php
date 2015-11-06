@@ -444,7 +444,7 @@ class Controller_GestioneOrdini extends MyFw_Controller {
         if(is_array($listProd) && count($listProd) > 0) {
             foreach($listProd AS $prodotto) 
             {
-                $arRes[] = array('id' => $prodotto->getIdProdotto(), 'label' => $prodotto->getDescrizioneListino(), 'category' => $prodotto->getSubcategoria());
+                $arRes[] = array('id' => $prodotto->getIdProdotto(), 'label' => $prodotto->getDescrizioneAnagrafica(), 'category' => $prodotto->getSubcategoria());
             }
         }
         $this->view->arRes = json_encode($arRes);

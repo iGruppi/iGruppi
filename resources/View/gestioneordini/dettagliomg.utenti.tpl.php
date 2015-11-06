@@ -15,7 +15,7 @@
                     'disponibile_ordine'    => ($pObj->isDisponibile() ? "SI" : "NO"),
                     'produttore'            => $pObj->getProduttore(),
                     'codice'                => $pObj->getCodice(),
-                    'descrizione'           => $pObj->getDescrizioneListino(),
+                    'descrizione'           => $pObj->getDescrizioneAnagrafica(),
                     'costo_ordine'          => $pObj->getCostoOrdine(),
                     'udm'                   => $pObj->getUdm() .($pObj->hasPezzatura() ? "<br /><small>(Minimo " . $pObj->getDescrizionePezzatura() . ")</small>" : ""),
                     'qta'                   => $pObj->getQta_ByIduser($user->iduser),

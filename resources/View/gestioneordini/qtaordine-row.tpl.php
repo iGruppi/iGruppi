@@ -2,7 +2,7 @@
 <?php if($this->pObj->isDisponibile()): 
         $keyrow = $this->iduser . "_" . $this->idprodotto;
     ?>
-    <td><?php echo $this->pObj->getDescrizioneListino();?><br />
+    <td><?php echo $this->pObj->getDescrizioneAnagrafica();?><br />
         <?php echo $this->pObj->getDescrizioneCosto();?> (Codice: <?php echo $this->pObj->getCodice();?>)<br />
         <?php if($this->pObj->hasPezzatura()): ?>
             <small>Pezzatura/Taglio: <?php echo $this->pObj->getDescrizionePezzatura(); ?></small>
@@ -20,7 +20,7 @@
         <strong><?php echo $this->valuta($this->pObj->getTotale()); ?></strong>
     </td>
 <?php else: ?>
-    <td class="danger strike"><?php echo $this->pObj->getDescrizioneListino();?><br />
+    <td class="danger strike"><?php echo $this->pObj->getDescrizioneAnagrafica();?><br />
         <?php echo $this->pObj->getDescrizioneCosto();?> (Codice: <?php echo $this->pObj->getCodice();?>)<br />
         <?php if($this->pObj->hasPezzatura()): ?>
             <small>Pezzatura/Taglio: <?php echo $this->pObj->getDescrizionePezzatura(); ?></small>

@@ -18,7 +18,7 @@
     <?php foreach ($prodottiUser as $idprodotto => $pObj): ?>
       <div class="row row-myig<?php echo ($pObj->isDisponibile()) ? "" : " box_row_dis" ; ?>">
         <div class="col-md-9">
-            <h3 class="no-margin"><?php echo $pObj->getDescrizioneListino();?></h3>
+            <h3 class="no-margin"><?php echo $pObj->getDescrizioneAnagrafica();?></h3>
             Categoria: <strong><?php echo $pObj->getSubCategoria(); ?></strong><br />
         <?php if($this->ordine->isMultiproduttore()): ?>
             Produttore: <strong><?php echo $pObj->getProduttore(); ?></strong><br />

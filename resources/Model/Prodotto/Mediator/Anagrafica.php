@@ -138,7 +138,7 @@ class Model_Prodotto_Mediator_Anagrafica
 
     /**
      * @return string
-     */    
+     */
     public function getDescrizioneAnagrafica()
     {
         return $this->_getValue("descrizione");
@@ -274,7 +274,7 @@ class Model_Prodotto_Mediator_Anagrafica
     /**
      * @param string $d
      */
-    public function setDescrizione($d)
+    public function setDescrizioneAnagrafica($d)
     {
         $this->_setValue("descrizione", $d);
     }

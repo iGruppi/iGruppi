@@ -27,7 +27,7 @@ class Model_Ordini_Logger
     {
         if(!is_null($prodotto))
         {
-            $descProdotto = $prodotto->getDescrizioneListino();
+            $descProdotto = $prodotto->getDescrizioneAnagrafica();
             $prezzo = $prodotto->getCostoOrdine();
             $txt = "Il prezzo del prodotto <b>$descProdotto</b> è stato modificato: <b>$prezzo &euro;</b>";
             return self::LogToDB($ordine->getIdOrdine(), $txt);
@@ -38,7 +38,7 @@ class Model_Ordini_Logger
     {
         if(!is_null($prodotto))
         {
-            $descProdotto = $prodotto->getDescrizioneListino();
+            $descProdotto = $prodotto->getDescrizioneAnagrafica();
             $disponibile = $prodotto->getDisponibileOrdine();
             if($disponibile == "S") 
             {
