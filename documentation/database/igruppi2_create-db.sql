@@ -239,7 +239,6 @@ ENGINE = InnoDB;
 CREATE  TABLE IF NOT EXISTS `listini_prodotti` (
   `idlistino` INT(10) UNSIGNED NOT NULL ,
   `idprodotto` INT(10) UNSIGNED NOT NULL ,
-  `descrizione_listino` VARCHAR(255) NOT NULL ,
   `costo_listino` DECIMAL(8,2) NOT NULL ,
   `note_listino` VARCHAR(1024) NOT NULL ,
   `attivo_listino` ENUM('S','N') NOT NULL DEFAULT 'S' ,
