@@ -30,18 +30,21 @@
                 </ul>
             </div>
             <div>
-        <?php $group = $this->groups[$this->idgroup]; ?>
+        <?php 
+              if(isset($this->groups[$this->idgroup])):
+                $group = $this->groups[$this->idgroup]; ?>
                 <h4 class="big-margin-top"><strong><?php echo $group->nome_gruppo; ?></strong></h4>
-        <?php if(!is_null($group->iduser_incaricato)): ?>
+        <?php   if(!is_null($group->iduser_incaricato)): ?>
                 <p>
                     Incaricato ordine: <b><?php echo $group->cognome_incaricato; ?> <?php echo $group->nome_incaricato; ?></b><br />
                     Tel: <b><?php echo $group->tel_incaricato; ?></b><br />
                     Email: <a href="mailto: <?php echo $group->email_incaricato; ?>"><?php echo $group->email_incaricato; ?></a>
                 </p>
-        <?php else: ?>
+        <?php   else: ?>
                 <p>
                     <b class="text-danger">Nessun incaricato ordine per questo gruppo!</b>
                 </p>
+        <?php   endif; ?>
         <?php endif; ?>
             </div>
     <?php endif; ?>
