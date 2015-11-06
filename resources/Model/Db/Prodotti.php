@@ -91,7 +91,7 @@ class Model_Db_Prodotti extends MyFw_DB_Base {
               ." JOIN categorie_sub AS cs ON p.idsubcat=cs.idsubcat"
               ." JOIN categorie AS c ON cs.idcat=c.idcat "
               ." WHERE op.idordine= :idordine"
-              ." ORDER BY c.descrizione, p.codice";
+              ." ORDER BY c.descrizione, cs.descrizione, p.descrizione";
         // echo $sql; die;
         $sth = $this->db->prepare($sql);
         $sth->execute(array('idordine' => $idordine));
