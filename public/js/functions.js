@@ -174,6 +174,8 @@
     
     function Trolley_setQtaProdotto(idprodotto, op) 
     {
+        // view alert auto_save - LOADING...
+        setAutosaveAlert('loading');
         // check for ADD or SUB
         if( op === "+" ) {
             Trolley.add(idprodotto);
@@ -210,6 +212,24 @@
                 {
                     Trolley_rebuildPartial(idprodotto);
                     Trolley_rebuildTotal();
+                    // view alert auto_save - OK
+                    setAutosaveAlert('ok');
+                } else {
+                    // view alert auto_save - ERROR
+                    setAutosaveAlert('ERROR');
                 }
-			});
+        });
     }
+    
+    function setAutosaveAlert(status)
+    {
+        $('#autosave_alert').removeClass();
+        if(status === "loading"){
+            $('#autosave_alert').show().html('Salvataggio in corso...').addClass('label label-default');
+        } else if(status === "ok"){
+            $('#autosave_alert').show().html('Salvataggio automatico eseguito').addClass('label label-success').fadeOut(800);
+        } else {
+            $('#autosave_alert').show().html('Errore Salvataggio, riprova!').addClass('label label-danger');
+        }
+    }
+    

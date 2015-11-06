@@ -90,7 +90,8 @@
     <div class="bs-sidebar" data-spy="affix" data-offset-top="80" role="complementary">
         <div class="totale">
             <h4>Totale: <strong id="totale">Loading...</strong></h4>
-            <a role="button" class="btn btn-success" href="/ordini/viewdettaglio/idordine/<?php echo $this->ordine->getIdOrdine();?>"><span class="glyphicon glyphicon-list"></span> Visualizza ordine</a>
+            <a role="button" class="btn btn-success" href="/ordini/viewdettaglio/idordine/<?php echo $this->ordine->getIdOrdine();?>"><span class="glyphicon glyphicon-list"></span> Visualizza ordine</a><br />
+            <small><span id="autosave_alert" style="display: none;"></span>&nbsp;</small>
         </div>
         <input type="text" name="search_products" id="search_products" placeholder="Cerca prodotto..." oninput="searchProducts(this.value);" />
         <br />
