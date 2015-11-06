@@ -1,6 +1,6 @@
 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
-SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL';
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
 
 
 -- -----------------------------------------------------
@@ -143,7 +143,7 @@ CREATE  TABLE IF NOT EXISTS `prodotti` (
   `aliquota_iva` TINYINT NOT NULL ,
   `note` VARCHAR(1024) NOT NULL ,
   `attivo` ENUM('S','N') NOT NULL DEFAULT 'S' ,
-  `production` ENUM('S','N') NOT NULL DEFAULT 'N' ,
+  `production` ENUM('S','N') NOT NULL DEFAULT 'S' ,
   PRIMARY KEY (`idprodotto`) ,
   INDEX `fk_prodotti_produttori1_idx` (`idproduttore` ASC) ,
   INDEX `fk_prodotti_sub_categorie1_idx` (`idsubcat` ASC) ,
@@ -181,7 +181,7 @@ CREATE  TABLE IF NOT EXISTS `ordini` (
   `archiviato` ENUM('N','S') NOT NULL DEFAULT 'N' ,
   `condivisione` ENUM('PUB','PRI','SHA') NOT NULL DEFAULT 'PRI' ,
   PRIMARY KEY (`idordine`) ,
-  INDEX `fk_ordini_users1` (`iduser_supervisore` ASC) ,
+  INDEX `fk_ordini_users1_idx` (`iduser_supervisore` ASC) ,
   CONSTRAINT `fk_ordini_users1`
     FOREIGN KEY (`iduser_supervisore` )
     REFERENCES `users` (`iduser` )
@@ -239,7 +239,6 @@ ENGINE = InnoDB;
 CREATE  TABLE IF NOT EXISTS `listini_prodotti` (
   `idlistino` INT(10) UNSIGNED NOT NULL ,
   `idprodotto` INT(10) UNSIGNED NOT NULL ,
-  `descrizione_listino` VARCHAR(255) NOT NULL ,
   `costo_listino` DECIMAL(8,2) NOT NULL ,
   `note_listino` VARCHAR(1024) NOT NULL ,
   `attivo_listino` ENUM('S','N') NOT NULL DEFAULT 'S' ,
