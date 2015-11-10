@@ -6,12 +6,14 @@
  */
 class Model_Prodotto_UdM {
     
+    const _BOTTIGLIA  = "Bottiglia";
     const _CONFEZIONE = "Confezione";
     const _PEZZO      = "Pezzo";
     const _KG         = "Kg";
     const _LITRO      = "Litro";
     
     static private $_arUdM = array(
+        self::_BOTTIGLIA  => 'Bottiglia',
         self::_CONFEZIONE => 'Confezione',
         self::_PEZZO      => 'Pezzo',
         self::_KG         => 'Kg',
