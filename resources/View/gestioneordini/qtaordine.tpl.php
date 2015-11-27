@@ -94,7 +94,7 @@ $(document).ready(function () {
           {
             data: 'qta_reale',
             type: 'numeric',
-            format: '0,0.00',
+            format: '0,0.000',
             language: 'it',
             readOnly: <?php echo (!$this->ordine->canModificaQtaOrdinate()) ? "true" : "false"; ?>
           }
