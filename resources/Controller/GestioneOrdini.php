@@ -189,7 +189,7 @@ class Controller_GestioneOrdini extends MyFw_Controller {
     private function _buildOrdine(Model_AF_AbstractFactory $factoryClass)
     {
         $ordObj = new Model_Db_Ordini();
-        $ordine = $ordObj->getByIdOrdine($this->_idordine);
+        $ordine = $ordObj->getByIdOrdine($this->_idordine, $this->_userSessionVal->idgroup);
         if(!is_null($ordine)) 
         {
             // build Ordine

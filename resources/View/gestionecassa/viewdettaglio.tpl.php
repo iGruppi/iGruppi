@@ -1,14 +1,4 @@
-<h2>Ordine del <strong><?php echo $this->date($this->ordine->getDataInizio(), '%d %B %Y');?></strong></h2>
-<h3>Produttori <strong><?php echo $this->arrayToString( $this->ordine->getProduttoriList() ); ?></strong></h3>
-<div class="row">
-  <div class="col-md-12">
-    <h4 class="ordine <?php echo $this->ordine->getStatusCSSClass(); ?>"><?php echo $this->ordine->getStateName(); ?></h3>
-    <p>
-        <em>Apertura</em>: <strong><?php echo $this->date($this->ordine->getDataInizio(), '%d/%m/%Y');?></strong> alle <?php echo $this->date($this->ordine->getDataInizio(), '%H:%M');?></strong><br />
-        <em>Chiusura</em>: <strong><?php echo $this->date($this->ordine->getDataFine(), '%d/%m/%Y');?></strong> alle <?php echo $this->date($this->ordine->getDataFine(), '%H:%M');?></strong><br />
-    </p>
-  </div>
-</div>
+<?php echo $this->partial('gestioneordini/header-title.tpl.php', array('ordine' => $this->ordine) ); ?>
 
 <h3 class="big-margin-top">Riepilogo per utente</h3>
 <?php if($this->ordCalcoli->getProdottiUtenti() > 0): ?>

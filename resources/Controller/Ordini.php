@@ -75,7 +75,7 @@ class Controller_Ordini extends MyFw_Controller {
         
         // INIT Ordine
         $ordObj = new Model_Db_Ordini();
-        $ordine = $ordObj->getByIdOrdine($idordine);
+        $ordine = $ordObj->getByIdOrdine($idordine, $this->_userSessionVal->idgroup);
         
         // build Ordine
         $mooObj = new Model_Ordini_Ordine( new Model_AF_UserOrdineFactory() );
@@ -121,7 +121,7 @@ class Controller_Ordini extends MyFw_Controller {
         $idordine = $this->getParam("idordine");
         $ordObj = new Model_Db_Ordini();
         // INIT Ordine
-        $ordine = $ordObj->getByIdOrdine($idordine);
+        $ordine = $ordObj->getByIdOrdine($idordine, $this->_userSessionVal->idgroup);
         // Validate ORDINE for this GROUP
         /**
          *  @todo

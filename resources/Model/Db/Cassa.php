@@ -33,12 +33,6 @@ class Model_Db_Cassa extends MyFw_DB_Base {
         return $sth->fetchAll(PDO::FETCH_ASSOC);        
     }
     
-    function addMovimentoOrdine(array $movimento)
-    {
-        $sth = $this->db->prepare("INSERT INTO cassa SET iduser= :iduser, importo= :importo, data= :data, descrizione= :descrizione, idordine= :idordine");
-        return $sth->execute($movimento);
-    }
-    
     function getMovimentiByIduser($iduser)
     {
         $sql = "SELECT c.*, o.data_inizio "
@@ -51,6 +45,68 @@ class Model_Db_Cassa extends MyFw_DB_Base {
         $sth->execute(array('iduser' => $iduser));
         return $sth->fetchAll(PDO::FETCH_ASSOC);        
     }
+    
+    /**
+     * Aggiunge un movimento di cassa
+     * @param array $movimento
+     * @return boolean
+     */
+    function addMovimentoOrdine(array $movimento)
+    {
+        $sth = $this->db->prepare("INSERT INTO cassa SET iduser= :iduser, importo= :importo, data= :data, descrizione= :descrizione, idordine= :idordine");
+        return $sth->execute($movimento);
+    }
+    
+    /**
+     * Chiude ordine per gruppo
+     * @param type $idordine
+     * @param type $idgroup
+     * @return boolean
+     */
+    function closeOrderByIdordineAndIdgroup($idordine, $idgroup)
+    {
+        $sth = $this->db->prepare("UPDATE ordini_groups SET archiviato='S' WHERE idordine= :idordine AND idgroup_slave= :idgroup ");
+        return $sth->execute(array('idordine' => $idordine, 'idgroup' => $idgroup));
+    }
+    
+    /**
+     * CLOSE an ORDINE
+     * 
+     * @param Model_Ordini_CalcoliAbstract $ordine
+     */
+    function closeOrdine(Model_Ordini_CalcoliAbstract $ordine, $idgroup)
+    {
+        // Start a transaction...
+        $this->db->beginTransaction();
+        
+        foreach ($ordine->getProdottiUtenti() AS $iduser => $user)
+        {
+            $produttoriList = ((count($ordine->getProduttoriList()) > 0) ? implode(", ", $ordine->getProduttoriList()) : "--");
+            $importo = -1 * abs($ordine->getTotaleConExtraByIduser($iduser));
+            $values = array(
+                'iduser'    => $iduser,
+                'importo'   => $importo,
+                'data'      => date("Y-m-d H:i:s"),
+                'descrizione' => 'Archiviato Ordine ' . $produttoriList,
+                'idordine'  => $ordine->getIdOrdine()
+            );
+            $res = $this->addMovimentoOrdine($values);
+            if(!$res) {
+                $this->db->rollBack();
+                return false;
+            }
+        }
+        
+        // CLOSE ORDINE per GRUPPO
+        $res2 = $this->closeOrderByIdordineAndIdgroup($ordine->getIdOrdine(), $idgroup);
+        if(!$res2) {
+            $this->db->rollBack();
+            return false;
+        }
+        
+        return $this->db->commit();
+    }
+    
     
     function getSaldiGroup($idgroup)
     {
@@ -68,7 +124,8 @@ class Model_Db_Cassa extends MyFw_DB_Base {
                 from ordini_user_prodotti 
                 LEFT JOIN ordini_prodotti ON ordini_prodotti.idordine = ordini_user_prodotti.idordine and ordini_prodotti.idprodotto = ordini_user_prodotti.idprodotto
                 LEFT JOIN ordini ON ordini_prodotti.idordine = ordini.idordine
-                where ordini.archiviato = 'N'
+                LEFT JOIN ordini_groups ON ordini.idordine=ordini_groups.idordine AND ordini_groups.idgroup_slave= :idgroup
+                where ordini_groups.archiviato = 'N'
                 group by iduser) ordini_user_prodotti1
                 ON ordini_user_prodotti1.iduser = users.iduser
                 WHERE users_group.idgroup = :idgroup

@@ -30,39 +30,32 @@ class Model_Ordini_State_Mover {
             case Model_Ordini_State_States_Consegnato::STATUS_NAME:
                 return $this->moveTo_Consegnato();
 
-            case Model_Ordini_State_States_Archiviato::STATUS_NAME:
-                return $this->moveTo_Archiviato();
         }
         return false;
     }
     
     private function moveTo_Chiuso()
     {
-        $sth_update = $this->_db->prepare("UPDATE ordini SET data_inviato=NULL, data_arrivato=NULL, data_consegnato=NULL, archiviato='N' WHERE idordine= :idordine");
+        $sth_update = $this->_db->prepare("UPDATE ordini SET data_inviato=NULL, data_arrivato=NULL, data_consegnato=NULL WHERE idordine= :idordine");
         return $sth_update->execute(array('idordine' => $this->_ordine->idordine));
     }
     
     private function moveTo_Inviato()
     {
-        $sth_update = $this->_db->prepare("UPDATE ordini SET data_inviato=NOW(), data_arrivato=NULL, data_consegnato=NULL, archiviato='N' WHERE idordine= :idordine");
+        $sth_update = $this->_db->prepare("UPDATE ordini SET data_inviato=NOW(), data_arrivato=NULL, data_consegnato=NULL WHERE idordine= :idordine");
         return $sth_update->execute(array('idordine' => $this->_ordine->idordine));
     }
     
     private function moveTo_Arrivato()
     {
-        $sth_update = $this->_db->prepare("UPDATE ordini SET data_arrivato=NOW(), data_consegnato=NULL, archiviato='N' WHERE idordine= :idordine");
+        $sth_update = $this->_db->prepare("UPDATE ordini SET data_arrivato=NOW(), data_consegnato=NULL WHERE idordine= :idordine");
         return $sth_update->execute(array('idordine' => $this->_ordine->idordine));
     }
     
     private function moveTo_Consegnato()
     {
-        $sth_update = $this->_db->prepare("UPDATE ordini SET data_consegnato=NOW(), archiviato='N' WHERE idordine= :idordine");
+        $sth_update = $this->_db->prepare("UPDATE ordini SET data_consegnato=NOW() WHERE idordine= :idordine");
         return $sth_update->execute(array('idordine' => $this->_ordine->idordine));
     }
-    
-    private function moveTo_Archiviato()
-    {
-        $sth_update = $this->_db->prepare("UPDATE ordini SET archiviato='S' WHERE idordine= :idordine");
-        return $sth_update->execute(array('idordine' => $this->_ordine->idordine));
-    }
+
 }

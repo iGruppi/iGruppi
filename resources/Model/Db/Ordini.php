@@ -11,17 +11,18 @@ class Model_Db_Ordini extends MyFw_DB_Base {
         parent::__construct();
     }
     
-    function getByIdOrdine($idordine) {
-        $sql = "SELECT o.*, CONCAT(u.nome, ' ', u.cognome) AS supervisore_name,"
+    function getByIdOrdine($idordine, $idgroup) {
+        $sql = "SELECT o.*, og.archiviato, CONCAT(u.nome, ' ', u.cognome) AS supervisore_name,"
             . " g.idgroup AS supervisore_idgroup, g.nome AS supervisore_group"
             . " FROM ordini AS o"
+            . " JOIN ordini_groups AS og ON o.idordine=og.idordine AND og.idgroup_slave= :idgroup"
             . " JOIN users AS u ON o.iduser_supervisore=u.iduser"
             . " JOIN users_group AS ug ON o.iduser_supervisore=ug.iduser"
             . " JOIN groups AS g ON ug.idgroup=g.idgroup"
-            . " WHERE idordine= :idordine";
+            . " WHERE o.idordine= :idordine";
         
         $sth = $this->db->prepare($sql);
-        $sth->execute(array('idordine' => $idordine));
+        $sth->execute(array('idordine' => $idordine, 'idgroup' => $idgroup));
         if($sth->rowCount() > 0) {
             return $sth->fetch(PDO::FETCH_OBJ);
         }
@@ -35,7 +36,7 @@ class Model_Db_Ordini extends MyFw_DB_Base {
               ." WHERE o.condivisione='PUB'"
               ." OR (o.condivisione='PRI' AND og.idgroup_master= :idgroup)"
               ." OR (o.condivisione='SHA' AND og.idgroup_slave = :idgroup)"
-              ." ORDER BY o.archiviato, o.data_fine DESC";
+              ." ORDER BY og.archiviato, o.data_fine DESC";
         $sth = $this->db->prepare($sql);
         $sth->execute(array('idgroup' => $idgroup));
         if($sth->rowCount() > 0) {
@@ -77,7 +78,7 @@ class Model_Db_Ordini extends MyFw_DB_Base {
                 }
             }
         }
-        $sql .= " ORDER BY o.archiviato, o.data_fine DESC";
+        $sql .= " ORDER BY og.archiviato, o.data_fine DESC";
 //        echo $sql; die;
         $sth = $this->db->prepare($sql);
 //        Zend_Debug::dump($sth);die;
@@ -107,7 +108,7 @@ class Model_Db_Ordini extends MyFw_DB_Base {
               ." AND ("
                 . " o.condivisione='PUB' OR og.idgroup_slave= :idgroup"
                 . ")"
-              ." ORDER BY o.archiviato, o.data_consegnato DESC";
+              ." ORDER BY og.archiviato DESC, o.data_consegnato DESC";
         $sth = $this->db->prepare($sql);
         $sth->execute(array('idgroup' => $idgroup));
         if($sth->rowCount() > 0) {
@@ -316,31 +317,31 @@ class Model_Db_Ordini extends MyFw_DB_Base {
         switch ($stato)
         {
             case Model_Ordini_State_States_Pianificato::STATUS_NAME:
-                $sql = " AND NOW() < o.data_inizio AND o.archiviato='N'";
+                $sql = " AND NOW() < o.data_inizio AND og.archiviato='N'";
                 break;
 
             case Model_Ordini_State_States_Aperto::STATUS_NAME:
-                $sql = " AND NOW() >= o.data_inizio AND NOW() <= o.data_fine AND o.archiviato='N'";
+                $sql = " AND NOW() >= o.data_inizio AND NOW() <= o.data_fine AND og.archiviato='N'";
                 break;
             
             case Model_Ordini_State_States_Chiuso::STATUS_NAME:
-                $sql = " AND NOW() > o.data_fine AND ( NOW() <= o.data_inviato OR o.data_inviato IS NULL) AND o.archiviato='N'";
+                $sql = " AND NOW() > o.data_fine AND ( NOW() <= o.data_inviato OR o.data_inviato IS NULL) AND og.archiviato='N'";
                 break;
 
             case Model_Ordini_State_States_Inviato::STATUS_NAME:
-                $sql = " AND NOW() > o.data_inviato AND ( NOW() <= o.data_arrivato OR o.data_arrivato IS NULL) AND o.archiviato='N'";
+                $sql = " AND NOW() > o.data_inviato AND ( NOW() <= o.data_arrivato OR o.data_arrivato IS NULL) AND og.archiviato='N'";
                 break;
 
             case Model_Ordini_State_States_Arrivato::STATUS_NAME:
-                $sql = " AND NOW() > o.data_arrivato AND ( NOW() <= o.data_consegnato OR o.data_consegnato IS NULL) AND o.archiviato='N'";
+                $sql = " AND NOW() > o.data_arrivato AND ( NOW() <= o.data_consegnato OR o.data_consegnato IS NULL) AND og.archiviato='N'";
                 break;
 
             case Model_Ordini_State_States_Consegnato::STATUS_NAME:
-                $sql = " AND NOW() > o.data_consegnato AND o.archiviato='N'";
+                $sql = " AND NOW() > o.data_consegnato AND og.archiviato='N'";
                 break;
 
             case Model_Ordini_State_States_Archiviato::STATUS_NAME:
-                $sql = " AND o.archiviato='S' ";
+                $sql = " AND og.archiviato='S' ";
                 break;
 
         }

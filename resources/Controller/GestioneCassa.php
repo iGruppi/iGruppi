@@ -146,7 +146,7 @@ class Controller_GestioneCassa extends MyFw_Controller {
     {
         $idordine = $this->getParam("idordine");
         $ordObj = new Model_Db_Ordini();
-        $ordine = $ordObj->getByIdOrdine($idordine);
+        $ordine = $ordObj->getByIdOrdine($idordine, $this->_userSessionVal->idgroup);
         if(is_null($ordine)) 
         {
             // REDIRECT
@@ -189,7 +189,7 @@ class Controller_GestioneCassa extends MyFw_Controller {
     {
         $idordine = $this->getParam("idordine");
         $ordObj = new Model_Db_Ordini();
-        $ordine = $ordObj->getByIdOrdine($idordine);
+        $ordine = $ordObj->getByIdOrdine($idordine, $this->_userSessionVal->idgroup);
         if(is_null($ordine)) 
         {
             // REDIRECT
@@ -231,22 +231,8 @@ class Controller_GestioneCassa extends MyFw_Controller {
             if($ordCalcObj->getProdottiUtenti() > 0)
             {
                 $cassaObj = new Model_Db_Cassa();
-                $produttoriList = ((count($mooObj->getProduttoriList()) > 0) ? implode(", ", $mooObj->getProduttoriList()) : "--");
-                foreach ($ordCalcObj->getProdottiUtenti() AS $iduser => $user)
-                {
-                    $importo = -1 * abs($ordCalcObj->getTotaleConExtraByIduser($iduser));
-                    $values = array(
-                        'iduser'    => $iduser,
-                        'importo'   => $importo,
-                        'data'      => date("Y-m-d H:i:s"),
-                        'descrizione' => 'Chiusura Ordine ' . $produttoriList,
-                        'idordine'  => $mooObj->getIdOrdine()
-                    );
-                    $cassaObj->addMovimentoOrdine($values);
-                }
-                
                 // ARCHIVIO ORDINE
-                $res = $mooObj->moveToNextState();
+                $res = $cassaObj->closeOrdine($ordCalcObj, $this->_userSessionVal->idgroup);
                 if($res)
                 {
                     $this->redirect("gestione-cassa", "index");

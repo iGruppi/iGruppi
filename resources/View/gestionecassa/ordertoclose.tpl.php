@@ -1,7 +1,7 @@
 <h2>Ordini in attesa di chiusura</h2>
 
 <div class="row" id="listwithsidebar">
-  <div class="col-md-8">
+  <div class="col-md-9">
       
 <?php if(count($this->ordini) > 0): ?>
     <?php foreach ($this->ordini as $key => $ordine): ?>
@@ -9,22 +9,7 @@
         <div class="row-myig">
             <div class="row">
               <div class="col-md-12">
-                  <h3 class="no-margin">Ordine del <strong><?php echo $this->date($ordine->getDataInizio(), '%d %B %Y');?></strong></h3>
-                  <p><strong><?php echo $this->arrayToString( $ordine->getProduttoriList() ); ?></strong></p>
-                  <h5><span class="text-muted">Prodotti:</span> <?php 
-                      $categorie = $ordine->getListaDescrizioniCategorie();
-                      echo $this->arrayToString($categorie); 
-                      ?></h5>
-                  <h5><span class="text-muted">Incaricato ordine:</span> 
-                      <?php if(!$ordine->getMyGroup()->isSetUserRef()): ?>
-                          <b class="text-danger">Nessun Incaricato ordine assegnato!</b>
-                      <?php else: ?>
-                          <?php echo $ordine->getMyGroup()->getIncaricato(); ?>
-                      <?php endif; ?>
-
-                  </h5>
-
-                  <h4 class="ordine <?php echo $ordine->getStatusCSSClass(); ?>"><?php echo $ordine->getStateName(); ?> </h4>
+                <?php echo $this->partial('gestioneordini/header-title.tpl.php', array('ordine' => $ordine) ); ?>
               </div>
             </div>
             <div class="row">
@@ -49,7 +34,7 @@
     <h3>Nessun ordine da archiviare.</h3>
 <?php endif; ?>
   </div>
-  <div class="col-md-3 col-md-offset-1 leftbar">
+  <div class="col-md-2 col-md-offset-1 leftbar">
       &nbsp;
   </div>
   
