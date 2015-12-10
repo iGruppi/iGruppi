@@ -362,6 +362,16 @@ h1 strong, h2 strong, h3 strong, h4 strong, h5 strong, h6 strong {color: #090; f
 }
 
 /*
+    PAGINATION
+*/
+.pagination>.active>a, .pagination>.active>a:focus, .pagination>.active>a:hover, .pagination>.active>span, .pagination>.active>span:focus, .pagination>.active>span:hover {
+    background-color: #47a447;
+    border-color: #47a447;
+}
+.pagination>li>a, .pagination>li>span {
+    color: #47a447;
+}
+/*
  * Handsontable
  *
  * Some specific styles to optimize Handsontable grids.

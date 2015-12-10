@@ -33,18 +33,58 @@ class Model_Db_Cassa extends MyFw_DB_Base {
         return $sth->fetchAll(PDO::FETCH_ASSOC);        
     }
     
-    function getMovimentiByIduser($iduser)
+    function getMovimentiByIduser($iduser, $start=0, $limit=10)
     {
         $sql = "SELECT c.*, o.data_inizio "
               ." FROM cassa AS c "
               ." LEFT JOIN ordini AS o ON c.idordine=o.idordine"
               ." WHERE iduser= :iduser"
               ." ORDER BY c.data DESC"
-              ." LIMIT 0,10";
+              ." LIMIT $start, $limit";
         $sth = $this->db->prepare($sql);
         $sth->execute(array('iduser' => $iduser));
         return $sth->fetchAll(PDO::FETCH_ASSOC);        
     }
+    
+    function getSaldiIduser($iduser, $idgroup)
+    {
+        $sql = "SELECT COALESCE(TotAttivi, 0) as TotaleVersamenti, 
+                COALESCE(TotPassivi, 0) as TotaleOrdiniPagati, 
+                COALESCE(Num_ordini, 0) as NumeroOrdiniArchiviati, 
+                COALESCE(Saldo,0) as SaldoUtente, 
+                COALESCE(Num_ordini_attivi,0) as NumeroOrdiniInCorso, 
+                (-1*COALESCE(StimaProxSpese,0)) as StimaSpeseProxOrdini, 
+                (COALESCE(Saldo,0)-COALESCE(StimaProxSpese,0)) as ProiezioneSaldo
+                FROM users
+                JOIN users_group ON users.iduser = users_group.iduser
+                LEFT JOIN 
+                    (SELECT iduser, 
+                    COALESCE( sum( case when idordine is null then importo else 0 end ) , 0 ) AS TotAttivi, 
+                    COALESCE( sum( case when idordine is not null then importo else 0 end ) , 0 ) AS TotPassivi, 
+                    COALESCE( count( DISTINCT cassa.idordine ) , 0 ) AS Num_ordini, 
+                    COALESCE( sum( importo ) , 0 ) AS Saldo 
+                    FROM cassa 
+                    WHERE cassa.iduser= :iduser
+                    GROUP by cassa.iduser) cassa1 
+                ON cassa1.iduser = users.iduser
+                LEFT JOIN 
+                    (SELECT iduser, 
+                    COALESCE( count( DISTINCT ordini.idordine ) , 0 ) AS Num_ordini_attivi, 
+                    ROUND(COALESCE( sum( costo_ordine * qta_reale ) , 0 ),2) AS StimaProxSpese
+                    FROM ordini_user_prodotti 
+                    LEFT JOIN ordini_prodotti ON ordini_prodotti.idordine = ordini_user_prodotti.idordine and ordini_prodotti.idprodotto = ordini_user_prodotti.idprodotto
+                    LEFT JOIN ordini ON ordini_prodotti.idordine = ordini.idordine
+                    LEFT JOIN ordini_groups ON ordini.idordine=ordini_groups.idordine AND ordini_groups.idgroup_slave= :idgroup
+                    WHERE ordini_groups.archiviato = 'N'
+                    GROUP by iduser) ordini_user_prodotti1
+                ON ordini_user_prodotti1.iduser = users.iduser
+                WHERE users.iduser = :iduser
+                GROUP BY users.iduser";
+        $sth = $this->db->prepare($sql);
+        $sth->execute(array('iduser' => $iduser, 'idgroup' => $idgroup));
+        return $sth->fetch(PDO::FETCH_OBJ);
+    }
+    
     
     /**
      * Aggiunge un movimento di cassa
@@ -110,17 +150,17 @@ class Model_Db_Cassa extends MyFw_DB_Base {
     
     function getSaldiGroup($idgroup)
     {
-        $sql = "SELECT concat( cognome, ' ', users.nome ) AS Utente, coalesce(TotAttivi, 0) as TotaleVersamenti, coalesce(TotPassivi, 0) as TotaleOrdiniPagati, 
-                coalesce(Num_ordini, 0) as NumeroOrdiniArchiviati, coalesce(Saldo,0) as SaldoUtente, coalesce(Num_ordini_attivi,0) as NumeroOrdiniInCorso, 
-                -1*coalesce(StimaProxSpese,0) as StimaSpeseProxOrdini, coalesce(Saldo,0)-coalesce(StimaProxSpese,0) as ProiezioneSaldo
+        $sql = "SELECT concat( cognome, ' ', users.nome ) AS Utente, COALESCE(TotAttivi, 0) as TotaleVersamenti, COALESCE(TotPassivi, 0) as TotaleOrdiniPagati, 
+                COALESCE(Num_ordini, 0) as NumeroOrdiniArchiviati, COALESCE(Saldo,0) as SaldoUtente, COALESCE(Num_ordini_attivi,0) as NumeroOrdiniInCorso, 
+                -1*COALESCE(StimaProxSpese,0) as StimaSpeseProxOrdini, COALESCE(Saldo,0)-COALESCE(StimaProxSpese,0) as ProiezioneSaldo
                 FROM users
                 JOIN users_group ON users.iduser = users_group.iduser
                 LEFT JOIN 
-                (select iduser, coalesce( sum( case when idordine is null then importo else 0 end ) , 0 ) AS TotAttivi, coalesce( sum( case when idordine is not null then importo else 0 end ) , 0 ) AS TotPassivi, 
-                coalesce( count( DISTINCT cassa.idordine ) , 0 ) AS Num_ordini, coalesce( sum( importo ) , 0 ) AS Saldo from cassa group by cassa.iduser) cassa1 
+                (select iduser, COALESCE( sum( case when idordine is null then importo else 0 end ) , 0 ) AS TotAttivi, COALESCE( sum( case when idordine is not null then importo else 0 end ) , 0 ) AS TotPassivi, 
+                COALESCE( count( DISTINCT cassa.idordine ) , 0 ) AS Num_ordini, COALESCE( sum( importo ) , 0 ) AS Saldo from cassa group by cassa.iduser) cassa1 
                 ON cassa1.iduser = users.iduser
                 LEFT JOIN 
-                (select iduser, coalesce( count( DISTINCT ordini.idordine ) , 0 ) AS Num_ordini_attivi, ROUND(coalesce( sum( costo_ordine * qta_reale ) , 0 ),2) AS StimaProxSpese
+                (select iduser, COALESCE( count( DISTINCT ordini.idordine ) , 0 ) AS Num_ordini_attivi, ROUND(COALESCE( sum( costo_ordine * qta_reale ) , 0 ),2) AS StimaProxSpese
                 from ordini_user_prodotti 
                 LEFT JOIN ordini_prodotti ON ordini_prodotti.idordine = ordini_user_prodotti.idordine and ordini_prodotti.idprodotto = ordini_user_prodotti.idprodotto
                 LEFT JOIN ordini ON ordini_prodotti.idordine = ordini.idordine
