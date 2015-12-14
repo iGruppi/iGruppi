@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>iGruppi - Gruppi di acquisto</title>
+    <title>iGruppi - Gruppi di acquisto solidale</title>
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
     <!-- jQuery CDN 
     <link rel="stylesheet" href="http://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css" type="text/css" />
@@ -113,7 +113,7 @@
     <div id="footer" class="hidden-print">
       <div class="container">
             <div class="info">
-                <p><a href="http://igruppi.com"><b>iGruppi</b></a><br /><small>Free Software per i Gruppi di acquisto</small></p>
+                <p><a href="http://igruppi.com"><b>iGruppi</b></a><br /><small>Free Software per i Gruppi di acquisto solidale</small></p>
                 <p class="icon_social github"><a href="https://github.com/iGruppi/iGruppi"><small>Code hosted by Github</small></a></p>
             </div>
             <div class="social">
