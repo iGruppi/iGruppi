@@ -156,6 +156,21 @@ h1 strong, h2 strong, h3 strong, h4 strong, h5 strong, h6 strong {color: #090; f
 .ordine_title a.disabled, .ordine_title a.disabled:hover { background-color: transparent; cursor: default; }
 
 
+/* DASHBOARD */
+#dashboard .table-condensed { margin-bottom: 0; }
+#dashboard .pagination { margin-top: 10px; }
+
+
+/* PAGINATION */
+.pagination>.active>a, .pagination>.active>a:focus, .pagination>.active>a:hover, .pagination>.active>span, .pagination>.active>span:focus, .pagination>.active>span:hover {
+    background-color: #47a447;
+    border-color: #47a447;
+}
+.pagination>li>a, .pagination>li>span {
+    color: #47a447;
+}
+
+
 /*
  * Side navigation ORDINI
  * Scrollspy and affixed enhanced navigation to highlight sections and secondary sections
@@ -361,16 +376,7 @@ h1 strong, h2 strong, h3 strong, h4 strong, h5 strong, h6 strong {color: #090; f
   color: #4CAD3A;
 }
 
-/*
-    PAGINATION
-*/
-.pagination>.active>a, .pagination>.active>a:focus, .pagination>.active>a:hover, .pagination>.active>span, .pagination>.active>span:focus, .pagination>.active>span:hover {
-    background-color: #47a447;
-    border-color: #47a447;
-}
-.pagination>li>a, .pagination>li>span {
-    color: #47a447;
-}
+
 /*
  * Handsontable
  *
