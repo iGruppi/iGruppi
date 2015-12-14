@@ -85,6 +85,24 @@ class Model_Db_Cassa extends MyFw_DB_Base {
         return $sth->fetch(PDO::FETCH_OBJ);
     }
     
+    function getTotaleOrdiniInCorsoByIduser($iduser, $idgroup)
+    {
+        $sql = "SELECT o.*, og.*, u.nome AS nome_incaricato, u.cognome AS cognome_incaricato,
+                ROUND(COALESCE( sum( costo_ordine * qta_reale ) , 0 ),2) AS TotOrdine
+                FROM ordini_user_prodotti AS oup
+                LEFT JOIN ordini_prodotti AS op ON op.idordine = oup.idordine and op.idprodotto = oup.idprodotto
+                LEFT JOIN ordini AS o ON op.idordine = o.idordine
+                LEFT JOIN ordini_groups AS og ON o.idordine=og.idordine AND og.idgroup_slave= :idgroup
+                LEFT JOIN users AS u ON og.iduser_incaricato=u.iduser
+                WHERE og.archiviato = 'N'
+                AND oup.iduser= :iduser
+                GROUP by o.idordine";
+        $sth = $this->db->prepare($sql);
+        $sth->execute(array('iduser' => $iduser, 'idgroup' => $idgroup));
+        return $sth->fetchAll(PDO::FETCH_OBJ);
+    }
+    
+    
     
     /**
      * Aggiunge un movimento di cassa

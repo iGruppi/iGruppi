@@ -41,14 +41,25 @@ class Controller_Dashboard extends MyFw_Controller {
             }
         }
         $this->view->movimenti = $movimenti;
+        // set num_result in SimplePager
+        $sPager->setNumResults(count($movimenti));
+        $this->view->sPager = $sPager;
+        
         
         // GET SALDI DI CASSA
         $saldi = $cassaObj->getSaldiIduser($this->_iduser, $this->_userSessionVal->idgroup);
         $this->view->saldi = $saldi;
         
-        // set num_result in SimplePager
-        $sPager->setNumResults(count($movimenti));
-        $this->view->sPager = $sPager;
+        // GET Ordini in corso
+        $listOrd = $cassaObj->getTotaleOrdiniInCorsoByIduser($this->_iduser, $this->_userSessionVal->idgroup);
+        // create array of Ordini
+        if(count($listOrd) > 0) {
+            foreach($listOrd AS &$ordine) 
+            {
+                $ordine->Model_Ordini_State = Model_Ordini_State_OrderFactory::getOrder($ordine);
+            }
+        }
+        $this->view->ordini_incorso = $listOrd;
     }
 
 }

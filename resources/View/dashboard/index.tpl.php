@@ -7,7 +7,7 @@
     <table class="table table-condensed">
         <thead>
           <tr>
-            <th>ID</th>
+            <th>#</th>
             <th>Data</th>
             <th class="text-right">Importo</th>
             <th>Descrizione</th>
@@ -67,6 +67,34 @@
                 
             </div>
         </div>
+    </div>
+</div>
+
+<h3>Ordini in corso</h3>
+<div class="row">
+    <div class="col-md-8">
+        <table class="table table-condensed">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Stato</th>
+                <th>Ordine</th>
+                <th class="text-right">Importo</th>
+              </tr>
+            </thead>
+            <tbody>
+    <?php foreach($this->ordini_incorso AS $ordine): ?>            
+                <tr>
+                    <td><i><?php echo $ordine->idordine; ?></i></td>
+                    <td><?php echo $ordine->Model_Ordini_State->getStateName(); ?></td>
+                    <td><a href="/ordini/viewdettaglio/idordine/<?php echo $ordine->idordine; ?>"><?php echo $ordine->descrizione; ?></a></td>
+                    <td class="text-right"><strong><?php echo $this->valuta($ordine->TotOrdine); ?></strong></td>
+                </tr>        
+    <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
+    <div class="col-md-4 dashboard-right">
         <div class="panel <?php echo($this->saldi->ProiezioneSaldo > 0) ? "panel-success" : "panel-danger"; ?>">
             <div class="panel-heading"> <h3 class="panel-title">Proiezione Saldo: <b><?php echo $this->valuta($this->saldi->ProiezioneSaldo); ?></b></h3> </div>            
             <div class="panel-body">
@@ -76,4 +104,3 @@
         </div>
     </div>
 </div>
-
