@@ -192,8 +192,8 @@ class Model_Ordini_Ordine extends Model_AF_AbstractCoR
      */
     public function canUpdateVisibile()
     {
-        return ($this->isIncaricatoOrdine() && $this->is_Pianificato()) OR
-               ($this->isAdminForGroup() && $this->is_Aperto());
+        return ($this->isIncaricatoOrdine() && ($this->is_Pianificato() || $this->is_Aperto()) ) OR
+               $this->isAdminForGroup();
     }
 
     /**
