@@ -158,10 +158,10 @@ h1 strong, h2 strong, h3 strong, h4 strong, h5 strong, h6 strong {color: #090; f
 
 /* DASHBOARD */
 #dashboard .table-condensed { margin-bottom: 0; }
-#dashboard .pagination { margin-top: 10px; }
 
 
 /* PAGINATION */
+.pagination { margin-top: 10px; }
 .pagination>.active>a, .pagination>.active>a:focus, .pagination>.active>a:hover, .pagination>.active>span, .pagination>.active>span:focus, .pagination>.active>span:hover {
     background-color: #47a447;
     border-color: #47a447;

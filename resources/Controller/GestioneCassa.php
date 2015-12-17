@@ -23,12 +23,16 @@ class Controller_GestioneCassa extends MyFw_Controller {
 
     function indexAction() 
     {
-        // get&set come filter
-        $start = is_null($this->getParam("start")) ? 0 : $this->getParam("start");
-        $limit = is_null($this->getParam("limit")) ? 20 : $this->getParam("limit");
+        // init the SimplePager
+        $page = is_null($this->getParam("page")) ? 0 : $this->getParam("page");
+        $view = is_null($this->getParam("view")) ? 10 : $this->getParam("view");
+        $sPager = new MyFw_SimplePager();
+        $sPager->setPage($page);
+        $sPager->setView($view);
+        $sPager->setURL('/gestione-cassa/index');
         
         $cassaModel = new Model_Db_Cassa();
-        $movRecs = $cassaModel->getUltimiMovimentiByIdgroup($this->_userSessionVal->idgroup, $start, $limit);
+        $movRecs = $cassaModel->getUltimiMovimentiByIdgroup($this->_userSessionVal->idgroup, $sPager->getSQLStartNumber(), $sPager->getSQLLimitNumber());
         $movimenti = array();
         if(count($movRecs) > 0)
         {
@@ -37,6 +41,10 @@ class Controller_GestioneCassa extends MyFw_Controller {
             }
         }
         $this->view->movimenti = $movimenti;
+        
+        // set num_result in SimplePager
+        $sPager->setNumResults(count($movimenti));
+        $this->view->sPager = $sPager;
     }
     
 

@@ -5,8 +5,7 @@
         <thead>
           <tr>
             <th>ID</th>
-            <th>Utente</th>
-            <th>Data</th>
+            <th>Utente/Data</th>
             <th class="text-right">Importo</th>
             <th>Descrizione</th>
             <th>&nbsp;</th>
@@ -16,8 +15,9 @@
 <?php foreach($this->movimenti AS $movimento): ?>            
             <tr class="<?php echo($movimento->getImporto() > 0) ? "success" : "danger"; ?>">
                 <td><i><?php echo $movimento->getId(); ?></i></td>
-                <td><strong><?php echo $movimento->getUser(); ?></strong></td>
-                <td><?php echo $this->date($movimento->getData(), '%d/%m/%Y %H:%M'); ?></td>
+                <td><strong><?php echo $movimento->getUser(); ?></strong><br />
+                    <small><?php echo $this->date($movimento->getData(), '%d/%m/%Y %H:%M'); ?></small>
+                </td>
                 <td class="text-right"><?php echo $this->valuta($movimento->getImporto()); ?></td>
                 <td>
                     <?php if($movimento->isRelatedToOrdine()): ?>
@@ -32,6 +32,32 @@
 <?php endforeach; ?>
         </tbody>
     </table>
+        <nav>
+          <ul class="pagination">
+            <li class="<?php echo ($this->sPager->hasPrev()) ? "" : "disabled"; ?>">
+                <?php if($this->sPager->hasPrev()): ?>
+                    <a href="<?php echo ($this->sPager->hasPrev()) ? $this->sPager->getURL_Prev() : ""; ?>" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                <?php else: ?>
+                    <span><span aria-hidden="true">&laquo;</span></span>                
+                <?php endif; ?>
+            </li>
+            <li class="active">
+                <a href="#"><?php echo $this->sPager->getPageNumber(); ?> <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="<?php echo ($this->sPager->hasNext()) ? "" : "disabled"; ?>">
+                <?php if($this->sPager->hasNext()): ?>
+                <a href="<?php echo ($this->sPager->hasNext()) ? $this->sPager->getURL_Next() : ""; ?>" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+                <?php else: ?>
+                    <span><span aria-hidden="true">&raquo;</span></span>                
+                <?php endif; ?>
+            </li>
+          </ul>
+        </nav>        
+      
   </div>
   <div class="col-md-3">
       <a class="btn btn-default btn-mylg" href="/gestione-cassa/add"><span class="glyphicon glyphicon-plus"></span> Aggiungi movimento</a>
