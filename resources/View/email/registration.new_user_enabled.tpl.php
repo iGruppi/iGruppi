@@ -7,5 +7,5 @@ Ti ricordiamo che i tuoi dati di accesso personali sono:<br />
 Email: <b><?php echo $this->email_user; ?></b><br />
 Password: <em>(quella scelta durante la registrazione)</em><br />
 <br />
-Puoi accedere a iGruppi dal seguente indirizzo:<br />
+Puoi accedere a iGruppi collegandoti al seguente indirizzo:<br />
 <a href="http://<?php echo $this->url_environment; ?>"><?php echo $this->url_environment; ?></a>
