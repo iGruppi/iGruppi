@@ -32,7 +32,7 @@ class Model_Ordini_State_OrderFactory
     public static function getOrder(stdclass $ordine)
     {
 
-        if($ordine->archiviato != "S") {
+        if(!isset($ordine->archiviato) || $ordine->archiviato != "S") {
             $startObj = self::getDateObj($ordine->data_inizio);
             $endObj = self::getDateObj($ordine->data_fine);
             
