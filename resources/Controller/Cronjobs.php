@@ -72,7 +72,6 @@ class Controller_Cronjobs extends MyFw_Controller {
                     $mooObj->initCategorie_ByObject($categorie);
                     //Zend_Debug::dump($catObj);
 
-
                     // add Ordine object to the array
                     $ordini[] = $mooObj;
                 }
@@ -90,24 +89,31 @@ class Controller_Cronjobs extends MyFw_Controller {
                     $groups = $ordineObj->getAllIdgroups();
                     foreach($groups AS $idgroup) 
                     {
-                        // PREPARE EMAIL TO GROUP LIST
-                        $mail = new MyFw_Mail();
-                        $mail->setSubject("Apertura Nuovo ordine: ".$ordineObj->getDescrizione()." (#".$ordineObj->getIdOrdine().")");
-                        $mail->setViewParam("ordine", $ordineObj);
-                        $mail->setDefaultTo();
+                        // get Group object
+                        $group = $ordineObj->getGroupByIdGroup($idgroup);
+                        
+                        // send email ONLY if ordine is VISIBILE
+                        if($group->getVisibile()->getBool()) {
+                            
+                            // PREPARE EMAIL TO GROUP LIST
+                            $mail = new MyFw_Mail();
+                            $mail->setSubject("Apertura Nuovo ordine: ".$ordineObj->getDescrizione()." (#".$ordineObj->getIdOrdine().")");
+                            $mail->setViewParam("ordine", $ordineObj);
+                            $mail->setDefaultTo();
 
-                        // GET USERS LIST
-                        $users = $usersObj->getUsersByIdGroup($idgroup, true);
-                        if(count($users) > 0)
-                        {
-                            foreach($users AS $user)
+                            // GET USERS LIST
+                            $users = $usersObj->getUsersByIdGroup($idgroup, true);
+                            if(count($users) > 0)
                             {
-                                $mail->addBcc($user->email);
+                                foreach($users AS $user)
+                                {
+                                    $mail->addBcc($user->email);
+                                }
                             }
-                        }
 
-                        // SEND IT...
-                        $mail->sendHtmlTemplate("order.start_open.tpl.php");
+                            // SEND IT...
+                            $mail->sendHtmlTemplate("order.start_open.tpl.php");
+                        }
                     }
                 }
             }
@@ -175,28 +181,35 @@ class Controller_Cronjobs extends MyFw_Controller {
                     $groups = $ordineObj->getAllIdgroups();
                     foreach($groups AS $idgroup) 
                     {
-                        // PREPARE EMAIL TO GROUP LIST
-                        $mail = new MyFw_Mail();
-                        $mail->setSubject("Chiusura ordine: ".$ordineObj->getDescrizione()." (#".$ordineObj->getIdOrdine().")");
-                        $mail->setViewParam("ordine", $ordineObj);
-                        $mail->setDefaultTo();
+                        // get Group object
+                        $group = $ordineObj->getGroupByIdGroup($idgroup);
+                        
+                        // send email ONLY if ordine is VISIBILE
+                        if($group->getVisibile()->getBool()) {
+                            
+                            // PREPARE EMAIL TO GROUP LIST
+                            $mail = new MyFw_Mail();
+                            $mail->setSubject("Chiusura ordine: ".$ordineObj->getDescrizione()." (#".$ordineObj->getIdOrdine().")");
+                            $mail->setViewParam("ordine", $ordineObj);
+                            $mail->setDefaultTo();
 
-                        // Get dati Gruppo
-                        $groupObj = $ordineObj->getGroupByIdGroup($idgroup);
-                        $mail->setViewParam("note_consegna", $groupObj->getNoteConsegna());
+                            // Get dati Gruppo
+                            $groupObj = $ordineObj->getGroupByIdGroup($idgroup);
+                            $mail->setViewParam("note_consegna", $groupObj->getNoteConsegna());
 
-                        // GET USERS LIST
-                        $users = $usersObj->getUsersByIdGroup($idgroup, true);
-                        if(count($users) > 0)
-                        {
-                            foreach($users AS $user)
+                            // GET USERS LIST
+                            $users = $usersObj->getUsersByIdGroup($idgroup, true);
+                            if(count($users) > 0)
                             {
-                                $mail->addBcc($user->email);
+                                foreach($users AS $user)
+                                {
+                                    $mail->addBcc($user->email);
+                                }
                             }
-                        }
 
-                        // SEND IT...
-                        $mail->sendHtmlTemplate("order.close_tomorrow.tpl.php");
+                            // SEND IT...
+                            $mail->sendHtmlTemplate("order.close_tomorrow.tpl.php");
+                        }
                     }
                 }
             }
