@@ -76,6 +76,7 @@ class Model_Db_Cassa extends MyFw_DB_Base {
                     LEFT JOIN ordini ON ordini_prodotti.idordine = ordini.idordine
                     LEFT JOIN ordini_groups ON ordini.idordine=ordini_groups.idordine AND ordini_groups.idgroup_slave= :idgroup
                     WHERE ordini_groups.archiviato = 'N'
+                    AND ordini_prodotti.disponibile_ordine = 'S'
                     GROUP by iduser) ordini_user_prodotti1
                 ON ordini_user_prodotti1.iduser = users.iduser
                 WHERE users.iduser = :iduser
@@ -95,6 +96,7 @@ class Model_Db_Cassa extends MyFw_DB_Base {
                 LEFT JOIN ordini_groups AS og ON o.idordine=og.idordine AND og.idgroup_slave= :idgroup
                 LEFT JOIN users AS u ON og.iduser_incaricato=u.iduser
                 WHERE og.archiviato = 'N'
+                AND op.disponibile_ordine = 'S'
                 AND oup.iduser= :iduser
                 GROUP by o.idordine";
         $sth = $this->db->prepare($sql);
