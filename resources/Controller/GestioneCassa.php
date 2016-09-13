@@ -236,15 +236,16 @@ class Controller_GestioneCassa extends MyFw_Controller {
             $ordCalcObj->setProdottiOrdinati($listProdOrdered);
             
             // Check If some product ordered EXISTS
-            if($ordCalcObj->getProdottiUtenti() > 0)
-            {
-                $cassaObj = new Model_Db_Cassa();
-                // ARCHIVIO ORDINE
+            $cassaObj = new Model_Db_Cassa();
+            if($ordCalcObj->getProdottiUtenti() > 0) {
+                // RIPARTIZIONE in CASSA e ARCHIVIO ORDINE
                 $res = $cassaObj->closeOrdine($ordCalcObj, $this->_userSessionVal->idgroup);
-                if($res)
-                {
-                    $this->redirect("gestione-cassa", "index");
-                }
+            } else {
+                // SOLO ARCHIVIA ORDINE
+                $res = $cassaObj->closeOrderByIdordineAndIdgroup($idordine, $idgroup);
+            }
+            if($res) {
+                $this->redirect("gestione-cassa", "index");
             }
         }
     }
