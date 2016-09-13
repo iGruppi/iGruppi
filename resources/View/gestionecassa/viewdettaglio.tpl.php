@@ -3,7 +3,7 @@
 <h3 class="big-margin-top">Riepilogo per utente</h3>
 <?php if($this->ordCalcoli->getProdottiUtenti() > 0): ?>
 <div class="row">
-  <div class="col-md-8">
+    <div class="col-md-8">
         <table class="table table-condensed">
             <thead>
               <tr>
@@ -27,17 +27,17 @@
             </tbody>
         </table>        
         <div class="my_clear" style="clear:both;">&nbsp;</div>
-  </div>
-  <div class="col-md-1">&nbsp;</div>
-  <div class="col-md-3">
-<?php if($this->ordCalcoli->canArchiviaOrdine()): ?>      
-    <a class="btn btn-success" role="button" href="/gestione-cassa/archivia/idordine/<?php echo $this->ordCalcoli->getIdOrdine();?>"><span class="glyphicon glyphicon-ok"></span> Archivia</a>
-<?php endif; ?>    
-  </div>
-</div>
-        
+    </div>
 <?php else: ?>
-    <div class="col-md-12">
+    <div class="col-md-8">
         <div class="lead">Nessun prodotto ordinato!</div>
     </div>
 <?php endif; ?>
+    <div class="col-md-1">&nbsp;</div>
+    <div class="col-md-3">
+<?php if($this->ordCalcoli->canArchiviaOrdine()): ?>      
+        <a class="btn btn-success" role="button" href="/gestione-cassa/archivia/idordine/<?php echo $this->ordCalcoli->getIdOrdine();?>"><span class="glyphicon glyphicon-ok"></span> Archivia</a>
+<?php endif; ?>    
+    </div>  
+</div>
+        

@@ -242,7 +242,7 @@ class Controller_GestioneCassa extends MyFw_Controller {
                 $res = $cassaObj->closeOrdine($ordCalcObj, $this->_userSessionVal->idgroup);
             } else {
                 // SOLO ARCHIVIA ORDINE
-                $res = $cassaObj->closeOrderByIdordineAndIdgroup($idordine, $idgroup);
+                $res = $cassaObj->closeOrderByIdordineAndIdgroup($idordine, $this->_userSessionVal->idgroup);
             }
             if($res) {
                 $this->redirect("gestione-cassa", "index");
