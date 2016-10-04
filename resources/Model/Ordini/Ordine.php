@@ -151,6 +151,10 @@ class Model_Ordini_Ordine extends Model_AF_AbstractCoR
     }
     
     
+    public function hasIncaricato()
+    {
+        return is_null($this->getMyGroup()->getIdUser_Incaricato()) ? false : true;
+    }
     
     /**
      * Return TRUE if iduser can manage ORDINE

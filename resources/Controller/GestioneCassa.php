@@ -115,7 +115,6 @@ class Controller_GestioneCassa extends MyFw_Controller {
         $this->view->form = $form;
     }
 
-    
     function ordertocloseAction()
     {
         $filter = $this->getParam("filter");
@@ -147,8 +146,43 @@ class Controller_GestioneCassa extends MyFw_Controller {
             }
         }
         $this->view->ordini = $ordini;
-
     }
+    
+    function orderclosedAction()
+    {
+        $filter = $this->getParam("filter");
+        if(is_null($filter)) 
+        {
+            $filter = "PRI"; // DEFAULT value
+        }
+        $this->view->filter = $filter;
+        
+        $ordObj = new Model_Db_Ordini();
+        $cObj = new Model_Db_Categorie();
+        $listOrd = $ordObj->getOrdiniClosed($this->_userSessionVal->idgroup);
+        $ordini = array();
+        if(count($listOrd) > 0) {
+            foreach($listOrd AS $ordine) {
+                $mooObj = new Model_Ordini_Ordine( new Model_AF_OrdineFactory() );
+                $mooObj->appendDati()->initDati_ByObject($ordine);
+                $mooObj->appendStates( Model_Ordini_State_OrderFactory::getOrder($ordine) );
+                
+                // build & init Gruppi
+                $mooObj->appendGruppi()->initGruppi_ByObject( $ordObj->getGroupsByIdOrdine( $mooObj->getIdOrdine()) );
+                $mooObj->setMyIdGroup($this->_userSessionVal->idgroup);
+                
+                // set Categories in Ordine object
+                $categorie = $cObj->getCategoriesByIdOrdine( $mooObj->getIdOrdine() );
+                $mooObj->appendCategorie()->initCategorie_ByObject($categorie);
+                // add Ordine to the list, ONLY if the INCARICATO was selected
+                if( $mooObj->hasIncaricato() ) {
+                    $ordini[] = $mooObj;
+                }
+            }
+        }
+        $this->view->ordini = $ordini;
+    }
+    
     
     function viewdettaglioAction()
     {
@@ -170,7 +204,7 @@ class Controller_GestioneCassa extends MyFw_Controller {
         // build & init Gruppi
         $mooObj->appendGruppi()->initGruppi_ByObject( $ordObj->getGroupsByIdOrdine( $mooObj->getIdOrdine()) );
         $mooObj->setMyIdGroup($this->_userSessionVal->idgroup);
-
+//echo "<pre>"; print_r( $ordObj->getGroupsByIdOrdine( $mooObj->getIdOrdine()) );die;
         // creo elenco prodotti
         $prodottiModel = new Model_Db_Prodotti();
         $listProd = $prodottiModel->getProdottiByIdOrdine($idordine);

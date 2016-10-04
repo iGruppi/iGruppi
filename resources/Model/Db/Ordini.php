@@ -97,7 +97,6 @@ class Model_Db_Ordini extends MyFw_DB_Base {
         return null;
     }
     
-    
     function getOrdiniToClose($idgroup)
     {
         $sql = "SELECT * FROM ordini AS o"
@@ -106,6 +105,7 @@ class Model_Db_Ordini extends MyFw_DB_Base {
               ." AND ("
                 . " o.condivisione='PUB' OR og.idgroup_slave= :idgroup"
                 . ")"
+                . "AND og.archiviato='N'"
               ." ORDER BY og.archiviato DESC, o.data_consegnato DESC";
         $sth = $this->db->prepare($sql);
         $sth->execute(array('idgroup' => $idgroup));
@@ -114,6 +114,25 @@ class Model_Db_Ordini extends MyFw_DB_Base {
         }
         return null;
     }
+    
+    function getOrdiniClosed($idgroup)
+    {
+        $sql = "SELECT * FROM ordini AS o"
+              ." LEFT JOIN ordini_groups AS og ON o.idordine=og.idordine"
+              ." WHERE o.data_consegnato IS NOT NULL "
+              ." AND ("
+                . " o.condivisione='PUB' OR og.idgroup_slave= :idgroup"
+                . ")"
+                . "AND og.archiviato='S'"
+              ." ORDER BY og.archiviato DESC, o.data_consegnato DESC";
+        $sth = $this->db->prepare($sql);
+        $sth->execute(array('idgroup' => $idgroup));
+        if($sth->rowCount() > 0) {
+            return $sth->fetchAll(PDO::FETCH_OBJ);
+        }
+        return null;
+    }
+
     
     function getGroupsByIdOrdine($idordine)
     {
