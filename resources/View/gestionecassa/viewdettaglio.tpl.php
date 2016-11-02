@@ -32,6 +32,17 @@
     <div class="col-md-8">
         <div class="lead">Nessun prodotto ordinato!</div>
     </div>
+
+    <?php 
+    
+    echo "<pre>"; print_r( $this->ordine->getMyGroup() );
+    
+    if(is_null($this->ordine->getMyGroup()->getIdUser_Referente())) : ?>
+        Nessun incaricato ordine.
+    <?php else: ?>
+        Referente ordine: <?php echo $this->ordine->getMyGroup()->getReferente(); ?>
+    <?php endif; ?>
+        
 <?php endif; ?>
     <div class="col-md-1">&nbsp;</div>
     <div class="col-md-3">

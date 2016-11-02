@@ -64,7 +64,7 @@
       <br /><br />
       <a class="btn btn-default btn-mylg" href="/gestione-cassa/ordertoclose"><span class="glyphicon glyphicon-list-alt"></span> Ordini da chiudere</a>
       <br /><br />
-      <a class="btn btn-default btn-mylg" href="/gestione-cassa/orderclosed"><span class="glyphicon glyphicon-inbox"></span> Ordini archiviati <span class="label label-danger">New</span></a>
+      <a class="btn btn-default btn-mylg" href="/gestione-cassa/orderclosed"><span class="glyphicon glyphicon-inbox"></span> Ordini archiviati</a>
       <br /><br />
       <a class="btn btn-default btn-mylg" href="/gestione-cassa/viewsaldi"><span class="glyphicon glyphicon-euro"></span> Saldi di cassa</a>
   </div>
