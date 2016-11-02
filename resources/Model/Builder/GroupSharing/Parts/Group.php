@@ -103,6 +103,7 @@ abstract class Model_Builder_GroupSharing_Parts_Group
     }
     
     /**
+     * Return ID INCARICATO
      * @return int
      */
     public function getIdUser_Referente()
@@ -111,6 +112,7 @@ abstract class Model_Builder_GroupSharing_Parts_Group
     }
 
     /**
+     * Return NOME-COGNOME INCARICATO
      * @return string
      */
     public function getReferente()

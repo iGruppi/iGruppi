@@ -87,6 +87,24 @@ class Model_AF_Ordine_Dati extends Model_AF_Dati
     }
     
     /**
+     * Return Email of Supervisore
+     * @return string
+     */
+    public function getSupervisore_Email()
+    {
+        return $this->getValue("supervisore_email");
+    }
+    
+    /**
+     * Return Tel of Supervisore
+     * @return string
+     */
+    public function getSupervisore_Tel()
+    {
+        return $this->getValue("supervisore_tel");
+    }
+    
+    /**
      * Return idgroup of the Supervisore
      * @return int
      */

@@ -12,7 +12,7 @@ class Model_Db_Ordini extends MyFw_DB_Base {
     }
     
     function getByIdOrdine($idordine, $idgroup) {
-        $sql = "SELECT o.*, og.archiviato, CONCAT(u.nome, ' ', u.cognome) AS supervisore_name,"
+        $sql = "SELECT o.*, og.archiviato, CONCAT(u.nome, ' ', u.cognome) AS supervisore_name, u.email AS supervisore_email, u.tel AS supervisore_tel, "
             . " g.idgroup AS supervisore_idgroup, g.nome AS supervisore_group"
             . " FROM ordini AS o"
             . " JOIN ordini_groups AS og ON o.idordine=og.idordine AND og.idgroup_slave= :idgroup"
