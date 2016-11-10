@@ -64,7 +64,7 @@
                 <div class="col-md-6 col-sm-6">
                     <ul class="nav nav-pills pull-right">
                       <li><a class="btn btn-default btn-mylg" href="/dashboard"><span class="glyphicon glyphicon-home"></span> Home</a></li>
-                      <li><a class="btn btn-success btn-mylg" href="/ordini"><span class="glyphicon glyphicon-shopping-cart"></span> Ordini</a></li>
+                      <li><a class="btn btn-default btn-mylg" href="/ordini"><span class="glyphicon glyphicon-shopping-cart"></span> Ordina</a></li>
                       <li>
                         <div class="btn-group">
                           <button type="button" class="btn btn-default dropdown-toggle btn-mylg" data-toggle="dropdown">
