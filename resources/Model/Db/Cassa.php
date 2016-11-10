@@ -26,7 +26,7 @@ class Model_Db_Cassa extends MyFw_DB_Base {
               ." JOIN users AS u ON c.iduser=u.iduser "
               ." LEFT JOIN ordini AS o ON c.idordine=o.idordine"
               ." WHERE c.iduser IN (SELECT iduser FROM users_group WHERE idgroup= :idgroup AND attivo='S')"
-              ." ORDER BY c.data DESC"
+              ." ORDER BY c.data DESC, c.idmovimento"
               ." LIMIT $start, $limit";
         $sth = $this->db->prepare($sql);
         $sth->execute(array('idgroup' => $idgroup));
