@@ -410,21 +410,38 @@ class Controller_GestioneOrdini extends MyFw_Controller {
     
     function changeqtaAction()
     {
-        $layout = Zend_Registry::get("layout");
-        $layout->disableDisplay();
+        Zend_Registry::get("layout")->disableDisplay();
         
-        // get Params values
-        $iduser = $this->getParam("iduser");
+        // build Ordine
+        $ordine = $this->_buildOrdine( new Model_AF_OrdineFactory() );
+        
+        // get param IdProdotto and check it if exists!
         $idprodotto = $this->getParam("idprodotto");
-        $idlistino = $this->getParam("idlistino");
-        $field = $this->getParam("field");
-        $value = $this->getParam("value");
-            
-        $sth = $this->getDB()->prepare("UPDATE ordini_user_prodotti SET $field= :$field, data_ins=NOW() WHERE iduser= :iduser AND idordine= :idordine AND idlistino= :idlistino  AND idprodotto= :idprodotto");
-        // UPDATE product selected
-        $fields = array('iduser' => $iduser, 'idordine' => $this->_idordine, 'idprodotto' => $idprodotto, 'idlistino' => $idlistino, $field => $value);
-        $rsth = $sth->execute($fields);
-        echo json_encode(array('res' => $rsth));
+        
+        $result = array('res' => false);
+        
+        // get Prodotto Ordine valeus from DB
+        $prodotto = $ordine->getProdottoById($idprodotto);
+        if(!is_null($prodotto))
+        {
+            // get Params values
+            $iduser = $this->getParam("iduser");
+            $idlistino = $this->getParam("idlistino");
+            $value = $this->getParam("value");
+            $whois = $this->getParam("whois");
+
+            $sth = $this->getDB()->prepare("UPDATE ordini_user_prodotti SET qta_reale= :qta_reale, data_ins=NOW() WHERE iduser= :iduser AND idordine= :idordine AND idlistino= :idlistino  AND idprodotto= :idprodotto");
+            // UPDATE product selected
+            $fields = array('iduser' => $iduser, 'idordine' => $this->_idordine, 'idprodotto' => $idprodotto, 'idlistino' => $idlistino, 'qta_reale' => $value);
+            $rsth = $sth->execute($fields);
+            if($rsth) {
+                $result = array('res' => true);
+                // LOG VARIAZIONE DATO 
+                Model_Ordini_Logger::LogVariazioneQtaUser($ordine, $prodotto, $iduser, $value, $whois);
+            }
+        }
+        
+        echo json_encode($result);
     }
     
     function newprodformAction() 

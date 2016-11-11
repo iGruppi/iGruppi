@@ -119,17 +119,14 @@ $(document).ready(function () {
                   // get SourceData by physicalIndex
                   var rowSourceData = this.getSourceDataAtRow(physicalIndex);
                   // get value changed fields
-                  var field = changes[i][1];
                   var old_value = changes[i][2];
                   var new_value = changes[i][3];
                   // check if it is really changed
-                  console.log(field + ": " + new_value + " - " + old_value );
-                  console.log(rowSourceData);
                   if(old_value !== new_value)
                   {   
                       $.getJSON(
                           '/gestione-ordini/changeqta/',
-                          {iduser: rowSourceData.iduser, idordine: idordine, idprodotto: rowSourceData.idprodotto, idlistino: rowSourceData.idlistino, field: field, value: new_value},
+                          {iduser: rowSourceData.iduser, idordine: idordine, idprodotto: rowSourceData.idprodotto, idlistino: rowSourceData.idlistino, value: new_value, whois: 'Incaricato'},
                           function(data) {
                               if(!data.res)
                               {

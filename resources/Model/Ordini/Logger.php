@@ -9,6 +9,20 @@ class Model_Ordini_Logger
 {
     
     
+    static function LogVariazioneQtaUser(Model_Ordini_Ordine $ordine, Model_Prodotto_Mediator_Mediator $prodotto, $iduser, $qta, $whois)
+    {
+        if(!is_null($prodotto))
+        {
+            $mUser = new Model_Db_Users();
+            $recUser = $mUser->getUserById($iduser);
+            
+            $descProdotto = $prodotto->getDescrizioneAnagrafica();
+            $txt = "<b>$whois</b> modifica QTA di <b>".$recUser->nome ." ".$recUser->cognome."</b>, $descProdotto: <b>$qta</b>";
+            return self::LogToDB($ordine->getIdOrdine(), $txt);
+        }
+    }
+    
+    
     static function LogVariazioneProdottoByField(Model_Ordini_Ordine $ordine, Model_Prodotto_Mediator_Mediator $prodotto, $field)
     {
         switch ($field) {

@@ -11,6 +11,13 @@ class Model_Db_Users extends MyFw_DB_Base {
         parent::__construct();
     }
     
+    function getUserById($iduser)
+    {
+        $sth_app = $this->db->prepare("SELECT nome, cognome, email FROM users WHERE iduser= :iduser");
+        $sth_app->execute(array('iduser' => $iduser));
+        return $sth_app->fetch(PDO::FETCH_OBJ);
+    }
+    
     function getUserByIdInGroup($iduser, $idgroup) {
 
         $sth_app = $this->db->prepare("SELECT * FROM users AS u LEFT JOIN users_group AS ug ON u.iduser=ug.iduser WHERE ug.iduser= :iduser AND ug.idgroup= :idgroup");
