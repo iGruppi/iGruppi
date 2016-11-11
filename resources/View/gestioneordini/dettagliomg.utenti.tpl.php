@@ -3,23 +3,25 @@
 <?php 
     $arProductsGrid = array();
     if(count($this->ordCalcObj->getProdottiUtenti()) > 0):
-        foreach ($this->ordCalcObj->getProdottiUtenti() AS $puObj)
+        foreach ($this->ordCalcObj->getProdottiUtenti() AS $iduser => $prodotti)
         {
-            $user = $puObj["user"];
-            $prodotti = $puObj["prodotti"];
-            foreach($prodotti AS $pObj)
+            $userDati = $prodotti["user"];
+            foreach($prodotti["prodotti"] AS $pObj)
             {
                 $arProductsGrid[] = array(
-                    'user_nome'             => $user->cognome . " " . $user->nome,
-                    'gas_nome'              => $user->nome_gas,
-                    'disponibile_ordine'    => ($pObj->isDisponibile() ? "SI" : "NO"),
+                    'idprodotto'            => $pObj->getIdProdotto(),
+                    'idlistino'             => $pObj->getIdListino(),
+                    'iduser'                => $iduser,
+                    'user_nome'             => $userDati->cognome . " " . $userDati->nome,
+                    'gas_nome'              => $userDati->nome_gas,
+                    'disponibile_ordine'    => $pObj->isDisponibile(),
                     'produttore'            => $pObj->getProduttore(),
                     'codice'                => $pObj->getCodice(),
                     'descrizione'           => $pObj->getDescrizioneAnagrafica(),
                     'costo_ordine'          => $pObj->getCostoOrdine(),
                     'udm'                   => $pObj->getUdm() .($pObj->hasPezzatura() ? "<br /><small>(Minimo " . $pObj->getDescrizionePezzatura() . ")</small>" : ""),
-                    'qta'                   => $pObj->getQta_ByIduser($user->iduser),
-                    'qta_reale'             => $pObj->getQtaReale_ByIduser($user->iduser),
+                    'qta'                   => $pObj->getQta_ByIduser($iduser),
+                    'qta_reale'             => $pObj->getQtaReale_ByIduser($iduser),
                     'subcat'                => $pObj->getSubCategoria()
                 );
             }
@@ -42,72 +44,115 @@
     
 <script>    
 $(document).ready(function () {
-    
+    // store my idordine
+    var idordine = <?php echo $this->ordine->getIdOrdine(); ?>;
+
   // init Container for Handsontable
   $('#grid-prodotti').handsontable({
-      data: <?php echo json_encode($arProductsGrid); ?>,
-      manualColumnMove: true,
-      manualColumnResize: true,
-      colHeaders: ['Utente', 'Gruppo', 'Disp.', <?php if($this->ordCalcObj->isMultiProduttore()) { echo "'Produttore', "; } ?> 'Codice', 'Descrizione', 'Qta Ord.', 'Qta Reale', 'Prezzo', 'Udm', 'Categoria'],
-      colWidths: [100, 100, 50, <?php if($this->ordCalcObj->isMultiProduttore()) { echo "150, "; } ?> 80, 380, 70, 70, 70, 120, 270],
-      columnSorting: true,
-      currentRowClassName: 'currentRow',
-      columns: [
-        {
-          data: 'user_nome',
-          readOnly: true
+        data: <?php echo json_encode($arProductsGrid); ?>,
+        manualColumnMove: true,
+        manualColumnResize: true,
+        colHeaders: ['Disp.', 'Utente', 'Gruppo', <?php if($this->ordCalcObj->isMultiProduttore()) { echo "'Produttore', "; } ?> 'Codice', 'Descrizione', 'Qta Ord.', 'Qta Reale', 'Prezzo', 'Udm', 'Categoria'],
+        colWidths: [50, 100, 100, <?php if($this->ordCalcObj->isMultiProduttore()) { echo "150, "; } ?> 80, 380, 70, 70, 70, 120, 270],
+        columnSorting: true,
+        currentRowClassName: 'currentRow',
+        columns: [
+          {
+            data: 'disponibile_ordine',
+            type: 'checkbox',
+            readOnly: true
+          },
+          {
+            data: 'user_nome',
+            readOnly: true
+          },
+          {
+            data: 'gas_nome',
+            readOnly: true
+          },
+      <?php if($this->ordCalcObj->isMultiProduttore()): ?>
+          {
+            data: 'produttore',
+            readOnly: true
+          },
+      <?php endif; ?>            
+          {
+            data: 'codice',
+            readOnly: true
+          },
+          {
+            data: 'descrizione',
+            readOnly: true
+          },
+          {
+            data: 'qta',
+            readOnly: true,
+            type: 'numeric'
+          },
+          {
+            data: 'qta_reale',
+            readOnly: true,
+            type: 'numeric',
+            format: '0,0.000',
+            language: 'it',
+            readOnly: <?php echo (!$this->ordine->canModificaQtaOrdinate()) ? "true" : "false"; ?>            
+          },
+          {
+            data: 'costo_ordine',
+            readOnly: true,
+            type: 'numeric',
+            format: '0,0.00 $',
+            language: 'it'
+          },
+          {
+            data: 'udm',
+            renderer: "html",
+            readOnly: true
+          },
+          {
+            data: 'subcat',
+            readOnly: true
+          }
+        ],
+        cells: function (row, col, prop) {
+          var cellProperties = {};
+          if (this.instance.getData()[row]["disponibile_ordine"] === false) {
+            cellProperties.readOnly = true;
+          }
+          return cellProperties;
         },
-        {
-          data: 'gas_nome',
-          readOnly: true
-        },
-        {
-          data: 'disponibile_ordine',
-          readOnly: true
-        },
-    <?php if($this->ordCalcObj->isMultiProduttore()): ?>
-        {
-          data: 'produttore',
-          readOnly: true
-        },
-    <?php endif; ?>            
-        {
-          data: 'codice',
-          readOnly: true
-        },
-        {
-          data: 'descrizione',
-          readOnly: true
-        },
-        {
-          data: 'qta',
-          readOnly: true,
-          type: 'numeric'
-        },
-        {
-          data: 'qta_reale',
-          readOnly: true,
-          type: 'numeric',
-          format: '0,0.00',
-          language: 'it'
-        },
-        {
-          data: 'costo_ordine',
-          readOnly: true,
-          type: 'numeric',
-          format: '0,0.00 $',
-          language: 'it'
-        },
-        {
-          data: 'udm',
-          renderer: "html",
-          readOnly: true
-        },
-        {
-          data: 'subcat',
-          readOnly: true
+        afterChange: function (changes, source) {
+            if (source === 'edit') {
+                for(var i = changes.length - 1; i >= 0; i--)
+                {
+                    // NOT SORTED (as Default value), logicalIndex = physicalIndex
+                    var physicalIndex = changes[i][0];
+                    if(isSorted(this)) {
+                        // SORTED, convert logicalIndex to physicalIndex to get the right SourceData
+                        physicalIndex = this.sortIndex[changes[i][0]][0];
+                    }
+                    // get SourceData by physicalIndex
+                    var rowSourceData = this.getSourceDataAtRow(physicalIndex);
+                    // get value changed fields
+                    var old_value = changes[i][2];
+                    var new_value = changes[i][3];
+                    // check if it is really changed
+                    if(old_value !== new_value)
+                    {
+                        $.getJSON(
+                            '/gestione-ordini/changeqta/',
+                            {iduser: rowSourceData.iduser, idordine: idordine, idprodotto: rowSourceData.idprodotto, idlistino: rowSourceData.idlistino, value: new_value, whois: 'Supervisore'},
+                            function(data) {
+                                if(!data.res)
+                                {
+                                    console.log('ERROR!');
+                                }
+                            });
+                    }
+                }
+            }
         }
-      ]
+        
     });
 });
 </script>

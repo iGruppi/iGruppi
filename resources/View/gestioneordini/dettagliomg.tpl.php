@@ -21,5 +21,5 @@
           </div>
         </div>
     </div>
-    <?php echo $this->partial($tpl, array('ordCalcObj' => $this->ordCalcObj));
+    <?php echo $this->partial($tpl, array('ordCalcObj' => $this->ordCalcObj, 'ordine' => $this->ordine));
     

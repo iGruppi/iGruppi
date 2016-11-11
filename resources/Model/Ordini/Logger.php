@@ -8,6 +8,19 @@
 class Model_Ordini_Logger 
 {
     
+    static function LogAggiuntoProdottoUser(Model_Ordini_Ordine $ordine, Model_Prodotto_Mediator_Mediator $prodotto, $iduser, $qta, $whois)
+    {
+        if(!is_null($prodotto))
+        {
+            $mUser = new Model_Db_Users();
+            $recUser = $mUser->getUserById($iduser);
+            
+            $descProdotto = $prodotto->getDescrizioneAnagrafica();
+            $txt = "<b>$whois</b> aggiunge <b>$qta</b> <i>$descProdotto</i> a <b>".$recUser->nome ." ".$recUser->cognome."</b>";
+            return self::LogToDB($ordine->getIdOrdine(), $txt);
+        }
+    }
+    
     
     static function LogVariazioneQtaUser(Model_Ordini_Ordine $ordine, Model_Prodotto_Mediator_Mediator $prodotto, $iduser, $qta, $whois)
     {
@@ -17,7 +30,7 @@ class Model_Ordini_Logger
             $recUser = $mUser->getUserById($iduser);
             
             $descProdotto = $prodotto->getDescrizioneAnagrafica();
-            $txt = "<b>$whois</b> modifica QTA di <b>".$recUser->nome ." ".$recUser->cognome."</b>, $descProdotto: <b>$qta</b>";
+            $txt = "<b>$whois</b> modifica quantità di <b>".$recUser->nome ." ".$recUser->cognome."</b>, <i>$descProdotto</i>: <b>$qta</b>";
             return self::LogToDB($ordine->getIdOrdine(), $txt);
         }
     }

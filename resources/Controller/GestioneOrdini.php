@@ -398,6 +398,20 @@ class Controller_GestioneOrdini extends MyFw_Controller {
         // build Ordine
         $ordine = $this->_buildOrdine( new Model_AF_UserOrdineFactory() );
         
+        // elenco users per Gruppo
+        $uModel = new Model_Db_Users();
+        $this->view->arrayUsers = $uModel->getUsersByIdGroup($this->_userSessionVal->idgroup);
+        
+        // elenco prodotti ordinabili
+        $pModel = new Model_Db_Prodotti();
+        $this->view->arrayProdotti = $pModel->getProdottiByIdOrdine($ordine->getIdOrdine());
+        $arrayProdotti = array();
+        foreach($this->view->arrayProdotti AS $prodotto)
+        {
+            $arrayProdotti[$prodotto->categoria_sub][$prodotto->idprodotto] = $prodotto;
+        }
+        
+        $this->view->arrayProdotti = $arrayProdotti;
         // GET PRODUCTS LIST with Qta Ordered
         $ordCalcObj = new Model_Ordini_CalcoliDecorator($ordine);
         $ordCalcObj->setIdgroup($this->_userSessionVal->idgroup);
@@ -469,50 +483,42 @@ class Controller_GestioneOrdini extends MyFw_Controller {
         echo json_encode(array('res' => true, 'myTpl' => $this->view->fetch('gestioneordini/qtaordine-newprod.form.tpl.php')));
 
     }
-    /*
+    
     function newprodsaveAction() 
     {
-        $layout = Zend_Registry::get("layout");
-        $layout->disableDisplay();
-        
+        Zend_Registry::get("layout")->disableDisplay();
+
         // build Ordine
         $ordine = $this->_buildOrdine( new Model_AF_OrdineFactory() );
         
         if($this->getRequest()->isPost()) {
             // get Post values
             $fv = $this->getRequest()->getPost();
-            $idordine = $fv["idordine"];
+            
+            // SET params
+            $prod_list = json_decode($fv["idprodotto"]);
+            $idprodotto = $prod_list->idprodotto;
+            $idlistino = $prod_list->idlistino;
+            $idordine = $this->getParam("idordine");
             $iduser = $fv["iduser"];
-            $idprodotto = $fv["idprodotto"];
-        
-            $ordObj = new Model_Db_Ordini();
-            $added = $ordObj->addQtaProdottoForOrdine($idordine, $iduser, $idprodotto);
-            if($added) {
-                $prodotti = $ordObj->getProdottiOrdinatiByIdordine($idordine,$this->_userSessionVal->idgroup);
-                if(is_array($prodotti) && count($prodotti) > 0) {
-                    $ordCalcObj = new Model_Ordini_CalcoliDecorator();
-                    $ordCalcObj->setIdgroup($this->_userSessionVal->idgroup);
-                    $ordCalcObj->setOrdObj($ordine);
-                    $ordCalcObj->setProdotti($prodotti);
-                    $prodObj = $ordCalcObj->getProdottiByIduser($iduser);
-                    if( isset($prodObj[$idprodotto]) ) {
-                        $this->view->pObj = $prodObj[$idprodotto];
-                        $this->view->iduser = $iduser;
-                        $this->view->idordine = $idordine;
-                        $this->view->idprodotto = $idprodotto;
-                        echo json_encode(array('res' => true, 
-                                   'grandTotal' => $ordCalcObj->getTotaleConSpedizioneByIduser($iduser), 
-                                   'myTpl' => $this->view->fetch('gestioneordini/qtaordine-row.tpl.php')));
-                        exit();
-                    }
+            $qta = $fv["qta"];
+                
+            // get Prodotto Ordine valeus from DB
+            $prodotto = $ordine->getProdottoById($idprodotto);
+            if(!is_null($prodotto))
+            {
+                $ordObj = new Model_Db_Ordini();
+                $rsth = $ordObj->setQtaProdottoForOrdine($idordine, $idlistino, $idprodotto, $iduser, $qta);
+                if($rsth) {
+                    // LOG VARIAZIONE DATO 
+                    Model_Ordini_Logger::LogAggiuntoProdottoUser($ordine, $prodotto, $iduser, $qta, "Incaricato");
                 }
             }
+            
+            $this->redirect("gestione-ordini", "qtaordine", array('idordine' => $idordine));
         }
-        
-        // Some error...
-        echo json_encode(array('res' => false));
     }
-    */
+    
     function dettaglioAction() 
     {
         // build Ordine

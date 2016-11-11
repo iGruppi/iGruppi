@@ -102,6 +102,14 @@ h1 strong, h2 strong, h3 strong, h4 strong, h5 strong, h6 strong {color: #090; f
 
 .strike { text-decoration: line-through; }
 
+figure.highlight {
+    padding: 15px;
+    margin: 15px 0;
+    background-color: #f7f7f9;
+    border: 1px solid #e1e1e8;
+    border-radius: 4px;
+}
+
 /* box_row disabled style */
 .box_row_dis,
 .box_row_dis *,
@@ -405,6 +413,7 @@ input, textarea, select { margin: 0px 2px 20px 2px; color: #000; }
 input  { background-color: #fff; border: solid 1px #aaa; padding: 2px 6px; font-size: 16px;}
 textarea { border:1px solid #aaa; padding:3px; font-size:11pt; margin-bottom: 5px;}
 select {
+    margin-top: 4px;
     padding: 6px 12px;
     color: #555;
     background-color: #fff;
