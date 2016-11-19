@@ -153,12 +153,16 @@ $(document).ready(function () {
     })
     
     $('#submit').click(function() {
+        
+        $(this).prop('disabled', true);
+        
         $.post(
         '/gestione-ordini/invia/idordine/'+idordine,
         $('#notifica_ordine').serialize(),
         function(data) {
-            // hide the form
+            // hide the form and re-enable the submit button
             $('#notifica_ordine').hide();
+            $('#submit').prop('disabled', false);
             if(data.res) {
                 $('#sender_response_OK').show();
                 $('#sender_response_FAIL').hide();
