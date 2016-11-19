@@ -303,7 +303,7 @@ h1 strong, h2 strong, h3 strong, h4 strong, h5 strong, h6 strong {color: #090; f
 .row-margin-bottom { margin-bottom: 15px; }
 
 /*------------------ Buttons and more.... */
-.btn { border-radius: 2px; }
+.btn { border-radius: 2px; margin-top: 4px; }
 .btn-no-bord-rad { border-radius: 0px; }
 .btn-mylg {
     padding: 10px 16px;
@@ -397,7 +397,7 @@ h1 strong, h2 strong, h3 strong, h4 strong, h5 strong, h6 strong {color: #090; f
 
 form{ margin:0px; margin-top: 35px; padding:0px; font-size: 16px; }
 form.ordini { margin: 0; font-size: 14px; }
-form#forminvioordine { margin-top: 0; }
+form#forminvioordine, form#notifica_ordine { margin-top: 0; }
 form p { margin-bottom: 15px; }
 label{ cursor: pointer;	color: #000; font-weight: bold;}
 label input{ font-weight: normal; }
