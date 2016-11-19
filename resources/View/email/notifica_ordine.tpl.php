@@ -1,2 +1,2 @@
 
-<?php echo $this->messaggio; ?>)
+<?php echo $this->messaggio; ?>
