@@ -32,20 +32,14 @@
     <div class="col-md-8">
         <div class="lead">Nessun prodotto ordinato!</div>
     </div>
-
-    <?php 
-    
-    echo "<pre>"; print_r( $this->ordine->getMyGroup() );
-    
-    if(is_null($this->ordine->getMyGroup()->getIdUser_Referente())) : ?>
-        Nessun incaricato ordine.
-    <?php else: ?>
-        Referente ordine: <?php echo $this->ordine->getMyGroup()->getReferente(); ?>
-    <?php endif; ?>
-        
 <?php endif; ?>
     <div class="col-md-1">&nbsp;</div>
     <div class="col-md-3">
+<?php if(is_null($this->ordine->getMyGroup()->getIdUser_Referente())) : ?>
+        <p>Nessun incaricato ordine.</p>
+<?php else: ?>
+        <p>Referente ordine: <?php echo $this->ordine->getMyGroup()->getReferente(); ?></p>
+<?php endif; ?>
 <?php if($this->ordCalcoli->canArchiviaOrdine()): ?>      
         <a class="btn btn-success" role="button" href="/gestione-cassa/archivia/idordine/<?php echo $this->ordCalcoli->getIdOrdine();?>"><span class="glyphicon glyphicon-ok"></span> Archivia</a>
 <?php endif; ?>    
