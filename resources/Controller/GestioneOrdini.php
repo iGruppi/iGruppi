@@ -625,7 +625,7 @@ class Controller_GestioneOrdini extends MyFw_Controller {
             $mail->clearFrom()->setFrom($userData->email, $userData->nome . " " . $userData->cognome);
             $mail->setSubject("[".$ordine->getDescrizione()." #".$ordine->getIdOrdine()."] - " . $oggetto);
             //$mail->setViewParam("ordine", $ordine);
-            $mail->setViewParam("messaggio", $messaggio);
+            $mail->setViewParam("messaggio", nl2br($messaggio));
             
             // check "Send to me" to SET the correct [TO]
             if(isset($fv["send_to_me"]) && $fv["send_to_me"] == 1) {
