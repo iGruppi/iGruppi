@@ -276,9 +276,9 @@ class Model_Ordini_Ordine extends Model_AF_AbstractCoR
     /**
      * Return TRUE if can send ORDINE by Email directly to Produttore
      */
-    public function canInviaOrdineByEmail()
+    public function canInviaNotificaOrdine()
     {
-        return false; // TODO!
+        return true;
     }
     
     /**

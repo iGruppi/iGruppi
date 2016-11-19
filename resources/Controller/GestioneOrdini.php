@@ -591,11 +591,68 @@ class Controller_GestioneOrdini extends MyFw_Controller {
         $this->view->ordCalcObj = $ordCalcObj;
     }
     
-    function inviaAction() {
-        // TODO: Invia email...
+    function inviaAction() 
+    {
+        Zend_Registry::get("layout")->disableDisplay();
+                
+        // build Ordine
+        $ordine = $this->_buildOrdine( new Model_AF_UserOrdineFactory() );
+        
+        $return = array('res' => false, 'msg' => 'ERROR!');
+        
+        // check data from POST
+        if($this->getRequest()->isPost()) {
+            // get Post values
+            $fv = $this->getRequest()->getPost();
+            $recipient = $fv["recipient"];
+            $groups = $fv["groups"];
+            $oggetto = $fv["oggetto"];
+            $messaggio = $fv["messaggio"];
+            
+            // get email addresses
+            $mdNotifiche = new Model_Db_Notifiche();
+            switch ($recipient) {
+                case "Amministratori":  $emails = $mdNotifiche->getEmails_Admins($groups); break;
+                case "Incaricati":      $emails = $mdNotifiche->getEmails_Incaricati($ordine->getIdOrdine(), $groups); break;
+                case "Utenti":          $emails = $mdNotifiche->getEmails_UsersOrder($ordine->getIdOrdine(), $groups); break;
+            }
+            
+            // GET user identity
+            $userData = Zend_Auth::getInstance()->getStorage()->read();
+            
+            // PREPARE EMAIL TO GROUP LIST
+            $mail = new MyFw_Mail();
+            $mail->clearFrom()->setFrom($userData->email, $userData->nome . " " . $userData->cognome);
+            $mail->setSubject("[".$ordine->getDescrizione()." #".$ordine->getIdOrdine()."] - " . $oggetto);
+            //$mail->setViewParam("ordine", $ordine);
+            $mail->setViewParam("messaggio", $messaggio);
+            
+            // check "Send to me" to SET the correct [TO]
+            if(isset($fv["send_to_me"]) && $fv["send_to_me"] == 1) {
+                $mail->addTo($userData->email);
+            } else {
+                $mail->setDefaultTo();
+            }
+            
+            // GET USERS LIST
+            if(count($emails) > 0)
+            {
+                foreach($emails AS $email)
+                {
+                    $mail->addBcc($email);
+                }
+            }
+
+            // SEND IT...
+            $res = $mail->sendHtmlTemplate("notifica_ordine.tpl.php");
+            $return = array('res' => $res, 'msg' => 'OK!');
+        }
+        
+        echo json_encode($return);
     }
     
-    function movestatusAction() {
+    function movestatusAction() 
+    {
         
         $layout = Zend_Registry::get("layout");
         $layout->disableDisplay();
