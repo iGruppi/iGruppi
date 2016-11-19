@@ -117,7 +117,7 @@
             </div>
             <div class="checkbox">
               <label>
-                <input type="checkbox" name="send_to_me" value="1"> Invia una copia a me stesso
+                  <input type="checkbox" name="send_to_me" value="1" checked=""> Invia una copia a me stesso
               </label>
             </div>
         </div>
