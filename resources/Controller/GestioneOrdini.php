@@ -502,16 +502,18 @@ class Controller_GestioneOrdini extends MyFw_Controller {
             $idordine = $this->getParam("idordine");
             $iduser = $fv["iduser"];
             $qta = $fv["qta"];
-                
-            // get Prodotto Ordine valeus from DB
-            $prodotto = $ordine->getProdottoById($idprodotto);
-            if(!is_null($prodotto))
-            {
-                $ordObj = new Model_Db_Ordini();
-                $rsth = $ordObj->setQtaProdottoForOrdine($idordine, $idlistino, $idprodotto, $iduser, $qta);
-                if($rsth) {
-                    // LOG VARIAZIONE DATO 
-                    Model_Ordini_Logger::LogAggiuntoProdottoUser($ordine, $prodotto, $iduser, $qta, "Incaricato");
+            
+            if((int)$qta > 0) {
+                // get Prodotto Ordine valeus from DB
+                $prodotto = $ordine->getProdottoById($idprodotto);
+                if(!is_null($prodotto))
+                {
+                    $ordObj = new Model_Db_Ordini();
+                    $rsth = $ordObj->setQtaProdottoForOrdine($idordine, $idlistino, $idprodotto, $iduser, $qta);
+                    if($rsth) {
+                        // LOG VARIAZIONE DATO 
+                        Model_Ordini_Logger::LogAggiuntoProdottoUser($ordine, $prodotto, $iduser, $qta, "Incaricato");
+                    }
                 }
             }
             
