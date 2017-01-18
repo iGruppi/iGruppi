@@ -12,8 +12,10 @@
                 'codice'                => $pObj->getCodice(),
                 'descrizione'           => $pObj->getDescrizioneAnagrafica(),
                 'costo_ordine'          => $pObj->getCostoOrdine(),
-                'udm'                   => $pObj->getUdm() .($pObj->hasPezzatura() ? "<br /><small>(Minimo " . $pObj->getDescrizionePezzatura() . ")</small>" : ""),
+                'udm'                   => $pObj->getUdm(),
+                'udm2'                  => "&euro;/" . $pObj->getUdm(),
                 'qta'                   => $pObj->getQta(),
+                'qta_pezzatura'         => " x " . $pObj->getDescrizioneUdmQtaOrdinata(),
                 'qta_reale'             => $pObj->getQtaReale(),
                 'subcat'                => $pObj->getSubCategoria()
             );
@@ -58,8 +60,8 @@ $(document).ready(function () {
       data: <?php echo json_encode($arProductsGrid); ?>,
       manualColumnMove: true,
       manualColumnResize: true,
-      colHeaders: ['Disp.', <?php if($this->ordCalcObj->isMultiProduttore()) { echo "'Produttore', "; } ?> 'Codice', 'Descrizione', 'Qta Ord.', 'Qta Reale', 'Prezzo', 'Udm', 'Categoria'],
-      colWidths: [50, <?php if($this->ordCalcObj->isMultiProduttore()) { echo "150, "; } ?> 80, 380, 70, 70, 70, 120, 270],
+      colHeaders: ['Disp.', <?php if($this->ordCalcObj->isMultiProduttore()) { echo "'Produttore', "; } ?> 'Codice', 'Qta Ord.', '', 'Descrizione', 'Qta Reale', '', 'Prezzo', '', 'Categoria'],
+      colWidths: [50, <?php if($this->ordCalcObj->isMultiProduttore()) { echo "150, "; } ?> 80, 70, 110, 380, 70, 120, 70, 120, 270],
       columnSorting: true,
       currentRowClassName: 'currentRow',
       columns: [
@@ -78,30 +80,39 @@ $(document).ready(function () {
           readOnly: true
         },
         {
-          data: 'descrizione',
-          readOnly: true
-        },
-        {
           data: 'qta',
           readOnly: true,
           type: 'numeric'
         },
         {
+          data: 'qta_pezzatura',
+          readOnly: true
+        },
+        {
+          data: 'descrizione',
+          readOnly: true
+        },
+        {
           data: 'qta_reale',
+          readOnly: true,
+          type: 'numeric',
+          format: '0,0.000',
+          language: 'it'
+        },
+        {
+          data: 'udm',
+          renderer: "html",
+          readOnly: true
+        },
+        {
+          data: 'costo_ordine',
           readOnly: true,
           type: 'numeric',
           format: '0,0.00',
           language: 'it'
         },
         {
-          data: 'costo_ordine',
-          readOnly: true,
-          type: 'numeric',
-          format: '0,0.00 $',
-          language: 'it'
-        },
-        {
-          data: 'udm',
+          data: 'udm2',
           renderer: "html",
           readOnly: true
         },

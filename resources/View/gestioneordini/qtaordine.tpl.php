@@ -15,12 +15,14 @@
                         'iduser'                => $iduser,
                         'disponibile_ordine'    => $pObj->isDisponibile(),
                         'user'                  => $userDati->cognome . " " . $userDati->nome,
-                        'qta'                   => $pObj->getQta_ByIduser($iduser),
-                        'qta_reale'             => $pObj->getQtaReale_ByIduser($iduser),
                         'codice'                => $pObj->getCodice(),
                         'descrizione'           => $pObj->getDescrizioneAnagrafica(),
                         'costo_ordine'          => $pObj->getCostoOrdine(),
-                        'udm'                   => $pObj->getUdm() .($pObj->hasPezzatura() ? "<br /><small>(Minimo " . $pObj->getDescrizionePezzatura() . ")</small>" : ""),
+                        'udm'                   => $pObj->getUdm(),
+                        'udm2'                  => "&euro;/" . $pObj->getUdm(),
+                        'qta'                   => $pObj->getQta(),
+                        'qta_pezzatura'         => " x " . $pObj->getDescrizioneUdmQtaOrdinata(),
+                        'qta_reale'             => $pObj->getQtaReale(),
                         'subcat'                => $pObj->getSubCategoria()
                     );
                 }
@@ -101,8 +103,8 @@ $(document).ready(function () {
         data: <?php echo json_encode($arProductsGrid); ?>,
         manualColumnMove: true,
         manualColumnResize: true,
-        colHeaders: ['Disp.', 'Codice', 'Descrizione', 'Prezzo', 'Udm', 'Utente', 'Qta Ord.', 'Qta Reale'],
-        colWidths: [50, 80, 350, 80, 100, 200, 70, 70],
+        colHeaders: ['Disp.', 'Codice', 'Qta Ord.', '', 'Descrizione', 'Qta Reale', '', 'Prezzo', '', 'Utente'],
+        colWidths: [50, 80, 70, 110, 350, 70, 120, 70, 120, 200],
         columnSorting: true,
         currentRowClassName: 'currentRow',
         columns: [
@@ -115,37 +117,46 @@ $(document).ready(function () {
             data: 'codice',
             readOnly: true
           },
+            {
+              data: 'qta',
+              readOnly: true,
+              type: 'numeric'
+            },
+            {
+              data: 'qta_pezzatura',
+              readOnly: true
+            },
           {
             data: 'descrizione',
             readOnly: true
           },
-          {
-            data: 'costo_ordine',
-            readOnly: true,
-            type: 'numeric',
-            format: '0,0.00 $',
-            language: 'it'
-          },
-          {
-            data: 'udm',
-            renderer: "html",
-            readOnly: true
-          },
+            {
+              data: 'qta_reale',
+              type: 'numeric',
+              format: '0,0.000',
+              language: 'it',
+              readOnly: <?php echo (!$this->ordine->canModificaQtaOrdinate()) ? "true" : "false"; ?>
+            },
+            {
+              data: 'udm',
+              renderer: "html",
+              readOnly: true
+            },
+            {
+              data: 'costo_ordine',
+              readOnly: true,
+              type: 'numeric',
+              format: '0,0.00',
+              language: 'it'
+            },
+            {
+              data: 'udm2',
+              renderer: "html",
+              readOnly: true
+            },
           {
             data: 'user',
             readOnly: true
-          },
-          {
-            data: 'qta',
-            readOnly: true,
-            type: 'numeric'
-          },
-          {
-            data: 'qta_reale',
-            type: 'numeric',
-            format: '0,0.000',
-            language: 'it',
-            readOnly: <?php echo (!$this->ordine->canModificaQtaOrdinate()) ? "true" : "false"; ?>
           }
         ],
         cells: function (row, col, prop) {

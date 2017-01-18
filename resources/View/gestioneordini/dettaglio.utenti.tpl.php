@@ -15,8 +15,9 @@
               <tr>
                 <th>Codice</th>
                 <th>Descrizione</th>
-                <th class="text-right">Quantità</th>
-                <th>Prezzo unitario</th>
+                <th class="text-right">Quantità ordinata</th>
+                <th class="text-right">Quantità reale</th>
+                <th class="text-right">Prezzo unitario</th>
                 <th class="text-right">Totale</th>
               </tr>
             </thead>
@@ -29,8 +30,9 @@
             <?php endif; ?>
                     <td><strong><?php echo $pObj->getCodice();?></strong></td>
                     <td><?php echo $pObj->getDescrizioneAnagrafica();?></td>
-                    <td class="text-right"><strong><?php echo $this->formatQta( $pObj->getQtaReale_ByIduser($iduser), $pObj->getUdm() );?></strong></td>
-                    <td><?php echo $pObj->getDescrizioneCosto();?></td>
+                    <td class="text-right"><?php echo $pObj->getQta_ByIduser($iduser) . " x " . $pObj->getDescrizioneUdmQtaOrdinata();?></td>
+                    <td class="text-right"><?php echo $this->formatQta($pObj->getQtaReale_ByIduser($iduser)) . " " . $pObj->getUdm(); ?></td>
+                    <td class="text-right"><?php echo $this->valuta($pObj->getCostoOrdine()) . "/" . $pObj->getUdm();?></td>
                     <td class="text-right"><strong><?php echo $this->valuta($pObj->getTotale_ByIduser($iduser)); ?></strong></td>
                 </tr>        
         <?php endforeach; ?>

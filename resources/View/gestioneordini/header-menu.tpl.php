@@ -73,7 +73,7 @@
         <br />
         <div class="btn-group">
             <a class="btn btn-success dropdown-toggle" data-toggle="dropdown">
-              <span class="glyphicon glyphicon-envelope"></span> Invia notifica a <span class="caret"></span>
+              <span class="glyphicon glyphicon-envelope"></span> Invia email a <span class="caret"></span>
             </a>
             <ul class="dropdown-menu" role="menu">
               <li><a href="#" data-whatever="Amministratori" data-toggle="modal" data-target="#notificaModal">Amministratori</a></li>

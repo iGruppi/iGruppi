@@ -49,6 +49,22 @@ class Model_Prodotto_Mediator_Anagrafica
     }
     
     /**
+     * @return string
+     */    
+    public function getDescrizioneUdmQtaOrdinata()
+    {
+        $pp = "";
+        if( $this->hasPezzatura() ) {
+            $arUdm = Model_Prodotto_UdM::getArWithMultip();
+            $pp .= round($this->getMoltiplicatore(), $arUdm[$this->getUdm()]["ndec"]) . " " . $arUdm[$this->getUdm()]["label"];
+        } else {
+            $arUdm = Model_Prodotto_UdM::getArUdm();
+            $pp .= round($this->getMoltiplicatore(), 0) . " " . $arUdm[$this->getUdm()];
+        }
+        return $pp;
+    }
+    
+    /**
      * @return bool
      */    
     public function hasPezzatura()
