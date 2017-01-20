@@ -20,9 +20,9 @@
                         'costo_ordine'          => $pObj->getCostoOrdine(),
                         'udm'                   => $pObj->getUdm(),
                         'udm2'                  => "&euro;/" . $pObj->getUdm(),
-                        'qta'                   => $pObj->getQta(),
+                        'qta'                   => $pObj->getQta_ByIduser($iduser),
                         'qta_pezzatura'         => " x " . $pObj->getDescrizioneUdmQtaOrdinata(),
-                        'qta_reale'             => $pObj->getQtaReale(),
+                        'qta_reale'             => $pObj->getQtaReale_ByIduser($iduser),
                         'subcat'                => $pObj->getSubCategoria()
                     );
                 }
