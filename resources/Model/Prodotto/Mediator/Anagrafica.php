@@ -33,7 +33,17 @@ class Model_Prodotto_Mediator_Anagrafica
     {
         parent::__construct($medium);
     }
-    
+
+
+    /**
+     * @return string
+     */
+    public function getDescrizioneUdm()
+    {
+        $arUdmPlural = Model_Prodotto_UdM::getArUdmPlural();
+        return $arUdmPlural[$this->getUdm()];
+    }
+
     
     /**
      * @return string

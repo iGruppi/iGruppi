@@ -61,17 +61,21 @@
                         'idListino'     => $prodotto->getIdListino(),
                         'costoOrdine'   => $prodotto->getCostoOrdine(),
                         'moltiplicatore'=> $prodotto->getMoltiplicatore(),
+                        'udm'           => $prodotto->getDescrizioneUdm(),
+                        'hasPezzatura'  => $prodotto->hasPezzatura(),
                         'qtaOrdinata'   => $qta_ordinata
                     );
                 ?>
                 <a class="menu_icon" href="javascript:void(0)" onclick="Trolley_setQtaProdotto(<?php echo $idprodotto;?>, '+')">+</a>
                 <input readonly class="prod_qta" type="text" id="prod_qta_<?php echo $idprodotto;?>" value="<?php echo $qta_ordinata;?>" />
                 <a class="menu_icon" href="javascript:void(0)" onclick="Trolley_setQtaProdotto(<?php echo $idprodotto;?>, '-')">-</a>
+                <div class="udm_desc" id="udm_desc_<?php echo $idprodotto;?>">...</div>
                 <div class="sub_totale" id="subtotale_<?php echo $idprodotto;?>">...</div>
+            </div>
             <?php else: ?>
                 <h4 class="non-disponibile">NON disponibile!</h4>
-            <?php endif; ?>
             </div>
+            <?php endif; ?>
         </div>
       </div>
         
@@ -109,7 +113,7 @@
         Trolley.idordine = <?php echo $this->ordine->getIdOrdine();?>;
         // SET Products ordered
     <?php foreach($arTrolley AS $idprodotto => $prodotto): ?>
-        Trolley.initByParams(<?php echo $idprodotto;?>, <?php echo $prodotto["idListino"]; ?>, <?php echo $prodotto["costoOrdine"];?>, <?php echo $prodotto["moltiplicatore"]; ?>, <?php echo $prodotto["qtaOrdinata"];?>);
+        Trolley.initByParams(<?php echo $idprodotto;?>, <?php echo $prodotto["idListino"]; ?>, <?php echo $prodotto["costoOrdine"];?>, <?php echo $prodotto["moltiplicatore"]; ?>, '<?php echo $prodotto["udm"]; ?>', '<?php echo $prodotto["hasPezzatura"]; ?>', <?php echo $prodotto["qtaOrdinata"];?>);
         Trolley_rebuildPartial(<?php echo $idprodotto;?>);
     <?php endforeach; ?> 
         

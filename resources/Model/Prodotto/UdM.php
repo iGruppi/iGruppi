@@ -19,7 +19,15 @@ class Model_Prodotto_UdM {
         self::_KG         => 'Kg',
         self::_LITRO      => 'Litro'
     );
-    
+
+    static private $_arUdMPlural = array(
+        self::_BOTTIGLIA  => 'Bottiglie',
+        self::_CONFEZIONE => 'Confezioni',
+        self::_PEZZO      => 'Pezzi',
+        self::_KG         => 'Kg',
+        self::_LITRO      => 'Litri'
+    );
+
     static private $_arUdMWithMultip = array(
         self::_PEZZO      => array('label' => 'Pezzi', 'ndec' => '0'),
         self::_KG         => array('label' => 'Kg',    'ndec' => '2'),
@@ -34,4 +42,10 @@ class Model_Prodotto_UdM {
     {
         return self::$_arUdMWithMultip;
     }
+
+    public static function getArUdmPlural()
+    {
+        return self::$_arUdMPlural;
+    }
+
 }

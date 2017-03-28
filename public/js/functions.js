@@ -118,12 +118,14 @@
         // list of products
         products: {},
                 
-        initByParams: function(idproduct, idlistino, prezzo, multip, qta) {
+        initByParams: function(idproduct, idlistino, prezzo, multip, udm, hasPezzatura, qta) {
             this.products[idproduct] = {
-                idlistino: parseFloat(idlistino), 
-                prezzo:    parseFloat(prezzo), 
-                multip:    parseFloat(multip), 
-                qta   :    parseInt(qta)
+                idlistino:      parseFloat(idlistino),
+                prezzo:         parseFloat(prezzo),
+                multip:         parseFloat(multip),
+                udm:            udm,
+                hasPezzatura:   hasPezzatura,
+                qta:            parseInt(qta)
             };
 //            console.log(idproduct + " - " + prezzo +" x "+qta);
         },
@@ -148,6 +150,17 @@
         getQta: function(idproduct) {
             if(idproduct in this.products) {
                 return this.products[idproduct].qta;
+            }
+        },
+
+        getUdmDescrizione: function(idproduct) {
+            if(idproduct in this.products) {
+                var totQta = this.products[idproduct].qta * this.products[idproduct].multip;
+                if(this.products[idproduct].hasPezzatura == '1') {
+                    return "x " + this.products[idproduct].multip.formatNumber(".", ",", 2) + " = " + totQta.formatNumber(".", ",", 2) + " " + this.products[idproduct].udm;
+                } else {
+                    return "x " + this.products[idproduct].multip + " = " + totQta + " " + this.products[idproduct].udm;
+                }
             }
         },
 
@@ -192,6 +205,8 @@
         $('#prod_qta_'+idprodotto).val(newQta);
         var subtotale = Trolley.calculatePartial(idprodotto);
         $('#subtotale_'+idprodotto).html(subtotale.formatNumber(2, ',', '') + "&nbsp;&euro;");
+        var udm_desc = Trolley.getUdmDescrizione(idprodotto);
+        $('#udm_desc_'+idprodotto).html(udm_desc);
     }
     
     function Trolley_rebuildTotal()

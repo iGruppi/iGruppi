@@ -127,7 +127,8 @@ figure.highlight {
 .sub_menu a.menu:hover { color: #333; background-color: #eee; border: 1px solid #ccc; }
 .sub_menu a.selected { color: #0c0; }
 .sub_menu a.menu_dis { color:#ddd; }
-.sub_menu .sub_totale { font-size: 18px; font-weight: 200; color: #666; clear: left; border: 1px solid #EEE; width: 127px; text-align: center; }
+.sub_menu .sub_totale, .sub_menu .udm_desc { font-size: 18px; font-weight: 200; color: #666; clear: left; border: 1px solid #EEE; width: 127px; text-align: center; }
+.sub_menu .udm_desc { color: #999; font-size: 12px; margin: 3px 0; }
 .totale_line { padding: 38px 0px 12px 8px; margin-bottom: 50px; }
 .totale_line h2 { float: left; padding: 0; margin: 0; }
 .totale_line .tot_right { margin: 0; padding: 0; color: #000; float: right; }
