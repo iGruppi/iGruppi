@@ -27,10 +27,10 @@
     
     <!-- Personalized CSS and JS -->
     <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="/css/custom-bs.css" type="text/css" />
-	<script type="text/javascript" language="JavaScript" src="/js/jx.js"></script>
-	<script type="text/javascript" language="JavaScript" src="/js/functions.js"></script>
-	<script type="text/javascript" language="JavaScript" src="/js/jxAdmin.js"></script>
+    <link rel="stylesheet" href="/css/custom-bs.css?56856a781" type="text/css" />
+	<script type="text/javascript" language="JavaScript" src="/js/jx.js?56856a781"></script>
+	<script type="text/javascript" language="JavaScript" src="/js/functions.js?56856a781"></script>
+	<script type="text/javascript" language="JavaScript" src="/js/jxAdmin.js?56856a781"></script>
 
 <?php if(is_array($this->arOnLoads) && count($this->arOnLoads) > 0): ?> 
 <script language="javascript">
