@@ -24,6 +24,10 @@
     <script src="/handsontable/handsontable.full.js"></script>
     <script src="/handsontable/it.js"></script>
     <link rel="stylesheet" media="screen" href="/handsontable/handsontable.full.css">
+    <!-- medium-editor -->
+    <script src="/medium-editor/js/medium-editor.js"></script>
+    <link rel="stylesheet" href="/medium-editor/css/medium-editor.css">
+    <link rel="stylesheet" href="/medium-editor/css/themes/default.css">
     
     <!-- Personalized CSS and JS -->
     <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css" />

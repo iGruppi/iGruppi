@@ -19,3 +19,6 @@
 [submodule "library/handsontable"]
 	path = library/handsontable
 	url = https://github.com/Jazzo/handsontable.git
+[submodule "library/medium-editor"]
+	path = library/medium-editor
+	url = https://github.com/yabwe/medium-editor.git
