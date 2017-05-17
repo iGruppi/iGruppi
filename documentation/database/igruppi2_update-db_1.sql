@@ -1,0 +1,21 @@
+SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
+SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
+
+ALTER TABLE produttori`
+  ADD COLUMN `p_iva` VARCHAR(16) NOT NULL  AFTER `production` ,
+  ADD COLUMN `url_www` VARCHAR(255) NOT NULL  AFTER `p_iva` ,
+  ADD COLUMN `desc_abstract` VARCHAR(45) NOT NULL  AFTER `url_www` ,
+  ADD COLUMN `desc_presentazione` VARCHAR(2048) NOT NULL  AFTER `desc_abstract` ,
+  ADD COLUMN `desc_storia` VARCHAR(2048) NOT NULL  AFTER `desc_presentazione` ,
+  ADD COLUMN `desc_certificazioni` VARCHAR(2048) NOT NULL  AFTER `desc_storia` ,
+  ADD COLUMN `desc_ambiente` VARCHAR(512) NOT NULL  AFTER `desc_certificazioni` ,
+  ADD COLUMN `desc_servizi` VARCHAR(512) NOT NULL  AFTER `desc_ambiente` ,
+  ADD COLUMN `desc_scelto` VARCHAR(512) NULL DEFAULT NULL  AFTER `desc_servizi` ,
+  ADD COLUMN `data_ins` DATETIME NOT NULL  AFTER `desc_scelto`
+, ADD INDEX `fk_produttori_province1_idx` (`provincia` ASC)
+
+
+SET SQL_MODE=@OLD_SQL_MODE;
+SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
+SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
