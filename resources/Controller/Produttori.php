@@ -47,33 +47,35 @@ class Controller_Produttori extends MyFw_Controller {
         
     }
 
-/*    
+
     function addAction() {
         
         $form = new Form_Produttori();
         $form->setAction("/produttori/add");
         $form->removeField("idproduttore");
-        
+
         if($this->getRequest()->isPost()) {
             $fv = $this->getRequest()->getPost();
             if( $form->isValid($fv) ) {
-                
+                // set production = S
+                $fv["production"] = "S";
+                $fv["data_ins"] = date("Y-m-d H:i:s");
                 // ADD Produttore
                 $idproduttore = $this->getDB()->makeInsert("produttori", $fv);
 
-                // Add Relationship to referenti (REFERENTE PRODUTTORE)
-                $this->getDB()->makeInsert("referenti", array(
-                    'idproduttore'  => $idproduttore,
-                    'idgroup'       => $this->_userSessionVal->idgroup,
-                    'iduser_referente'    => $this->_iduser
-                ));
-     
                 // Add Relationship to users_produttori (GESTORE PRODUTTORE)
                 $this->getDB()->makeInsert("users_produttori", array(
                     'idproduttore'  => $idproduttore,
                     'iduser'    => $this->_iduser
                 ));
-                
+
+                // Add Relationship to referenti (REFERENTE PRODUTTORE)
+                $this->getDB()->makeInsert("referenti", array(
+                    'idproduttore'      => $idproduttore,
+                    'idgroup'           => $this->_userSessionVal->idgroup,
+                    'iduser_referente'  => $this->_iduser
+                ));
+
                 // REDIRECT TO EDIT
                 $this->redirect("produttori", "edit", array('idproduttore' => $idproduttore));
             }
@@ -82,11 +84,11 @@ class Controller_Produttori extends MyFw_Controller {
         // set Form in the View
         $this->view->form = $form;
     }
-*/    
+
     function viewAction() {
         $idproduttore = $this->getParam("idproduttore");
-        $myObj = new Model_Db_Produttori();
-        $this->view->produttore = $myObj->getProduttoreById($idproduttore);
+        $produttoreObj = new Model_Db_Produttori();
+        $this->view->produttore = $produttoreObj->getProduttoreById($idproduttore);
     }
     
     function editAction() {
@@ -94,8 +96,8 @@ class Controller_Produttori extends MyFw_Controller {
         $idproduttore = $this->getParam("idproduttore");
         
         // check if CAN edit this Produttore
-        $myObj = new Model_Db_Produttori();
-        $produttore = $myObj->getProduttoreById($idproduttore);
+        $produttoreObj = new Model_Db_Produttori();
+        $produttore = $produttoreObj->getProduttoreById($idproduttore);
         // Un po' di controlli per i furbi...
         if($produttore === false) {
             $this->redirect("produttori");
@@ -108,7 +110,9 @@ class Controller_Produttori extends MyFw_Controller {
         // Get Form Produttori
         $form = new Form_Produttori();
         $form->setAction("/produttori/edit/idproduttore/$idproduttore");
-        
+        // reset validators (I will check P. IVA below)
+        $form->getField("p_iva")->setValidators([]);
+
         // Get elenco Categorie
         $catObj = new Model_Db_Categorie();
         $this->view->categorie = $catObj->convertToSingleArray($catObj->getCategorie(), "idcat", "descrizione");
@@ -125,24 +129,31 @@ class Controller_Produttori extends MyFw_Controller {
             unset($fv["idcat"]);
             
             if( $form->isValid($fv) ) {
-                
-                $this->getDB()->makeUpdate("produttori", "idproduttore", $fv);
-                
-                /* ADD CATEGORIES */
-                if(count($arSubCat) > 0) {
-                    $arVal = array();
-                    // prepare array to UPDATE!
-                    foreach ($arSubCat as $idsubcat => $subCat) {
-                        $arVal[] = array(
-                            'idsubcat'      => $idsubcat,
-                            'descrizione'   => $subCat["descrizione"],
-                            'idcat'         => $subCat["idcat"]
-                        );
-                    }
-                    $catObj->editSubCategorie($arVal);
-                }
 
-                $this->redirect("produttori", "edit", array('idproduttore' => $idproduttore, 'updated' => true));
+                // check P.IVA DUPLICATED
+                $check = $produttoreObj->checkForPIVA_Exists($fv["p_iva"], $idproduttore);
+                if($check !== false) {
+                    $form->setError("p_iva", "Errore: P. IVA esistente!");
+                } else {
+                    $this->getDB()->makeUpdate("produttori", "idproduttore", $fv);
+
+                    /* ADD CATEGORIES */
+                    if(count($arSubCat) > 0) {
+                        $arVal = array();
+                        // prepare array to UPDATE!
+                        foreach ($arSubCat as $idsubcat => $subCat) {
+                            $arVal[] = array(
+                                'idsubcat'      => $idsubcat,
+                                'descrizione'   => $subCat["descrizione"],
+                                'idcat'         => $subCat["idcat"]
+                            );
+                        }
+                        $catObj->editSubCategorie($arVal);
+                    }
+
+                    $this->redirect("produttori", "edit", array('idproduttore' => $idproduttore, 'updated' => true));
+                }
+                
             }
         } else {
             $form->setValues($produttore);

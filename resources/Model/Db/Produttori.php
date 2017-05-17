@@ -63,4 +63,13 @@ class Model_Db_Produttori extends MyFw_DB_Base {
         return $res;
          
     }
+
+    function checkForPIVA_Exists($piva, $idproduttore)
+    {
+        $sql = "SELECT idproduttore, ragsoc FROM produttori WHERE p_iva = :p_iva AND idproduttore != :idproduttore";
+        $sth_app = $this->db->prepare($sql);
+        $sth_app->execute(array('p_iva' => $piva, 'idproduttore' => $idproduttore));
+        return $sth_app->fetch(PDO::FETCH_OBJ);
+    }
+
 }

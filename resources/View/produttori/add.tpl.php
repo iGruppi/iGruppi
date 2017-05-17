@@ -2,8 +2,10 @@
 <div class="row">
   <div class="col-md-8 col-sm-8 col-xs-8">
     <form id="prodform" action="<?php echo $this->form->getAction(); ?>" method="post" class="f1n200">
-      <?php include $this->template('produttori/form.dati.tpl.php'); ?>
-        
+        <fieldset>
+            <?php echo $this->form->renderField('ragsoc'); ?>
+            <?php echo $this->form->renderField('p_iva'); ?>
+        </fieldset>
       <button type="submit" id="submit" class="btn btn-success btn-mylg">SALVA</button>
     </form>
   </div>

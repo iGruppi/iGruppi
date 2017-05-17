@@ -21,7 +21,7 @@
     </div>
     <div class="col-md-5 hidden-print">
     <?php if(!$this->ordine->isSupervisoreOrdine()): ?>
-        <div class="alert alert-success" role="alert"><span class="label label-danger">New</span>
+        <div class="alert alert-success" role="alert">
             Supervisore ordine: <b><?php echo $this->ordine->getSupervisore_Name(); ?></b><br />
             Email: <b><?php echo $this->ordine->getSupervisore_Email(); ?></b> (Tel: <b><?php echo $this->ordine->getSupervisore_Tel(); ?></b>)<br />
             Gruppo: <b><?php echo $this->ordine->getSupervisore_GroupName(); ?></b>

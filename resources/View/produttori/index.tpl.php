@@ -38,8 +38,8 @@
   </div>
   <div class="col-md-1 col-sm-1 col-xs-1">&nbsp;</div>
   <div class="col-md-3 col-sm-3 col-xs-3">
-      <!-- <a class="btn btn-default btn-mylg" href="/produttori/add"><span class="glyphicon glyphicon-plus"></span> Nuovo produttore</a> -->
-      &nbsp;
+      <span class="label label-danger">New</span><br />
+      <a class="btn btn-default btn-mylg" href="/produttori/add"><span class="glyphicon glyphicon-plus"></span> Nuovo produttore</a>
   </div>
 </div>
 
