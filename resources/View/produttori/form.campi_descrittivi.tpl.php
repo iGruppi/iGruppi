@@ -1,31 +1,31 @@
       <fieldset>
           <h2>Abstract</h2>
           <div id="desc_abstract" class="medium_editor_editable"><?php echo $this->form->getField('desc_abstract')->getValue(); ?></div>
-          <input type="hidden" name="desc_abstract" value="<?php echo $this->form->getField('desc_abstract')->getValue(); ?>">
+          <textarea name="desc_abstract" style="display: none;"><?php echo $this->form->getField('desc_abstract')->getValue(); ?></textarea>
           <hr />
           <h2>Presentazione</h2>
           <div id="desc_presentazione" class="medium_editor_editable"><?php echo $this->form->getField('desc_presentazione')->getValue(); ?></div>
-          <input type="hidden" name="desc_presentazione" value="<?php echo $this->form->getField('desc_presentazione')->getValue(); ?>">
+          <textarea name="desc_presentazione" style="display: none;"><?php echo $this->form->getField('desc_presentazione')->getValue(); ?></textarea>
           <hr />
           <h2>Storia</h2>
-          <div id="desc_storia" class="medium_editor_editable"></div>
-          <input type="hidden" name="desc_storia" value="">
+          <div id="desc_storia" class="medium_editor_editable"><?php echo $this->form->getField('desc_storia')->getValue(); ?></div>
+          <textarea name="desc_storia" style="display: none;"><?php echo $this->form->getField('desc_storia')->getValue(); ?></textarea>
           <hr />
           <h2>Certificazioni</h2>
-          <div id="desc_certificazioni" class="medium_editor_editable"></div>
-          <input type="hidden" name="desc_certificazioni" value="">
+          <div id="desc_certificazioni" class="medium_editor_editable"><?php echo $this->form->getField('desc_certificazioni')->getValue(); ?></div>
+          <textarea name="desc_certificazioni" style="display: none;"><?php echo $this->form->getField('desc_certificazioni')->getValue(); ?></textarea>
           <hr />
           <h2>Attenzioni all'ambiente</h2>
-          <div id="desc_ambiente" class="medium_editor_editable"></div>
-          <input type="hidden" name="desc_ambiente" value="">
+          <div id="desc_ambiente" class="medium_editor_editable"><?php echo $this->form->getField('desc_ambiente')->getValue(); ?></div>
+          <textarea name="desc_ambiente" style="display: none;"><?php echo $this->form->getField('desc_ambiente')->getValue(); ?></textarea>
           <hr />
           <h2>Servizi</h2>
-          <div id="desc_servizi" class="medium_editor_editable"></div>
-          <input type="hidden" name="desc_servizi" value="">
+          <div id="desc_servizi" class="medium_editor_editable"><?php echo $this->form->getField('desc_servizi')->getValue(); ?></div>
+          <textarea name="desc_servizi" style="display: none;"><?php echo $this->form->getField('desc_servizi')->getValue(); ?></textarea>
           <hr />
           <h2>Scelto perchè...</h2>
-          <div id="desc_scelto" class="medium_editor_editable"></div>
-          <input type="hidden" name="desc_scelto" value="">
+          <div id="desc_scelto" class="medium_editor_editable"><?php echo $this->form->getField('desc_scelto')->getValue(); ?></div>
+          <textarea name="desc_scelto" style="display: none;"><?php echo $this->form->getField('desc_scelto')->getValue(); ?></textarea>
           <hr />
       </fieldset>
       <script>
@@ -41,7 +41,7 @@
           });
           $('.medium_editor_editable').focusout(function() {
               var id = $(this).attr('id');
-              $('input[name="'+id+'"]').val($(this).html());
+              $('textarea[name="'+id+'"]').val($(this).html());
           });
 
       </script>
