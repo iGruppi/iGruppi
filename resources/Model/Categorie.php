@@ -52,7 +52,7 @@ class Model_Categorie extends Model_AF_AbstractHandlerCoR
                 );
         foreach($iterator AS $child) {
             if( $child instanceof Model_Categorie_ProduttoreElement) {
-                $ar[] = $child->getDescrizione();
+                $ar[$child->getId()] = $child->getDescrizione();
             }
         }
         return array_unique($ar);
