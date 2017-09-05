@@ -30,6 +30,7 @@
 <?php
         endif;
     endif; ?>
+
     <h5><span class="text-muted">Prodotti:</span> <?php 
         $categorie = $this->ordine->getListaDescrizioniCategorie();
         echo $this->arrayToString($categorie); 
