@@ -73,10 +73,15 @@ class Form_User extends MyFw_Form {
                         'maxlength' => 45
             ));
 
+        // PROVINCE
+        $objProv = new Model_Db_Province();
+        $arValP = $objProv->convertToSingleArray($objProv->getAll(), "provincia", "provdesc");
+        $arValP[0] = 'Seleziona...';
         $this->addField('provincia', array(
+                        'type'      => 'select',
                         'label'     => 'Provincia',
-                        'size'      => 4,
-                        'maxlength' => 2
+                        'options'   => $arValP,
+                        'required'  => true
             ));
 
         $this->addField('in_prova', array(

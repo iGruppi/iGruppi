@@ -99,7 +99,6 @@ class Controller_Auth extends MyFw_Controller {
         $form->removeField("tel");
         $form->removeField("indirizzo");
         $form->removeField("localita");
-        $form->removeField("provincia");
         $form->removeField("note");
 
         // reset errorLogin
