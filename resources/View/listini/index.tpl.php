@@ -11,9 +11,8 @@
             <h3 class="title-list <?php echo ($lObj->canManageListino()) ? "green" : "text-dark"; ?>"><?php echo $lObj->getDescrizione();?> <?php echo $this->createLabelCondivisione($lObj->getCondivisione()); ?></h3>
         </div>
         <div class="col-md-8">
-            <p>Produttore: <strong><?php echo $lObj->getProduttoreName(); ?></strong><br />
-               Gestito da <a href="mailto: <?php echo $lObj->getReferente_Email(); ?>"><?php echo $lObj->getReferente_Nome(); ?></a> (<?php echo $lObj->getMasterGroup()->getGroupName(); ?>)
-            </p>
+            <a role="button" class="btn btn-default btn-xs" href="/produttori/view/idproduttore/<?php echo $lObj->getIdProduttore(); ?>"><?php echo $lObj->getProduttoreName(); ?></a>
+            <p>Gestito da <a href="mailto: <?php echo $lObj->getReferente_Email(); ?>"><?php echo $lObj->getReferente_Nome(); ?></a> (<?php echo $lObj->getMasterGroup()->getGroupName(); ?>)</p>
             <h4><span class="text-muted">Prodotti:</span> <?php 
                 $categorie = $lObj->getListaDescrizioniCategorie();
                 echo $this->arrayToString($categorie); 

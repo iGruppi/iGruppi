@@ -163,7 +163,7 @@ figure.highlight {
 #ordine_header { margin-top: 20px; }
 #ordine_header .big-margin-top { margin-top: 30px; }
 .ordine_title a.disabled, .ordine_title a.disabled:hover { background-color: transparent; cursor: default; }
-
+.ordine_title .title-list { margin: 0; }
 
 /* DASHBOARD */
 #dashboard .table-condensed { margin-bottom: 0; }
