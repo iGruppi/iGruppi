@@ -101,6 +101,9 @@ class Controller_Auth extends MyFw_Controller {
         $form->removeField("localita");
         $form->removeField("note");
 
+        // SET registration_type default value
+        $form->setValue("registration_type", "0");
+
         // reset errorLogin
         $this->view->added = false;
 
@@ -112,7 +115,16 @@ class Controller_Auth extends MyFw_Controller {
             {
                 // GET FORM VALUES
                 $fValues = $form->getValues();
-                
+
+                // unset not used fields
+                $group_nome = $fValues["group_nome"];
+                unset($fValues["group_nome"]);
+                $group_desc = $fValues["group_desc"];
+                unset($fValues["group_desc"]);
+                $provincia = $fValues["provincia"];
+                unset($fValues["provincia"]);
+
+                //print_r($fValues);die;
                 // check EMAIL DUPLICATI
                 $checkSth = $this->getDB()->prepare("SELECT email FROM users WHERE email= :email");
                 $checkSth->execute(array('email' => $fValues["email"]));
@@ -123,51 +135,95 @@ class Controller_Auth extends MyFw_Controller {
                     if( $fValues["password"] != $fValues["password2"] ) {
                         $form->setError("password2", "Riscrivi correttamente la password");
                     } else {
-                        try {
-                            // remove password2 field
-                            unset($fValues["password2"]);
-                            // get idgroup
+                        // remove password2 field
+                        unset($fValues["password2"]);
+
+                        // get registration_type
+                        $registration_type = $fValues["registration_type"];
+                        unset($fValues["registration_type"]);
+
+                        $gObj = new Model_Db_Groups();
+
+                        // check registration_type
+                        if($registration_type == "0") {
+                        # GAS ESISTENTE
                             $idgroup = $fValues["idgroup"];
                             unset($fValues["idgroup"]);
-
-                            $gObj = new Model_Db_Groups();
                             $group = $gObj->getGroupById($idgroup);
-                            if($group !== false) {
+                            if($group === false) {
+                                $form->setError("idgroup", "Devi selezionare un gruppo esistente!");
+                            }
 
+                            // array users_group data
+                            $ugFields = array(
+                                'idgroup'=> $idgroup
+                            );
+
+                        } else {
+                        # NUOVO GAS
+                            unset($fValues["idgroup"]);
+                            // ADD NEW GROUP
+                            if($group_nome == "") {
+                                $form->setError("group_nome", "Devi inserire un nome del gruppo!");
+                            }
+                            if($provincia == "") {
+                                $form->setError("provincia", "Devi inserire la provincia del gruppo!");
+                            }
+                            if(!$form->hasErrors()) {
+                                $gFields = array(
+                                    'nome' => $group_nome,
+                                    'descrizione' => $group_desc,
+                                    'provincia' => $provincia,
+                                    'data_creazione' => date("Y-m-d"),
+                                    'email_ml' => ''
+                                );
+                                $idgroup = $this->getDB()->makeInsert("groups", $gFields);
+
+                                // array users_group data
+                                $ugFields = array(
+                                    'idgroup'=> $idgroup,
+                                    'attivo' => 'S',
+                                    'fondatore' => 'S'
+                                );
+                            }
+                        }
+
+                        // check if ERROR exists
+                        if(!$form->hasErrors()) {
+                            try {
                                 // ADD USER
                                 $iduser = $this->getDB()->makeInsert("users", $fValues);
 
-                                // ADD USER TO GROUP
-                                $ugFields = array(
-                                    'iduser' => $iduser,
-                                    'idgroup'=> $idgroup
-                                );
+                                // ADD iduser TO users_group array data
+                                $ugFields['iduser'] = $iduser;
                                 $this->getDB()->makeInsert("users_group", $ugFields);
 
-                                // Get Founder of the Group
-                                $ugObj = $gObj->getGroupFoundersById($idgroup);
-                                if(count($ugObj) > 0) {
-                                    // INVIO EMAIL al FONDATORE per NUOVO UTENTE
-                                    $mail = new MyFw_Mail();
-                                    $mail->setSubject("Nuovo iscritto al Gruppo ".$group->nome);
-                                    foreach($ugObj AS $ugVal) {
-                                        $mail->addTo($ugVal["email"]);
+                                if($registration_type == "0") {
+
+                                    // Get Founder of the Group
+                                    $ugObj = $gObj->getGroupFoundersById($idgroup);
+                                    if (count($ugObj) > 0) {
+                                        // INVIO EMAIL al FONDATORE per NUOVO UTENTE
+                                        $mail = new MyFw_Mail();
+                                        $mail->setSubject("Nuovo iscritto al Gruppo " . $group->nome);
+                                        foreach ($ugObj AS $ugVal) {
+                                            $mail->addTo($ugVal["email"]);
+                                        }
+                                        $mail->setViewParam("new_user", $fValues["nome"] . " " . $fValues["cognome"]);
+                                        $mail->setViewParam("gruppo", $group->nome);
+                                        $mail->setViewParam("email_user", $fValues["email"]);
+                                        $config = Zend_Registry::get("appConfig");
+                                        $mail->setViewParam("url_environment", $config->url_environment);
+                                        $this->view->sended = $mail->sendHtmlTemplate("registration.new_user_subscribe.tpl.php");
                                     }
-                                    $mail->setViewParam("new_user", $fValues["nome"] . " " . $fValues["cognome"] );
-                                    $mail->setViewParam("gruppo", $group->nome);
-                                    $mail->setViewParam("email_user", $fValues["email"]);
-                                    $config = Zend_Registry::get("appConfig");
-                                    $mail->setViewParam("url_environment", $config->url_environment);
-                                    $this->view->sended = $mail->sendHtmlTemplate("registration.new_user_subscribe.tpl.php");
                                 }
 
                                 // REGISTRATION OK!
                                 $this->redirect("auth", "registerok");
-                            } else {
-                                $form->setError("idgroup", "Devi selezionare un gruppo esistente!");
+
+                            } catch (MyFw_Exception $exc) {
+                                $exc->displayError();
                             }
-                        } catch (MyFw_Exception $exc) {
-                            $exc->displayError();
                         }
                     }
                 }

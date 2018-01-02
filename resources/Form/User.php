@@ -109,7 +109,20 @@ class Form_User extends MyFw_Form {
                         'options'   => $arVal,
                         'required'  => true
             ));
-        
+
+        $this->addField('group_nome', array(
+            'label'     => 'Nome Gruppo',
+            'size'      => 40,
+            'maxlength' => 50
+        ));
+
+        $this->addField('group_desc', array(
+            'label'     => 'Descrizione',
+            'size'      => 50,
+            'maxlength' => 45
+        ));
+
+
         // Hidden field iduser
         $this->addField('iduser', array( 'type' => 'hidden' ));
         
@@ -133,7 +146,9 @@ class Form_User extends MyFw_Form {
                     'options'   => array('S' => 'SI', 'N' => 'NO'),
                     'required'  => true
         ));
-        
+
+        // REGISTRATION TYPE
+        $this->addField('registration_type', array( 'type' => 'hidden' ));
 
     }
 }

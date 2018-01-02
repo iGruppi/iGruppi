@@ -27,17 +27,14 @@
             </a>
             <br/>
             <br/>
-            <label for="group_nome">Nome Gruppo:</label>
-            <input type="text" name="group_nome" id="group_nome" size="40" maxlength="50" required="">
-            <br/>
-            <label for="group_desc">Descrizione:</label>
-            <input type="text" name="group_desc" id="group_desc" size="50" maxlength="45" required="">
-            <br/>
+            <?php echo $this->form->renderField('group_nome'); ?>
+            <?php echo $this->form->renderField('group_desc'); ?>
             <?php echo $this->form->renderField('provincia'); ?>
         </div>
     </fieldset>
     <fieldset class="border_top_submit">
         <button type="submit" id="submit" class="btn btn-primary btn-mylg">ISCRIVIMI ORA!</button>
+        <?php echo $this->form->renderField('registration_type'); ?>
     </fieldset>
 </form>
 <script>
@@ -45,12 +42,26 @@
     {
         $('#div_add_group').show();
         $('#div_select_group').hide();
+        // set mandatory field
+        $('#idgroup').prop('required', false);
+        $('#group_nome').prop('required', true);
+        $('#group_desc').prop('required', true);
+        $('#provincia').prop('required', true);
+        // set registration_type
+        $('#registration_type').val("1");
     }
 
     function showFormSelectGruppo()
     {
         $('#div_add_group').hide();
         $('#div_select_group').show();
+        // set mandatory field
+        $('#idgroup').prop('required', true);
+        $('#group_nome').prop('required', false);
+        $('#group_desc').prop('required', false);
+        $('#provincia').prop('required', false);
+        // set registration_type
+        $('#registration_type').val("0");
     }
 
     $(function () {
