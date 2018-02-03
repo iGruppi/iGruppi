@@ -1,9 +1,6 @@
 [submodule "library/MyFw"]
 	path = library/MyFw
 	url = https://github.com/Jazzo/MyFw.git
-[submodule "library/zf1"]
-	path = library/zf1
-	url = https://github.com/Jazzo/zf1.git
 [submodule "library/bootstrap"]
 	path = library/bootstrap
 	url = https://github.com/Jazzo/bootstrap.git
