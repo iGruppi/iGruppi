@@ -16,7 +16,11 @@ I criteri fondamentali su cui si basa sono:
  - La figura dell'Amministratore del GAS (qui definita Fondatore) e i suoi compiti sono minimi (gestione degli utenti ed eventuali comunicazioni).
 
 
-Installazione
+Installazione ambiente di sviluppo
+-------------
+Per ottenere rapidamente l'ambiente di lavoro potete creare una macchina virtuale già predisposta e realizzata ad hoc per iGruppi. Seguire la procedura descritta in [iGruppi/Vagrant-Dev-Env](https://github.com/iGruppi/Vagrant-Dev-Env).
+
+Installazione ambiente in produzione
 -------------
 Nella directory _documentation/database_ è presente il dump MySQL del database: *igruppi2_create-db.sql*.
 Le uniche tabelle del database che andrebbero popolate sono _categorie_ (categorie prodotti), _groups_ (inserendo il primo gruppo), _users_ (inserendo il primo utente del suddetto gruppo) e _users_group_ (creando la relazione tra i precedenti 2).
