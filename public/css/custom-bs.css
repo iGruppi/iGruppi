@@ -36,7 +36,7 @@ body {
     max-width: 1170px;
 }
 
-.container .jumbotron { margin-top: 50px; height: 360px; background: transparent url(/images/logo-iGruppi_icon.png) no-repeat 145px -23px; }
+.container .jumbotron { margin-top: 50px; height: 360px; background-color: transparent; }
 
 #footer > .container {
     padding-left: 15px;
