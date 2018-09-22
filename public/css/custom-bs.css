@@ -7,7 +7,6 @@ body {
 
 .header {
     border-bottom: 1px solid #eee;
-    padding-bottom: 10px;
 }
 #userdata { float: left; border-left: 10px solid #fcfcfc; margin: 0; padding: 0 10px; font-size: 14px; }
 

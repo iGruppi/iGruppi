@@ -59,13 +59,13 @@
         if($auth->hasIdentity()):
             $userData = $auth->getStorage()->read();
 ?>
-                <div class="col-md-3 col-sm-3">
+                <div class="col-md-3 col-sm-3" style="margin-top: 14px;">
                     <div id="userdata">
                         <b><?php echo $userData->nome . " " . $userData->cognome; ?></b><br />
                         <em>Gruppo:</em> <b><?php echo $userData->gruppo; ?></b>
                     </div>                
                 </div>
-                <div class="col-md-6 col-sm-6">
+                <div class="col-md-6 col-sm-6" style="margin-top: 8px;">
                     <ul class="nav nav-pills pull-right">
                       <li><a class="btn btn-default btn-mylg" href="/dashboard"><span class="glyphicon glyphicon-home"></span> Home</a></li>
                       <li><a class="btn btn-default btn-mylg" href="/ordini"><span class="glyphicon glyphicon-shopping-cart"></span> Ordina</a></li>
