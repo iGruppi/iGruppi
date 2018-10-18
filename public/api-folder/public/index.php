@@ -11,7 +11,6 @@ if (PHP_SAPI == 'cli-server') {
 
 require __DIR__ . '/../vendor/autoload.php';
 
-session_start();
 
 // Instantiate the app
 $settings = require __DIR__ . '/../src/settings.php';
@@ -54,6 +53,8 @@ $application->bootstrap_api();
 include("../lib/Workers/Api.php");
 include("../lib/Workers/Login.php");
 include("../lib/Workers/Groups.php");
+include("../lib/Workers/Produttori.php");
+include("../lib/Workers/Users.php");
 
 // include("index_swagger.php");
 
@@ -92,7 +93,13 @@ $app->GET('/api/login', "WorkerLogin::login" );
  * Notes: Return list of groups
  * Output-Formats: [application/json]
  */
-$app->GET('/api/groups', "WorkerGroup::lista" );
+$app->GET('/api/user', "WorkerUser::userInfo" );
+$app->GET('/api/groups', "WorkerGroup::groups" );
+$app->GET('/api/groupInfo', "WorkerGroup::groupInfo" );
+$app->GET('/api/groupUsers', "WorkerGroup::groupUsers" );
+$app->GET('/api/produttori', "WorkerProduttori::produttori" );
+$app->GET('/api/produttoriInfo', "WorkerProduttori::produttoriInfo" );
+$app->GET('/api/produttoriProducts', "WorkerProduttori::produttoriProducts" );
 
 
 $app->run();
