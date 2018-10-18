@@ -53,7 +53,8 @@ $application->bootstrap_api();
 
 include("../lib/Workers/Api.php");
 include("../lib/Workers/Login.php");
- 
+include("../lib/Workers/Groups.php");
+
 // include("index_swagger.php");
 
 /**
@@ -84,6 +85,14 @@ $app->POST('/api/inventory', function($request, $response, $args) {
  */
 $app->GET('/api/login', "WorkerLogin::login" );
 
+
+/**
+ * GET Groups List
+ * Summary: Group list
+ * Notes: Return list of groups
+ * Output-Formats: [application/json]
+ */
+$app->GET('/api/groups', "WorkerGroup::lista" );
 
 
 $app->run();
