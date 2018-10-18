@@ -50,7 +50,11 @@ $application = new MyFw_ControllerFront(
     APPLICATION_PATH . '/config/application.ini'
 );
 $application->bootstrap_api();
+
+include("../lib/Workers/Api.php");
+include("../lib/Workers/Login.php");
  
+// include("index_swagger.php");
 
 /**
  * Simple Inventory API
@@ -66,8 +70,6 @@ $application->bootstrap_api();
  */
 $app->POST('/api/inventory', function($request, $response, $args) {
             
-            
-            
             $body = $request->getParsedBody();
             $response->write('How about implementing addInventory as a POST method ?');
             return $response;
@@ -80,15 +82,7 @@ $app->POST('/api/inventory', function($request, $response, $args) {
  * Notes: By passing in the appropriate options, you can search for available inventory in the system 
  * Output-Formats: [application/json]
  */
-$app->GET('/api/inventory', function($request, $response, $args) {
-            
-            $queryParams = $request->getQueryParams();
-            $searchString = $queryParams['searchString'];    $skip = $queryParams['skip'];    $limit = $queryParams['limit'];    
-            
-            
-            $response->write('How about implementing searchInventory as a GET method ?');
-            return $response;
-            });
+$app->GET('/api/login', "WorkerLogin::login" );
 
 
 
