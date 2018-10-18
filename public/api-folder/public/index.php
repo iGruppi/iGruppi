@@ -25,8 +25,10 @@ require __DIR__ . '/../src/middleware.php';
 
 // Register routes
 require __DIR__ . '/../src/routes.php';
+
 defined('APPLICATION_PATH')
-    || define('APPLICATION_PATH', realpath(dirname(__FILE__) . '/../../'));
+    || define('APPLICATION_PATH', realpath(dirname(__FILE__)) . '/../../../');
+
 
 // Define application environment
 defined('APPLICATION_ENV')
@@ -40,15 +42,14 @@ set_include_path(implode(PATH_SEPARATOR, array(
 )));
 
 /** Zend_Application */
-require_once '../../MyFw/ControllerFront.php';
+require_once 'MyFw/ControllerFront.php';
 
 // Create application, bootstrap, and run
 $application = new MyFw_ControllerFront(
     APPLICATION_ENV,
     APPLICATION_PATH . '/config/application.ini'
 );
-$application->bootstrap()
-            ->run();
+$application->bootstrap_api();
  
 
 /**
