@@ -7,8 +7,16 @@ class WorkerGroup {
     Api::checkUserToken();
 
     $gObj = new Model_Db_Groups();
-    $groups = $gObj->getAll();
-    Api::result("OK", ["data" => $groups]);
+    $data = $gObj->getAll();
+    if(!is_null($data) && is_array($data) && count($data) > 0) {
+        foreach($data AS &$group) {
+            unset($group->email_ml);
+        }
+    } else {
+        $data = [];
+    }
+
+    Api::result("OK", ["data" => $data]);
   }
   static function groupInfo($request, $response, $args) {
     Api::setPayload($request->getQueryParams());

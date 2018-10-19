@@ -13,7 +13,7 @@ class Model_Db_Users extends MyFw_DB_Base {
     
     function getUserById($iduser)
     {
-        $sth_app = $this->db->prepare("SELECT nome, cognome, email FROM users WHERE iduser= :iduser");
+        $sth_app = $this->db->prepare("SELECT iduser, nome, cognome, email FROM users WHERE iduser= :iduser");
         $sth_app->execute(array('iduser' => $iduser));
         return $sth_app->fetch(PDO::FETCH_OBJ);
     }
