@@ -4,7 +4,7 @@ class WorkerGroup {
 
   static function groups($request, $response, $args) {
     Api::setPayload($request->getQueryParams());
-    Api::checkUserToken();
+    // Api::checkUserToken();
 
     $gObj = new Model_Db_Groups();
     $data = $gObj->getAll();
@@ -33,7 +33,7 @@ class WorkerGroup {
 
     $gObj = new Model_Db_Groups();
     $rec = $gObj->getGroupFoundersById(Api::getUserField("idgroup"));
-    
+
     Api::result("OK", ["data" => $rec]);
   }
 }

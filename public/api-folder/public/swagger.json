@@ -67,6 +67,12 @@
         "operationId" : "groupInfo",
         "produces" : [ "application/json" ],
         "parameters" : [ {
+          "name" : "token",
+          "in" : "query",
+          "description" : "auth user token",
+          "required" : true,
+          "type" : "string"
+        }, {
           "name" : "id",
           "in" : "query",
           "description" : "the group id",
@@ -89,6 +95,12 @@
         "operationId" : "groupUsers",
         "produces" : [ "application/json" ],
         "parameters" : [ {
+          "name" : "token",
+          "in" : "query",
+          "description" : "auth user token",
+          "required" : true,
+          "type" : "string"
+        }, {
           "name" : "id",
           "in" : "query",
           "description" : "the group id",
@@ -111,7 +123,13 @@
         "description" : "Returns all the produttori in the system\n",
         "operationId" : "produttoriList",
         "produces" : [ "application/json" ],
-        "parameters" : [ ],
+        "parameters" : [ {
+          "name" : "token",
+          "in" : "query",
+          "description" : "auth user token",
+          "required" : true,
+          "type" : "string"
+        } ],
         "responses" : {
           "200" : {
             "description" : "search results matching criteria",
@@ -128,6 +146,12 @@
         "operationId" : "produttoriInfo",
         "produces" : [ "application/json" ],
         "parameters" : [ {
+          "name" : "token",
+          "in" : "query",
+          "description" : "auth user token",
+          "required" : true,
+          "type" : "string"
+        }, {
           "name" : "id",
           "in" : "query",
           "description" : "the produttori id",
@@ -150,6 +174,12 @@
         "operationId" : "produttoriProducs",
         "produces" : [ "application/json" ],
         "parameters" : [ {
+          "name" : "token",
+          "in" : "query",
+          "description" : "auth user token",
+          "required" : true,
+          "type" : "string"
+        }, {
           "name" : "id",
           "in" : "query",
           "description" : "the produttori id",
@@ -172,6 +202,12 @@
         "operationId" : "prodottiProducs",
         "produces" : [ "application/json" ],
         "parameters" : [ {
+          "name" : "token",
+          "in" : "query",
+          "description" : "auth user token",
+          "required" : true,
+          "type" : "string"
+        }, {
           "name" : "id",
           "in" : "query",
           "description" : "the produttori id",
@@ -200,6 +236,12 @@
         "operationId" : "productInfo",
         "produces" : [ "application/json" ],
         "parameters" : [ {
+          "name" : "token",
+          "in" : "query",
+          "description" : "auth user token",
+          "required" : true,
+          "type" : "string"
+        }, {
           "name" : "id",
           "in" : "query",
           "description" : "the produttori id",
