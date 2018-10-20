@@ -13,7 +13,7 @@ class WorkerUser {
         if ($rec) {
             // remove password
             unset($rec->password);
-            Api::result("OK", ["data" => $rec]);
+            Api::result("OK", ["data" => Api::decorateRec($rec)]);
         } else {
             Api::result("OK", ["data" => ""]);
         }

@@ -89,4 +89,25 @@ class Api {
     }
     return true;
   }
+
+  static function decorateRec( $userArray ){
+      $userArray = json_decode(json_encode($userArray), true);
+      $id = "";
+      if( isset($userArray["iduser"]) ) {
+          $id  = $userArray["iduser"];
+      }
+      if( isset($userArray["idgroup"]) ) {
+          $id  = $userArray["idgroup"];
+      }
+      if( isset($userArray["idproduttore"]) ) {
+          $id  = $userArray["idproduttore"];
+      }
+      $lat = 44.697904;
+      $lng = 10.40003;
+      $mult1 = (($id % 7)/7)*(($id%2)*-1);
+      $mult2 = (($id % 9)/9)*(($id%2)*-1);
+      $userArray["lat"] = $lat + ( 10 * $mult1 );
+      $userArray["lng"] = $lng + ( 10 * $mult2 );
+      return $userArray;
+  }
 }
