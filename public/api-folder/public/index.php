@@ -55,6 +55,8 @@ include("../lib/Workers/Login.php");
 include("../lib/Workers/Groups.php");
 include("../lib/Workers/Produttori.php");
 include("../lib/Workers/Users.php");
+include("../lib/Workers/Orders.php");
+include("../lib/Workers/Products.php");
 
 // include("index_swagger.php");
 
@@ -100,6 +102,10 @@ $app->GET('/api/groupUsers', "WorkerGroup::groupUsers" );
 $app->GET('/api/produttori', "WorkerProduttori::produttori" );
 $app->GET('/api/produttoriInfo', "WorkerProduttori::produttoriInfo" );
 $app->GET('/api/produttoriProducts', "WorkerProduttori::produttoriProducts" );
-
+$app->GET('/api/orders', "WorkerOrders::orders" );
+$app->GET('/api/orderInfo', "WorkerOrders::orderInfo" );
+$app->GET('/api/orderDelivery', "WorkerOrders::orderDelivery" );
+$app->GET('/api/products', "WorkerProducts::products" );
+$app->GET('/api/productInfo', "WorkerProducts::productsInfo" );
 
 $app->run();

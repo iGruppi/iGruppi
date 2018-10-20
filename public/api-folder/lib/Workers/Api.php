@@ -50,7 +50,7 @@ class Api {
     }
       if( $token == "" ){
 
-          $token = self::payload("token");
+          $token = $headerStringValue = $_SERVER['HTTP_BEARER'];
       }
       $parts = explode("-",$token);
     $id = $parts[0];

@@ -16,54 +16,136 @@
   "basePath" : "/IGRUPPI/igruppi-api/1.0.0",
   "schemes" : [ "https" ],
   "paths" : {
+    "/login" : {
+      "get" : {
+        "summary" : "ottiene token utente",
+        "operationId" : "loginLogin",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "email",
+          "in" : "query",
+          "description" : "the user email",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "passwd",
+          "in" : "query",
+          "description" : "the user password",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "api response",
+            "schema" : {
+              "$ref" : "#/definitions/ApiResponse"
+            }
+          }
+        }
+      }
+    },
     "/groups" : {
       "get" : {
         "summary" : "elenco gruppi",
-        "description" : "By passing in the appropriate options, you can search for\navailable inventory in the system\n",
-        "operationId" : "searchInventory",
+        "description" : "Returns all the groups in the system\n",
+        "operationId" : "groupList",
+        "produces" : [ "application/json" ],
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "search results matching criteria",
+            "schema" : {
+              "$ref" : "#/definitions/LoginApiResponse"
+            }
+          }
+        }
+      }
+    },
+    "/groupInfo" : {
+      "get" : {
+        "summary" : "ottiene token utente",
+        "operationId" : "groupInfo",
         "produces" : [ "application/json" ],
         "parameters" : [ {
-          "name" : "searchString",
+          "name" : "id",
           "in" : "query",
-          "description" : "pass an optional search string for looking up inventory",
-          "required" : false,
-          "type" : "string"
-        }, {
-          "name" : "skip",
+          "description" : "the group id",
+          "required" : true,
+          "type" : "integer"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "matching info group",
+            "schema" : {
+              "$ref" : "#/definitions/ApiResponse"
+            }
+          }
+        }
+      }
+    },
+    "/groupUsers" : {
+      "get" : {
+        "summary" : "ottiene tutti gli utenti di un gruppo",
+        "operationId" : "groupUsers",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "id",
           "in" : "query",
-          "description" : "number of records to skip for pagination",
-          "required" : false,
-          "type" : "integer",
-          "minimum" : 0,
-          "format" : "int32"
-        }, {
-          "name" : "limit",
-          "in" : "query",
-          "description" : "maximum number of records to return",
-          "required" : false,
-          "type" : "integer",
-          "maximum" : 50,
-          "minimum" : 0,
-          "format" : "int32"
+          "description" : "the group id",
+          "required" : true,
+          "type" : "integer"
         } ],
         "responses" : {
           "200" : {
             "description" : "search results matching criteria",
             "schema" : {
-              "type" : "array",
-              "items" : {
-                "$ref" : "#/definitions/InventoryItem"
-              }
+              "$ref" : "#/definitions/ApiResponse"
             }
-          },
-          "400" : {
-            "description" : "bad input parameter"
           }
         }
       }
     }
   },
   "definitions" : {
+    "ApiResponse" : {
+      "properties" : {
+        "status" : {
+          "type" : "string",
+          "example" : "OK",
+          "readOnly" : true
+        },
+        "data" : {
+          "type" : "object",
+          "properties" : { }
+        },
+        "error" : {
+          "type" : "string",
+          "example" : "User not found"
+        }
+      },
+      "example" : {
+        "data" : "{}",
+        "error" : "User not found",
+        "status" : "OK"
+      }
+    },
+    "LoginApiResponse" : {
+      "properties" : {
+        "status" : {
+          "type" : "string",
+          "example" : "OK",
+          "readOnly" : true
+        },
+        "token" : {
+          "type" : "string",
+          "example" : "0023-321321312"
+        }
+      },
+      "example" : {
+        "status" : "OK",
+        "token" : "0023-321321312"
+      }
+    },
     "User" : {
       "required" : [ "cognome", "email", "nome" ],
       "properties" : {
