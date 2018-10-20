@@ -24,6 +24,7 @@ class WorkerGroup {
 
     $gObj = new Model_Db_Groups();
     $rec = $gObj->getGroupById(Api::getUserField("idgroup"));
+
     Api::result("OK", ["data" => $rec]);
   }
   static function groupUsers($request, $response, $args) {
@@ -32,6 +33,7 @@ class WorkerGroup {
 
     $gObj = new Model_Db_Groups();
     $rec = $gObj->getGroupFoundersById(Api::getUserField("idgroup"));
+    
     Api::result("OK", ["data" => $rec]);
   }
 }

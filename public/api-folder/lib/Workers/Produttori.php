@@ -1,7 +1,6 @@
 <?php
 
 class WorkerProduttori {
-
   static function produttori($request, $response, $args) {
     Api::setPayload($request->getQueryParams());
     Api::checkUserToken();

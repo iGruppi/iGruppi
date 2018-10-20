@@ -4,11 +4,11 @@ class Api {
   static $payload = [];
   static $user = [];
   
-  static function result( $status, $retval ) {
-    if ($status === "OK") {
-      $ret = ["status"=>"OK", "data" => $retval];
-    } else {
-      $ret = ["status"=>"KO", "error" => $retval];  
+  static function result( $status, $retval = []) {
+    $ret = [];
+    $ret["status"] = $status;
+    foreach( $retval as $k => $v ) {
+        $ret[$k] = $v;
     }
     // TODO:: look for format parameter in payload and serve xml
     header('Content-Type: application/json');

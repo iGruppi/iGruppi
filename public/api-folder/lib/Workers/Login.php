@@ -16,6 +16,6 @@ class WorkerLogin {
           Api::result("OK", ["token" => sprintf( "%04d-%08d", $row->iduser, abs(rand(1,100000000)-100000000))]);
       }
     }
-    Api::result("KO", "login: invalid email or password");
+    Api::result("KO", ["error" => "login: invalid email or password"]);
   }
 }
