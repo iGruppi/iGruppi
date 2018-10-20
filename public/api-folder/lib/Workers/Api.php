@@ -48,7 +48,7 @@ class Api {
     if( $token == "" ){
       $token = self::payload("token");
     }
-      if( $token == "" ){
+      if( $token == "" && isset($_SERVER['HTTP_BEARER']) ){
 
           $token = $headerStringValue = $_SERVER['HTTP_BEARER'];
       }
@@ -85,7 +85,7 @@ class Api {
               }
     // TODO:: validate user on db 
     if ( !Api::getUserField("iduser")) {
-      self::result("KO", "Token not found or invalid");
+      self::result("KO", ["error" => "Token not found or invalid"]);
     }
     return true;
   }
