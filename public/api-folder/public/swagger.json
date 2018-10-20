@@ -12,9 +12,8 @@
       "url" : "http://www.apache.org/licenses/LICENSE-2.0.html"
     }
   },
-  "host" : "virtserver.swaggerhub.com",
-  "basePath" : "/IGRUPPI/igruppi-api/1.0.0",
-  "schemes" : [ "https" ],
+  "basePath" : "/api/",
+  "schemes" : [ "http", "https" ],
   "paths" : {
     "/login" : {
       "get" : {
