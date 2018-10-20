@@ -48,7 +48,11 @@ class Api {
     if( $token == "" ){
       $token = self::payload("token");
     }
-    $parts = explode("-",$token);
+      if( $token == "" ){
+
+          $token = self::payload("token");
+      }
+      $parts = explode("-",$token);
     $id = $parts[0];
     
   $sql = "SELECT u.*, ug.attivo, ug.fondatore, ug.contabile, g.nome AS gruppo, g.idgroup "

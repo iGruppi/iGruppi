@@ -1,11 +1,11 @@
 {
   "swagger" : "2.0",
   "info" : {
-    "description" : "This is a simple API",
+    "description" : "This is the IGRUPPI API",
     "version" : "1.0.0",
-    "title" : "Simple Inventory API",
+    "title" : "IGRUPPI API",
     "contact" : {
-      "email" : "you@your-company.com"
+      "email" : "info@igruppi.com"
     },
     "license" : {
       "name" : "Apache 2.0",
@@ -13,20 +13,12 @@
     }
   },
   "host" : "virtserver.swaggerhub.com",
-  "basePath" : "/sooshi/iGruppi/1.0.0",
-  "tags" : [ {
-    "name" : "admins",
-    "description" : "Secured Admin-only calls"
-  }, {
-    "name" : "developers",
-    "description" : "Operations available to regular developers"
-  } ],
+  "basePath" : "/IGRUPPI/igruppi-api/1.0.0",
   "schemes" : [ "https" ],
   "paths" : {
-    "/inventory" : {
+    "/groups" : {
       "get" : {
-        "tags" : [ "developers" ],
-        "summary" : "searches inventory",
+        "summary" : "elenco gruppi",
         "description" : "By passing in the appropriate options, you can search for\navailable inventory in the system\n",
         "operationId" : "searchInventory",
         "produces" : [ "application/json" ],
@@ -68,92 +60,106 @@
             "description" : "bad input parameter"
           }
         }
-      },
-      "post" : {
-        "tags" : [ "admins" ],
-        "summary" : "adds an inventory item",
-        "description" : "Adds an item to the system",
-        "operationId" : "addInventory",
-        "consumes" : [ "application/json" ],
-        "produces" : [ "application/json" ],
-        "parameters" : [ {
-          "in" : "body",
-          "name" : "inventoryItem",
-          "description" : "Inventory item to add",
-          "required" : false,
-          "schema" : {
-            "$ref" : "#/definitions/InventoryItem"
-          }
-        } ],
-        "responses" : {
-          "201" : {
-            "description" : "item created"
-          },
-          "400" : {
-            "description" : "invalid input, object invalid"
-          },
-          "409" : {
-            "description" : "an existing item already exists"
-          }
-        }
       }
     }
   },
   "definitions" : {
-    "InventoryItem" : {
-      "type" : "object",
-      "required" : [ "id", "manufacturer", "name", "releaseDate" ],
+    "User" : {
+      "required" : [ "cognome", "email", "nome" ],
       "properties" : {
-        "id" : {
-          "type" : "string",
-          "format" : "uuid",
-          "example" : "d290f1ee-6c54-4b01-90e6-d701748f0851"
+        "iduser" : {
+          "type" : "integer",
+          "example" : 1,
+          "readOnly" : true
         },
-        "name" : {
+        "nome" : {
           "type" : "string",
-          "example" : "Widget Adapter"
+          "example" : "Davide"
         },
-        "releaseDate" : {
+        "cognome" : {
           "type" : "string",
-          "format" : "int32",
-          "example" : "2016-08-29T09:12:33.001Z"
+          "example" : "Gullo"
         },
-        "manufacturer" : {
-          "$ref" : "#/definitions/Manufacturer"
-        }
-      },
-      "example" : {
-        "releaseDate" : "2016-08-29T09:12:33.001Z",
-        "name" : "Widget Adapter",
-        "id" : "d290f1ee-6c54-4b01-90e6-d701748f0851",
-        "manufacturer" : {
-          "phone" : "408-867-5309",
-          "name" : "ACME Corporation",
-          "homePage" : "https://www.acme-corp.com"
+        "email" : {
+          "type" : "string",
+          "format" : "email",
+          "example" : "info@igruppi.com"
+        },
+        "in_prova" : {
+          "type" : "string",
+          "example" : "N"
+        },
+        "indirizzo" : {
+          "type" : "string",
+          "example" : ""
+        },
+        "localita" : {
+          "type" : "string",
+          "example" : ""
+        },
+        "note" : {
+          "type" : "string",
+          "example" : ""
+        },
+        "num_members" : {
+          "type" : "integer",
+          "example" : 4
+        },
+        "provincia" : {
+          "type" : "string",
+          "example" : ""
+        },
+        "role" : {
+          "type" : "string",
+          "example" : "User"
+        },
+        "tel" : {
+          "type" : "string",
+          "example" : ""
+        },
+        "idgroup" : {
+          "type" : "integer",
+          "example" : 1
+        },
+        "attivo" : {
+          "type" : "string",
+          "example" : "S"
+        },
+        "contabile" : {
+          "type" : "string",
+          "example" : "S"
+        },
+        "fondatore" : {
+          "type" : "string",
+          "example" : "S"
         }
       }
     },
-    "Manufacturer" : {
-      "required" : [ "name" ],
+    "Group" : {
+      "required" : [ "nome" ],
       "properties" : {
-        "name" : {
-          "type" : "string",
-          "example" : "ACME Corporation"
+        "idgroup" : {
+          "type" : "integer",
+          "example" : 1,
+          "readOnly" : true
         },
-        "homePage" : {
+        "nome" : {
           "type" : "string",
-          "format" : "url",
-          "example" : "https://www.acme-corp.com"
+          "example" : "GAS Numero 1"
         },
-        "phone" : {
+        "descrizione" : {
           "type" : "string",
-          "example" : "408-867-5309"
+          "example" : "https://www.igruppi.com"
+        },
+        "provincia" : {
+          "type" : "string",
+          "example" : "RE"
+        },
+        "data_creazione" : {
+          "type" : "string",
+          "format" : "date",
+          "example" : "2012-12-07"
         }
-      },
-      "example" : {
-        "phone" : "408-867-5309",
-        "name" : "ACME Corporation",
-        "homePage" : "https://www.acme-corp.com"
       }
     }
   }
