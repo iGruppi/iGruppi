@@ -38,7 +38,7 @@
           "200" : {
             "description" : "api response",
             "schema" : {
-              "$ref" : "#/definitions/ApiResponse"
+              "$ref" : "#/definitions/LoginApiResponse"
             }
           }
         }
@@ -55,7 +55,7 @@
           "200" : {
             "description" : "search results matching criteria",
             "schema" : {
-              "$ref" : "#/definitions/LoginApiResponse"
+              "$ref" : "#/definitions/ApiResponse"
             }
           }
         }
@@ -98,6 +98,117 @@
         "responses" : {
           "200" : {
             "description" : "search results matching criteria",
+            "schema" : {
+              "$ref" : "#/definitions/ApiResponse"
+            }
+          }
+        }
+      }
+    },
+    "/produttori" : {
+      "get" : {
+        "summary" : "elenco produttori",
+        "description" : "Returns all the produttori in the system\n",
+        "operationId" : "produttoriList",
+        "produces" : [ "application/json" ],
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "search results matching criteria",
+            "schema" : {
+              "$ref" : "#/definitions/LoginApiResponse"
+            }
+          }
+        }
+      }
+    },
+    "/produttoriInfo" : {
+      "get" : {
+        "summary" : "ottiene token utente",
+        "operationId" : "produttoriInfo",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "query",
+          "description" : "the produttori id",
+          "required" : true,
+          "type" : "integer"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "matching info group",
+            "schema" : {
+              "$ref" : "#/definitions/ApiResponse"
+            }
+          }
+        }
+      }
+    },
+    "/produttoriProducts" : {
+      "get" : {
+        "summary" : "ottiene tutti gli utenti di un gruppo",
+        "operationId" : "produttoriProducs",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "query",
+          "description" : "the produttori id",
+          "required" : true,
+          "type" : "integer"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "search results matching criteria",
+            "schema" : {
+              "$ref" : "#/definitions/ApiResponse"
+            }
+          }
+        }
+      }
+    },
+    "/products" : {
+      "get" : {
+        "summary" : "ottiene un elenco di prodotti",
+        "operationId" : "prodottiProducs",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "query",
+          "description" : "the produttori id",
+          "required" : false,
+          "type" : "integer"
+        }, {
+          "name" : "query",
+          "in" : "query",
+          "description" : "stringa da ricercare",
+          "required" : false,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "returna a product array",
+            "schema" : {
+              "$ref" : "#/definitions/ApiResponse"
+            }
+          }
+        }
+      }
+    },
+    "/productInfo" : {
+      "get" : {
+        "summary" : "returns detail on product",
+        "operationId" : "productInfo",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "query",
+          "description" : "the produttori id",
+          "required" : true,
+          "type" : "integer"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "product object",
             "schema" : {
               "$ref" : "#/definitions/ApiResponse"
             }
