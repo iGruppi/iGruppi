@@ -16,7 +16,7 @@ class WorkerProduttori {
 
     $gObj = new Model_Db_Produttori();
     $rec = $gObj->getProduttoreById(Api::payload("id"));
-    Api::result("OK", ["data" => Api::decorateRec($rec)]);
+    Api::result("OK", ["data" => Api::decorateRec("produttori", $rec)]);
   }
   static function produttoriProducts($request, $response, $args) {
     Api::setPayload($request->getQueryParams());

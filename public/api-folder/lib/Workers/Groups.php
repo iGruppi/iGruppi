@@ -17,7 +17,7 @@ class WorkerGroup {
     }
     $newr = [];
     foreach( $data as $r ) {
-      $newr[] = Api::decorateRec($r);
+      $newr[] = Api::decorateRec("groups", $r);
     }
     Api::result("OK", ["data" => $newr]);
   }
@@ -28,7 +28,7 @@ class WorkerGroup {
     $gObj = new Model_Db_Groups();
     $rec = $gObj->getGroupById(Api::getUserField("idgroup"));
 
-    Api::result("OK", ["data" => Api::decorateRec($rec)]);
+    Api::result("OK", ["data" => Api::decorateRec("groups", $rec)]);
   }
   static function groupUsers($request, $response, $args) {
     Api::setPayload($request->getQueryParams());
@@ -39,7 +39,7 @@ class WorkerGroup {
 
     $newr = [];
     foreach( $rec as $r ) {
-        $newr[] = Api::decorateRec($r);
+        $newr[] = Api::decorateRec("groups", $r);
     }
     Api::result("OK", ["data" => $newr]);
   }

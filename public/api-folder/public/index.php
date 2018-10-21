@@ -107,5 +107,7 @@ $app->GET('/api/orderInfo', "WorkerOrders::orderInfo" );
 $app->GET('/api/orderDelivery', "WorkerOrders::orderDelivery" );
 $app->GET('/api/products', "WorkerProducts::products" );
 $app->GET('/api/productInfo', "WorkerProducts::productsInfo" );
+$app->GET('/api/metaSet', "WorkerMeta::metaSet" );
+$app->GET('/api/metaDelete', "WorkerMeta::metaDelete" );
 
 $app->run();
