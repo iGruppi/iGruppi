@@ -2,7 +2,7 @@
   "swagger" : "2.0",
   "info" : {
     "description" : "This is the IGRUPPI API",
-    "version" : "1.0.0",
+    "version" : "1.0.2",
     "title" : "IGRUPPI API",
     "contact" : {
       "email" : "info@igruppi.com"
@@ -12,8 +12,9 @@
       "url" : "http://www.apache.org/licenses/LICENSE-2.0.html"
     }
   },
-  "basePath" : "/api/",
-  "schemes" : [ "http", "https" ],
+  "host" : "virtserver.swaggerhub.com",
+  "basePath" : "/IGRUPPI/igruppi-api/1.0.0",
+  "schemes" : [ "https" ],
   "paths" : {
     "/login" : {
       "get" : {
@@ -250,6 +251,108 @@
         "responses" : {
           "200" : {
             "description" : "product object",
+            "schema" : {
+              "$ref" : "#/definitions/ApiResponse"
+            }
+          }
+        }
+      }
+    },
+    "/orders" : {
+      "get" : {
+        "summary" : "returns order details",
+        "operationId" : "orders",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "token",
+          "in" : "query",
+          "description" : "auth user token",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "data-da",
+          "in" : "query",
+          "description" : "start date (Ymd)",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "data-a",
+          "in" : "query",
+          "description" : "end date (Ymd)",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "idstato",
+          "in" : "query",
+          "description" : "end date (Ymd)",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "stato",
+          "in" : "query",
+          "description" : "Pianificato/Aperto/Chiuso/Inviato/Arrivato/Consegnato/Archiviato",
+          "required" : false,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "order aggregated object",
+            "schema" : {
+              "$ref" : "#/definitions/ApiResponse"
+            }
+          }
+        }
+      }
+    },
+    "/orderInfo" : {
+      "get" : {
+        "summary" : "returns order details",
+        "operationId" : "productInfo",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "token",
+          "in" : "query",
+          "description" : "auth user token",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "id",
+          "in" : "query",
+          "description" : "the order id",
+          "required" : true,
+          "type" : "integer"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "order aggregated object",
+            "schema" : {
+              "$ref" : "#/definitions/ApiResponse"
+            }
+          }
+        }
+      }
+    },
+    "/orderDelivery" : {
+      "get" : {
+        "summary" : "returns order details",
+        "operationId" : "orderDelivery",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "token",
+          "in" : "query",
+          "description" : "auth user token",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "id",
+          "in" : "query",
+          "description" : "the order id",
+          "required" : true,
+          "type" : "integer"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "order delivery object",
             "schema" : {
               "$ref" : "#/definitions/ApiResponse"
             }
