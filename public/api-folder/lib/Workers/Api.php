@@ -13,6 +13,7 @@ class Api
             $ret[$k] = $v;
         }
         // TODO:: look for format parameter in payload and serve xml
+        header("Access-Control-Allow-Origin: *");
         header('Content-Type: application/json');
         echo json_encode($ret);
         exit;
