@@ -315,7 +315,7 @@
           "required" : true,
           "type" : "string"
         }, {
-          "name" : "id",
+          "name" : "idordine",
           "in" : "query",
           "description" : "the order id",
           "required" : true,
@@ -343,7 +343,7 @@
           "required" : true,
           "type" : "string"
         }, {
-          "name" : "id",
+          "name" : "idordine",
           "in" : "query",
           "description" : "the order id",
           "required" : true,
