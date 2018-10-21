@@ -1,0 +1,58 @@
+<html>
+  <head>
+    <title>iGruppi</title>
+    <script src = "https://cdn.jsdelivr.net/npm/web3@0.19.0/dist/web3.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <script src="contract.js"></script>
+    <link rel="stylesheet" type="text/css" href="users-list.css">
+    <img id = "logo" src = "images/logo.png"><span> <a style="color:white; font-size: 20px; margin-left: 20px" href="/products-list">Prodotti</a> <a style="color:white; font-size: 20px; margin-left: 20px" href="/users-list">Utenti</a></span>
+  </head>
+  <body>
+    <div class="container text-center"></div>
+  </body>
+  <script>
+    let itemCount = 0;
+
+    const { getUsers, getUser } = document.contractFns;
+    getUsers()
+      .then(users => {
+        users.forEach(address => {
+          getUser(address)
+            .then(addToTable)
+
+        })
+      })
+
+    const addToTable = (item) => {
+      item[1] = item[1].replace(/'/g, "\"")
+      const address = item[0]
+      item = JSON.parse(item[1])
+      if (itemCount % 3 === 0)
+        document.getElementsByClassName("container")[0].innerHTML += '<div class="row"></div>'
+        document.getElementsByClassName("row")[0].innerHTML += [
+          `<div class="col-md-5" id="grid" onclick = "viewUser('${address}')">`,
+            '<div class="media">',
+              '<div class="media-left">',
+                '<a href="#">',
+                  '<img class="media-object fwi buffer" src="images/user-black.png" alt="...">',
+                '</a>',
+              '</div>',
+              '<div class="media-body">',
+                `<h4 class="media-heading">${address}</h4>`,
+                item.name,
+              '</div>',
+            '</div>',
+          '</div>',
+        ].join("")
+      itemCount++;
+    }
+
+    const viewUser = (address) => {
+
+      window.sessionStorage.setItem("address", address)
+      window.location.href = "./user.html"
+    }
+  </script>
+</html>

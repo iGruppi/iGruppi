@@ -1,0 +1,60 @@
+<html>
+  <head>
+    <title>iGruppi</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <script src = "https://cdn.jsdelivr.net/npm/web3@0.19.0/dist/web3.min.js"></script>
+    <script src="contract.js"></script>
+    <link rel="stylesheet" type="text/css" href="products-list.css">
+    <img id = "logo" src = "images/logo.png"><span> <a style="color:white; font-size: 20px; margin-left: 20px" href="/products-list">Prodotti</a> <a style="color:white; font-size: 20px; margin-left: 20px" href="/users-list">Utenti</a></span>
+  </head>
+  <body>
+    <div class="container text-center"></div>
+  </body>
+  <script>
+    let itemCount = 0;
+
+    const { getProductCount, getProductActionCount, getProductAction } = document.contractFns;
+    getProductCount()
+      .then(e => {
+        for (let i = 0; i < +e; i++) {
+          getProductActionCount(i)
+            .then(k => {
+              for (let l = 0; l < +k; l++)
+                getProductAction(i, l).then(e => addToTable(e, i, l))
+            })
+        }
+      })
+
+    const addToTable = (item, productId, actionId) => {
+      item = JSON.parse(item[2])
+      if (itemCount % 3 === 0)
+        document.getElementsByClassName("container")[0].innerHTML += '<div class="row"></div>'
+        document.getElementsByClassName("row")[0].innerHTML += [
+          `<div class="col-md-3" id="grid" onclick = viewProduct(${productId},${actionId})>`,
+            '<div class="media">',
+              '<div class="media-left">',
+                '<a href="#">',
+                  `<img class="media-object fwi buffer" src="images/${item.tag}-black.png" alt="...">`,
+                '</a>',
+              '</div>',
+              '<div class="media-body">',
+                `<h4 class="media-heading">${item.name}</h4>`,
+                "Prezzo: ", parseFloat(Math.round(item.price * 100) / 100).toFixed(2), '&#8364', '<br>',
+                "ID: ", productId, "", actionId,
+              '</div>',
+            '</div>',
+          '</div>',
+        ].join("")
+      itemCount++;
+    }
+
+    const viewProduct = (productId, actionId) => {
+      window.sessionStorage.setItem("productId", productId)
+      window.sessionStorage.setItem("actionId", actionId)
+      window.location.href = "./product.html"
+    }
+  </script>
+</html>

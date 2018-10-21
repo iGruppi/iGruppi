@@ -1,0 +1,55 @@
+<html>
+	<head>
+		<title>iGruppi</title>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+		<link rel="stylesheet" type="text/css" href="login.css">
+	</head>
+	<body>
+		<img id = "logo" src = "images/logo.png">	
+		<div class="container" id="form">
+			<div class="row">
+				<h2 id="title">Sign-Up</h2>
+				<div class="login-panel panel panel-default">
+                	<div class="panel-body">
+                    	<form role="form">
+	                        <fieldset>
+	                            <div class="form-group">
+	                                <input class="form-control" id="email" placeholder="E-mail" name="email" type="email" autofocus="">
+	                            </div>
+	                            <div class="form-group">
+	                                <input class="form-control" id="address" placeholder="Address" name="address" type="text" value="">
+	                            </div>
+	                            <div class="form-group">
+	                                <input class="form-control" id="pswd" placeholder="Password" name="password" type="password" value="">
+	                            </div>
+	                            <!-- Change this to a button or input when using this as a form -->
+	                            <input type="button" name="login" onclick="submit()" value="Login">
+	                        </fieldset>
+                    </form>
+                </div>
+            </div>
+		</div>
+			</div>
+	</div>
+		<script type="text/javascript">
+			const submit = () => {
+				fetch(`http://10.57.140.213:8888/api/login?email=${document.getElementById("email").value}&passwd=${document.getElementById("pswd").value}`)
+          .then(data => {
+            return data.json()
+          })
+          .then(data => {
+            if (data.status === "KO")
+              return window.alert(`Error: ${data.error}`);
+
+            console.log(data) //Here, we would make another call to the api in order to register the user's address,
+            //but we don't know the user ID and we don't have an endpoint that can do such task.
+            window.location.href = "http://www.mozilla.org" //fixme
+          })
+			.catch(console.error)
+			}
+		</script>
+	</body>
+</html>
