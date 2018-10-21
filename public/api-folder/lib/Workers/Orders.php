@@ -78,6 +78,9 @@ class WorkerOrders {
         $idgroup = $userSessionVal->idgroup;
 
         $ordCalcObj = self::_loadOrderData(Api::payload("idordine"));
+        if($ordCalcObj === false) {
+            Api::result("KO", ["error" => "Order not found or not accessible!"]);
+        }
 
         // START TO BUILD DATA
         $data = [
@@ -163,6 +166,9 @@ class WorkerOrders {
         $idgroup = $userSessionVal->idgroup;
 
         $ordCalcObj = self::_loadOrderData(Api::payload("idordine"));
+        if($ordCalcObj === false) {
+            Api::result("KO", ["error" => "Order not found or not accessible!"]);
+        }
 
         // START TO BUILD DATA
         $data = [
@@ -273,6 +279,7 @@ class WorkerOrders {
             return $ordCalcObj;
         }
 
+        return false;
 
     }
 
