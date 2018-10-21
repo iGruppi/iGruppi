@@ -39,6 +39,9 @@ class Api
     {
         $ret = [];
         $db = Zend_registry::get("db");
+
+        $ret = [];
+
         if ($fieldName) {
             $sql = "SELECT * from meta where tableid=:id and field=:field and tablename=:table";
             $checkSth = $db->prepare($sql);
