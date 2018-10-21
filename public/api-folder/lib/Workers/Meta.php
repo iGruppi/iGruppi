@@ -6,7 +6,8 @@ class WorkerMeta
         Api::setPayload($request->getQueryParams());
         Api::checkUserToken();
 
-        $meta = Api::getMeta(Api::payload("table"), Api::payload("id"), Api::payload("field"), Api::payload("value"));
+        Api::setMeta(Api::payload("table"), Api::payload("id"), Api::payload("field"), Api::payload("value"));
+        $meta = Api::getMeta(Api::payload("table"), Api::payload("id"), Api::payload("field"));
         Api::result("OK", ["data" => $meta] );
     }
     static function metaDelete($request, $response, $args)

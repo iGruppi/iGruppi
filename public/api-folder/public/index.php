@@ -57,7 +57,7 @@ include("../lib/Workers/Produttori.php");
 include("../lib/Workers/Users.php");
 include("../lib/Workers/Orders.php");
 include("../lib/Workers/Products.php");
-
+include("../lib/Workers/Meta.php");
 // include("index_swagger.php");
 
 /**
