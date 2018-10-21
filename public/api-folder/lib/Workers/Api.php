@@ -40,15 +40,17 @@ class Api
         $db = Zend_registry::get("db");
         if ($fieldName) {
             $sql = "SELECT * from meta where tableid=:id and field=:field and table=:table";
+            $checkSth = $db->prepare($sql);
+            $checkSth->execute(array('id' => $id, 'table' => $table, "field" => $fieldName ));
         } else {
             $sql = "SELECT * from meta where tableid=:id and table=:table";
+            $checkSth = $db->prepare($sql);
+            $checkSth->execute(array('id' => $id, 'table' => $table ));
         }
-        $checkSth = $db->prepare($sql);
-        $checkSth->execute(array('id' => $id, 'table' => $table, "field" => $fieldName ));
         if ($checkSth->rowCount() > 0) {
             if ($fieldName) {
                 $row = $checkSth->fetch(PDO::FETCH_OBJ);
-                $ret $row["val"];
+                $ret = $row["val"];
             } else {
                 $ret = [];
                 while ($row = $checkSth->fetch(PDO::FETCH_OBJ) ){
