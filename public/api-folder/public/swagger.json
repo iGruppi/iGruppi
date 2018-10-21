@@ -12,9 +12,8 @@
       "url" : "http://www.apache.org/licenses/LICENSE-2.0.html"
     }
   },
-  "host" : "virtserver.swaggerhub.com",
-  "basePath" : "/IGRUPPI/igruppi-api/1.0.0",
-  "schemes" : [ "https" ],
+  "basePath" : "/api/",
+  "schemes" : [ "http" ],
   "paths" : {
     "/login" : {
       "get" : {
@@ -307,7 +306,7 @@
     "/orderInfo" : {
       "get" : {
         "summary" : "returns order details",
-        "operationId" : "productInfo",
+        "operationId" : "orderInfo",
         "produces" : [ "application/json" ],
         "parameters" : [ {
           "name" : "token",
@@ -353,6 +352,92 @@
         "responses" : {
           "200" : {
             "description" : "order delivery object",
+            "schema" : {
+              "$ref" : "#/definitions/ApiResponse"
+            }
+          }
+        }
+      }
+    },
+    "/metaSet" : {
+      "get" : {
+        "summary" : "returns meta field",
+        "operationId" : "metaSet",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "token",
+          "in" : "query",
+          "description" : "auth user token",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "table",
+          "in" : "query",
+          "description" : "table to add meta field (users/groups/produttori/orders)",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "id",
+          "in" : "query",
+          "description" : "id record to add meta field",
+          "required" : true,
+          "type" : "integer"
+        }, {
+          "name" : "field",
+          "in" : "query",
+          "description" : "name of the meta field",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "val",
+          "in" : "query",
+          "description" : "value for the meta field",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "order aggregated object",
+            "schema" : {
+              "$ref" : "#/definitions/ApiResponse"
+            }
+          }
+        }
+      }
+    },
+    "/metaDelete" : {
+      "get" : {
+        "summary" : "returns meta field",
+        "operationId" : "metaDelete",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "token",
+          "in" : "query",
+          "description" : "auth user token",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "table",
+          "in" : "query",
+          "description" : "table to add meta field (users/groups/produttori/orders)",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "id",
+          "in" : "query",
+          "description" : "id record to delete meta field",
+          "required" : true,
+          "type" : "integer"
+        }, {
+          "name" : "field",
+          "in" : "query",
+          "description" : "name of the meta field",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "order aggregated object",
             "schema" : {
               "$ref" : "#/definitions/ApiResponse"
             }

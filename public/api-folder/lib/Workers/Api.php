@@ -21,22 +21,23 @@ class Api
     static function setMeta($table, $id, $fieldName, $fieldValue)
     {
         $db = Zend_registry::get("db");
-        $sql = "SELECT * from meta where tableid=:id and fieldname=:fieldName and tablename=:table";
+        $sql = "SELECT * from meta where tableid=:id and field=:field and tablename=:table";
         $checkSth = $db->prepare($sql);
         $checkSth->execute(array('id' => $id, 'table' => $table, "field" => $fieldName ));
         if ($checkSth->rowCount() > 0) {
             // Record found, update it
-            $sql = "UPDATE meta set val=:value where tableid=:id and field=:fieldName and tablename=:fieldValue";
+            $sql = "UPDATE meta set val=:val where tableid=:id and field=:field and tablename=:table";
         } else {
-            $sql = "INSERT INTO meta (tableid,tablename,field,val) VALUES (:tableid, :table, :field, :valuemeta set value=:value)";
+            $sql = "INSERT INTO meta (tableid,tablename,field,val) VALUES (:id, :table, :field, :val)";
             // Record not found, update it
         }
         $checkSth = $db->prepare($sql);
-        $checkSth->execute(array('id' => $id, 'table' => $table, "field" => $fieldName, "value" => $fieldValue ));
+        $checkSth->execute(array('id' => $id, 'table' => $table, "field" => $fieldName, "val" => $fieldValue ));
     }
 
     static function getMeta($table, $id, $fieldName = "")
     {
+        $ret = [];
         $db = Zend_registry::get("db");
         if ($fieldName) {
             $sql = "SELECT * from meta where tableid=:id and field=:field and tablename=:table";
@@ -50,11 +51,11 @@ class Api
         if ($checkSth->rowCount() > 0) {
             if ($fieldName) {
                 $row = $checkSth->fetch(PDO::FETCH_OBJ);
-                $ret = $row["val"];
+                $ret = $row->val;
             } else {
                 $ret = [];
                 while ($row = $checkSth->fetch(PDO::FETCH_OBJ) ){
-                    $ret[$row["field"]] = $row["val"];
+                    $ret[$row->field] = $row->val;
                 }
             }
         }
