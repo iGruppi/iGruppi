@@ -177,8 +177,8 @@ class Api
                 $lng = 10.40003;
                 $mult1 = (($id % 7) / 7) * (($id % 2) * -1);
                 $mult2 = (($id % 9) / 9) * (($id % 2) * -1);
-                $data["lat"] = $lat + (10 * $mult1);
-                $data["lng"] = $lng + (10 * $mult2);
+                $data["lat"] = $lat + (1 * $mult1);
+                $data["lng"] = $lng + (1 * $mult2);
                 $data["meta"] = Api::getMeta($tablename, $id);
             }
         }
