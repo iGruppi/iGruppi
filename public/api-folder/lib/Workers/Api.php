@@ -21,14 +21,14 @@ class Api
     static function setMeta($table, $id, $fieldName, $fieldValue)
     {
         $db = Zend_registry::get("db");
-        $sql = "SELECT * from meta where tableid=:id and fieldname=:fieldName and table=:fieldValue";
+        $sql = "SELECT * from meta where tableid=:id and fieldname=:fieldName and tablename=:table";
         $checkSth = $db->prepare($sql);
-        $checkSth->execute(array('id' => $id, 'table' => $table, "field" => $fieldName, "value" => $fieldValue ));
+        $checkSth->execute(array('id' => $id, 'table' => $table, "field" => $fieldName ));
         if ($checkSth->rowCount() > 0) {
             // Record found, update it
             $sql = "UPDATE meta set val=:value where tableid=:id and field=:fieldName and tablename=:fieldValue";
         } else {
-            $sql = "INSERT INTO meta (tableid,tablename,field,val) VALUES meta set value=:value where tableid=:id and field=:fieldName and tablename=:fieldValue";
+            $sql = "INSERT INTO meta (tableid,tablename,field,val) VALUES (:tableid, :table, :field, :valuemeta set value=:value)";
             // Record not found, update it
         }
         $checkSth = $db->prepare($sql);
@@ -39,11 +39,11 @@ class Api
     {
         $db = Zend_registry::get("db");
         if ($fieldName) {
-            $sql = "SELECT * from meta where tableid=:id and field=:field and table=:table";
+            $sql = "SELECT * from meta where tableid=:id and field=:field and tablename=:table";
             $checkSth = $db->prepare($sql);
             $checkSth->execute(array('id' => $id, 'table' => $table, "field" => $fieldName ));
         } else {
-            $sql = "SELECT * from meta where tableid=:id and table=:table";
+            $sql = "SELECT * from meta where tableid=:id and tablename=:table";
             $checkSth = $db->prepare($sql);
             $checkSth->execute(array('id' => $id, 'table' => $table ));
         }
@@ -64,7 +64,7 @@ class Api
     static function deleteMeta($table, $id, $fieldName)
     {
         $db = Zend_registry::get("db");
-        $sql = "DELETE from meta where tableid=:id and field=:field and table=:table";
+        $sql = "DELETE from meta where tableid=:id and field=:field and tablename=:table";
         $checkSth = $db->prepare($sql);
         $checkSth->execute(array('id' => $id, 'table' => $table, "field" => $fieldName ));
     }
