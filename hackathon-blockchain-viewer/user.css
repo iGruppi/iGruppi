@@ -1,0 +1,59 @@
+@font-face {
+  font-family: 'Boston'; 
+  src: url('./fonts/Boston.otf');
+}
+
+body {
+	font-family: 'Boston'; 
+	background-color: #6fad8c;
+}
+
+h4 {
+	font-size: 20px;
+	color: white;
+}
+
+.test {
+	padding-bottom: 10px;
+}
+
+.description {
+	text-align: justify;
+	padding-top: 15%;
+	padding-right: 5%;
+}
+
+.scroll {
+    max-height: 500px;
+    overflow-y: auto;
+}
+
+#val {
+	font-weight: strong;
+}
+
+#cardBody {
+	text-align: left;
+	background-color: #fff;
+	width: 100%;
+}
+
+#username {
+	font-weight: bold;
+}
+
+#logo {
+	width: 200px;
+	height: auto;
+	margin-left: 150px;
+}
+
+#user {	
+	width: 200px;
+	height: auto;
+	margin-top: 10px;
+}
+
+#navCard {
+	background-color: #fff
+}

@@ -1,0 +1,41 @@
+@font-face {
+    font-family: 'Boston'; 
+    src: url('./fonts/Boston.otf');
+}
+
+body {
+	font-family: Boston;
+	background-color: #6fad8c;
+}
+
+#logo {
+	width: 200px;
+	height: auto;
+	margin-left: 150px;
+}
+
+#grid {
+	margin: 8px;
+}
+
+h4 {
+	font-size: 15px;
+	font-weight: bold;
+	padding-top: 15px;
+}
+
+.fwi {
+  width: 48px;
+  height: auto;
+}
+
+.buffer { 
+	margin: 8px;
+}
+
+.media {
+	background-color: azure; 
+	border-radius: 5px; 
+	padding:7px;
+	cursor;
+}

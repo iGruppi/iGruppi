@@ -1,0 +1,116 @@
+<html>
+	<head>
+		<title>iGruppi</title>
+    <script src = "https://cdn.jsdelivr.net/npm/web3@0.19.0/dist/web3.min.js"></script>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+			<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+		<link rel="stylesheet" type="text/css" href="product.css">
+	</head>
+	<body>
+		<div class="container">
+			<div class="row">
+				<img id = "logo" src = "images/logo.png"><span> <a style="color:white; font-size: 20px; margin-left: 20px" href="/products-list">Prodotti</a> <a style="color:white; font-size: 20px; margin-left: 20px" href="/users-list">Utenti</a></span>
+			</div>
+		  <div class="row">
+		    <div class="col-sm-3 text-center">
+		      <img id = "product-image" src = "images/fallback.png">
+		    </div>
+		    <div class="col-sm-9">
+		      <p class="specs">
+		      	<b id="productName"></b><br/>
+		      	ID: <b id="productId"></b><br/>
+		      	Prezzo (&#8364/kg): <b id="productPrice"></b><br/>
+		      	Rating prodotto: <span id="rating"></span>
+		      </p>
+		      <nav>
+						<ul class="nav nav-tabs" role="tablist">
+						  <li class="nav-item" id="produzione-li" onclick="changeColor(this.id)">
+						    <span><a class="nav-link active" id="produzione-tab" data-toggle="tab" href="#produzione" role="tab" aria-controls="produzione" aria-selected="true">Produzione</a><img class="arrow" src="images/arrow.png"></span>
+						  </li>
+						  <li class=" nav-items" id="trasporto-li" onclick="changeColor(this.id)">
+						    <span><a class="nav-link" id="trasporto-tab" data-toggle="tab" href="#trasporto" role="tab" aria-controls="trasporto" aria-selected="false">Trasporto</a><img class="arrow" src="images/arrow.png"></span>
+						  </li>
+						  <li class=" nav-items" id="qualità-li" onclick="changeColor(this.id)">
+						    <span><a class="nav-link" id="qualità-tab" data-toggle="tab" href="#qualità" role="tab" aria-controls="qualità" aria-selected="false">Qualit&#224</a><img class="arrow" src="images/arrow.png"></span>
+						  </li>
+						  <li class="nav-item nav-items" id="supermercato-li" onclick="changeColor(this.id)">
+						    <span><a class="nav-link" id="supermercato-tab" data-toggle="tab" href="#supermercato" role="tab" aria-controls="supermercato" aria-selected="false">Supermercato</a><img class="arrow" src="images/arrow.png"></span>
+						  </li>
+						</ul>
+					<div class="tab-content">
+					  <div class="tab-pane fade active" id="produzione" role="tabpanel" aria-labelledby="produzione-tab"><div class="text-pane">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum eget posuere tellus, eu fermentum risus. Aenean euismod sollicitudin augue, in volutpat quam aliquet sed. Curabitur sed elementum sem, in dignissim tellus. Vivamus blandit ex ac fringilla bibendum. Mauris lectus arcu, dapibus id pharetra quis, mollis ac ipsum. Morbi sed facilisis lorem. Nulla bibendum ex vitae mauris tempor rhoncus. Morbi eget mi tempus, convallis nibh sed, rhoncus libero. Nullam et libero mi. Suspendisse vulputate purus in facilisis accumsan. Ut in mattis enim. Nunc pretium, enim sit amet aliquam rhoncus, libero nibh maximus arcu, non pulvinar lectus est non nisl. Fusce bibendum lacus urna, quis egestas leo hendrerit quis. Praesent et arcu quis nulla iaculis lobortis a quis velit. Vivamus id finibus nisl, a tincidunt orci.Ut maximus ante id enim molestie ullamcorper. Cras vel nunc vel mi pulvinar tincidunt. Suspendisse in libero vel elit placerat dapibus. Fusce in blandit nisi. Nunc molestie eros vel libero efficitur lacinia. Donec sagittis cursus tempor. Nam hendrerit lorem non justo porttitor, a tempus est dignissim. Mauris rhoncus quam eu massa porttitor consequat. Nam cursus vehicula eros, a porta odio consectetur ut.Cras sed justo bibendum ante congue tempus eget vel nulla. Sed vitae pellentesque neque, id congue purus. Morbi interdum et ligula vel congue. Aliquam suscipit congue tellus, nec feugiat nunc feugiat at. Fusce in lectus tempus mauris auctor suscipit a sed ipsum. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Integer congue nunc at velit faucibus porta. Integer blandit nunc et sem euismod volutpat id lacinia erat. Vestibulum gravida venenatis consectetur.</div></div>
+					  <div class="tab-pane fade" id="trasporto" role="tabpanel" aria-labelledby="trasporto-tab"><div class="text-pane">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div></div>
+					  <div class="tab-pane fade" id="qualità" role="tabpanel" aria-labelledby="qualità-tab"><div class="text-pane">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div></div>
+					  <div class="tab-pane fade" id="supermercato" role="tabpanel" aria-labelledby="supermercato-tab"><div class="text-pane">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div></div>
+					</div>
+		    </div>
+		  </div>
+		</div>
+    <script src = "./contract.js"></script>
+    <script type="text/javascript">
+    	changeColor = id => {
+    		["produzione-li", "trasporto-li", "qualità-li", "supermercato-li"].forEach(e => {
+    			if (e === id) {
+    				document.getElementById(e).style["background-color"] = "white"
+    			} else {
+    				document.getElementById(e).style["background-color"] = "gainsboro"
+    			}
+    		})
+    	}
+    </script>
+    <script type="text/javascript">
+      const productId = sessionStorage.getItem("productId");
+      const actionId = sessionStorage.getItem("actionId");
+      document.contractFns.getProductAction(productId, actionId)
+        .then(([,,metadata]) => {
+          metadata = JSON.parse(metadata);
+          console.log(metadata)
+        	document.getElementById("productPrice").innerHTML = metadata.price;
+        	document.getElementById("productName").innerHTML = metadata.name;
+        	document.getElementById("productId").innerHTML = productId+actionId;
+          document.getElementById("product-image").setAttribute("src", "./images/" + metadata.tag + "-white.png")
+        })
+        .catch(console.error)
+
+      let totalRatings = 0;
+      let totalRatingsValue = 0;
+      const {getUsers, getActionVote} = document.contractFns;
+
+      getUsers()
+        .then(addresses => {
+          return Promise.all(addresses.map(address => new Promise((resolve, reject) => {
+            getActionVote(productId, actionId, 0, address)
+              .then(resolve)
+              .catch(reject);
+          })));
+        })
+        .then(votes => {
+          votes.forEach(vote => {
+            if (vote > 0) {
+              totalRatings++;
+              totalRatingsValue += Number(vote);
+            }
+          });
+        })
+        .then(() => {
+        	if(totalRatingsValue) {
+        		const stars = Math.round(totalRatingsValue/totalRatings)
+          	console.log(totalRatingsValue, totalRatings, stars)
+          	for (let i = 0; i < stars; i++) {
+							document.getElementById("rating").insertAdjacentHTML("beforeend", `<img class="star" src="images/StellaPiena.png">`)
+						}     
+
+          	for (let i = 0; i < 5 - stars; i++) {
+							document.getElementById("rating").insertAdjacentHTML("beforeend", `<img class="star" src="images/StellaVuota.png">`)
+          	}
+        	} else {
+        		for (let i = 0; i < 5; i++) {
+							document.getElementById("rating").insertAdjacentHTML("beforeend", `<img class="star" src="images/StellaVuota.png">`)
+          	}
+        	}
+        })
+    </script>
+	</body>
+</html>

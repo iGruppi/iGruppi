@@ -1,0 +1,68 @@
+<html>
+	<head>
+		<title>iGruppi</title>
+    <script src = "https://cdn.jsdelivr.net/npm/web3@0.19.0/dist/web3.min.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+		<script src = "./contract.js"></script>
+		<link rel="stylesheet" type="text/css" href="user.css">
+		<img id = "logo" src = "images/logo.png"><span> <a style="color:white; font-size: 20px; margin-left: 20px" href="/products-list">Prodotti</a> <a style="color:white; font-size: 20px; margin-left: 20px" href="/users-list">Utenti</a></span> 		
+	</head>
+	<body>
+		<div class="container">
+		  <div class="col-md-3">
+	    	<img id = "user" src = "images/user-white.png">
+	    </div>
+	    <div class="col-md-9">
+	      <div class="test">
+	      <h4><b>Address:</b> <span id="address"></span></h4>
+	      <h4><b>Name:</b> <span id="name"></span></b></h4></div>
+    		<script type="text/javascript">
+    			document.contractFns.getUser(window.sessionStorage.getItem("address"))
+    				.then(data => {
+    					console.log(data)
+    					document.getElementById("name").innerHTML = JSON.parse(data[1].replace(/'/g, "\"")).name;
+    				})
+    			document.getElementById("address").innerHTML = window.sessionStorage.getItem("address");
+		  	</script>
+		  	<div class="card text-left">
+	  			<div class="card-header">
+	  				<ul class="nav nav-tabs card-header-tabs">
+	  					<li>
+	  						<a class="nav-link active" id="navCard" href="#">Transazioni</a>
+	  					</li>
+	  				</ul>
+	  			</div>
+		  		<div class="card-body container scroll" id="cardBody">
+		  			<div class="row text-center">
+		  				<div class="col-md-6">
+		  					<img src="https://gateway.ipfs.io/ipfs/QmYJD948teV5V7qywvUkA7TNuF7eQ4Wy38LwBR1aiDyBJa" alt="Css" width="100%" height="100%" margin="0px" /><br>
+		  				</div>
+		  				<div class="col-md-6 description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam tempor eleifend mi vitae semper. Pellentesque et erat in libero iaculis pellentesque. Nam sed ante eget lorem pretium iaculis eu et lacus. Aliquam leo arcu, sagittis sit amet mattis et, porta quis lectus. Praesent id scelerisque odio. Sed sagittis vestibulum arcu, eu feugiat lectus. Curabitur fermentum, sem ac ultrices facilisis, dolor metus porta nisi, eget condimentum nisi neque eget nibh. Phasellus semper magna a tempor gravida. In at dolor nec lectus maximus consequat. Donec fermentum auctor eros ut posuere. Suspendisse sollicitudin mauris ac libero sodales dignissim.</div>
+		  			</div>
+		  			<div class="row">
+		  				<div class="col-md-6">
+		  					<img src="https://ipfs.infura.io/ipfs/Qmeaxv7BMLU1rmnFeCkVAQdEqfaHPPZfQNtHgiRFWYJ48W" alt="Css" width="100%" height="100%" /><br>
+		  				</div>
+		  				<div class="col-md-6 description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam tempor eleifend mi vitae semper. Pellentesque et erat in libero iaculis pellentesque. Nam sed ante eget lorem pretium iaculis eu et lacus. Aliquam leo arcu, sagittis sit amet mattis et, porta quis lectus. Praesent id scelerisque odio. Sed sagittis vestibulum arcu, eu feugiat lectus. Curabitur fermentum, sem ac ultrices facilisis, dolor metus porta nisi, eget condimentum nisi neque eget nibh. Phasellus semper magna a tempor gravida. In at dolor nec lectus maximus consequat. Donec fermentum auctor eros ut posuere. Suspendisse sollicitudin mauris ac libero sodales dignissim.</div>
+		  			</div>
+		  			<div class="row text-center">
+		  				<div class="col-md-6">
+		  					<img src="https://cloudflare-ipfs.com/ipfs/QmRqpEoeWuLBUkDENdtEpwbe3QWo9w75CQep4R55zKF6xQ" alt="Css" width="100%" height="100%" /><br>
+		  				</div>
+		  				<div class="col-md-6 description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam tempor eleifend mi vitae semper. Pellentesque et erat in libero iaculis pellentesque. Nam sed ante eget lorem pretium iaculis eu et lacus. Aliquam leo arcu, sagittis sit amet mattis et, porta quis lectus. Praesent id scelerisque odio. Sed sagittis vestibulum arcu, eu feugiat lectus. Curabitur fermentum, sem ac ultrices facilisis, dolor metus porta nisi, eget condimentum nisi neque eget nibh. Phasellus semper magna a tempor gravida. In at dolor nec lectus maximus consequat. Donec fermentum auctor eros ut posuere. Suspendisse sollicitudin mauris ac libero sodales dignissim.</div>
+		  			</div>
+		  			<div class="row text-center">
+		  				<div class="col-md-6">
+		  					<img src="https://ipfs.infura.io/ipfs/Qmeaxv7BMLU1rmnFeCkVAQdEqfaHPPZfQNtHgiRFWYJ48W" alt="Css" width="100%" height="100%" /><br>
+		  				</div>
+		  				<div class="col-md-6 description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam tempor eleifend mi vitae semper. Pellentesque et erat in libero iaculis pellentesque. Nam sed ante eget lorem pretium iaculis eu et lacus. Aliquam leo arcu, sagittis sit amet mattis et, porta quis lectus. Praesent id scelerisque odio. Sed sagittis vestibulum arcu, eu feugiat lectus. Curabitur fermentum, sem ac ultrices facilisis, dolor metus porta nisi, eget condimentum nisi neque eget nibh. Phasellus semper magna a tempor gravida. In at dolor nec lectus maximus consequat. Donec fermentum auctor eros ut posuere. Suspendisse sollicitudin mauris ac libero sodales dignissim.</div>
+		  			</div>
+		  		</div>
+		  	</div>
+		  </div>
+		</div>
+	</body>
+</html>

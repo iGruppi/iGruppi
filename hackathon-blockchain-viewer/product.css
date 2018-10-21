@@ -1,0 +1,77 @@
+@font-face {
+    font-family: 'Boston'; 
+    src: url('./fonts/Boston.otf');
+}
+
+body {
+	font-family: Boston;
+	background-color: #6fad8c;
+}
+
+#logo {
+	width: 200px;
+	height: auto;
+	margin-left: 50px;
+}
+
+#product-image {
+	width: 150px;
+	height: auto;
+}
+
+.specs {
+	font-size: 200%;
+	color: white;
+}
+
+.star {
+  padding-top: 0px;
+  width: 25px;
+  height: auto;
+}
+
+.nav {
+	margin-top: 30px;
+}
+
+.nav-item {
+	background-color: gainsboro;
+	width: 200px;
+	text-align: center;
+	padding-top: 15px;
+	padding-bottom: 15px;
+}
+
+.nav-items {
+	background-color: gainsboro;
+	width: 200px;
+	text-align: center;
+	padding-top: 15px;
+	padding-bottom: 15px;		
+	margin-left: 15px;	
+}
+
+.nav-link {
+	font-size: 20px ;
+	color: black;
+}
+
+.nav-link:hover {
+	color: gray;
+}
+
+.tab-pane {
+	background-color: white;
+	height: 350px;
+}
+
+.text-pane {
+	padding-top: 30px;
+	padding-left: 30px;
+}
+
+.arrow {
+	width: 20px;
+	height: auto;
+	margin-left: 5px;
+}

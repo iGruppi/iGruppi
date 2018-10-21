@@ -1,0 +1,21 @@
+#logo {
+	text-align: left;
+	width: 200px;
+	height: auto;
+	margin-left: 50px;
+}
+
+#title {
+	color: white;
+}
+
+#form {
+	width: 40%;
+	height: auto;
+	text-align: center;
+}
+
+
+body {
+	 background-color: #6fad8c;
+}
