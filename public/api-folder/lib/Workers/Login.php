@@ -11,7 +11,7 @@ class WorkerLogin {
     if( $checkSth->rowCount() > 0 ) {
       // Fetch User data
       $row = $checkSth->fetch(PDO::FETCH_OBJ);
-      if( $row->password == Api::payload("password") ){
+      if( $row->password == Api::payload("passwd") ){
           Api::setUser($row);
           Api::result("OK", ["token" => sprintf( "%04d-%08d", $row->iduser, abs(rand(1,100000000)-100000000))]);
       }
